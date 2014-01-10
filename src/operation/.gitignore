@@ -1,0 +1,16 @@
+/Operation.class
+/OperationCPLEX.class
+/OperationEq.class
+/OperationEqCPLEX.class
+/OperationFactory.class
+/OperationFactoryCPLEX.class
+/OperationGe.class
+/OperationGeCPLEX.class
+/OperationGt.class
+/OperationGtCPLEX.class
+/OperationLe.class
+/OperationLeCPLEX.class
+/OperationLt.class
+/OperationLtCPLEX.class
+/OperationNotEq.class
+/OperationNotEqCPLEX.class
