@@ -31,7 +31,12 @@
 /**
  * 6 mars 2013 
  */
-package src.applications;
+package applications;
+
+import general.Bind;
+import general.CplexBind;
+import general.GLPKBind;
+import general.Vars;
 
 import java.io.File;
 
@@ -39,13 +44,9 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
-import src.Bind;
-import src.CplexBind;
-import src.GLPKBind;
-import src.Vars;
-import src.analyses.Analysis;
-import src.analyses.FBAAnalysis;
-import src.analyses.result.AnalysisResult;
+import analyses.Analysis;
+import analyses.FBAAnalysis;
+import analyses.result.AnalysisResult;
 
 /**
  * 

@@ -31,7 +31,7 @@
 /**
  * 15 mars 2013 
  */
-package src.analyses.result;
+package analyses.result;
 
 /**
  * 

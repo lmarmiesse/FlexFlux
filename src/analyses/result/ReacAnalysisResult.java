@@ -31,7 +31,9 @@
 /**
  * 18 avr. 2013 
  */
-package src.analyses.result;
+package analyses.result;
+
+import general.Vars;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -62,8 +64,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RefineryUtilities;
 
 import parsebionet.biodata.BioEntity;
-import src.Vars;
-import src.analyses.PhenotypicPhaseComparator;
+import analyses.PhenotypicPhaseComparator;
 
 
 /**

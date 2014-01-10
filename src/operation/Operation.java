@@ -31,12 +31,13 @@
 /**
  * 7 mars 2013 
  */
-package src.operation;
+package operation;
+
+import general.Constraint;
 
 import java.util.List;
 
 import parsebionet.biodata.BioEntity;
-import src.Constraint;
 
 /**
  * 

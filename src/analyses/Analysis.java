@@ -31,10 +31,10 @@
 /**
  * 5 avr. 2013 
  */
-package src.analyses;
+package analyses;
 
-import src.Bind;
-import src.analyses.result.AnalysisResult;
+import general.Bind;
+import analyses.result.AnalysisResult;
 
 /**
  * 

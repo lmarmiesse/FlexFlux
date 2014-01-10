@@ -29,98 +29,63 @@
  * knowledge of the CeCILL license and that you accept its terms.
  ******************************************************************************/
 /**
- * 11 mars 2013 
+ * 4 avr. 2013 
  */
-package src;
-
-import parsebionet.biodata.BioEntity;
 
 /**
  * 
- * This class represents the objective function of the FBA.
+ * Class containing global variables and parameters used by FlexFlux.
  * 
- * @author lmarmiesse 11 mars 2013
+ * @author lmarmiesse 4 avr. 2013
  * 
  */
-public class Objective {
+package general;
+public class Vars {
+
+	/**
+	 * Maximum number of threads created.
+	 */
+	public static int maxThread = Runtime.getRuntime().availableProcessors();
+
+	/**
+	 * Determines if FlexFlux uses epsilon.
+	 */
+	public static boolean cheat = true;
+	/**
+	 * Value used to approximate inequalities.
+	 */
+	public static double epsilon = 0.00001;
+
+	/**
+	 * Keyword for the sum of all fluxes.
+	 */
+	public static String FluxSumKeyWord = "FluxSum";
+
+	public static String Irrev1 = "FlexFluxIrrev1";
+	public static String Irrev2 = "FlexFluxIrrev2";
+
+	/**
+	 * Percentage of liberty for constraints created by objective functions.
+	 */
+	public static double libertyPercentage = 0;
+
+	/**
+	 * Number of decimals of precision of the calculations.
+	 */
+	public static int decimalPrecision = 6;
 
 	/**
 	 * 
-	 * Name of the objective function.
+	 * Rounds number to the decimal precision.
 	 * 
+	 * @param value
+	 *            Initial value.
+	 * @return The rounded value.
 	 */
-	private String name = "Objective value";
-
-	/**
-	 * 
-	 * If true, it maximizes the function, if false it minimizes.
-	 * 
-	 */
-	private boolean maximize;
-
-	/**
-	 * 
-	 * Entities composing the function.
-	 * 
-	 */
-	BioEntity[] entities;
-
-	/**
-	 * 
-	 * Their coefficients.
-	 * 
-	 */
-	double[] coeffs;
-
-	public Objective() {
-		maximize = true;
-		entities = new BioEntity[0];
-		coeffs = new double[0];
-	}
-
-	public Objective(BioEntity[] entities, double[] coeffs, String name,
-			boolean maximize) {
-		this.name = name;
-		this.coeffs = coeffs;
-		this.maximize = maximize;
-		this.entities = entities;
-
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public boolean getMaximize() {
-		return maximize;
-	}
-
-	public BioEntity[] getEntities() {
-		return entities;
-	}
-
-	public double[] getCoeffs() {
-		return coeffs;
-	}
-
-	public String toString() {
-
-		String res = "";
-
-		if (maximize) {
-			res += "maximize : ";
-		} else {
-			res += "minimize : ";
-		}
-
-		for (int i = 0; i < entities.length; i++) {
-
-			res += coeffs[i] + "*" + entities[i].getId() + " ";
-
-		}
-
-		return res;
-
+	static public double round(double value) {
+		double r = (Math.round(value * Math.pow(10, decimalPrecision)))
+				/ (Math.pow(10, decimalPrecision));
+		return r;
 	}
 
 }

@@ -31,15 +31,15 @@
 /**
  * 7 mars 2013 
  */
-package src.interaction.cplex;
+package interaction.cplex;
 
+import general.Bind;
+import general.CplexBind;
+import interaction.Unique;
+import operation.Operation;
+import operation.OperationCPLEX;
+import operation.OperationGeCPLEX;
 import parsebionet.biodata.BioEntity;
-import src.Bind;
-import src.CplexBind;
-import src.interaction.Unique;
-import src.operation.Operation;
-import src.operation.OperationCPLEX;
-import src.operation.OperationGeCPLEX;
 
 /**
  * 

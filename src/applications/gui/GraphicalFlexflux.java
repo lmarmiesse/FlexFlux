@@ -1,7 +1,9 @@
 /**
  * 21 juin 2013 
  */
-package src.applications.gui;
+package applications.gui;
+
+import gui.MainFrame;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,8 +15,7 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import src.applications.FlexfluxTest;
-import src.gui.MainFrame;
+import applications.FlexfluxTest;
 
 
 /**
@@ -32,7 +33,7 @@ public class GraphicalFlexflux {
 
 		try {
 			new MainFrame(FlexfluxTest.okSolvers,
-					getClasses("src.applications"));
+					getClasses("applications"));
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -80,7 +81,7 @@ public class GraphicalFlexflux {
 					String entry = entries.nextElement().getName();
 
 					if (entry
-							.contains("src/applications/Flex")) {
+							.contains("applications/Flex")) {
 
 						entry = entry.substring(0,
 								entry.length() - ".class".length());

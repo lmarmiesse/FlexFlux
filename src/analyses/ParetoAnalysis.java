@@ -31,7 +31,10 @@
 /**
  * 15 mai 2013 
  */
-package src.analyses;
+package analyses;
+
+import general.Bind;
+import general.Objective;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -47,12 +50,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import parsebionet.biodata.BioEntity;
-import src.Bind;
-import src.Objective;
-import src.analyses.result.FBAResult;
-import src.analyses.result.ParetoAnalysisResult;
-import src.analyses.result.ReacAnalysisResult;
-import src.analyses.result.TwoReacsAnalysisResult;
+import analyses.result.FBAResult;
+import analyses.result.ParetoAnalysisResult;
+import analyses.result.ReacAnalysisResult;
+import analyses.result.TwoReacsAnalysisResult;
 
 /**
  * Class to run a pareto analysis.

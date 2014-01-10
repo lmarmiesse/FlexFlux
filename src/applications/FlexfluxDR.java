@@ -31,7 +31,13 @@
 /**
  * 6 mars 2013 
  */
-package src.applications;
+package applications;
+
+import general.Bind;
+import general.Constraint;
+import general.CplexBind;
+import general.GLPKBind;
+import general.Vars;
 
 import java.io.File;
 import java.util.Collection;
@@ -43,13 +49,8 @@ import org.kohsuke.args4j.Option;
 import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.io.Sbml2Bionetwork;
-import src.Bind;
-import src.Constraint;
-import src.CplexBind;
-import src.GLPKBind;
-import src.Vars;
-import src.analyses.DRAnalysis;
-import src.analyses.result.DRResult;
+import analyses.DRAnalysis;
+import analyses.result.DRResult;
 
 /**
  * 

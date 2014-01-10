@@ -31,7 +31,12 @@
 /**
  * 6 mars 2013 
  */
-package src.applications;
+package applications;
+
+import general.Bind;
+import general.CplexBind;
+import general.GLPKBind;
+import general.Vars;
 
 import java.io.File;
 import java.util.HashMap;
@@ -42,14 +47,10 @@ import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 import parsebionet.biodata.BioEntity;
-import src.Bind;
-import src.CplexBind;
-import src.GLPKBind;
-import src.Vars;
-import src.analyses.CompFVAAnalysis;
-import src.analyses.FVAAnalysis;
-import src.analyses.result.CompFVAResult;
-import src.analyses.result.FVAResult;
+import analyses.CompFVAAnalysis;
+import analyses.FVAAnalysis;
+import analyses.result.CompFVAResult;
+import analyses.result.FVAResult;
 
 /**
  * 

@@ -1,13 +1,13 @@
 /**
  * 13 juin 2013 
  */
-package src.applications;
+package applications;
+
+import general.CplexBind;
+import general.GLPKBind;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import src.CplexBind;
-import src.GLPKBind;
 
 /**
  * 

@@ -31,8 +31,7 @@
 /**
  * 6 mars 2013 
  */
-package src;
-
+package general;
 import java.util.HashMap;
 import java.util.Map;
 

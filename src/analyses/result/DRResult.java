@@ -31,7 +31,9 @@
 /**
  * 8 avr. 2013 
  */
-package src.analyses.result;
+package analyses.result;
+
+import general.Bind;
 
 import java.awt.BorderLayout;
 import java.io.File;
@@ -49,7 +51,6 @@ import javax.swing.JScrollPane;
 import org.jfree.ui.RefineryUtilities;
 
 import parsebionet.biodata.BioEntity;
-import src.Bind;
 
 
 /**

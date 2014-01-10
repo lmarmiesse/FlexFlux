@@ -31,7 +31,9 @@
 /**
  * 15 mars 2013 
  */
-package src.analyses.result;
+package analyses.result;
+
+import general.Vars;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -59,7 +61,6 @@ import javax.swing.table.TableRowSorter;
 import org.jfree.ui.RefineryUtilities;
 
 import parsebionet.biodata.BioEntity;
-import src.Vars;
 
 
 /**

@@ -31,15 +31,16 @@
 /**
  * 13 mars 2013 
  */
-package src.thread;
+package thread;
+
+import general.Bind;
+import general.Objective;
 
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import parsebionet.biodata.BioEntity;
-import src.Bind;
-import src.Objective;
-import src.analyses.result.FVAResult;
+import analyses.result.FVAResult;
 
 /**
  * 

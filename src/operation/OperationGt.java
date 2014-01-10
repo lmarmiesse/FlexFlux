@@ -31,7 +31,10 @@
 /**
  * 7 mars 2013 
  */
-package src.operation;
+package operation;
+
+import general.Constraint;
+import general.Vars;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,8 +42,6 @@ import java.util.List;
 import java.util.Map;
 
 import parsebionet.biodata.BioEntity;
-import src.Constraint;
-import src.Vars;
 
 /**
  * 
