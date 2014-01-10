@@ -33,6 +33,8 @@
  */
 package src.operation;
 
+import ilog.concert.IloNumVar;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

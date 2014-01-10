@@ -1,0 +1,10 @@
+src
+src.analyses
+src.analyses.result
+src.applications
+src.applications.gui
+src.gui
+src.interaction
+src.interaction.cplex
+src.operation
+src.thread

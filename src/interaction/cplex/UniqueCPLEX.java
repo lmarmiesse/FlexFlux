@@ -31,7 +31,7 @@
 /**
  * 7 mars 2013 
  */
-package parsebionet.utils.flexconflux.interaction.cplex;
+package src.interaction.cplex;
 
 import parsebionet.biodata.BioEntity;
 import src.Bind;

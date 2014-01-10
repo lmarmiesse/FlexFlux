@@ -33,6 +33,8 @@
  */
 package src.operation;
 
+import ilog.concert.IloNumExpr;
+
 
 /**
  * 
