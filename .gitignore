@@ -1,0 +1,7 @@
+*.class
+*.jar
+
+
+# Eclipse specific files/directories
+.classpath
+.project
