@@ -31,8 +31,11 @@
 /**
  * 7 mars 2013 
  */
-package parsebionet.utils.flexconflux.interaction.cplex;
+package src.interaction.cplex;
 
+import ilog.concert.IloConstraint;
+import ilog.concert.IloException;
+import ilog.cplex.IloCplexModeler;
 import src.Bind;
 import src.interaction.Or;
 

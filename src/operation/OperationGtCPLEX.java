@@ -33,6 +33,10 @@
  */
 package src.operation;
 
+import ilog.concert.IloException;
+import ilog.concert.IloNumExpr;
+import ilog.cplex.IloCplexModeler;
+
 
 /**
  * 
