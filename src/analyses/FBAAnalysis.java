@@ -31,11 +31,11 @@
 /**
  * 5 avr. 2013 
  */
-package src.analyses;
+package analyses;
 
-import src.Bind;
-import src.DoubleResult;
-import src.analyses.result.FBAResult;
+import general.Bind;
+import general.DoubleResult;
+import analyses.result.FBAResult;
 
 /**
  * 

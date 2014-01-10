@@ -31,15 +31,16 @@
 /**
  * 18 avr. 2013 
  */
-package src.analyses;
+package analyses;
+
+import general.Bind;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import parsebionet.biodata.BioEntity;
-import src.Bind;
-import src.analyses.result.CompFVAResult;
-import src.analyses.result.FVAResult;
+import analyses.result.CompFVAResult;
+import analyses.result.FVAResult;
 
 /**
  * 

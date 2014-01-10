@@ -31,10 +31,10 @@
 /**
  * 7 mars 2013 
  */
-package src.interaction;
+package interaction;
 
+import operation.Operation;
 import parsebionet.biodata.BioEntity;
-import src.operation.Operation;
 
 /**
  * 

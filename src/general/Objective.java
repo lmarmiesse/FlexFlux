@@ -29,35 +29,98 @@
  * knowledge of the CeCILL license and that you accept its terms.
  ******************************************************************************/
 /**
- * 15 mai 2013 
+ * 11 mars 2013 
  */
-package src;
+package general;
+import parsebionet.biodata.BioEntity;
 
 /**
  * 
- * Class representing the result of an FBA.
+ * This class represents the objective function of the FBA.
  * 
- * @author lmarmiesse 15 mai 2013
+ * @author lmarmiesse 11 mars 2013
  * 
  */
-public class DoubleResult {
+
+public class Objective {
 
 	/**
-	 * Value of the objective function calculated by the solver.
-	 */
-	public double result;
-
-	/**
-	 * Flag giving information about the solve. 0 means an optimal solution was
-	 * found, 1 means the problem was unfeasible.
+	 * 
+	 * Name of the objective function.
 	 * 
 	 */
+	private String name = "Objective value";
 
-	public int flag;
+	/**
+	 * 
+	 * If true, it maximizes the function, if false it minimizes.
+	 * 
+	 */
+	private boolean maximize;
 
-	public DoubleResult(double res, int flag) {
-		this.result = res;
-		this.flag = flag;
+	/**
+	 * 
+	 * Entities composing the function.
+	 * 
+	 */
+	BioEntity[] entities;
+
+	/**
+	 * 
+	 * Their coefficients.
+	 * 
+	 */
+	double[] coeffs;
+
+	public Objective() {
+		maximize = true;
+		entities = new BioEntity[0];
+		coeffs = new double[0];
+	}
+
+	public Objective(BioEntity[] entities, double[] coeffs, String name,
+			boolean maximize) {
+		this.name = name;
+		this.coeffs = coeffs;
+		this.maximize = maximize;
+		this.entities = entities;
+
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public boolean getMaximize() {
+		return maximize;
+	}
+
+	public BioEntity[] getEntities() {
+		return entities;
+	}
+
+	public double[] getCoeffs() {
+		return coeffs;
+	}
+
+	public String toString() {
+
+		String res = "";
+
+		if (maximize) {
+			res += "maximize : ";
+		} else {
+			res += "minimize : ";
+		}
+
+		for (int i = 0; i < entities.length; i++) {
+
+			res += coeffs[i] + "*" + entities[i].getId() + " ";
+
+		}
+
+		return res;
+
 	}
 
 }

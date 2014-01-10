@@ -1,7 +1,7 @@
 /**
  * 24 juin 2013 
  */
-package src.gui;
+package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

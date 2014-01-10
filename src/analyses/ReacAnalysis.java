@@ -31,7 +31,11 @@
 /**
  * 18 avr. 2013 
  */
-package src.analyses;
+package analyses;
+
+import general.Bind;
+import general.Constraint;
+import general.Vars;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,13 +45,10 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import parsebionet.biodata.BioEntity;
-import src.Bind;
-import src.Constraint;
-import src.Vars;
-import src.analyses.result.FVAResult;
-import src.analyses.result.ReacAnalysisResult;
-import src.thread.ResolveThread;
-import src.thread.ThreadReac;
+import thread.ResolveThread;
+import thread.ThreadReac;
+import analyses.result.FVAResult;
+import analyses.result.ReacAnalysisResult;
 
 
 /**

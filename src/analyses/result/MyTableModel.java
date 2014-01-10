@@ -31,7 +31,7 @@
 /**
  * 18 avr. 2013 
  */
-package src.analyses.result;
+package analyses.result;
 
 import javax.swing.table.DefaultTableModel;
 

@@ -31,7 +31,11 @@
 /**
  * 8 mars 2013 
  */
-package src.thread;
+package thread;
+
+import general.Constraint;
+import general.Objective;
+import interaction.InteractionNetwork;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,13 +44,10 @@ import java.util.Queue;
 
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
-import src.Constraint;
-import src.Objective;
-import src.analyses.result.FVAResult;
-import src.analyses.result.KOResult;
-import src.analyses.result.ReacAnalysisResult;
-import src.analyses.result.TwoReacsAnalysisResult;
-import src.interaction.InteractionNetwork;
+import analyses.result.FVAResult;
+import analyses.result.KOResult;
+import analyses.result.ReacAnalysisResult;
+import analyses.result.TwoReacsAnalysisResult;
 
 /**
  * 

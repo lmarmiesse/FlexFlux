@@ -1,7 +1,7 @@
 /**
  * 24 juin 2013 
  */
-package src.gui;
+package gui;
 
 import javax.swing.JComboBox;
 

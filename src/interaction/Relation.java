@@ -31,14 +31,15 @@
 /**
  * 7 mars 2013 
  */
-package src.interaction;
+package interaction;
+
+import general.Bind;
+import general.Constraint;
 
 import java.util.List;
 import java.util.Map;
 
 import parsebionet.biodata.BioEntity;
-import src.Bind;
-import src.Constraint;
 
 /**
  * 

@@ -31,7 +31,14 @@
 /**
  * 5 avr. 2013 
  */
-package src.analyses;
+package analyses;
+
+import general.Bind;
+import general.Constraint;
+import general.DoubleResult;
+import general.Vars;
+import interaction.Interaction;
+import interaction.Relation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,13 +49,7 @@ import java.util.Set;
 
 import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
-import src.Bind;
-import src.Constraint;
-import src.DoubleResult;
-import src.Vars;
-import src.analyses.result.RFBAResult;
-import src.interaction.Interaction;
-import src.interaction.Relation;
+import analyses.result.RFBAResult;
 
 /**
  * 

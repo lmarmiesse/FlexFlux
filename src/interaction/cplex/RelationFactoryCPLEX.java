@@ -31,18 +31,18 @@
 /**
  * 7 mars 2013 
  */
-package src.interaction.cplex;
+package interaction.cplex;
 
+import interaction.And;
+import interaction.EqInteraction;
+import interaction.IfThenInteraction;
+import interaction.InversedRelation;
+import interaction.Or;
+import interaction.Relation;
+import interaction.RelationFactory;
+import interaction.Unique;
+import operation.Operation;
 import parsebionet.biodata.BioEntity;
-import src.interaction.And;
-import src.interaction.EqInteraction;
-import src.interaction.IfThenInteraction;
-import src.interaction.InversedRelation;
-import src.interaction.Or;
-import src.interaction.Relation;
-import src.interaction.RelationFactory;
-import src.interaction.Unique;
-import src.operation.Operation;
 
 /**
  * 

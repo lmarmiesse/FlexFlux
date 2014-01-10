@@ -31,7 +31,7 @@
 /**
  * 7 mai 2013 
  */
-package src.analyses;
+package analyses;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +41,7 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 import parsebionet.biodata.BioEntity;
-import src.analyses.result.FVAResult;
+import analyses.result.FVAResult;
 
 /**
  * 

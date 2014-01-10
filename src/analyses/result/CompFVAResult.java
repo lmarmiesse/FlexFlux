@@ -31,7 +31,9 @@
 /**
  * 18 avr. 2013 
  */
-package src.analyses.result;
+package analyses.result;
+
+import general.Vars;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -62,8 +64,6 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import org.jfree.ui.RefineryUtilities;
-
-import src.Vars;
 
 
 

@@ -31,14 +31,14 @@
 /**
  * 7 mai 2013 
  */
-package src.interaction.cplex;
+package interaction.cplex;
 
+import general.Bind;
 import ilog.concert.IloConstraint;
 import ilog.concert.IloException;
 import ilog.cplex.IloCplexModeler;
-import src.Bind;
-import src.interaction.InversedRelation;
-import src.interaction.Relation;
+import interaction.InversedRelation;
+import interaction.Relation;
 
 /**
  * 

@@ -31,7 +31,9 @@
 /**
  * 28 mars 2013 
  */
-package src.analyses.result;
+package analyses.result;
+
+import general.Vars;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -59,8 +61,6 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RefineryUtilities;
-
-import src.Vars;
 
 /**
  * Class representing the result of a time dependent FBA analysis.

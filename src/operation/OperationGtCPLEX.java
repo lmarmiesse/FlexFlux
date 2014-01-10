@@ -31,7 +31,7 @@
 /**
  * 11 mars 2013 
  */
-package src.operation;
+package operation;
 
 import ilog.concert.IloException;
 import ilog.concert.IloNumExpr;

@@ -31,9 +31,10 @@
 /**
  * 12 mars 2013 
  */
-package src.interaction;
+package interaction;
 
-import src.Bind;
+import general.Bind;
+
 
 /**
  * 

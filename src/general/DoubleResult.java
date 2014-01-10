@@ -29,63 +29,35 @@
  * knowledge of the CeCILL license and that you accept its terms.
  ******************************************************************************/
 /**
- * 4 avr. 2013 
+ * 15 mai 2013 
  */
-package src;
 
 /**
  * 
- * Class containing global variables and parameters used by FlexFlux.
+ * Class representing the result of an FBA.
  * 
- * @author lmarmiesse 4 avr. 2013
+ * @author lmarmiesse 15 mai 2013
  * 
  */
-public class Vars {
+package general;
+public class DoubleResult {
 
 	/**
-	 * Maximum number of threads created.
+	 * Value of the objective function calculated by the solver.
 	 */
-	public static int maxThread = Runtime.getRuntime().availableProcessors();
+	public double result;
 
 	/**
-	 * Determines if FlexFlux uses epsilon.
-	 */
-	public static boolean cheat = true;
-	/**
-	 * Value used to approximate inequalities.
-	 */
-	public static double epsilon = 0.00001;
-
-	/**
-	 * Keyword for the sum of all fluxes.
-	 */
-	public static String FluxSumKeyWord = "FluxSum";
-
-	public static String Irrev1 = "FlexFluxIrrev1";
-	public static String Irrev2 = "FlexFluxIrrev2";
-
-	/**
-	 * Percentage of liberty for constraints created by objective functions.
-	 */
-	public static double libertyPercentage = 0;
-
-	/**
-	 * Number of decimals of precision of the calculations.
-	 */
-	public static int decimalPrecision = 6;
-
-	/**
+	 * Flag giving information about the solve. 0 means an optimal solution was
+	 * found, 1 means the problem was unfeasible.
 	 * 
-	 * Rounds number to the decimal precision.
-	 * 
-	 * @param value
-	 *            Initial value.
-	 * @return The rounded value.
 	 */
-	static public double round(double value) {
-		double r = (Math.round(value * Math.pow(10, decimalPrecision)))
-				/ (Math.pow(10, decimalPrecision));
-		return r;
+
+	public int flag;
+
+	public DoubleResult(double res, int flag) {
+		this.result = res;
+		this.flag = flag;
 	}
 
 }

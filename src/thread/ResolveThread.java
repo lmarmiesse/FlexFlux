@@ -31,14 +31,14 @@
 /**
  * 8 mars 2013 
  */
-package src.thread;
+package thread;
+
+import general.Bind;
+import general.Constraint;
+import general.Objective;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import src.Bind;
-import src.Constraint;
-import src.Objective;
 
 /**
  * 

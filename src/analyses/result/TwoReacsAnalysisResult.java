@@ -31,7 +31,9 @@
 /**
  * 18 avr. 2013 
  */
-package src.analyses.result;
+package analyses.result;
+
+import general.Vars;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -63,8 +65,7 @@ import org.math.plot.plots.ScatterPlot;
 import org.math.plot.render.AbstractDrawer;
 
 import parsebionet.biodata.BioEntity;
-import src.Vars;
-import src.analyses.PhenotypicPhaseComparator;
+import analyses.PhenotypicPhaseComparator;
 
 /**
  * 

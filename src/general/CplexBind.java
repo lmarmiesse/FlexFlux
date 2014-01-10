@@ -31,8 +31,7 @@
 /**
  * 6 mars 2013 
  */
-package src;
-
+package general;
 import ilog.concert.IloConstraint;
 import ilog.concert.IloException;
 import ilog.concert.IloNumExpr;
@@ -43,19 +42,19 @@ import ilog.concert.IloObjectiveSense;
 import ilog.concert.IloRange;
 import ilog.cplex.IloCplex;
 import ilog.cplex.IloCplexModeler;
+import interaction.Interaction;
+import interaction.InteractionNetwork;
+import interaction.cplex.RelationFactoryCPLEX;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import operation.OperationFactoryCPLEX;
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
-import src.interaction.Interaction;
-import src.interaction.InteractionNetwork;
-import src.interaction.cplex.RelationFactoryCPLEX;
-import src.operation.OperationFactoryCPLEX;
-import src.thread.ThreadFactoryCPLEX;
+import thread.ThreadFactoryCPLEX;
 
 /**
  * 

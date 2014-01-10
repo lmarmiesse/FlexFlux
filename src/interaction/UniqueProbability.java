@@ -31,11 +31,11 @@
 /**
  * 26 mars 2013 
  */
-package src.interaction;
+package interaction;
 
+import general.Bind;
+import operation.OperationFactory;
 import parsebionet.biodata.BioEntity;
-import src.Bind;
-import src.operation.OperationFactory;
 
 /**
  * 

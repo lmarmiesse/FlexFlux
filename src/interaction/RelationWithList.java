@@ -31,7 +31,7 @@
 /**
  * 12 mars 2013 
  */
-package src.interaction;
+package interaction;
 
 import java.util.ArrayList;
 import java.util.List;

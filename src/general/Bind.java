@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright INRA
+ *  Copyright INRA
  * 
  *  Contact: ludovic.cottret@toulouse.inra.fr
  * 
@@ -31,7 +31,17 @@
 /**
  * 6 mars 2013 
  */
-package src;
+package general;
+
+import interaction.And;
+import interaction.Interaction;
+import interaction.InteractionNetwork;
+import interaction.Or;
+import interaction.Relation;
+import interaction.RelationFactory;
+import interaction.RelationWithList;
+import interaction.Unique;
+import interaction.UniqueProbability;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -49,9 +59,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-
-
+import operation.OperationFactory;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -64,21 +72,11 @@ import parsebionet.biodata.BioPhysicalEntity;
 import parsebionet.biodata.BioPhysicalEntityParticipant;
 import parsebionet.biodata.BioProtein;
 import parsebionet.io.Sbml2Bionetwork;
-import src.analyses.FBAAnalysis;
-import src.analyses.FVAAnalysis;
-import src.analyses.result.FBAResult;
-import src.analyses.result.FVAResult;
-import src.interaction.And;
-import src.interaction.Interaction;
-import src.interaction.InteractionNetwork;
-import src.interaction.Or;
-import src.interaction.Relation;
-import src.interaction.RelationFactory;
-import src.interaction.RelationWithList;
-import src.interaction.Unique;
-import src.interaction.UniqueProbability;
-import src.operation.OperationFactory;
-import src.thread.ThreadFactory;
+import thread.ThreadFactory;
+import analyses.FBAAnalysis;
+import analyses.FVAAnalysis;
+import analyses.result.FBAResult;
+import analyses.result.FVAResult;
 
 
 

@@ -31,7 +31,9 @@
 /**
  * 13 mars 2013 
  */
-package src.analyses.result;
+package analyses.result;
+
+import general.Vars;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -63,7 +65,6 @@ import org.jfree.ui.RefineryUtilities;
 
 import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
-import src.Vars;
 
 
 /**

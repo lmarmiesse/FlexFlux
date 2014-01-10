@@ -31,12 +31,17 @@
 /**
  * 9 avr. 2013 
  */
-package src;
+package general;
+import interaction.Interaction;
+import interaction.InteractionNetwork;
+import interaction.RelationFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import operation.OperationFactory;
 
 import org.gnu.glpk.GLPK;
 import org.gnu.glpk.GLPKConstants;
@@ -48,11 +53,7 @@ import org.gnu.glpk.glp_smcp;
 
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
-import src.interaction.Interaction;
-import src.interaction.InteractionNetwork;
-import src.interaction.RelationFactory;
-import src.operation.OperationFactory;
-import src.thread.ThreadFactoryGLPK;
+import thread.ThreadFactoryGLPK;
 
 /**
  * 
