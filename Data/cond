@@ -1,0 +1,4 @@
+obj : MIN(FluxSum)
+
+#On fixe la biomasse
+R_Ec_biomass_iAF1260_core_59p81M 0.6 0.8

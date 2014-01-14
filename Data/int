@@ -1,0 +1,16 @@
+
+#IF[M_glc_D_b>0.01]THEN[R_EX_ac_e_>=0][0][0.4]
+
+#IF[M_glc_D_b>0]THEN[lacZ=0.001]
+
+#IF[M_glc_D_b=0]THEN[lacZ=0.03]
+
+#IF[lacZ<0.02]THEN[R_EX_lcts_e_=0]
+
+#IF[lacZ>0.02]THEN[R_EX_lcts_e_=-3]
+
+
+#IF[R_EX_o2_e_>-5 AND R_EX_glc_e_>-5]THEN[R_Ec_biomass_iAF1260_core_59p81M=0]
+
+
+#IF[a]THEN[baze]

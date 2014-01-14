@@ -1,0 +1,8 @@
+MAX(R_Biomass_Ecoli_core_w_GAM)[0,1.8] MIN(FluxesSummation)[0,1000] MAX(R_EX_glc_e)[-20,0] MAX(R_EX_o2_e)[-45,0]
+
+
+1.79 989 -20 -41
+
+0.5 325 -6	-13.8
+
+1.05 613 -12 -25.7

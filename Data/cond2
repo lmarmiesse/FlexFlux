@@ -1,0 +1,9 @@
+obj : MAX(R_Ec_biomass_iAF1260_core_59p81M)
+
+R_EX_glc_e_ -5.5 999999
+
+INTEGER
+
+BINARY
+
+EQUATIONS
