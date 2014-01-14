@@ -1,0 +1,10 @@
+IF[A=0]THEN[B=5 AND C=4 AND D=8]
+
+IF[A=0]THEN[g>3.5]
+
+
+IF[b]THEN[a=0]
+
+IF[t1]THEN[t2=5]
+
+
