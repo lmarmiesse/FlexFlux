@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Installation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<!-- Les styles -->
+<link href="css/bootstrap.css" rel="stylesheet"
+	media="screen">
+<link href="css/bootstrap-responsive.css" rel="stylesheet"
+	media="screen">
+<link href="css/prettify.css" rel="stylesheet"
+	media="screen">
+
+
+<link href="css/docs.css" rel="stylesheet" media="screen">
+
+<style type="text/css">
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+}
+</style>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41601195-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<button type="button" class="btn btn-navbar" data-toggle="collapse"
+					data-target=".nav-collapse">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="brand" href="./index.html">FlexFlux</a>
+				<div class="nav-collapse collapse">
+					<ul class="nav">
+						<li><a href="./documentation.html">User documentation</a></li>
+						<li class="active"><a href="./installation.html">Installation</a></li>
+						<li><a href="./techdocumentation.html">Technical
+								documentation</a></li>
+						<li><a
+							href="https://github.com/lmarmiesse/FlexFlux/wiki/Downloads">Download</a></li>
+						<li><a href="https://github.com/lmarmiesse/FlexFlux">Sources</a></li>
+						<li><a href="./javadoc/index.html">Javadoc</a></li>
+						<li><a href="mailto:Lucas.Marmiesse@toulouse.inra.fr">Contact</a></li>
+
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<!-- Main hero unit for a primary marketing message or call to action -->
+		<div class="hero-unit">
+			<h1>FlexFlux installation</h1>
+		</div>
+
+		<div class="row">
+
+			<div class="span3 bs-docs-sidebar">
+				<ul class="nav nav-list bs-docs-sidenav affix-top" data-spy="affix"
+					data-offset-top="240">
+					<li><a href="#linux"><i class="icon-chevron-right"></i>
+							Linux</a></li>
+
+					<li><a href="#windows"><i class="icon-chevron-right"></i>
+							Windows</a></li>
+
+
+
+				</ul>
+
+			</div>
+			<div class="span9">
+
+				<p>
+					First, download FlexFlux executable version <a
+						href="https://github.com/lmarmiesse/FlexFlux/wiki/Downloads">here</a>.
+				</p>
+				<p>Unzip FlexFlux_1.0_executable.zip in the folder of your
+					choice.</p>
+
+				<p>
+					To use FlexFlux you need Java to be installed. It can be downloaded
+					from <a
+						href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">http://www.oracle.com/technetwork/java/javase/downloads/index.html</a>.
+				</p>
+				<p>FlexFlux runs on Java 7 or higher.</p>
+
+				<section id="linux">
+					<h2 id="linux">Linux</h2>
+
+					<p>For FlexFlux to work, you must have already installed a
+						solver. At this point, FlexFlux supports CPLEX and GLPK.</p>
+
+
+					To install <a href="http://glpk-java.sourceforge.net/index.html">glpk
+						for java</a> on Ubuntu and Debian you can type this in a terminal :
+
+					<pre class="prettyprint">sudo apt-get install glpk
+sudo apt-get install libglpk-java
+</pre>
+
+					<ol>
+						<li><p>Open a terminal and go into the directory when you
+								put FlexFlux/</p>
+						<li>make Flexflux.sh and GraphicalFlexflux.sh executables by
+							typing the commands : <pre class="prettyprint">chmod +x Flexflux.sh</pre>
+							<pre class="prettyprint">chmod +x GraphicalFlexflux.sh</pre>
+						<li>Test your solvers by typing : <pre
+								class="prettyprint">./Flexflux.sh Test</pre>
+							<p>If a solver is OK, you are all set ! Skip step 4, you can
+								use FlexFlux. If no solver is OK, go to step 4.</p>
+						<li><p>Open the configuration file : config</p> which looks
+							like that : <pre class="prettyprint">#IF YOU ARE USING CPLEX YOU MUST SET THE RIGHE VALUE FOR THOSE TWO VARIABLES
+#link to the CPLEX shared library (directory containing libcplex124.so)
+CPLEX_shared_library=/usr/local/ILOG/CPLEX_Studio124/cplex/bin/x86-64_sles10_4.1/
+#link to CPLEX.jar
+CPLEX_JAR=/usr/local/ILOG/CPLEX_Studio124/cplex/lib/cplex.jar
+
+
+#IF YOU ARE USING GLPK YOU MUST SET THE RIGHE VALUE FOR THOSE TWO VARIABLES
+#link to the GLPK shared library (directory containing libglpk_java.so)
+GLPK_shared_library=/usr/local/lib/jni:/usr/lib/jni/
+GLPK_JAR=lib/glpk-java-linux.jar
+</pre>
+							<p>Set the right value(s) for your solver, ignore the others.
+								Try the ./Flexflux.sh Test again.</p>
+						<li>
+							<p>Use the graphical version of Flexflux by executing the
+								file "GraphicalFlexflux.sh"</p>
+
+
+							<p>OR</p>
+
+							<p>Launch the analysis you want by typing :</p> <pre
+								class="prettyprint">./Flexflux.sh your_analysis your_parameters</pre>
+
+							<p>Example :</p> <pre class="prettyprint">./Flexflux.sh FBA -s network.xml -cond conditions.txt -plot</pre>
+
+							<p>
+								See the <a href="./documentation.html">documentation</a> for
+								details on all possible analyses.
+							</p>
+						</li>
+					</ol>
+				</section>
+				<section id="windows">
+					<h2>Windows</h2>
+
+					<p>The solver GLPK is already included in FlexFlux so if you
+						want to use it you have nothing to do.</p>
+
+					<p>If you want to use another solver, you must install it.</p>
+
+					<ol>
+						<li><p>Open the folder Flexflux/</p>
+						<li>Test your solvers by running the windows command file
+							"GraphicalFlexflux"
+							<p>If a solver is OK, you are all set ! Skip step 3), you can
+								use FlexFlux. If no solver is OK, go to step 3).</p>
+						<li><p>Open the configuration file : config.windows.bat</p>
+							which looks like that : <pre class="prettyprint">@echo off
+
+::IF YOU ARE USING CPLEX YOU MUST SET THE RIGHE VALUE FOR THOSE TWO VARIABLES
+::link to the CPLEX shared library (directory containing libcplex124.so)
+set CPLEX_shared_library=
+::link to CPLEX.jar
+set CPLEX_JAR=
+
+
+::IF YOU ARE USING GLPK YOU MUST SET THE RIGHE VALUE FOR THOSE TWO VARIABLES
+::link to the GLPK shared library (directory containing glpk_4_50_java.dll)
+
+if %PROCESSOR_ARCHITECTURE%==x86 (
+  set GLPK_shared_library=lib\glpk-4.50\w32
+) else (
+  set GLPK_shared_library=lib\glpk-4.50\w64
+)
+
+::link to glpk jar
+set GLPK_JAR=lib\glpk-java-win.jar
+</pre>
+							<p>Set the right value(s) for your solver, ignore the others.
+								Try the Flexflux.bat Test again.</p>
+						<li>
+							<p>Use the graphical version of Flexflux by running the
+								windows command file "GraphicalFlexflux"</p>
+
+
+							<p>OR</p>
+
+							<p>Launch the analysis you want by typing in the command line
+								:</p> <pre class="prettyprint">Flexflux.bat your_analysis your_parameters</pre>
+
+							<p>Example :</p> <pre class="prettyprint">Flexflux.bat FBA -s network.xml -cond conditions.txt -plot</pre>
+
+							<p>
+								See the <a href="./documentation.html">documentation</a> for
+								details on all possible analyses.
+							</p>
+						</li>
+					</ol>
+				</section>
+			</div>
+
+
+
+		</div>
+		<footer class="footer">
+			<div class="container">
+				<p>
+					This project was developed at <a
+						href="http://www6.toulouse.inra.fr/lipm_eng/Platforms-and-Facilities/Bioinformatics-platform/Activities">LIPM</a>
+					by Lucas Marmiesse. Copyright &copy; 2013, INRA
+				</p>
+			</div>
+		</footer>
+	</div>
+	<script src="js/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/prettify.js"></script>
+</body>
+</html>
+
+
+

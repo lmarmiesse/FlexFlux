@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   name=""
+   repos="https://svn.code.sf.net/p/parsebionet/code"
+   revision="460"
+   last-author="lmarmiesse"
+   url="https://svn.code.sf.net/p/parsebionet/code/trunk/doc/flexconflux/site/bootstrap"
+   committed-rev="460"
+   kind="dir"
+   committed-date="2013-06-06T14:26:44.301000Z"/>
+<entry
+   name="css"
+   kind="dir"/>
+<entry
+   name="img"
+   kind="dir"/>
+<entry
+   name="js"
+   kind="dir"/>
+</wc-entries>

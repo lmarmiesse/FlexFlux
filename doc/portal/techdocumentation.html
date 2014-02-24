@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Technical documentation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<!-- Les styles -->
+<link href="css/bootstrap.css" rel="stylesheet"
+	media="screen">
+<link href="css/bootstrap-responsive.css" rel="stylesheet"
+	media="screen">
+<link href="css/prettify.css" rel="stylesheet"
+	media="screen">
+
+
+<link href="css/docs.css" rel="stylesheet" media="screen">
+<!-- <link href="docs2.css" rel="stylesheet" media="screen"> -->
+
+<style type="text/css">
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+}
+</style>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41601195-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<button type="button" class="btn btn-navbar" data-toggle="collapse"
+					data-target=".nav-collapse">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="brand" href="./index.html">FlexFlux</a>
+				<div class="nav-collapse collapse">
+					<ul class="nav">
+						<li><a href="./documentation.html">User documentation</a></li>
+						<li><a href="./installation.html">Installation</a></li>
+						<li class="active"><a href="./techdocumentation.html">Technical
+								documentation</a></li>
+						<li><a
+							href="https://github.com/lmarmiesse/FlexFlux/wiki/Downloads">Download</a></li>
+						<li><a href="https://github.com/lmarmiesse/FlexFlux">Sources</a></li>
+						<li><a href="./javadoc/index.html">Javadoc</a></li>
+						<li><a href="mailto:Lucas.Marmiesse@toulouse.inra.fr">Contact</a></li>
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<!-- Main hero unit for a primary marketing message or call to action -->
+		<div class="hero-unit">
+			<h1>FlexFlux technical documentation</h1>
+		</div>
+		<div class="row">
+			<div class="span3 bs-docs-sidebar">
+				<ul class="nav nav-list bs-docs-sidenav affix-top" data-spy="affix"
+					data-offset-top="240">
+					<li><a href="#newMethod"><i class="icon-chevron-right"></i>
+							Add a new FBA based method</a></li>
+					<ul>
+						<li><a href="#main"><i class="icon-chevron-right"></i>
+								The Main class</a></li>
+						<li><a href="#ana"><i class="icon-chevron-right"></i> The
+								classes for the analysis</a></li>
+						<li><a href="#multi"><i class="icon-chevron-right"></i>
+								Multithreading</a></li>
+					</ul>
+
+
+
+					<li><a href="#newSolver"><i class="icon-chevron-right"></i>
+							Add a new solver</a></li>
+
+					<ul>
+						<li><a href="#bind"><i class="icon-chevron-right"></i>
+								Subclass of Bind</a></li>
+						<li><a href="#fact"><i class="icon-chevron-right"></i>
+								The factories</a></li>
+
+					</ul>
+
+				</ul>
+			</div>
+			<div class="span9">
+
+				<p>All information about the network : entities, constraints and
+					interactions are accessible from the Bind class.</p>
+
+
+
+
+				<p>
+					See the <a href="./javadoc/index.html">Javadoc</a> for more details
+					about all classes, methods and parameters.
+				</p>
+
+
+				<section id="newMethod">
+					<h2>Add a new FBA based method</h2>
+
+					<h3 id="main">The Main class</h3>
+
+					<p>The first thing to do when creating a new FBA based method
+						is to create a new class in the package
+						parsebionet.applications.flux.flexflux</p>
+
+					<p>This class has to be a main class.</p>
+
+					<p>
+						Arguments are handled by the Java class library <a
+							href="http://args4j.kohsuke.org/">args4j</a>.
+					</p>
+
+					<!-- TODO : Mettre un exemple pour ce qui est la dessous  -->
+
+					<p>For the graphical interface to work properly, you must
+						respect a syntax for the Option annotation of your arguments :
+					<ul>
+
+						<li>arguments representing the path to a file must have :
+							metaVar = "File",
+						<li>the -sol argument for the solver must have : metaVar =
+							"Solver",
+						<li>arguments representing a finite number of choices must
+							have : metaVar = "[choice1,choice2,...]"
+						<li>arguments representing booleans must not have any
+							metaVar.
+					</ul>
+
+					<p>Look at the analysis already written to be sure you are
+						doing it the right way.</p>
+
+
+					<p>The class you create has to follow theses steps :</p>
+					<ul>
+						<li>Get and check all arguments.</li>
+						<li>Create the right Bind object depending on the chosen
+							solver.
+							<p>Example :</p> <pre class="prettyprint">bind = new CplexBind(!f.nointInSolver);</pre>
+						<li>Load the files specified in the arguments.
+							<p>Example :</p> <pre class="prettyprint">bind.loadSbmlNetwork(f.sbmlFile, f.extended);
+if (f.condFile != "") {
+	bind.loadConditionsFile(f.condFile);
+}
+if (f.intFile != "") {
+	bind.loadInteractionsFile(f.intFile);	
+}</pre>
+						<li>Prepare the solver : transform all model entities into
+							solver variables and constraints. Example: <pre
+								class="prettyprint">bind.prepareSolver();</pre>
+						</li>
+						<li>Create and run your analysis.
+							<p>Example :</p> <pre class="prettyprint">Analysis analysis = new YourAnalysis(yourArguments);
+AnalysisResult result = analysis.runAnalysis();</pre>
+						<li>Plot or write the results to a file according to the
+							arguments.
+							<p>Example :</p> <pre class="prettyprint">if (f.plot) {
+	result.plot();
+}
+if (!f.outName.equals("")) {
+	result.writeToFile(f.outName);
+}</pre>
+					</ul>
+
+
+
+					<p>To be faster, you can just copy and paste an existing class
+						(like FlexFluxFBA), change the arguments, the name of your method
+						and make other potential changes.
+					<h3 id="ana">The classes for the analysis</h3>
+
+					<p>All classes representing analysis extend the class Analysis
+						and all analysis result classes extend the class AnalysisResult.</p>
+
+					<img src="img/umlAna.png"></img>
+
+
+					<p>So you have to create two more classes :</p>
+					<ul>
+						<li>YourAnalysis which extends Analysis.
+						<li>YourAnalysisResult which extends AnalysisResult</li>
+					</ul>
+
+
+					<p>YourAnalysis will contain all the actions that you method
+						will make. You have to overwrite the function runAnalysis(). This
+						method creates and returns your YourAnalysisResult object.</p>
+
+
+					<p>YourAnalysisResult contains all the data calculated by your
+						analysis and must overwrite at least two methods :
+					<ul>
+						<li>writeToFile(String path) : this must write all important
+							information in the file specified by the path.
+						<li>plot() : this method has to generate a graphical
+							representation of the calculated data.
+
+							<p>
+								For simple plots with tables FlexFlux uses <a
+									href="http://en.wikipedia.org/wiki/Swing_(Java)">Java Swing</a>.
+								For 2D plots it uses <a href="http://www.jfree.org/jfreechart/">JFreeChart</a>
+								and for 3D plots <a href="https://code.google.com/p/jmathplot/">JMathPlot</a>.
+							</p>
+							<p>This libraries are included in FlexFlux.</p>
+					</ul>
+
+
+					<h3 id="multi">Multithreading</h3>
+
+					<p>If you want to use multithrading, you must create a class
+						that extends ResolveThread. Your threads have to be created in the
+						runAnalysis() of your YourAnalysis class.</p>
+
+					<p>Threads are created with a copy of the original Bind object.
+						For the right Bind object to be created, you must use the
+						ThreadFactory to create your thread. This will create the right
+						Bind object.</p>
+					<p>In order to do that, you must add a method in the
+						ThreadFactory class and implement it in all it's subclasses (one
+						class per solver).</p>
+
+					<p>Example :</p>
+
+					<p>In the ThreadFactory class :</p>
+					<pre class="prettyprint">
+public abstract YourThread makeYourThread(boolean interactionInSolver);					
+					</pre>
+
+
+					<p>And in, for example, the ThreadFactoryGLPK class</p>
+					<pre class="prettyprint">public YourThread makeYourThread(boolean interactionInSolver) {
+
+	Bind bind = new GLPKBind(constraints, simpleConstraints, intNet,
+			bioNet, interactionInSolver);
+
+	return new YourThread(bind);
+}</pre>
+
+
+
+
+
+				</section>
+				<section id="newSolver">
+					<h2>Add a new solver</h2>
+
+					<h3 id="bind">Create a subclass of Bind</h3>
+
+					<p>First, you must create a new class which extends Bind. This
+						class will translate all problem's data into objects that your
+						solver will understand.</p>
+
+					<p>Your have to implement the following methods :</p>
+					<ul>
+						<li>public void init() : this methods sets parameters for
+							your solver and creates the right factories (see next section).
+						<li>public void entitiesToSolverVars() : transforms solver
+							entities into variables for the solver.
+						<li>public void makeSolverConstraint(Constraint constraint,
+							List&lt;Object&gt; toRemoveFromModel, Map&lt;String, double[]&gt;
+							oldBounds) : creates a constraint for the solver.
+						<li>protected void interactionsToSolverConstraints(
+							List&lt;Interaction&gt; interactions) : only used if your solver
+							can transfrom interactions into constraints.
+						<li>protected void deleteConstraints(List&lt;Object&gt;
+							constraints) : deletes constraints.
+						<li>public void makeSolverObjective() : transforms the
+							problem's objective into a solver objective.
+						<li>public void changeObjVarValue(BioEntity e, double d) :
+							changes the coefficient of an entity in the objective function.
+						<li>public void setObjSense(boolean maximize) : sets the sens
+							of the objective (minimizes or maximizes).
+						<li>protected void clear() : clears the solver's model.
+						<li>public boolean isMIP() : returns if the model is a Mixed
+							Integer Programming problem.
+						<li>protected void changeVarBounds(String entity, double[]
+							bounds) : changes the lower and upper bound of a solver variable.
+
+
+
+
+
+
+
+
+
+						
+						<li>protected DoubleResult go(boolean saveResults) : Solves
+							the problem. This method creats a DoubleResult object containing
+							the result for the objective function and a flag that says if the
+							problem was feasible or not.
+						<li>public void end() : Deletes the problem.
+					</ul>
+
+
+					<p>Then, you have to add the construction of your new class on
+						every Main class of FlexFlux (in the package
+						parsebionet.applications.flux.flexflux) where the right bind is
+						created.</p>
+
+
+					<p>For example :</p>
+
+					<pre class="prettyprint">
+if (f.solver.equals("CPLEX")) {
+	bind = new CplexBind(!f.nointInSolver);
+} else if (f.solver.equals("GLPK")) {
+	bind = new GLPKBind(false);
+} else if (f.solver.equals("YourSolver")) {
+	bind = new YourSolverBind(!f.nointInSolver);
+} else {
+	System.err.println("Unknown solver name");
+	parser.printUsage(System.err);
+	System.exit(0);
+}
+</pre>
+
+					<h3 id="fact">The factories</h3>
+
+					<h4>Thread factory</h4>
+
+					<p>Some analysis are using threads to run faster. Those threads
+						need to copy the original Bind object.</p>
+					<p>To let the thread know what kind of Bind object they must
+						create, your original bind has an attribute called threadFactory.</p>
+
+					<p>You have to create a new ThreadFactoryYourSolver class that
+						extends the ThreadFactory class and that creates the right Bind
+						objects.</p>
+
+
+					<p>For example in the class ThreadFactoryYourSolver :</p>
+
+					<pre class="prettyprint">
+public ThreadFVA makeFVAThread(boolean interactionInSolver,Queue&lt;BioEntity&gt; ents, Queue&lt;BioEntity&gt; entsCopy, FVAResult result) {
+
+	Bind bind = new YourSolverBind(constraints, simpleConstraints, intNet,bioNet, interactionInSolver);
+
+	return new ThreadFVA(bind, ents, entsCopy, result);
+}</pre>
+
+					<p>In the init() function of your YourSolverBind class you must
+						add :</p>
+
+					<pre class="prettyprint">this.threadFactory = new ThreadFactoryYourSolver(constraints,simpleConstraints, intNet);</pre>
+
+
+					<h4>Relation factory and Operation factory</h4>
+
+					<p>Depending on your solver there are two cases :</p>
+					<ol>
+						<li><p>Your solver does not support interactions.</p>
+
+							<p>You have nothing more to do than add these two lines in
+								the init() function of your YourSolverBind class :</p> <pre
+								class="prettyprint">this.operationFactory = new OperationFactory();
+this.relationFactory = new RelationFactory();</pre></li>
+
+
+						<li><p>Your solver supports interactions and you want to
+								use it.</p>
+
+
+							<p>You have to create a relation factory and an operation
+								factory for your solver.</p>
+
+
+
+							<p>Finally, add these two lines in the init() function of
+								your YourSolverBind class :</p> <pre class="prettyprint">this.operationFactory = new OperationFactoryYourSolver();
+this.relationFactory = new RelationFactoryYourSolver();</pre></li>
+					</ol>
+
+
+
+					<!-- <h3>Bind</h3> -->
+					<!-- <pre class="prettyprint linenums"> -->
+					<!-- String solver; -->
+					<!-- . -->
+					<!-- . -->
+					<!-- . -->
+					<!-- if(solver="CPLEX"){ -->
+					<!-- 	Interaction i = new InteractionCplex(); -->
+					<!-- } -->
+					<!-- else if(solver="GLPK"){ -->
+					<!-- 	Interaction i = new InteractionGlpk(); -->
+					<!-- } -->
+					<!-- else if ... -->
+					<!-- . -->
+					<!-- . -->
+					<!-- . -->
+					<!-- </pre> -->
+
+					<!-- <h3>Bind</h3> -->
+
+					<!-- <pre class="prettyprint linenums"> -->
+					<!-- InteractionFactory factory; -->
+					<!-- . -->
+					<!-- . -->
+					<!-- Interaction i = factory.makeInteraction(); -->
+					<!-- </pre> -->
+
+					<!-- <h3>CPLEXBind</h3> -->
+
+					<!-- <pre class="prettyprint linenums"> -->
+					<!-- factory = new CplexFactory(); -->
+					<!-- </pre> -->
+
+
+					<!-- <pre class="prettyprint linenums"> -->
+					<!-- public class FlexfluxFBA { -->
+
+					<!-- public String message = "FlexfluxFBA [options...]\n" -->
+					<!-- + "Computes an FBA given a metabolic network," -->
+					<!-- + "an objective function and constraints."; -->
+
+					<!-- @Option(name = "-s", metaVar = "File", required = true) -->
+					<!-- public String sbmlFile = ""; -->
+
+					<!-- @Option(name = "-cond", metaVar = "File", required = true) -->
+					<!-- public String condFile = ""; -->
+
+					<!-- @Option(name = "-lib", metaVar = "Double") -->
+					<!-- public double liberty = 0; -->
+
+					<!-- @Option(name = "-pre", metaVar = "Integer") -->
+					<!-- public int precision = 6; -->
+
+					<!-- . -->
+					<!-- . -->
+					<!-- }		 -->
+					<!-- </pre> -->
+				</section>
+			</div>
+
+
+		</div>
+		<footer class="footer">
+			<div class="container">
+				<p>
+					This project was developed at <a
+						href="http://www6.toulouse.inra.fr/lipm_eng/Platforms-and-Facilities/Bioinformatics-platform/Activities">LIPM</a>
+					by Lucas Marmiesse. Copyright &copy; 2013, INRA
+				</p>
+			</div>
+		</footer>
+
+	</div>
+	<script src="js/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/prettify.js"></script>
+	<script>
+     	!function ($) {
+     		$(function(){
+				window.prettyPrint && prettyPrint()   
+			})
+		}(window.jQuery)
+	</script>
+	<script>
+  $(function () {
+    $('#myTab a:last').tab('show');
+  })
+  
+  $('#myTab a').click(function (e) {
+  e.preventDefault();
+  $(this).tab('show');
+})
+
+</script>
+
+</body>
+</html>

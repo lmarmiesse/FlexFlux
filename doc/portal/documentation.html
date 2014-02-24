@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>User documentation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<!-- Les styles -->
+<link href="css/bootstrap.css" rel="stylesheet"
+	media="screen">
+<link href="css/bootstrap-responsive.css" rel="stylesheet"
+	media="screen">
+<link href="css/prettify.css" rel="stylesheet"
+	media="screen">
+
+
+<link href="css/docs.css" rel="stylesheet" media="screen">
+<!-- <link href="docs2.css" rel="stylesheet" media="screen"> -->
+
+<style type="text/css">
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+}
+</style>
+<script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push([ '_setAccount', 'UA-41601195-1' ]);
+	_gaq.push([ '_trackPageview' ]);
+
+	(function() {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl'
+				: 'http://www')
+				+ '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+</script>
+</head>
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<button type="button" class="btn btn-navbar" data-toggle="collapse"
+					data-target=".nav-collapse">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="brand" href="./index.html">FlexFlux</a>
+				<div class="nav-collapse collapse">
+					<ul class="nav">
+						<li class="active"><a href="./documentation.html">User
+								documentation</a></li>
+						<li><a href="./installation.html">Installation</a></li>
+						<li><a href="./techdocumentation.html">Technical
+								documentation</a></li>
+						<li><a
+							href="https://github.com/lmarmiesse/FlexFlux/wiki/Downloads">Download</a></li>
+						<li><a href="https://github.com/lmarmiesse/FlexFlux">Sources</a></li>
+						<li><a href="./javadoc/index.html">Javadoc</a></li>
+						<li><a href="mailto:Lucas.Marmiesse@toulouse.inra.fr">Contact</a></li>
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<!-- Main hero unit for a primary marketing message or call to action -->
+		<div class="hero-unit">
+			<h1>FlexFlux user documentation</h1>
+		</div>
+		<div class="row">
+			<div class="span3 bs-docs-sidebar">
+				<ul class="nav nav-list bs-docs-sidenav affix-top" data-spy="affix"
+					data-offset-top="240">
+					<li><a href="#general"><i class="icon-chevron-right"></i>
+							General functioning</a></li>
+					<ul>
+						<li><a href="#network"><i class="icon-chevron-right"></i>
+								Network file</a></li>
+						<li><a href="#cond"><i class="icon-chevron-right"></i>
+								Condition file</a></li>
+						<li><a href="#int"><i class="icon-chevron-right"></i>
+								Interaction file</a></li>
+						<li><a href="#keywords"><i class="icon-chevron-right"></i>
+								Key words</a></li>
+						<li><a href="#lpmip"><i class="icon-chevron-right"></i>
+								LP vs MIP</a></li>
+					</ul>
+
+					<li><a href="#analysis"><i class="icon-chevron-right"></i>
+							FlexFlux functions</a></li>
+
+					<ul>
+						<li><a href="#fba"><i class="icon-chevron-right"></i>
+								Simple FBA</a></li>
+						<li><a href="#fva"><i class="icon-chevron-right"></i>
+								Flux Variability Analyses : FVA</a></li>
+						<li><a href="#comp"><i class="icon-chevron-right"></i>
+								Comparison of two FVAs</a></li>
+						<li><a href="#ko"><i class="icon-chevron-right"></i>
+								Knock out analysis : KO</a></li>
+						<li><a href="#rfba"><i class="icon-chevron-right"></i>
+								Time dependent FBA</a></li>
+						<li><a href="#reac"><i class="icon-chevron-right"></i>
+								2-D Phenotypic phase analysis.</a></li>
+						<li><a href="#tworeacs"><i class="icon-chevron-right"></i>
+								3-D Phenotypic phase analysis.</a></li>
+						<li><a href="#pareto"><i class="icon-chevron-right"></i>
+								Pareto analysis</a></li>
+						<li><a href="#dead"><i class="icon-chevron-right"></i>
+								Dead reactions</a></li>
+
+					</ul>
+
+				</ul>
+			</div>
+			<div class="span9">
+				<p>FlexFlux is a tool for metabolic flux analysis. It is usable
+					as a Java executable file (.jar format) via command line or
+					graphical user interface. FlexFlux is based on a mathematical
+					method, FBA (Flux Balance Analysis) which consists in transforming
+					a metabolic network into linear equations and calculate fluxes
+					thanks to linear programming. This method does not rely on kinetic
+					parameters but is based on constraints, in particular steady state
+					constraint (ensuring that each amount of metabolite being produced
+					is consumed). From these constraints, FBA can determine an optimal
+					value (maximal or minimal) for one or more fluxes : the objective
+					function.</p>
+				<p>To sum up, FBA needs :
+				<ul>
+					<li>a metabolic network,</li>
+					<li>constraints,</li>
+					<li>an objective funcion.</li>
+				</ul>
+				</p>
+				<p>FlexFlux performs the whole preliminary step of translating
+					the metabolic network as well as the constraints (that can be
+					logical constraints) into linear equations. Mathematical linear
+					programming caculations are then performed by external optimization
+					software. FlexFlux contains many methods dedicated to flux analysis
+					all based on FBA. We focused the development of FlexFlux on two
+					main principles: flexibility and rapidity.</p>
+
+				<section id="general">
+					<h2>General functioning and file formats</h2>
+					<p>FlexFlux works by taking as an input three different files:</p>
+
+					<ul>
+						<li>a file describing the metabolic network (SBML file
+							format),</li>
+						<li>a condition file containing the objective function as
+							well as constraints concerning the values of variables,</li>
+						<li>an interaction file containing logical constraints that
+							can take into account an activation time for these constraints.</li>
+					</ul>
+
+					<div>
+						<img src="img/General.png"></img>
+					</div>
+					<p style="text-align: center">
+						<strong>Overview of FlexFlux.</strong>
+					</p>
+
+
+					<h3 id="network">File describing the network</h3>
+					From this file, FlexFlux performs a few actions:
+					<ul>
+						<li>it adds to the model all reactions, genes, and proteins
+							as variables;</li>
+						<li>consequently to the steady-state assumption, it adds
+							constraints corresponding to the steady state;</li>
+						<li>it adds all reaction flux constraints. If no value is
+							given for a reaction, the lower bound is set to 0 for
+							irreversible reactions and to -999999 for reversible ones, and
+							the upper bound is set to 999999;</li>
+						<li>it adds to the model all the logical constraints (as
+							interactions) concerning gene-protein-reaction interactions
+							(GPR).</li>
+					</ul>
+
+					FlexFlux supports the <a
+						href="http://metexplore.toulouse.inra.fr/metexploreJoomla/metexplore/Doc/html/documentation.html#sbml">SBML
+						format.</a> FlexFlux also supports an <a
+						href="http://metexplore.toulouse.inra.fr/metexploreJoomla/metexplore/Doc/html/documentation.html#extSbml">extended
+						SBML format</a> used by <a
+						href="http://metexplore.toulouse.inra.fr/metexplore/index.php">MetExplore</a>.
+
+
+					<h3 id="cond">Condition file</h3>
+
+					<p>
+						The format of the condition file is quite similar to existing file
+						formats like the <a
+							href="http://lpsolve.sourceforge.net/5.5/CPLEX-format.htm">LP
+							file format</a> used by the solver CPLEX.
+					</p>
+
+
+					<p>This file is used to define the objective function as well
+						as constraints.</p>
+					<h4>Objective function</h4>
+					<p>To set the objective function :
+					<pre class="prettyprint">obj : MAX(2*a + -1*b)</pre>
+					where a and b are variables.
+					</p>
+					The variables must be separated by a "+" sign and the coefficients
+					can be any real number.
+
+					<h4>Nested objective functions</h4>
+
+					<p>Multiple objective functions can be written. In that case,
+						all objective functions are sequentially considered. The optimal
+						value of an objective function becomes a new constraint (with a
+						percentage of liberty than can be specified) for the following
+						optimization.</p>
+
+					<p>Example :</p>
+
+					<pre class="prettyprint">
+obj : MAX(R_GLC)
+obj : MAX(R_BIOMASS)</pre>
+
+					<p>FlexFlux will first calculate the maximum value for R_GLC,
+						will add it as a constraint, and then will normally continue with
+						R_BIOMASS as the objective function</p>
+
+					<h4>Conditions</h4>
+					Each line corresponds to a condition :
+					<ul>
+
+
+						<li>The line may contain three columns : <pre
+								class="prettyprint">
+a 3 6
+</pre> which means 3 &lt; a &lt; 6
+
+						</li>
+
+						<li>Or two columns : <pre class="prettyprint">
+b -1
+</pre> which means b=-1
+
+						</li>
+
+					</ul>
+
+
+					<p>By default, variables are considered as real numbers (they
+						can take every value between their lower and upper bound,
+						including decimal numbers).</p>
+
+					<p>If you don't want your variable to be a real number, you can
+						set as a integer or a binary variable.</p>
+
+					<p>To add integer variables, they must be written under the
+						line</p>
+					<pre class="prettyprint">
+INTEGER
+</pre>
+					The lines :
+					<pre class="prettyprint">
+INTEGER
+
+a 3 6
+</pre>
+					mean that a can take the value 3, 4, 5 or 6.
+
+					<p>For binary values (0 or 1), the variable name has to be
+						written under the line BINARY.</p>
+
+					To set it to 0 or 1, the value must be written next to the
+					variable. The lines :
+					<pre class="prettyprint">
+BINARY
+
+a
+b 1
+</pre>
+					mean : a is a boolean and can be equal to 0 or 1 and b is a boolean
+					equal to 1.
+
+
+					<h4>Equations</h4>
+
+					Equations can be added under the line
+					<pre class="prettyprint">
+EQUATIONS
+</pre>
+					These equations must be composed of known variables and respect the
+					following rules.
+
+					<ul>
+						<li>Only one equality (or inequality) is possible by line.
+							For example : 0 &lt; a &lt; 3*b will have to be written over two
+							lines.</li>
+
+						<li>Variables can be written without coefficient. If they
+							have one, it must be placed before the variable name. Exemple 3*a
+							+ 4*b &lt; 5.</li>
+
+						<li>The negative sign must be on the coefficient : a+3*-b
+							must be written : a + -3*b.</li>
+					</ul>
+
+
+					<p>Equations can be a good way of making a shortcut, for
+						instance :</p>
+					<pre class="prettyprint">
+obj : MAX(a)
+ 
+.....
+
+EQUATIONS
+a = R_GLC + -2*R_AC + 3*R_BIOMASS
+</pre>
+
+
+
+
+					<h4>Example</h4>
+
+					<p>Example of a condititon file :</p>
+
+					<pre class="prettyprint">
+obj : MAX(R_BIOMASS)
+
+a 5
+c 10
+d 0 50
+M_glc_D_b 10.4
+M_ac_b 0.3
+
+M_lcts_b 5.8
+
+lacZ 0.001 0.03
+
+R_EX_glc_e_ -10.5 999999
+R_EX_o2_e_ -15 999999
+
+R_EX_ac_e_ -2.5 4
+
+R_EX_lcts_e_ -3 999999
+
+INTEGER
+
+BINARY
+
+EQUATIONS
+d = 2*a + 3*c
+
+</pre>
+
+
+					<h3 id="int">Interaction file</h3>
+
+					An interaction works with two parts :
+					<ul>
+						<li>a condition : what will be checked,</li>
+						<li>a consequence : what will be done if the condition is
+							true.</li>
+					</ul>
+
+					<p>Those two parts must be writtent between brackets [ ]</p>
+
+					There are two kinds of interactions :
+					<ul>
+						<li><strong>IF THEN interaction</strong> which must be
+							written this way : <pre class="prettyprint">
+IF[A]THEN[B]
+</pre> This one means : if A is not equal to 0, then B must not be equal to 0.
+						</li>
+						<li><strong>EQ interaction</strong> which must be written
+							this way : <pre class="prettyprint">
+[A]EQ[B]
+</pre> This one means : if A is not equal to 0, then B must not be equal to 0,
+							AND if B is not equal to 0, A must not be equal to 0.</li>
+					</ul>
+
+					<p>In both of these cases, interactions can be complicated by
+						using the two keywords AND and OR to combine interactions.</p>
+
+					Example :
+					<pre class="prettyprint">
+IF[A AND B]THEN[C]
+IF[(A AND B) OR (C AND D)]THEN[E]
+</pre>
+					This means that if A is not equal to 0 and B is not equal to 0,
+					then c must not be equal to 0.
+
+
+					<p>Specific values for variables can also be added thanks to
+						the signs :</p>
+					<pre class="prettyprint">
+=,<=,<,>=,>,*
+</pre>
+					A*0.5 means that A must be equals to 0.5 times its upper bound.
+
+
+					<p>Two optional values can be added to an interaction and they
+						will respectively specify:</p>
+					<ul>
+						<li>how long it takes for the consequence to become active,</li>
+						<li>how long the interaction will stay true.</li>
+					</ul>
+
+					<p>Those two values can be added between brackets at the end of
+						the desired interaction.</p>
+					<p>
+						These optional values are only used in <a href="#rfba">time
+							dependent FVA.</a>
+					</p>
+
+					<h4>Interactions and solvers</h4>
+
+					<p>Depending on the solver that is used, FlexFlux has two ways
+						of dealing with interactions (logical constraints).</p>
+					<ul>
+						<li>Interactions are treated outside the solver, before the
+							calculation begins. In this case, interactions are evaluated one
+							by one (so they must be in order) and it can lead to some
+							inconsistencies because the interactions are evaluated before and
+							are not checked after the calculations. Also, this mode does not
+							support "EQ" interactions.
+							<p>We don't advise to use this mode for big interaction
+								networks. However if there are just a few interactions, this
+								mode is much faster and as efficient as the other one.</p>
+							<p>This mode can be used with all solvers.</p>
+						</li>
+						<li>Interactions are translated as constraints by the solver
+							itself. In this case there won't be any inconsistency and a large
+							interaction network can be used. However, this mode is slower
+							(because the problem becomes a MIP <a href="#lpmip">see here</a>)
+							and isn't available for all solvers.
+
+							<p>If the solver you use supports it and if you don't have a
+								problem with calculation times, we advise you to use this mode.</p>
+
+							<p>This mode is supported by the solver CPLEX.</p>
+						</li>
+					</ul>
+
+					<p>The choice of the mode is made with the argument -nointsolv.</p>
+
+					<h4>Example</h4>
+
+					<p>Example of an interaction file :</p>
+
+					<pre class="prettyprint">
+IF[M_glc_D_b>0.01]THEN[R_EX_ac_e_>=0][0][0.4]
+
+IF[M_glc_D_b>0]THEN[lacZ=0.001]
+
+IF[M_glc_D_b=0]THEN[lacZ=0.03]
+
+IF[lacZ<0.02]THEN[R_EX_lcts_e_=0]
+
+IF[lacZ>0.02]THEN[R_EX_lcts_e_=-3]</pre>
+
+
+					<h3 id="keywords">Key words</h3>
+
+
+					<h4>Getting the summation of all fluxes</h4>
+
+					<p>
+						The key-word <b>FluxSum</b> can be used to get the sum of the
+						absolute values of all fluxes in the network.
+					</p>
+					<p>It can be used for instance as an objective function :</p>
+
+					<pre class="prettyprint">obj : MIN(FluxSum)</pre>
+
+					<p>It can be also used as a constraint :</p>
+					<pre class="prettyprint">FluxSum 0 3000</pre>
+
+					<h4>Getting the state of a gene-protein relation (GPR)</h4>
+
+					<p>
+						In the interaction file, <b>GPR_</b> placed in front of the name
+						of a reaction is a way of knowing if the genes specified in the
+						sbml file allow the reaction not to be equal to zero.
+					</p>
+
+					<p>Example :</p>
+
+					<pre class="prettyprint">IF[GPR_R_glc]THEN[R_glc=1.5]</pre>
+
+					<p>This interaction means that if the reaction R_glc is not set
+						to zero by its genes, then its value must be 1.5</p>
+
+
+
+					<h3 id="lpmip">LP vs MIP</h3>
+
+
+					<p>Depending on the parameters you choose and the type of your
+						variables, the problem the solver has to solve can be either a LP
+						or a MIP.</p>
+
+					<p>The difference is that LP models only have continuous (real)
+						variables whereas MIP model have integer or binary variables.</p>
+
+					<p>
+						<b>MIPs are longer to solve.</b>
+					</p>
+
+
+					<p>There are two ways to have a MIP on Flexflux :</p>
+					<ul>
+						<li>Adding an integer or a binary variable in the condition
+							file.</li>
+						<li>Using a solver that supports interactions (like CPLEX),
+							choosing to include the interactions in the solver and having a
+							model with interactions (GPRs or interactions in the interaction
+							file).
+					</ul>
+
+
+				</section>
+				<section id="analysis">
+					<h2>FlexFlux functions</h2>
+
+					<p>This section details all possible analyses using FlexFlux.
+						FlexFlux can used in two modes:</p>
+
+					<ul>
+						<li><strong>Graphical version</strong>: GraphicalFlexflux.sh
+							for linux and GraphicalFlexflux.bat for windows (see the <a
+							href="./installation.html">installation section</a>). Then choose
+							your options and hit the run button!
+						<li><strong>Command line</strong>. The arguments are the
+							same. In this documentation, analyses are run in the command line
+							but there is no difference.
+							<p>
+								To try the examples of this documentation yourself, you must
+								change the name of the analysis acording to your operating
+								system (see the <a href="./installation.html">installation
+									section</a>).
+							</p> For example, for windows <pre class="prettyprint">FlexfluxFBA -s ....</pre>
+							becomes <pre class="prettyprint">Flexflux.bat FBA -s ....</pre>
+							and for linux it becomes <pre class="prettyprint">./Flexflux.sh FBA -s ....</pre>
+					</ul>
+
+
+					<p>The output of all analyses can be either a text file
+						containing all the results data, a graphical representation of the
+						data, or both.</p>
+
+
+					<h3 id="fba">Simple FBA</h3>
+
+					Computes a simple FBA and returns the value of the optimized
+					objective function as well as all variable values. Variable values
+					can represent only one solution amongst many.
+
+					<h4>Command-line arguments</h4>
+					<ul>
+						<li>-s String : Sbml file path</li>
+						<li>-cond String : Condition file path
+						<li>-int String : [OPTIONAL]Interaction file path
+						<li>-nointsolv : [OPTIONAL, default = false]Interactions are
+							not in the solver
+						<li>-out String : [OPTIONAL]Output file name
+						<li>-plot : [OPTIONAL, default = false]Plots the results
+						<li>-lib Double : [OPTIONAL, default = 0]Percentage of non
+							optimality for new constraints
+						<li>-pre Integer : [OPTIONAL, default = 6]Number of decimals
+							of precision for calculations and results
+						<li>-sol String : Solver name
+						<li>-ext : [OPTIONAL, default = false]Uses the extended SBML
+							format
+						<li>-h : Prints help
+					</ul>
+
+					<p>Example :
+					<pre class="prettyprint">FlexfluxFBA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt</pre>
+					</p>
+
+
+
+					<h4>Results</h4>
+
+
+					For this example, we used :
+					<ul>
+						<li>the SBML file <a href="results/coli_core.xml">coli_core.xml,</a></li>
+						<li>the condition file <a href="results/conditionsFBA.txt">conditionsFBA.txt,</a></li>
+						<li>the command line : <pre class="prettyprint">FlexfluxFBA -s coli_core.xml -cond conditionsFBA.txt -out FBA_result.txt -plot</pre></li>
+					</ul>
+
+
+
+
+					Here is a part of the text result file <a
+						href="results/FBA_result.txt">FBA_result.txt</a> :
+					<pre class="prettyprint">
+FBA result
+
+obj : 0.873922
+M_acon_C_c	0.0
+b3956	1.0
+R_GLUSy	0.0
+M_acald_e	0.0
+M_actp_c	0.0
+M_acald_c	0.0
+R_GLUDy	-4.541857
+M_acald_b	0.0
+b1817_and_b1818_and_b1819_and_b2415_and_b2416	0.0
+M_pi_e	0.0
+b2914	1.0
+R_GLUt2r	0.0
+R_EX_glc_e	-10.0
+R_EX_o2_e	-21.799493
+</pre>
+
+
+					<p>The graphical result :</p>
+
+
+					<img src="img/FBA.png"></img>
+
+
+					<p style="text-align: center">
+						<strong>FlexFlux FBA results.</strong><i>In these conditions,
+							the maximum biomass production is 0.873922 and we can see the
+							value of all other variables.</i>
+					</p>
+
+
+					<h3 id="fva">Flux Variability Analyses : FVA</h3>
+
+
+					<p>An FVA consists in getting the optimal value for the
+						objective function, setting this value as a constraint and, given
+						a list of entities, minimize and maximize their values. This
+						analysis returns the objective value, and the minimum and maximum
+						value for each entity desired.</p>
+
+					<p>The advantage of FlexFlux's FVA compared to classical FVA is
+						that it is not limited to biochemical reactions. It can be done on
+						any variable.</p>
+
+
+					<h4>Command-line arguments</h4>
+					<ul>
+						<li>-s String : Sbml file path</li>
+						<li>-cond String : Condition file path
+						<li>-int String : [OPTIONAL]Interaction file path
+						<li>-nointsolv : [OPTIONAL, default = false]Interactions are
+							not in the solver
+						<li>-e String : [OPTIONAL]Biological entities to perform the
+							FVA on (Space-separated list of entities, example : "R1 R2 G1
+							G2"). If empty, FVA is done on all reactions
+						<li>-n Integer : [OPTIONAL, default = number of available
+							processors]Number of threads
+						<li>-out String : [OPTIONAL]Output file name
+						<li>-plot : [OPTIONAL, default = false]Plots the results
+						<li>-lib Double : [OPTIONAL, default = 0]Percentage of non
+							optimality for new constraints
+						<li>-pre Integer : [OPTIONAL, default = 6]Number of decimals
+							of precision for calculations and results
+						<li>-sol String : Solver name
+						<li>-ext : [OPTIONAL, default = false]Uses the extended SBML
+							format</li>
+						<li>-h : Prints help
+					</ul>
+
+					<p>Example 1 :
+					<pre class="prettyprint">FlexfluxFVA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt</pre>
+
+					This example is a simple FVA analysis on all reactions described in
+					network.xml.
+
+					</p>
+
+					<p>Example 2 :
+					<pre class="prettyprint">FlexfluxFVA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -e "R1 R2 G1 G2" -lib 10</pre>
+					</p>
+
+					Here, the FVA will be run on the reactions R1 and R2 and on the
+					genes G1 and G2 with a liberty of 10% for the objective constraint.
+
+					<h4>Results</h4>
+
+
+					For this example, we used :
+					<ul>
+						<li>the SBML file <a href="results/coli_core.xml">coli_core.xml,</a></li>
+						<li>the condition file <a href="results/conditionsFBA.txt">conditionsFBA.txt,</a></li>
+						<li>the command line : <pre class="prettyprint">FlexfluxFVA -s coli_core.xml -cond conditionsFBA.txt -out FVA_result.txt -lib 10 -plot</pre></li>
+					</ul>
+
+
+					Here is a part of the text result file <a
+						href="results/FVA_result.txt">FVA_result.txt</a> :
+					<pre class="prettyprint">
+FVA result
+
+obj : 0.873922(+-10.0%)
+Name	min	max
+R_CYTBD	35.984865	51.239087
+R_PPCK	0.0	17.161
+R_PGM	-16.732521	-8.686588
+R_Biomass_Ecoli_core_w_GAM	0.786529	0.873922
+R_SUCCt3	0.0	22.881333
+R_PPC	0.0	20.346866
+R_GLNabc	0.0	0.0
+R_SUCOAS	-8.045934	0.0
+R_CS	0.848587	8.89452
+R_EX_glu_L_e	0.0	1.271185
+R_EX_akg_e	0.0	1.430083
+</pre>
+
+
+					<p>The graphical result :</p>
+					<img src="img/FVA.png"></img>
+
+					<p style="text-align: center">
+						<strong>FlexFlux FVA results.</strong> <i>Minimum and maximum
+							flux of each reaction for a maximized biomass production (with a
+							liberty of 10%).</i>
+					</p>
+
+					<h3 id="comp">Comparison of two FVAs</h3>
+
+					Compares the results of two FVA analyses given a metabolic network,
+					an objective function and two different set of constraints. This
+					analysis returns the objective value, the minimum and maximum value
+					for each entity desired, for both conditions.
+
+					<h4>Command-line arguments</h4>
+					<ul>
+						<li>-s String : Sbml file path</li>
+						<li>-cond String : Condition file path
+						<li>-cond2 String : Second condition file path
+						<li>-int String : [OPTIONAL]Interaction file path
+						<li>-nointsolv : [OPTIONAL, default = false]Interactions are
+							not in the solver
+						<li>-e String : [OPTIONAL]Biological entities to perform the
+							FVA analyses on (Space-separated list of entities, example : "R1
+							R2 G1 G2"). If empty, FVA is done on all reactions
+						<li>-n Integer : [OPTIONAL, default = number of available
+							processors]Number of threads
+						<li>-out String : [OPTIONAL]Output file name
+						<li>-plot : [OPTIONAL, default = false]Plots the results
+						<li>-lib Double : [OPTIONAL, default = 0]Percentage of non
+							optimality for new constraints
+						<li>-pre Integer : [OPTIONAL, default = 6]Number of decimals
+							of precision for calculations and results
+						<li>-sol String : Solver name
+						<li>-ext : [OPTIONAL, default = false]Uses the extended SBML
+							format</li>
+						<li>-h : Prints help
+					</ul>
+
+					<p>Example 1 :
+					<pre class="prettyprint">FlexfluxCompFVA -s network.xml -cond cond.txt -cond2 cond2.txt -int int.txt -plot -out out.txt</pre>
+					</p>
+
+					<p>Example 2 :
+					<pre class="prettyprint">FlexfluxCompFVA -s network.xml -cond cond.txt -cond2 cond2.txt -int int.txt -plot -out out.txt -e "R1 R2 G1 G2"</pre>
+					</p>
+
+
+					<h4>Results</h4>
+					For this example, we used :
+					<ul>
+						<li>the SBML file <a href="results/coli_core.xml">coli_core.xml,</a></li>
+						<li>the condition file <a href="results/conditionsFBA.txt">conditionsFBA.txt,</a></li>
+						<li>a second condition file <a
+							href="results/conditionsFBA2.txt">conditionsFBA2.txt</a> in witch
+							we allow glucose uptake to be bigger,
+						</li>
+						<li>the command line <pre class="prettyprint">FlexfluxCompFVA -s coli_core.xml -cond conditionsFBA.txt -cond2 conditionsFBA2.txt -out comp_FVA_result.txt -lib 5 -plot</pre></li>
+					</ul>
+
+
+					Here is a part of the text result file <a
+						href="results/comp_FVA_result.txt">comp_FVA_result.txt</a> :
+					<pre class="prettyprint">
+FVA comparison result
+
+obj1 : 0.873922(+-5.0%)
+obj2 : 1.790569(+-5.0%)
+Name	min1	max1	min2	max2
+R_EX_succ_e	0.0	0.837122	0.0	1.715171
+R_ADK1	0.0	8.5805	0.0	17.5805
+R_GLUSy	0.0	8.5805	0.0	17.5805
+R_GLUDy	-4.950357	4.265735	-10.142737	8.740022
+R_FORt2	0.0	34.322	0.0	70.322
+R_FUM	0.792103	7.381819	1.021209	14.146736
+R_EX_glc_e	-10.0	-9.523306	-20.0	-19.023306
+R_PDH	3.903028	18.770887	6.937593	36.503884
+R_GLUt2r	-0.635593	0.0	-1.302259	0.0
+R_EX_o2_e	-23.709518	-19.895962	-45.644797	-37.831242
+</pre>
+					<p>The graphical result :</p>
+					<img src="img/CompFVA.png"></img>
+
+
+					<p style="text-align: center">
+						<strong>FlexFlux FVA comparison result.</strong> <i>We can see
+							the differences between the two conditions. The glucose uptake is
+							bigger in the second case so the biomass production is higher.
+							The two last columns make the comparison between the the FVA's
+							easier. Green values mean the result is higher is the second
+							condition, and red values mean the result is lower in the second
+							condition.</i>
+					</p>
+
+
+					<h3 id="ko">Knock out analysis : KO</h3>
+					A KO analysis consists in setting network entities values to 0, and
+					observe the effect on the objective function. There are three ways
+					to perform this KO analysis:
+					<ul>
+						<li>on reactions,
+						<li>on genes,
+						<li>on any biological entity (specified with argument -e)
+					</ul>
+
+
+					Whatever the list of entities to perform the KO analysis, entites
+					are set to 0 one by one and each time an FBA is performed. This
+					analysis returns the objective value corresponding to each
+					knocked-out entity.
+
+
+					<h4>Command-line arguments</h4>
+					<ul>
+						<li>-s String : Sbml file path</li>
+						<li>-cond String : Condition file path
+						<li>-int String : [OPTIONAL]Interaction file path
+						<li>-nointsolv : [OPTIONAL, default = false]Interactions are
+							not in the solver
+						<li>-e String : [Optional]Biological entities to perform the
+							KO analysis on (Space-separated list of entities, example : "R1
+							R2 G1 G2"). If empty, KO is done on all reactions (mode 0) or all
+							genes (mode 1)
+						<li>-mode Integer : [OPTIONAL, default = 0]KO mode :
+							<ul>
+								<li>Mode 0: the KO analysis is performed on reactions.
+								<li>Mode 1: the KO analysis is performed on genes.
+							</ul>
+						<li>-n Integer : [OPTIONAL, default = number of available
+							processors]Number of threads
+						<li>-out String : [OPTIONAL]Output file name
+						<li>-plot : [OPTIONAL, default = false]Plots the results
+						<li>-lib Double : [OPTIONAL, default = 0]Percentage of non
+							optimality for new constraints
+						<li>-pre Integer : [OPTIONAL, default = 6]Number of decimals
+							of precision for calculations and results
+						<li>-sol String : Solver name
+						<li>-ext : [OPTIONAL, default = false]Uses the extended SBML
+							format</li>
+						<li>-h : Prints help
+					</ul>
+
+					<p>Example 1 :
+					<pre class="prettyprint">FlexfluxKO -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -mode 1</pre>
+					</p>
+
+					This example is a simple KO analysis run on all network genes (mode
+					= 1).
+
+					<p>Example 2 :
+					<pre class="prettyprint">FlexfluxKO -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -e "R1 R2 G1 G2"</pre>
+					</p>
+
+					Here the KO analysis is run on the reactions R1 and R2 and the
+					genes G1 and G2.
+
+					<h4>Results</h4>
+
+					For this example, we used :
+					<ul>
+						<li>the SBML file <a href="results/coli_core.xml">coli_core.xml,</a></li>
+						<li>the condition file <a href="results/conditionsFBA.txt">conditionsFBA.txt,</a></li>
+						<li>the command line : <pre class="prettyprint">FlexfluxKO -s coli_core.xml -cond conditionsFBA.txt -out KO_result.txt -mode 1 -plot</pre></li>
+					</ul>
+
+
+					Here is a part of the text result file <a
+						href="results/KO_result.txt">KO_result.txt</a> : KO results :
+
+					b2277 obj value : 0.211663 b1819 obj value : 0.873922 b3528 obj
+					value : 0.873922 b2296 obj value : 0.873922 b3612 obj value :
+					0.873922 b2285 obj value : 0.211663 b0720 obj value : 0.0 b2914 obj
+					value : 0.873922
+					</pre>
+					<p>The graphical result :</p>
+					<img src="img/KO.png"></img>
+
+					<p style="text-align: center">
+						<strong>FlexFlux KO analysis result.</strong> <i>The analysis
+							is performed on genes because we set the parameter "mode" to 1.
+							We can see what genes are essentials for biomass production. For
+							exemple the gene b0720 is essential because the maximum biomass
+							production is 0 when this gene is knocked out.</i>
+					</p>
+
+
+					<h3 id="rfba">Time dependent FBA</h3>
+
+					<p>This analysis is based on external metabolic concentrations
+						and cell density. Given initial metabolite concentrations, cell
+						density, a time step and a number of iterations, this analysis
+						returns the value of each metabolite and cell density for each
+						time. Initial metabolite concentrations must be written in the
+						condition file.</p>
+
+					<h4>Command-line arguments</h4>
+					<ul>
+						<li>-s String : Sbml file path</li>
+						<li>-cond String : Condition file path
+						<li>-int String : [OPTIONAL]Interaction file path
+						<li>-nointsolv : [OPTIONAL, default = false]Interactions are
+							not in the solver
+						<li>-e String : [OPTIONAL]Biological entities included in the
+							results. If empty, only concerned metabolites and cell density
+							will be included
+						<li>-x Double : Cell density initial value in g/L
+						<li>-t Double : [OPTIONAL, default = 0.1]Time between each
+							iteration in hour
+						<li>-it Integer : [OPTIONAL, default = 150]Number of
+							iterations
+						<li>-bio String : Name of the biomass reaction
+						<li>-n Integer : [OPTIONAL, default = number of available
+							processors]Number of threads
+						<li>-out String : [OPTIONAL]Output file name
+						<li>-plot : [OPTIONAL, default = false]Plots the results
+						<li>-lib Double : [OPTIONAL, default = 0]Percentage of non
+							optimality for new constraints
+						<li>-pre Integer : [OPTIONAL, default = 6]Number of decimals
+							of precision for calculations and results
+						<li>-sol String : Solver name
+						<li>-ext : [OPTIONAL, default = false]Uses the extended SBML
+							format</li>
+						<li>-h : Prints help
+					</ul>
+
+					<p>Example 1:
+					<pre class="prettyprint">FlexfluxRFBA -s network.xml -cond cond.txt -int int.txt -bio R_BIOMASS -x 0.01 -plot -out out.txt</pre>
+					</p>
+
+					This a a RFBA analysis on the network described in network.xml. The
+					biomass reaction is R_BIOMASS and the initial cell density is 0.01
+					g/L.
+
+					<p>Example 2:
+					<pre class="prettyprint">FlexfluxRFBA -s network.xml -cond cond.txt -int int.txt -bio R_BIOMASS -plot -out out.txt -x 0.01 -t 0.02 -it 400 -e "R1 R2 G1 G2"</pre>
+					</p>
+
+					Here, the timestep between each iteration will be 0.02 h and the
+					entities R1, R2, G1 and G2 will be added to the results.
+
+
+					<h4>Results</h4>
+
+					For this example, we used :
+					<ul>
+						<li>the SBML file <a href="results/coli_core.xml">coli_core.xml</a>,
+						</li>
+						<li>the condition file <a href="results/conditionsRFBA.txt">conditionsRFBA.txt</a>
+							where initial concentrations are set,
+						</li>
+						<li>the interaction file <a
+							href="results/interactionsRFBA.txt">interactionsRFBA.txt</a>,
+						</li>
+						<li>The command line: <pre class="prettyprint">FlexfluxRFBA -s coli_core.xml -cond conditionsRFBA.txt -int interactionsRFBA.txt -out RFBA_result.txt -bio R_Biomass_Ecoli_core_w_GAM -e lacZ -x 0.011 -plot</pre>
+						</li>
+					</ul>
+
+					<p>
+						The values for this example are extracted from [<a
+							href="#covertRef">1</a>] and algorithms for calculations are
+						detailed in [<a href="#algorfba">4</a>].
+					</p>
+
+					Here is a part of the text result file <a
+						href="results/RFBA_result.txt">RFBA_result.txt</a> :
+					<pre class="prettyprint">
+	M_lac_D_b	lacZ	X	M_glc_D_b	
+0.0	5.8	0.0	0.011	1.6	
+0.1	5.8	0.0	0.011626	1.592649	
+0.2	5.8	0.0	0.012287	1.584879	
+0.3	5.8	0.0	0.012985	1.576668	
+0.4	5.8	0.0	0.013724	1.567989	
+0.5	5.8	0.0	0.014504	1.558818	
+0.6	5.8	0.0	0.015329	1.549124	
+0.7	5.8	0.0	0.016201	1.53888	
+0.8	5.8	0.0	0.017122	1.528053	
+0.9	5.8	0.0	0.018096	1.51661	
+1.0	5.8	0.0	0.019125	1.504516	
+1.1	5.8	0.0	0.020212	1.491735
+</pre>
+					<p>The graphical result :</p>
+					<img src="img/RFBA1.png"></img> <img src="img/RFBA2.png"></img>
+
+					<p style="text-align: center">
+						<strong>FlexFlux time dependant flux analysis result.</strong> <i>We
+							can see the variation of the value of differents entities. X
+							represents the cell density. While the glucose concentration
+							(M_glc_D_b) is greater than 0, the gene lacZ is repressed (thanks
+							to an interaction in the interaction file). When all the glucose
+							is used, lacZ is not repressed and the cell can use the lactose
+							to grow.</i>
+					</p>
+
+
+
+
+
+					<h3 id="reac">2-D Phenotypic phase analysis</h3>
+
+					<p>This analysis returns the objective value for each reaction
+						flux.</p>
+					<p>
+						This permits a phenotype phase plane analysis. [<a
+							href="#phenoRef">2</a>]
+					</p>
+
+					<p>A phenotype phase corresponds to a specific metabolic
+						network behavior.</p>
+
+					<p>In order to do that, it calculates the shadow price on each
+						point and groups the points with same shadow price into phenotipic
+						phases that are represented in different colors. To give a hint on
+						what reactions are active in each phase, a FVA is applied on each
+						one and the result is graphically shown: essential reactions are
+						displayed.</p>
+
+					<h4>Command-line arguments</h4>
+					<ul>
+						<li>-s String : Sbml file path</li>
+						<li>-cond String : Condition file path
+						<li>-int String : [OPTIONAL]Interaction file path
+						<li>-r String : Name of the reaction to test
+						<li>-nointsolv : [OPTIONAL, default = false]Interactions are
+							not in the solver
+						<li>-init Double : Initial flux value of the reaction to test</li>
+						<li>-end Double : Final flux value of the reaction to test
+						<li>-f Double : [OPTIONAL, default = 0.1]Difference between
+							each FBA for the reaction flux
+						<li>-n Integer : [OPTIONAL, default = number of available
+							processors]Number of threads
+						<li>-out String : [OPTIONAL]Output file name
+						<li>-plot : [OPTIONAL, default = false]Plots the results
+						<li>-lib Double : [OPTIONAL, default = 0]Percentage of non
+							optimality for new constraints
+						<li>-pre Integer : [OPTIONAL, default = 6]Number of decimals
+							of precision for calculations and results
+						<li>-sol String : Solver name
+						<li>-ext : [OPTIONAL, default = false]Uses the extended SBML
+							format</li>
+						<li>-h : Prints help
+					</ul>
+					<p>Example :
+					<pre class="prettyprint">FlexfluxReac -s network.xml -cond cond.txt -int int.txt -r R1 -init -10 -end 0 -plot -out out.txt</pre>
+					</p>
+
+
+					<h4>Results</h4>
+
+					For this example, we used :
+					<ul>
+						<li>the SBML file <a href="results/coli_core.xml">coli_core.xml</a>,
+						</li>
+						<li>the condition file <a href="results/conditionsFBA.txt">conditionsFBA.txt</a>,
+						</li>
+						<li>the command line : <pre class="prettyprint">FlexfluxReac -s coli_core.xml -cond conditionsFBA.txt -out Reac_result.txt -r R_EX_o2_e -init -20 -end 0 -f 0.05 -plot</pre>
+						</li>
+					</ul>
+
+
+					Here the text result file <a href="results/Reac_result.txt">Reac_result.txt</a>
+					:
+					<pre class="prettyprint">
+Reaction flux result
+
+Flux : R_EX_o2_e
+Objective : R_Biomass_Ecoli_core_w_GAM
+
+Flux	Objective
+-20.0	0.832614
+-19.95	0.831466
+-19.9	0.830318
+-19.85	0.82917
+-19.8	0.828023
+-19.7	0.825727
+-19.75	0.826875
+</pre>
+					<p>The graphical result :</p>
+					<img src="img/Reac.png"></img>
+
+					<p style="text-align: center">
+						<strong>FlexFlux 2-D Phenotypic phase analysis.</strong><i> We
+							can see the evolution of the maximum biomass production for
+							different values of oxygen uptake. We observe three distinctive
+							phenotypic phases.</i>
+					</p>
+
+
+
+					<h3 id="tworeacs">3-D Phenotypic phase analysis</h3>
+
+					<p>This analysis returns the objective value for each
+						combination of two reaction fluxes.</p>
+					<p>This permits a phenotype phase plane analysis.</p>
+					<p>In order to do that, it calculates the shadow price on each
+						point and groups the points with same shadow price into phetotipic
+						phases that are represented in different colors. To give a hint on
+						what reactions are active in each phase, a FVA is applied on each
+						and the result is graphically shown : essential reactions are
+						displayed (the "order" found for the phases is only indicative and
+						might not have any biological meaning).</p>
+
+
+					<h4>Command-line arguments</h4>
+					<ul>
+						<li>-s String : Sbml file path</li>
+						<li>-cond String : Condition file path
+						<li>-int String : [OPTIONAL]Interaction file path
+						<li>-r String : Name of the first reaction to test
+						<li>-r2 String : Name of the second reaction to test
+						<li>-nointsolv : [OPTIONAL, default = false]Interactions are
+							not in the solver
+						<li>-init Double : Initial flux value of the first reaction
+							to test</li>
+						<li>-end Double : Final flux value of the first reaction to
+							test
+						<li>-f Double : [OPTIONAL, default = 0.1]Difference between
+							each FBA for the first reaction flux
+						<li>-init2 Double : Initial flux value of the second reaction
+							to test</li>
+						<li>-end2 Double : Final flux value of the second reaction to
+							test
+						<li>-f2 Double : [OPTIONAL, default = 0.1]Difference between
+							each FBA for the second reaction flux
+						<li>-n Integer : [OPTIONAL, default = number of available
+							processors]Number of threads
+						<li>-out String : [OPTIONAL]Output file name
+						<li>-plot : [OPTIONAL, default = false]Plots the results
+						<li>-lib Double : [OPTIONAL, default = 0]Percentage of non
+							optimality for new constraints
+						<li>-pre Integer : [OPTIONAL, default = 6]Number of decimals
+							of precision for calculations and results
+						<li>-sol String : Solver name
+						<li>-ext : [OPTIONAL, default = false]Uses the extended SBML
+							format</li>
+						<li>-h : Prints help
+					</ul>
+					<p>Example:
+					<pre class="prettyprint">FlexfluxTwoReacs -s network.xml -cond cond.txt -int int.txt -r R1 -init -20 -end 0 -r2 R2 -20 -end2 0 -f2 0.2 -plot -out out.txt</pre>
+					</p>
+
+
+					<h4>Results</h4>
+
+					For this example, we used :
+					<ul>
+						<li>The SBML file <a href="results/coli_core.xml">coli_core.xml</a></li>
+						<li>The condition file <a href="results/conditionsFBA.txt">conditionsFBA.txt</a></li>
+						<li>The command line : FlexfluxTwoReacs -s coli_core.xml
+							-cond conditionsFBA.txt -out Two_Reacs_result.txt -r R_EX_glc_e
+							-init -20 -end 0 -f 0.5 -r2 R_EX_o2_e -init2 -20 -end2 0 -f2 0.05
+							-plot</li>
+					</ul>
+
+
+					Here the text result file <a href="results/Two_Reacs_result.txt">Two_Reacs_result.txt</a>
+					:
+					<pre class="prettyprint">
+Two reactions fluxes result
+
+Flux1 : R_EX_glc_e
+Flux2 : R_EX_o2_e
+Objective : R_Biomass_Ecoli_core_w_GAM
+
+Flux1	Flux2	Objective
+-20.0	-19.5	1.192735
+-20.0	-20.0	1.208983
+-20.0	-19.0	1.176487
+-20.0	-18.5	1.160239
+-20.0	-17.5	1.127742
+-20.0	-18.0	1.14399
+-20.0	-16.5	1.095245
+-20.0	-16.0	1.078997
+-20.0	-15.5	1.062749
+-20.0	-17.0	1.111494
+-20.0	-15.0	1.0465
+</pre>
+					<p>The graphical result :</p>
+					<img src="img/TwoReacs.png"></img>
+
+					<p style="text-align: center">
+						<strong>FlexFlux 3-D Phenotypic phase analysis result.</strong> <i>We
+							can see the evolution of the maximum biomass production for
+							different values of oxygen and glucose uptake. We observe four
+							distinctive phenotypic phases.</i>
+					</p>
+
+
+
+					<h3 id="pareto">Pareto analysis</h3>
+
+					<p>
+						The goal of this analysis is to determine what objective (or set
+						of objectives) an organism is optimizing.[<a href="#paretoRef">3</a>]
+					</p>
+
+					<p>It take as an argument a file containing the objective
+						functions to test and experimental values, and finds out (in one,
+						two and three dimensions) what objective optimization is closest
+						to the experimental values.</p>
+
+					<p>The objectives that are optimized are those for witch the
+						experimental values are the closest to the pareto surface.</p>
+
+
+					<p>The pareto surface is the surface in which all points are
+						pareto optimal. This means that to increase the value of an
+						objective, you must decrease another.</p>
+
+					<p>In this analysis, the objective function of the condition
+						file is optional and ignored if present.</p>
+
+					<h4>Objective function and experimental values file</h4>
+
+					<p>The file must contain all the objectives in the first line,
+						and then one line per experimental value. There must be as many
+						values for one experiment as there are objective functions.</p>
+					<p>For each experimental value, values for the objectives must
+						be in order and separated by a space.</p>
+
+
+					<p>Example:</p>
+
+					<pre class="prettyprint">MIN(sum) MAX(atpYield) MAX(R_Biomass_Ecoli_core_w_GAM)
+
+1667.4 213.0 6.4
+1635.9 191.0 7.9
+1622.2 204.0 7.2
+1640.4 171.0 7.4
+1696.2 176.0 7.2
+1657.4 173.0 7.4
+1642.9 207.0 6.9
+1616.7 185.0 7.7
+1569.8 198.0 7.8	
+</pre>
+
+
+					<h4>Command-line arguments</h4>
+					<ul>
+						<li>-s String : Sbml file path</li>
+						<li>-cond String : Condition file path
+						<li>-int String : [OPTIONAL]Interaction file path
+						<li>-exp String : Path of file containing objective functions
+							and experimental values
+						<li>-all : [OPTIONAL, default = false]Plots all results. If
+							false, plots 1D results and only the best result for 2D and 3D
+							results.
+						<li>-nointsolv : [OPTIONAL, default = false]Interactions are
+							not in the solver
+						<li>-n Integer : [OPTIONAL, default = number of available
+							processors]Number of threads
+						<li>-out String : [OPTIONAL]Output folder name
+						<li>-plot : [OPTIONAL, default = false]Plots the results
+						<li>-lib Double : [OPTIONAL, default = 0]Percentage of non
+							optimality for new constraints
+						<li>-pre Integer : [OPTIONAL, default = 6]Number of decimals
+							of precision for calculations and results
+						<li>-sol String : Solver name
+						<li>-ext : [OPTIONAL, default = false]Uses the extended SBML
+							format</li>
+						<li>-h : Prints help
+					</ul>
+					<p>Example : FlexfluxPareto -s network.xml -cond cond.txt -int
+						int.txt -plot -e expFile</p>
+
+
+					<h4>Results</h4>
+
+
+					For this example, we used :
+					<ul>
+						<li>the SBML file <a href="results/coli_core.xml">coli_core.xml</a></li>
+						<li>the condition file <a href="results/conditionsPareto.txt">conditionsPareto.txt</a></li>
+						<li>the objective/experimental file <a
+							href="results/expFile.txt">expFile.txt</a></li>
+						<li>the command line: <pre class="prettyprint">FlexfluxPareto -s coli_core.xml -cond conditionsPareto.txt -exp expFile.txt -out pareto/ -plot</pre>
+						</li>
+					</ul>
+
+
+					The text result files are in the folder pareto/ :
+
+					<ul>
+						<li><a href="results/pareto/1D.txt">1D.txt</a></li>
+						<li><a href="results/pareto/2D_1.txt">2D_1.txt</a></li>
+						<li><a href="results/pareto/2D_2.txt">2D_2.txt</a></li>
+						<li><a href="results/pareto/2D_3.txt">2D_3.txt</a></li>
+						<li><a href="results/pareto/3D_1.txt">3D_1.txt</a></li>
+					</ul>
+
+
+					<p>The graphical results :</p>
+
+					<p>Axes values are normalized such that the coordinates of the
+						points on the Pareto surface range from 0 to 1, where 1 represents
+						the theoretical minimum or maximum of an objective.</p>
+
+					<ul class="nav nav-tabs" id="myTab">
+						<li><a href="#1d">One dimension</a></li>
+						<li><a href="#2d">Two dimensions</a></li>
+						<li class="active"><a href="#3d">Three dimensions</a></li>
+
+					</ul>
+
+					<div class="tab-content">
+						<div class="tab-pane" id="1d">
+							<img src="img/Pareto1D.png"></img>
+						</div>
+						<div class="tab-pane" id="2d">
+							<img src="img/Pareto2D.png"></img>
+						</div>
+						<div class="tab-pane active" id="3d">
+							<img src="img/Pareto3D.png"></img>
+						</div>
+					</div>
+					<p style="text-align: center">
+						<strong>FlexFlux Pareto analysis result.</strong>
+					</p>
+
+					<h3 id="dead">Dead reactions</h3>
+
+					Dead reactions are unable to carry a steady state flux and thus
+					clearly represent missing information in the model. This analysis
+					returns the list of dead reactions.
+
+					<h4>Command-line arguments</h4>
+					<ul>
+						<li>-s String : Sbml file path</li>
+						<li>-cond String : [OPTIONAL]Condition file path
+						<li>-int String : [OPTIONAL]Interaction file path
+						<li>-nointsolv : [OPTIONAL, default = false]Interactions are
+							not in the solver
+						<li>-d Double : [OPTIONAL, default = 0.000001]Maximal
+							distance of the reaction flux from 0 to be considered as dead
+						<li>-mode Integer : [OPTIONAL, default = 0]Dead reactions
+							mode:
+							<ul>
+								<li>- Mode 0: Reactions fluxes are not changed.
+								<li>- Mode 1: All reactions fluxes bounds are set to a
+									maximum value. (fluxes become free)
+							</ul>
+						<li>-n Integer : [OPTIONAL, default = number of available
+							processors]Number of threads
+						<li>-out String : [OPTIONAL]Output file name
+						<li>-plot : [OPTIONAL, default = false]Plots the results
+						<li>-lib Double : [OPTIONAL, default = 0]Percentage of non
+							optimality for new constraints
+						<li>-pre Integer : [OPTIONAL, default = 6]Number of decimals
+							of precision for calculations and results
+						<li>-sol String : Solver name
+						<li>-ext : [OPTIONAL, default = false]Uses the extended SBML
+							format</li>
+						<li>-h : Prints help
+					</ul>
+					<p>Example 1 : FlexfluxDR -s network.xml -plot -out out.txt</p>
+
+					<p>Example 2 : FlexfluxDR -s network.xml -cond cond.txt -int
+						int.txt -plot -out out.txt -mode 1 -d 0.1</p>
+
+
+					<h4>Results</h4>
+
+					For this example, we used :
+					<ul>
+						<li>the SBML file <a href="results/coli_core.xml">coli_core.xml</a>,
+						</li>
+						<li>the command line : <pre class="prettyprint">FlexfluxDR -s coli_core.xml -out DR_result.txt -plot</pre></li>
+					</ul>
+
+
+					Here the text result file <a href="results/DR_result.txt">DR_result.txt</a>
+					:
+					<pre class="prettyprint">
+Dead Reactions result
+
+R_EX_fru_e
+R_EX_fum_e
+R_EX_mal_L_e
+R_FUMt2_2
+R_GLNabc
+R_EX_gln_L_e
+R_FRUpts2
+R_MALt2_2
+</pre>
+					<p>The graphical result :</p>
+					<img src="img/DR.png"></img>
+
+					<p style="text-align: center">
+						<strong>FlexFlux dead reaction identification result</strong>. <i>In
+							these conditions, those 8 reactions cannot carry any flux</i>
+					</p>
+
+
+				</section>
+				<h2>References</h2>
+				<ol>
+					<li><p id="covertRef">
+							Markus W. Covert and Bernhard Ø. Palsson: <b>Transcriptional
+								Regulation in Constraints-based Metabolic Models of Escherichia
+								coli.</b>The Journal of Biological Chemistry 2002
+
+						</p></li>
+					<li><p id="phenoRef">
+							Jeremy S. Edwards, Ramprasad Ramakrishna, Bernhard O. Palsson: <b>Characterizing
+								the Metabolic Phenotype: A Phenotype Phase Plane Analysis.</b>
+							Biotechnology and bioengineering 2002
+						</p></li>
+					<li><p id="paretoRef">
+							Robert Schuetz, Nicola Zamboni, Mattia Zampieri, Matthias
+							Heinemann, Uwe Sauer: <b>Multidimensional Optimality of
+								Microbial Metabolism.</b> Science 2012
+						</p></li>
+					<li><p id="algorfba">
+							Amit Warma and Bernhard Ø Palsson: <b>Stoichiometric flux
+								balance models quantitatively predict growth and metabolic
+								by-product secretion in wild-type Escherichia coli W3110.</b> Appl
+							Environ Microbiol. 1994
+						</p></li>
+				</ol>
+			</div>
+
+		</div>
+		<footer class="footer">
+			<div class="container">
+				<p>
+					This project was developed at <a
+						href="http://www6.toulouse.inra.fr/lipm_eng/Platforms-and-Facilities/Bioinformatics-platform/Activities">LIPM</a>
+					by Lucas Marmiesse. Copyright &copy; 2013, INRA
+				</p>
+			</div>
+		</footer>
+
+	</div>
+	<script src="js/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/prettify.js"></script>
+	<script>
+		!function($) {
+			$(function() {
+				window.prettyPrint && prettyPrint()
+			})
+		}(window.jQuery)
+	</script>
+	<script>
+		$(function() {
+			$('#myTab a:last').tab('show');
+		})
+
+		$('#myTab a').click(function(e) {
+			e.preventDefault();
+			$(this).tab('show');
+		})
+	</script>
+
+</body>
+</html>
