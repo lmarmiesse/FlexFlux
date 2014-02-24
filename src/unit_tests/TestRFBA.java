@@ -89,26 +89,21 @@ public class TestRFBA {
 	@Test
 	public void test() {
 		
-		System.out.println("yo");
 
-		Analysis analysis = new FBAAnalysis(bind);
-		AnalysisResult result = analysis.runAnalysis();
 		
-		System.out.println(bind.getSolvedValue(new BioEntity("h")));
-		
-//		go();
-//		bind = new CplexBind(true);
-//
-//		bind.loadSbmlNetwork("Data/coli.xml", false);
-//		n = bind.getBioNetwork();
-//		i = bind.getInteractionNetwork();
-//
-//		bind.loadConditionsFile("Data/condTestRfba");
-//
-//		bind.loadInteractionsFile("Data/intTestRfba");
-//
-//		bind.prepareSolver();
-//		go();
+		go();
+		bind = new CplexBind(true);
+
+		bind.loadSbmlNetwork("Data/coli.xml", false);
+		n = bind.getBioNetwork();
+		i = bind.getInteractionNetwork();
+
+		bind.loadConditionsFile("Data/condTestRfba");
+
+		bind.loadInteractionsFile("Data/intTestRfba");
+
+		bind.prepareSolver();
+		go();
 
 	}
 
