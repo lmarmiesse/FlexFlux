@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   repos="https://svn.code.sf.net/p/parsebionet/code"
+   name=""
+   revision="460"
+   last-author="lmarmiesse"
+   url="https://svn.code.sf.net/p/parsebionet/code/trunk/doc/flexconflux/site/bootstrap/img"
+   committed-rev="460"
+   kind="dir"
+   committed-date="2013-06-06T14:26:44.301000Z"/>
+<entry
+   name="glyphicons-halflings-white.png"
+   checksum="9bbc6e9602998a385c2ea13df56470fd"
+   last-author="lmarmiesse"
+   text-time="2013-06-06T12:30:03.000000Z"
+   committed-rev="460"
+   kind="file"
+   committed-date="2013-06-06T14:26:44.301000Z"
+   prop-time="2013-06-06T14:26:21.000000Z"/>
+<entry
+   name="glyphicons-halflings.png"
+   checksum="2516339970d710819585f90773aebe0a"
+   last-author="lmarmiesse"
+   text-time="2013-06-06T12:30:03.000000Z"
+   committed-rev="460"
+   kind="file"
+   committed-date="2013-06-06T14:26:44.301000Z"
+   prop-time="2013-06-06T14:26:21.000000Z"/>
+</wc-entries>

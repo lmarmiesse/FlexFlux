@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>FlexFlux</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<!-- Les styles -->
+<link href="css/bootstrap.css" rel="stylesheet"
+	media="screen">
+<link href="css/bootstrap-responsive.css" rel="stylesheet"
+	media="screen">
+<link href="css/prettify.css" rel="stylesheet"
+	media="screen">
+
+
+<link href="css/docs.css" rel="stylesheet" media="screen">
+
+<style type="text/css">
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+}
+</style>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41601195-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<button type="button" class="btn btn-navbar" data-toggle="collapse"
+					data-target=".nav-collapse">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="brand" href="./index.html">FlexFlux</a>
+				<div class="nav-collapse collapse">
+					<ul class="nav">
+						<li><a href="./documentation.html">User documentation</a></li>
+						<li><a href="./installation.html">Installation</a></li>
+						<li><a href="./techdocumentation.html">Technical documentation</a></li>
+						<li><a href="https://github.com/lmarmiesse/FlexFlux/wiki/Downloads">Download</a></li>
+						<li><a href="https://github.com/lmarmiesse/FlexFlux">Sources</a></li>
+						<li><a href="./javadoc/index.html">Javadoc</a></li>
+						<li><a href="mailto:Lucas.Marmiesse@toulouse.inra.fr">Contact</a></li>
+
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<!-- Main hero unit for a primary marketing message or call to action -->
+		<div class="hero-unit">
+			<h1>FlexFlux</h1>
+			<p>
+				<b>FlexFlux</b> is a java tool for metabolic flux analysis.
+			</p>
+
+			<p>
+				<a href="./documentation.html" class="btn btn-primary btn-large">Learn
+					more »</a>
+			</p>
+		</div>
+
+		<div class="row">
+
+			<div class="span4"></div>
+
+
+			<div class="span5">
+
+				<h2>Example of plots</h2>
+
+				<div id="myCarousel" class="carousel slide">
+					<ol class="carousel-indicators">
+						<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+						<li data-target="#myCarousel" data-slide-to="1"></li>
+						<li data-target="#myCarousel" data-slide-to="2"></li>
+						<li data-target="#myCarousel" data-slide-to="3"></li>
+					</ol>
+					<!-- Carousel items -->
+					<div class="carousel-inner">
+						<div class="active item">
+
+							<img src="img/FBA.png" alt="">
+							<div class="carousel-caption">
+								<h4>FBA results</h4>
+								<p>FBA results with all variable values</p>
+							</div>
+						</div>
+						<div class="item">
+							<img src="img/RFBA.png" alt="">
+							<div class="carousel-caption">
+								<h4>Time dependent FVA results</h4>
+								<p>Cell density and glucose concentration variations</p>
+							</div>
+						</div>
+						<div class="item">
+							<img src="img/Pareto3D.png" alt="">
+							<div class="carousel-caption">
+								<h4>Objective analysis</h4>
+								<p>Comparison between objectives and experimental values</p>
+							</div>
+						</div>
+						<div class="item">
+							<img src="img/TwoReacs.png" alt="">
+							<div class="carousel-caption">
+								<h4>Phenotype phase plane</h4>
+								<p>Phenotype phase plane obtained by optimizing and varying
+									two fluxes</p>
+							</div>
+						</div>
+					</div>
+					<!-- Carousel nav -->
+					<a class="carousel-control left" href="#myCarousel"
+						data-slide="prev">&lsaquo;</a> <a class="carousel-control right"
+						href="#myCarousel" data-slide="next">&rsaquo;</a>
+
+
+
+				</div>
+
+			</div>
+
+			<div class="span3"></div>
+
+
+
+		</div>
+		<footer class="footer">
+			<div class="container">
+				<p>
+					This project was developed at <a
+						href="http://www6.toulouse.inra.fr/lipm_eng/Platforms-and-Facilities/Bioinformatics-platform/Activities">LIPM</a>
+					by Lucas Marmiesse. Copyright &copy; 2013, INRA
+				</p>
+			</div>
+		</footer>
+	</div>
+	<script src="js/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/prettify.js"></script>
+	<script>
+$(function (){
+    $('.carousel').carousel({
+  interval: 5000
+})
+});  
+</script>
+</body>
+</html>
+
+
+

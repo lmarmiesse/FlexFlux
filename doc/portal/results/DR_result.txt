@@ -1,0 +1,10 @@
+Dead Reactions result
+
+R_EX_fru_e
+R_EX_fum_e
+R_EX_mal_L_e
+R_FUMt2_2
+R_GLNabc
+R_EX_gln_L_e
+R_FRUpts2
+R_MALt2_2
