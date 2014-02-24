@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   repos="https://svn.code.sf.net/p/parsebionet/code"
+   name=""
+   revision="460"
+   last-author="lmarmiesse"
+   url="https://svn.code.sf.net/p/parsebionet/code/trunk/doc/flexconflux/site/bootstrap/js"
+   committed-rev="460"
+   kind="dir"
+   committed-date="2013-06-06T14:26:44.301000Z"/>
+<entry
+   name="bootstrap.js"
+   checksum="772ea2441e5fe335b0fa79df73be7c81"
+   last-author="lmarmiesse"
+   text-time="2013-06-06T12:30:03.000000Z"
+   committed-rev="460"
+   kind="file"
+   committed-date="2013-06-06T14:26:44.301000Z"/>
+<entry
+   name="bootstrap.min.js"
+   checksum="d700a93337122b390b90bbfe21e64f71"
+   last-author="lmarmiesse"
+   text-time="2013-06-06T12:30:03.000000Z"
+   committed-rev="460"
+   kind="file"
+   committed-date="2013-06-06T14:26:44.301000Z"/>
+</wc-entries>
