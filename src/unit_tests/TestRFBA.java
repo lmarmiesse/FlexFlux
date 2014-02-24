@@ -51,8 +51,12 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
+import analyses.Analysis;
+import analyses.FBAAnalysis;
 import analyses.RFBAAnalysis;
+import analyses.result.AnalysisResult;
 import analyses.result.RFBAResult;
 
 /**
@@ -84,20 +88,27 @@ public class TestRFBA {
 
 	@Test
 	public void test() {
+		
+		System.out.println("yo");
 
-		go();
-		bind = new CplexBind(true);
-
-		bind.loadSbmlNetwork("Data/coli.xml", false);
-		n = bind.getBioNetwork();
-		i = bind.getInteractionNetwork();
-
-		bind.loadConditionsFile("Data/condTestRfba");
-
-		bind.loadInteractionsFile("Data/intTestRfba");
-
-		bind.prepareSolver();
-		go();
+		Analysis analysis = new FBAAnalysis(bind);
+		AnalysisResult result = analysis.runAnalysis();
+		
+		System.out.println(bind.getSolvedValue(new BioEntity("h")));
+		
+//		go();
+//		bind = new CplexBind(true);
+//
+//		bind.loadSbmlNetwork("Data/coli.xml", false);
+//		n = bind.getBioNetwork();
+//		i = bind.getInteractionNetwork();
+//
+//		bind.loadConditionsFile("Data/condTestRfba");
+//
+//		bind.loadInteractionsFile("Data/intTestRfba");
+//
+//		bind.prepareSolver();
+//		go();
 
 	}
 
