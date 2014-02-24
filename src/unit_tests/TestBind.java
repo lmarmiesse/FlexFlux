@@ -178,7 +178,8 @@ public class TestBind {
 		Assert.assertTrue(gpr);
 
 		Sbml2Bionetwork parser = new Sbml2Bionetwork(
-				"/home/lmarmiesse/Documents/test.xml", false);//MISSING FILE
+				"Data/test.xml", false);
+
 		BioNetwork network = parser.getBioNetwork();
 		bind.setNetwork(network, false);
 
