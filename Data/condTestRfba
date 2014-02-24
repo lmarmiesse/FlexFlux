@@ -23,10 +23,12 @@ x 5
 y 4
 z 5
 b 0
-h 0 5
+
 
 INTEGER
 
+
 BINARY
+h
 
 EQUATIONS
