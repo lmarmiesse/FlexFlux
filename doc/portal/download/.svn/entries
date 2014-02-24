@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   repos="https://svn.code.sf.net/p/parsebionet/code"
+   name=""
+   revision="468"
+   last-author="lmarmiesse"
+   url="https://svn.code.sf.net/p/parsebionet/code/trunk/doc/flexconflux/site/download"
+   committed-rev="468"
+   kind="dir"
+   committed-date="2013-06-18T11:41:18.376000Z"/>
+<entry
+   name="FlexFlux_1.0_executable.zip"
+   revision="469"
+   checksum="a8df483f43922890732cbd80df531597"
+   last-author="lmarmiesse"
+   committed-rev="469"
+   text-time="2013-06-18T14:05:01.000000Z"
+   kind="file"
+   committed-date="2013-06-19T13:56:04.998000Z"
+   prop-time="2013-06-18T11:39:10.000000Z"/>
+</wc-entries>
