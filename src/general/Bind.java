@@ -303,6 +303,8 @@ public abstract class Bind {
 				for (Constraint c : checkInteractions().keySet()) {
 					c.setOverWritesBounds(false);
 					constraintsToAdd.add(c);
+					
+					System.out.println(c);
 				}
 
 				return FBAWithConstraints(constraintsToAdd, saveResults,
@@ -342,8 +344,8 @@ public abstract class Bind {
 				// treatment to ensure there is no problem
 
 				Map<BioEntity, Constraint> oldSimpleConstraint = new HashMap<BioEntity, Constraint>();
-				// we add the simple constraints to be taken into acocunt when
-				// cheking interactions
+				// we add the simple constraints to be taken into account when
+				// checking interactions
 				for (Constraint constr : constraintsToAdd) {
 
 					if (constr.getEntities().size() == 1) {
@@ -362,6 +364,7 @@ public abstract class Bind {
 				}
 
 				for (Constraint c : checkInteractions().keySet()) {
+					System.out.println(c);
 					c.setOverWritesBounds(false);
 					constraintsToAdd.add(c);
 				}
@@ -674,6 +677,7 @@ public abstract class Bind {
 										relationFactory
 												.makeInversedRelation(condition));
 
+						
 						intNet.addAddedIntercation(i);
 
 						// if the interaction has to start right away
@@ -707,6 +711,7 @@ public abstract class Bind {
 						Interaction i = relationFactory.makeIfThenInteraction(
 								consequence, condition);
 
+						
 						intNet.addAddedIntercation(i);
 
 					}
@@ -1423,35 +1428,35 @@ public abstract class Bind {
 	 */
 	public void prepareSolver() {
 
-		if (solverPrepared) {
-			System.err.println("Warning : preparing a non-empty solver");
-		}
-
-		// we fill the two lists of interactions
+		entitiesToSolverVars();
+		
 		List<Interaction> normalInteractions = new ArrayList<Interaction>();
 		List<Interaction> probaInteractions = new ArrayList<Interaction>();
-		for (Interaction inter : intNet.getGPRInteractions()) {
-
-			if (inter.isProbabilityInteraction()) {
-				probaInteractions.add(inter);
-			} else {
-				normalInteractions.add(inter);
-			}
-
-		}
-		for (Interaction inter : intNet.getAddedInteractions()) {
-
-			if (inter.isProbabilityInteraction()) {
-				probaInteractions.add(inter);
-			} else {
-				normalInteractions.add(inter);
-			}
-
-		}
-
-		entitiesToSolverVars();
-
 		if (interactionInSolver) {
+			if (solverPrepared) {
+				System.err.println("Warning : preparing a non-empty solver");
+			}
+	
+			// we fill the two lists of interactions
+			
+			for (Interaction inter : intNet.getGPRInteractions()) {
+	
+				if (inter.isProbabilityInteraction()) {
+					probaInteractions.add(inter);
+				} else {
+					normalInteractions.add(inter);
+				}
+	
+			}
+			for (Interaction inter : intNet.getAddedInteractions()) {
+	
+				if (inter.isProbabilityInteraction()) {
+					probaInteractions.add(inter);
+				} else {
+					normalInteractions.add(inter);
+				}
+	
+			}
 
 			interactionsToSolverConstraints(normalInteractions);
 		}
@@ -1520,27 +1525,6 @@ public abstract class Bind {
 				interactionsToSolverConstraints(probaInteractions);
 
 			}
-		}
-
-		// we associate each interaction to the constraint(s) they could provoke
-		// we only treat probabilistic interactions
-		if (!interactionInSolver) {
-
-			List<Interaction> interactions = intNet.getAddedInteractions();
-			interactions.addAll(intNet.getGPRInteractions());
-
-			for (Interaction inter : interactions) {
-
-				if (inter.isProbabilityInteraction()) {
-					try {
-						intToConstraint.put(inter, inter.getConsequence()
-								.createConstraints());
-					} catch (Exception e) {
-
-					}
-				}
-			}
-
 		}
 
 		Objective realObj = obj;
@@ -2212,6 +2196,7 @@ public abstract class Bind {
 										reactionToActiveGPR.get(intNet
 												.getEntity(reacName)));
 
+						
 						intNet.addAddedIntercation(inter);
 
 					}
