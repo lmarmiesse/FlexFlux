@@ -47,6 +47,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -77,8 +79,6 @@ import analyses.FBAAnalysis;
 import analyses.FVAAnalysis;
 import analyses.result.FBAResult;
 import analyses.result.FVAResult;
-
-
 
 /**
  * 
@@ -298,17 +298,30 @@ public abstract class Bind {
 		if (solverPrepared) {
 			if (chechInt && !interactionInSolver) {
 
+				// //////////////////////////////////////////////OLD VERSION
+
+				// List<Constraint> constraintsToAdd = new
+				// ArrayList<Constraint>();
+				//
+				// for (Constraint c : checkInteractions().keySet()) {
+				// c.setOverWritesBounds(false);
+				// constraintsToAdd.add(c);
+				//
+				// }
+				//
+				// return FBAWithConstraints(constraintsToAdd, saveResults,
+				// chechInt);
+				// //////////////////////////////////////////////
+
 				List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 
-				for (Constraint c : checkInteractions().keySet()) {
-					c.setOverWritesBounds(false);
+				for (Constraint c : findInteractionNetworkSteadyState()) {
+//					c.setOverWritesBounds(false);
 					constraintsToAdd.add(c);
-					
-					System.out.println(c);
 				}
 
-				return FBAWithConstraints(constraintsToAdd, saveResults,
-						chechInt);
+				return goWithConstraints(constraintsToAdd, saveResults);
+
 			}
 
 			else {
@@ -347,10 +360,12 @@ public abstract class Bind {
 				// we add the simple constraints to be taken into account when
 				// checking interactions
 				for (Constraint constr : constraintsToAdd) {
+					System.out.println(constr);
 
 					if (constr.getEntities().size() == 1) {
 						for (BioEntity ent : constr.getEntities().keySet()) {
 							if (constr.getEntities().get(ent) == 1.0) {
+								System.out.println("oui");
 								if (simpleConstraints.containsKey(ent)) {
 									oldSimpleConstraint.put(ent,
 											simpleConstraints.get(ent));
@@ -362,14 +377,16 @@ public abstract class Bind {
 					}
 
 				}
-
-				for (Constraint c : checkInteractions().keySet()) {
-					System.out.println(c);
-					c.setOverWritesBounds(false);
-					constraintsToAdd.add(c);
+				
+				List<Constraint> intNetSteadyStateConstraints = new ArrayList<Constraint>();
+				for (Constraint c : findInteractionNetworkSteadyState()) {
+//					c.setOverWritesBounds(false);
+					intNetSteadyStateConstraints.add(c);
 				}
 
+				
 				for (Constraint constr : constraintsToAdd) {
+					System.out.println(constr);
 					if (constr.getEntities().size() == 1) {
 						for (BioEntity ent : constr.getEntities().keySet()) {
 							if (constr.getEntities().get(ent) == 1.0) {
@@ -385,7 +402,8 @@ public abstract class Bind {
 						}
 					}
 				}
-
+				
+				constraintsToAdd.addAll(intNetSteadyStateConstraints);
 			}
 
 			return goWithConstraints(constraintsToAdd, saveResults);
@@ -437,7 +455,7 @@ public abstract class Bind {
 	 * Constructor used to copy the bind.
 	 * 
 	 * 
-	 * @param constraints
+	 * @param constraints2
 	 *            Constraints to copy.
 	 * @param simpleConstraints
 	 *            Simple constraints to copy.
@@ -449,12 +467,12 @@ public abstract class Bind {
 	 *            Determines if interactions will be treated by the solver of
 	 *            before.
 	 */
-	public Bind(List<Constraint> constraints,
+	public Bind(List<Constraint> constraints2,
 			Map<BioEntity, Constraint> simpleConstraints,
 			InteractionNetwork intNet, BioNetwork bioNet,
 			boolean interactionInSolver) {
 
-		this.constraints.addAll(constraints);
+		this.constraints.addAll(constraints2);
 		this.simpleConstraints.putAll(simpleConstraints);
 
 		// we copy the interaction network
@@ -533,7 +551,7 @@ public abstract class Bind {
 
 		// we add the trimed reactions as set to 0
 		for (BioChemicalReaction trimed : deadReactions) {
-			
+
 			intNet.addNumEntity(trimed);
 
 			Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
@@ -677,7 +695,6 @@ public abstract class Bind {
 										relationFactory
 												.makeInversedRelation(condition));
 
-						
 						intNet.addAddedIntercation(i);
 
 						// if the interaction has to start right away
@@ -711,7 +728,6 @@ public abstract class Bind {
 						Interaction i = relationFactory.makeIfThenInteraction(
 								consequence, condition);
 
-						
 						intNet.addAddedIntercation(i);
 
 					}
@@ -977,6 +993,7 @@ public abstract class Bind {
 
 						Constraint c = new Constraint(constraintMap, lb, ub);
 						constraints.add(c);
+
 						simpleConstraints.put(entity, c);
 
 					}
@@ -1429,33 +1446,33 @@ public abstract class Bind {
 	public void prepareSolver() {
 
 		entitiesToSolverVars();
-		
+
 		List<Interaction> normalInteractions = new ArrayList<Interaction>();
 		List<Interaction> probaInteractions = new ArrayList<Interaction>();
 		if (interactionInSolver) {
 			if (solverPrepared) {
 				System.err.println("Warning : preparing a non-empty solver");
 			}
-	
+
 			// we fill the two lists of interactions
-			
+
 			for (Interaction inter : intNet.getGPRInteractions()) {
-	
+
 				if (inter.isProbabilityInteraction()) {
 					probaInteractions.add(inter);
 				} else {
 					normalInteractions.add(inter);
 				}
-	
+
 			}
 			for (Interaction inter : intNet.getAddedInteractions()) {
-	
+
 				if (inter.isProbabilityInteraction()) {
 					probaInteractions.add(inter);
 				} else {
 					normalInteractions.add(inter);
 				}
-	
+
 			}
 
 			interactionsToSolverConstraints(normalInteractions);
@@ -1490,6 +1507,7 @@ public abstract class Bind {
 		// we make a fba to get the min and max values
 		// of the entities to scale
 		if (intNet.isNotTransformedUnique()) {
+
 			List<UniqueProbability> toTransform = new ArrayList<UniqueProbability>();
 
 			int size = intNet.getNotTransformedUniques().size();
@@ -1507,8 +1525,12 @@ public abstract class Bind {
 				mapFVA.put(ent.getId(), ent);
 			}
 
+			System.out.println("SIZE1 " + simpleConstraints.size());
+			
 			FVAAnalysis fva = new FVAAnalysis(this, mapFVA, null);
 			FVAResult result = fva.runAnalysis();
+
+			System.out.println("SIZE2 " + simpleConstraints.size());
 
 			for (UniqueProbability unique : toTransform) {
 				BioEntity ent = unique.getEntity();
@@ -2196,7 +2218,6 @@ public abstract class Bind {
 										reactionToActiveGPR.get(intNet
 												.getEntity(reacName)));
 
-						
 						intNet.addAddedIntercation(inter);
 
 					}
@@ -2276,73 +2297,71 @@ public abstract class Bind {
 	 *         belong to.
 	 */
 
-	public Map<Constraint, Interaction> checkInteractions() {
-
-		List<Interaction> trueInteractions = new ArrayList<Interaction>();
-
-		if (!interactionInSolver) {
-
-			List<Interaction> toCheck = intNet.getAddedInteractions();
-			toCheck.addAll(intNet.getGPRInteractions());
-			Vector<Interaction> toCheckVector = new Vector<Interaction>();
-
-			toCheckVector.addAll(toCheck);
-
-			Map<BioEntity, Constraint> constraintsToCheckInteractions = new HashMap<BioEntity, Constraint>();
-			constraintsToCheckInteractions.putAll(simpleConstraints);
-
-			for (Interaction inter : toCheckVector) {
-
-				// if the probabilities are not transformed yet, we don't treat
-				// them
-				if (inter.isProbabilityInteraction()) {
-					if (((UniqueProbability) inter.getConsequence())
-							.getTransformation() == null) {
-						continue;
-					}
-				}
-
-				
-				
-				// if this interaction is verified
-				if (inter.getCondition().isTrue(constraintsToCheckInteractions)) {
-					
-					if (intToConstraint.containsKey(inter)) {
-
-						for (Constraint cons : intToConstraint.get(inter)) {
-
-							// those constraints must not set bounds
-							cons.setOverWritesBounds(false);
-
-							if (cons.getEntities().size() == 1) {
-								for (BioEntity b : cons.getEntities().keySet()) {
-
-									constraintsToCheckInteractions.put(b, cons);
-
-								}
-							}
-						}
-						trueInteractions.add(inter);
-					}
-
-				}
-			}
-		}
-
-		Map<Constraint, Interaction> constMap = new HashMap<Constraint, Interaction>();
-
-		for (Interaction inter : trueInteractions) {
-
-			for (Constraint c : intToConstraint.get(inter)) {
-
-				constMap.put(c, inter);
-
-			}
-		}
-
-		return constMap;
-
-	}
+//	public Map<Constraint, Interaction> checkInteractions() {
+//
+//		List<Interaction> trueInteractions = new ArrayList<Interaction>();
+//
+//		if (!interactionInSolver) {
+//
+//			List<Interaction> toCheck = intNet.getAddedInteractions();
+//			toCheck.addAll(intNet.getGPRInteractions());
+//			Vector<Interaction> toCheckVector = new Vector<Interaction>();
+//
+//			toCheckVector.addAll(toCheck);
+//
+//			Map<BioEntity, Constraint> constraintsToCheckInteractions = new HashMap<BioEntity, Constraint>();
+//			constraintsToCheckInteractions.putAll(simpleConstraints);
+//
+//			for (Interaction inter : toCheckVector) {
+//
+//				// if the probabilities are not transformed yet, we don't treat
+//				// them
+//				if (inter.isProbabilityInteraction()) {
+//					if (((UniqueProbability) inter.getConsequence())
+//							.getTransformation() == null) {
+//						continue;
+//					}
+//				}
+//
+//				// if this interaction is verified
+//				if (inter.getCondition().isTrue(constraintsToCheckInteractions)) {
+//
+//					if (intToConstraint.containsKey(inter)) {
+//
+//						for (Constraint cons : intToConstraint.get(inter)) {
+//
+//							// those constraints must not set bounds
+//							cons.setOverWritesBounds(false);
+//
+//							if (cons.getEntities().size() == 1) {
+//								for (BioEntity b : cons.getEntities().keySet()) {
+//
+//									constraintsToCheckInteractions.put(b, cons);
+//
+//								}
+//							}
+//						}
+//						trueInteractions.add(inter);
+//					}
+//
+//				}
+//			}
+//		}
+//
+//		Map<Constraint, Interaction> constMap = new HashMap<Constraint, Interaction>();
+//
+//		for (Interaction inter : trueInteractions) {
+//
+//			for (Constraint c : intToConstraint.get(inter)) {
+//
+//				constMap.put(c, inter);
+//
+//			}
+//		}
+//
+//		return constMap;
+//
+//	}
 
 	/**
 	 * Returns list of true interactions when setting the given entities to the
@@ -2353,94 +2372,94 @@ public abstract class Bind {
 	 * @return List of true interactions.
 	 */
 
-	public List<Constraint> checkInteractionsForEntities(
-			Map<BioEntity, double[]> entititesMap) {
-
-		List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
-
-		for (BioEntity entity : entititesMap.keySet()) {
-
-			Map<BioEntity, Double> map = new HashMap<BioEntity, Double>();
-			map.put(entity, 1.0);
-
-			Constraint constr = new Constraint(map,
-					entititesMap.get(entity)[0], entititesMap.get(entity)[1]);
-			constr.setOverWritesBounds(false);
-			constraintsToAdd.add(constr);
-		}
-
-		if (interactionInSolver) {
-			return constraintsToAdd;
-		} else {
-
-			List<Interaction> toCheck = new ArrayList<Interaction>();
-
-			for (BioEntity entity : entititesMap.keySet()) {
-				if (intNet.getInteractionToCheck().containsKey(entity)) {
-					toCheck.addAll(intNet.getInteractionToCheck().get(entity));
-				}
-			}
-			// if the is no interaction to check
-			if (toCheck.size() == 0) {
-				return constraintsToAdd;
-			}
-
-			Map<BioEntity, double[]> oldBounds = new HashMap<BioEntity, double[]>();
-
-			for (BioEntity entity : entititesMap.keySet()) {
-				Constraint c = null;
-
-				boolean hasSimpleConstraint = simpleConstraints
-						.containsKey(entity);
-
-				// we add the constraint for the entity
-				if (hasSimpleConstraint) {
-					double oldLb = simpleConstraints.get(entity).getLb();
-					double oldUb = simpleConstraints.get(entity).getUb();
-
-					oldBounds.put(entity, new double[] { oldLb, oldUb });
-
-					simpleConstraints.get(entity).setLb(
-							entititesMap.get(entity)[0]);
-					simpleConstraints.get(entity).setUb(
-							entititesMap.get(entity)[1]);
-				} else {
-					Map<BioEntity, Double> constraintMap = new HashMap<BioEntity, Double>();
-					constraintMap.put(entity, 1.0);
-
-					c = new Constraint(constraintMap,
-							entititesMap.get(entity)[0],
-							entititesMap.get(entity)[1]);
-					simpleConstraints.put(entity, c);
-				}
-
-			}
-
-			// we check the interactions
-			for (Constraint c : checkInteractions().keySet()) {
-
-				constraintsToAdd.add(c);
-
-			}
-
-			// we go back to how it was
-			for (BioEntity entity : entititesMap.keySet()) {
-				if (oldBounds.containsKey(entity)) {
-					simpleConstraints.get(entity).setLb(
-							oldBounds.get(entity)[0]);
-					simpleConstraints.get(entity).setLb(
-							oldBounds.get(entity)[1]);
-				} else {
-					simpleConstraints.remove(entity);
-				}
-
-			}
-
-			return constraintsToAdd;
-
-		}
-
-	}
+//	public List<Constraint> checkInteractionsForEntities(
+//			Map<BioEntity, double[]> entititesMap) {
+//
+//		List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
+//
+//		for (BioEntity entity : entititesMap.keySet()) {
+//
+//			Map<BioEntity, Double> map = new HashMap<BioEntity, Double>();
+//			map.put(entity, 1.0);
+//
+//			Constraint constr = new Constraint(map,
+//					entititesMap.get(entity)[0], entititesMap.get(entity)[1]);
+//			constr.setOverWritesBounds(false);
+//			constraintsToAdd.add(constr);
+//		}
+//
+//		if (interactionInSolver) {
+//			return constraintsToAdd;
+//		} else {
+//
+//			List<Interaction> toCheck = new ArrayList<Interaction>();
+//
+//			for (BioEntity entity : entititesMap.keySet()) {
+//				if (intNet.getInteractionToCheck().containsKey(entity)) {
+//					toCheck.addAll(intNet.getInteractionToCheck().get(entity));
+//				}
+//			}
+//			// if the is no interaction to check
+//			if (toCheck.size() == 0) {
+//				return constraintsToAdd;
+//			}
+//
+//			Map<BioEntity, double[]> oldBounds = new HashMap<BioEntity, double[]>();
+//
+//			for (BioEntity entity : entititesMap.keySet()) {
+//				Constraint c = null;
+//
+//				boolean hasSimpleConstraint = simpleConstraints
+//						.containsKey(entity);
+//
+//				// we add the constraint for the entity
+//				if (hasSimpleConstraint) {
+//					double oldLb = simpleConstraints.get(entity).getLb();
+//					double oldUb = simpleConstraints.get(entity).getUb();
+//
+//					oldBounds.put(entity, new double[] { oldLb, oldUb });
+//
+//					simpleConstraints.get(entity).setLb(
+//							entititesMap.get(entity)[0]);
+//					simpleConstraints.get(entity).setUb(
+//							entititesMap.get(entity)[1]);
+//				} else {
+//					Map<BioEntity, Double> constraintMap = new HashMap<BioEntity, Double>();
+//					constraintMap.put(entity, 1.0);
+//
+//					c = new Constraint(constraintMap,
+//							entititesMap.get(entity)[0],
+//							entititesMap.get(entity)[1]);
+//					simpleConstraints.put(entity, c);
+//				}
+//
+//			}
+//
+//			// we check the interactions
+//			for (Constraint c : checkInteractions().keySet()) {
+//
+//				constraintsToAdd.add(c);
+//
+//			}
+//
+//			// we go back to how it was
+//			for (BioEntity entity : entititesMap.keySet()) {
+//				if (oldBounds.containsKey(entity)) {
+//					simpleConstraints.get(entity).setLb(
+//							oldBounds.get(entity)[0]);
+//					simpleConstraints.get(entity).setLb(
+//							oldBounds.get(entity)[1]);
+//				} else {
+//					simpleConstraints.remove(entity);
+//				}
+//
+//			}
+//
+//			return constraintsToAdd;
+//
+//		}
+//
+//	}
 
 	public boolean isInteractionInSolver() {
 		return interactionInSolver;
@@ -2496,4 +2515,182 @@ public abstract class Bind {
 	public Collection<BioChemicalReaction> getDeadReactions() {
 		return deadReactions;
 	}
+
+	/**
+	 * 
+	 * Find a steady state in the interaction network and 
+	 * return the constraints corresponding to this steady state
+	 */
+	
+	
+	public List<Constraint> findInteractionNetworkSteadyState() {
+
+		Set<Interaction> toCheck = new HashSet<Interaction>();
+		toCheck.addAll(intNet.getAddedInteractions());
+		toCheck.addAll(intNet.getGPRInteractions());
+		
+		// System.out.println(simpleConstraints.size());
+
+		//copy simpleConstraints
+		Map<BioEntity, Constraint> thisStepSimpleConstraints = new HashMap<BioEntity,Constraint>();
+				
+		for (BioEntity b : simpleConstraints.keySet()){
+			
+			thisStepSimpleConstraints.put(b, simpleConstraints.get(b));
+		}
+		//
+		
+		List<Map<BioEntity, Constraint>> allIterationsSimpleConstraints = new ArrayList<Map<BioEntity, Constraint>>();
+
+		for (int it = 1; it < Vars.steadyStatesIterations; it++) {
+
+			// /////We check that this step has not already been achieved
+
+			boolean areTheSame = false;
+			for (Map<BioEntity, Constraint> previousStep : allIterationsSimpleConstraints) {
+				areTheSame = true;
+				// compare "thisStepSimpleConstraints" with "previousStep"
+				// They have to be exactly the same
+
+				// the same size
+				if (thisStepSimpleConstraints.size() == previousStep.size()) {
+					for (BioEntity b : thisStepSimpleConstraints.keySet()) {
+						if (previousStep.containsKey(b)) {
+							Constraint c1 = thisStepSimpleConstraints.get(b);
+							Constraint c2 = previousStep.get(b);
+
+							if (c1.getLb() != c2.getLb()
+									|| c1.getUb() != c2.getUb()) {
+								areTheSame = false;
+							}
+						} else {
+							areTheSame = false;
+						}
+					}
+				} else {
+					areTheSame = false;
+				}
+
+				if (areTheSame) {
+					break;
+				}
+
+			}
+
+			if (areTheSame) {
+				System.out.println("Steady state found in " + (it - 1)
+						+ " iterations.");
+				break;
+			}
+
+			// /////
+
+			allIterationsSimpleConstraints.add(thisStepSimpleConstraints);
+
+			// System.out.println("it = " + it);
+			// System.out.println("");
+			//
+			// for (BioEntity b : thisStepSimpleConstraints.keySet()) {
+			//
+			// System.out.println("" + b + "      "
+			// + thisStepSimpleConstraints.get(b));
+			// }
+
+			// we copy the previous state
+			Map<BioEntity, Constraint> nextStepSimpleConstraints = new HashMap<BioEntity, Constraint>();
+			for (BioEntity b : thisStepSimpleConstraints.keySet()) {
+				nextStepSimpleConstraints.put(b,
+						thisStepSimpleConstraints.get(b));
+			}
+
+			
+			for (Interaction i : toCheck) {
+
+				if (i.getCondition().isTrue(thisStepSimpleConstraints)) {
+					// we go through all the consequences (there should be only
+					// one)
+					if (intToConstraint.containsKey(i)) {
+						for (Constraint consequence : this.intToConstraint
+								.get(i)) {
+
+							// we check it's a simple constraint
+							if (consequence.getEntities().size() == 1) {
+								for (BioEntity ent : consequence.getEntities()
+										.keySet()) {
+									if (consequence.getEntities().get(ent) == 1.0) {
+										nextStepSimpleConstraints.put(ent,
+												consequence);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			thisStepSimpleConstraints = nextStepSimpleConstraints;
+
+		}
+
+		List<Constraint> steadyStateConstraints = new ArrayList<Constraint>();
+
+		for (BioEntity b : thisStepSimpleConstraints.keySet()) {
+			
+			steadyStateConstraints.add(thisStepSimpleConstraints.get(b));
+		}
+		
+		return steadyStateConstraints;
+		
+//		return new ArrayList<Constraint>();
+	}
+
+	public List<Constraint> goToNextInteractionNetworkState() {
+		Set<Interaction> toCheck = new HashSet<Interaction>();
+		toCheck.addAll(intNet.getAddedInteractions());
+		toCheck.addAll(intNet.getGPRInteractions());
+		
+		
+		Map<BioEntity, Constraint> nextStepSimpleConstraints = new HashMap<BioEntity, Constraint>();
+		for (BioEntity b : simpleConstraints.keySet()) {
+			nextStepSimpleConstraints.put(b,
+					simpleConstraints.get(b));
+		}
+
+		
+		for (Interaction i : toCheck) {
+
+			if (i.getCondition().isTrue(simpleConstraints)) {
+				// we go through all the consequences (there should be only
+				// one)
+				if (intToConstraint.containsKey(i)) {
+					for (Constraint consequence : this.intToConstraint
+							.get(i)) {
+
+						// we check it's a simple constraint
+						if (consequence.getEntities().size() == 1) {
+							for (BioEntity ent : consequence.getEntities()
+									.keySet()) {
+								if (consequence.getEntities().get(ent) == 1.0) {
+									nextStepSimpleConstraints.put(ent,
+											consequence);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		List<Constraint> steadyStateConstraints = new ArrayList<Constraint>();
+
+		for (BioEntity b : nextStepSimpleConstraints.keySet()) {
+			
+			steadyStateConstraints.add(nextStepSimpleConstraints.get(b));
+		}
+
+		
+		return steadyStateConstraints;
+
+	}
+
 }

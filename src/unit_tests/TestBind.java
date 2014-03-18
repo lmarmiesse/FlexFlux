@@ -192,17 +192,19 @@ public class TestBind {
 		bind.loadInteractionsFile("Data/intTest");
 
 		bind.prepareSolver();
-
 		Assert.assertFalse(bind.isMIP() != intInSolver);
 
+		
+		
 		Assert.assertTrue(bind.FBA(true, true).result == 14.0);
+		
 
 		Assert.assertTrue(Math.abs(bind.getSolvedValue(new BioEntity("d")) - 40.0) < 0.001);
 		Assert.assertTrue(bind.getSolvedValue(new BioEntity("e")) >= 2.0
 				&& bind.getSolvedValue(new BioEntity("e")) <= 4.0);
 
+		
 		Assert.assertTrue(bind.getSolvedValue(new BioEntity("f")) == 122.0);
-		System.out.println(bind.getSolvedValue(new BioEntity("g")));
 		Assert.assertTrue(bind.getSolvedValue(new BioEntity("g")) == 58.0);
 
 		Bind bind2 = new CplexBind(true);

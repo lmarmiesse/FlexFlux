@@ -144,11 +144,16 @@ public class RFBAAnalysis extends Analysis {
 
 			}
 
-			//we chack all interactions
-			Map<Constraint, Interaction> constMap = b.checkInteractions();
-			for (Constraint c : constMap.keySet()) {
+			
+			
+//			b.goToNextInteractionNetworkState();
+			for (Constraint c :  b.goToNextInteractionNetworkState()) {
 				constraintsToAdd.add(c);
 			}
+			//we check all interactions
+//			for (Constraint c :  b.findInteractionNetworkSteadyState()) {
+//				constraintsToAdd.add(c);
+//			}
 			
 			//we go back to the old simple constraints
 			for (BioEntity ent : oldSimpleConstraints.keySet()) {

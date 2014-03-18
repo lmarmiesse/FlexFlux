@@ -84,7 +84,7 @@ public class TestFVA_KO_DR {
 
 		bind.loadConditionsFile("Data/condColiTest");
 
-//		bind.loadInteractionsFile("Data/intColiTest");
+		// bind.loadInteractionsFile("Data/intColiTest");
 
 		bind.prepareSolver();
 
@@ -95,18 +95,18 @@ public class TestFVA_KO_DR {
 
 		go();
 		bind = new GLPKBind(false);
-		
+
 		bind.loadSbmlNetwork("Data/coli_core.xml", false);
 		n = bind.getBioNetwork();
 		i = bind.getInteractionNetwork();
 
 		bind.loadConditionsFile("Data/condColiTest");
 
-//		bind.loadInteractionsFile("Data/intColiTest");
+		// bind.loadInteractionsFile("Data/intColiTest");
 
 		bind.prepareSolver();
 		go();
-		
+
 	}
 
 	public void go() {
@@ -127,7 +127,7 @@ public class TestFVA_KO_DR {
 			}
 		}
 
-		FVAAnalysis fva = new FVAAnalysis(bind, null,null);
+		FVAAnalysis fva = new FVAAnalysis(bind, null, null);
 		FVAResult result = fva.runAnalysis();
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(
@@ -143,7 +143,15 @@ public class TestFVA_KO_DR {
 				double min = Double.parseDouble(splittedLine[1]);
 				double max = Double.parseDouble(splittedLine[2]);
 
-				
+//				System.out.println("min "+name);
+//				System.out.println(result.getValuesForEntity(bind
+//						.getInteractionNetwork().getEntity(name))[0]);
+//				System.out.println(min);
+//				System.out.println("max "+name);
+//				System.out.println(result.getValuesForEntity(bind
+//						.getInteractionNetwork().getEntity(name))[1]);
+//				System.out.println(max);
+
 				Assert.assertTrue(Math.abs(result.getValuesForEntity(bind
 						.getInteractionNetwork().getEntity(name))[0] - min) < 0.001);
 
@@ -176,7 +184,7 @@ public class TestFVA_KO_DR {
 				String name = splittedLine[0].replaceAll("\\s", "");
 
 				double value = Double.parseDouble(splittedLine[1]);
-				
+
 				Assert.assertTrue(Math.abs(resultKo.getValueForEntity(bind
 						.getInteractionNetwork().getEntity(name)) - value) < 0.001);
 
@@ -207,6 +215,11 @@ public class TestFVA_KO_DR {
 
 				double value = Double.parseDouble(splittedLine[1]);
 
+//				System.out.println(name);
+//				System.out.println(Math.abs(resultKoGenes.getValueForEntity(bind
+//						.getInteractionNetwork().getEntity(name))));
+//				System.out.println(value);
+				
 				Assert.assertTrue(Math.abs(resultKoGenes.getValueForEntity(bind
 						.getInteractionNetwork().getEntity(name)) - value) < 0.001);
 
@@ -221,7 +234,7 @@ public class TestFVA_KO_DR {
 		}
 
 		// DR
-		DRAnalysis dr = new DRAnalysis(bind,0.000001);
+		DRAnalysis dr = new DRAnalysis(bind, 0.000001);
 		DRResult resultDr = dr.runAnalysis();
 
 		List<BioEntity> dead = resultDr.getDeadReactions();
@@ -241,6 +254,6 @@ public class TestFVA_KO_DR {
 		testDead.add(bind.getInteractionNetwork().getEntity("R_FRUpts2"));
 
 		Assert.assertTrue(dead.containsAll(testDead));
-		
+
 	}
 }

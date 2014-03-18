@@ -92,7 +92,7 @@ public class TestRFBA {
 
 		
 		go();
-		bind = new CplexBind(true);
+		bind = new CplexBind(false);
 
 		bind.loadSbmlNetwork("Data/coli.xml", false);
 		n = bind.getBioNetwork();

@@ -34,6 +34,7 @@
 package thread;
 
 import general.Bind;
+import general.Constraint;
 import general.Objective;
 
 import java.util.Queue;
@@ -90,13 +91,15 @@ public class ThreadFVA extends ResolveThread {
 	public void run() {
 		bind.setObjective(new Objective());
 		bind.makeSolverObjective();
-
+		
+		
 		// we do all the minimize
 		bind.setObjSense(false);
 		double size;
 		while ((size = entities.size()) > 0) {
 
 			BioEntity entity = entities.poll();
+			
 			bind.changeObjVarValue(entity, 1.0);
 			result.setMin(entity, bind.FBA(false, false).result);
 			bind.changeObjVarValue(entity, 0.0);

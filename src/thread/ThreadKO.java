@@ -90,13 +90,31 @@ public class ThreadKO extends ResolveThread {
 
 			BioEntity entity = entities.poll();
 
-			Map<BioEntity, double[]> entityValues = new HashMap<BioEntity, double[]>();
+			// Map<BioEntity, double[]> entityValues = new HashMap<BioEntity,
+			// double[]>();
+			//
+			// entityValues.put(entity, new double[] { 0.0, 0.0 });
 
-			entityValues.put(entity, new double[] { 0.0, 0.0 });
+			Constraint oldConst = bind.getSimpleConstraints().get(entity);
+			
+			Map<BioEntity, Double> entityMap = new HashMap<BioEntity, Double>();
+			entityMap.put(entity, 1.0);
+
+			
+			bind.getSimpleConstraints().put(entity,
+					new Constraint(entityMap, 0.0, 0.0));
 
 			List<Constraint> constraintsToAdd = bind
-					.checkInteractionsForEntities(entityValues);
+					.findInteractionNetworkSteadyState();
 
+			if (oldConst!=null){
+				bind.getSimpleConstraints().put(entity, oldConst);
+			}else{
+				bind.getSimpleConstraints().remove(entity);
+			}
+				
+				
+			
 			DoubleResult value = bind.FBAWithConstraints(constraintsToAdd,
 					false, false);
 
