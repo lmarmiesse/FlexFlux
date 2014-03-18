@@ -42,6 +42,7 @@ import interaction.InteractionNetwork;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 
 import parsebionet.biodata.BioEntity;
 import analyses.result.FVAResult;

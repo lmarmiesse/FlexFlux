@@ -41,6 +41,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
@@ -86,6 +87,8 @@ public abstract class ThreadFactory {
 		this.simpleConstraints = simpleConstraints;
 		this.intNet = intNet;
 	}
+
+
 
 	/**
 	 * 

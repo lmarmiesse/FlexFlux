@@ -73,6 +73,11 @@ public class Vars {
 	 * Number of decimals of precision of the calculations.
 	 */
 	public static int decimalPrecision = 6;
+	
+	/**
+	 * Maximal number of iterations to find a steady state in the interaction network.
+	 */
+	public static int steadyStatesIterations = 100;
 
 	/**
 	 * 

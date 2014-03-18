@@ -79,7 +79,7 @@ public class DRAnalysis extends Analysis {
 		// we add the constraints corresponding to the interactions
 		if (!b.isInteractionInSolver()) {
 
-			for (Constraint c : b.checkInteractions().keySet()) {
+			for (Constraint c :  b.findInteractionNetworkSteadyState()) {
 				constraintsToAdd.add(c);
 			}
 		}

@@ -36,6 +36,7 @@ package analyses;
 import general.Bind;
 import general.Constraint;
 import general.DoubleResult;
+import general.Objective;
 import general.Vars;
 
 import java.util.ArrayList;
@@ -88,24 +89,25 @@ public class FVAAnalysis extends Analysis {
 	}
 
 	public FVAResult runAnalysis() {
+		
 		double startTime = System.currentTimeMillis();
-
+		
 		DoubleResult result = b.FBAWithConstraints(constraints, false, true);
-
+		
 		if (result.flag != 0) {
 
 			System.out.println("Unfeasible");
 			System.exit(0);
 
 		}
-
+		
 		List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 		constraintsToAdd.addAll(constraints);
 
 		// we add the constraints corresponding to the interactions
 		if (!b.isInteractionInSolver()) {
 
-			for (Constraint c : b.checkInteractions().keySet()) {
+			for (Constraint c : b.findInteractionNetworkSteadyState()) {
 				constraintsToAdd.add(c);
 			}
 		}
@@ -122,6 +124,8 @@ public class FVAAnalysis extends Analysis {
 			constraintMap.put(entities[i], coeffs[i]);
 		}
 
+
+		
 		double lb = result.result;
 		double ub = result.result;
 		double delta = Math.abs(result.result) * Vars.libertyPercentage / 100;
@@ -132,7 +136,7 @@ public class FVAAnalysis extends Analysis {
 		System.out.println("FVA initial constraint : \n" + c);
 
 		b.getConstraints().add(c);
-
+		
 		Map<String, BioEntity> FVAMap = new HashMap<String, BioEntity>();
 
 		if (mapEntities == null) {
@@ -145,6 +149,8 @@ public class FVAAnalysis extends Analysis {
 			FVAMap = mapEntities;
 		}
 
+
+		
 		// one queue to minimize and the other to maximize
 		Queue<BioEntity> entQueue = new LinkedBlockingQueue<BioEntity>();
 		Queue<BioEntity> entQueueCopy = new LinkedBlockingQueue<BioEntity>();
@@ -169,6 +175,10 @@ public class FVAAnalysis extends Analysis {
 		System.out.print("]\n");
 		System.out.print("[");
 
+
+		
+		
+		
 		for (ResolveThread thread : threads) {
 			thread.start();
 		}
