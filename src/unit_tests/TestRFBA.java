@@ -113,7 +113,7 @@ public class TestRFBA {
 				"R_Ec_biomass_iAF1260_core_59p81M", 0.003, 0.1, 150,
 				new ArrayList<String>());
 		RFBAResult result = rfba.runAnalysis();
-//		result.plot();
+		result.plot();
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(
 					"Data/rFBATest"));
@@ -142,8 +142,8 @@ public class TestRFBA {
 					double trueResult = Double.parseDouble(splittedLine[i]
 							.replaceAll("\\s+", ""));
 					double resultToTest = values.get(entities.get(i - 1));
-					System.out.println(time + " " + entities.get(i - 1)
-							+ "  :  " + trueResult + " " + resultToTest);
+//					System.out.println(time + " " + entities.get(i - 1)
+//							+ "  :  " + trueResult + " " + resultToTest);
 
 					Assert.assertTrue(Math.abs(trueResult - resultToTest) < 0.001);
 
