@@ -79,7 +79,7 @@ public class InversedRelation extends Relation {
 	}
 
 	public String toString() {
-		return "opposite of " + rel;
+		return "opposite of ( " + rel + " )";
 	}
 
 	/*

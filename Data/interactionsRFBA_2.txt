@@ -1,11 +1,11 @@
 #The uptake of lactose can only be active when there is no glucose
 
-IF[M_glc_D_b>0]THEN[lacZ=0.001]
 
-IF[lacZ=0.001]THEN[a=5]
+IF[M_glc_D_b>0]THEN[lacZ=0.001]
+IF[M_glc_D_b=0]THEN[a=5]
 IF[a=5]THEN[b=5]
 IF[b=5]THEN[c=5]
-IF[c=5]THEN[d=5]
-IF[d=5]THEN[e=5]
-IF[e=5]THEN[f=5]
-IF[f=5]THEN[R_EX_lac_D_e=0]
+IF[c=5]THEN[lacZ=0.03]
+
+IF[lacZ=0.001]THEN[R_EX_lac_D_e=0]
+

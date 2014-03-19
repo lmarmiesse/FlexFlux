@@ -37,8 +37,6 @@ import general.Bind;
 import general.Constraint;
 import general.DoubleResult;
 import general.Vars;
-import interaction.Interaction;
-import interaction.Relation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -98,6 +96,7 @@ public class RFBAAnalysis extends Analysis {
 	}
 
 	public RFBAResult runAnalysis() {
+		Map<String, Double> lastSolve = new HashMap<String, Double>();
 
 		// warning list to tell when the model was unfeasible
 		List<Integer> unfeasibleSteps = new ArrayList<Integer>();
@@ -116,8 +115,6 @@ public class RFBAAnalysis extends Analysis {
 
 		RFBAResult rFBAResult = new RFBAResult();
 
-		int noGrowthCount = 0;
-
 		for (int i = 0; i < iterations; i++) {
 
 			// we save the results
@@ -126,44 +123,71 @@ public class RFBAAnalysis extends Analysis {
 
 			List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 
-			
-			//we save simple constraints
-			Map<BioEntity, Constraint> oldSimpleConstraints = new HashMap<BioEntity, Constraint>();
+			System.out.println("-----");
+			System.out.println("it number " + i);
 
-			//we add the constraints of this step to the simple constraints
-			for (Constraint c : timeConstraintMap.get(i)) {
-				if (c.getEntities().size() == 1) {
-					for (BioEntity ent : c.getEntities().keySet()) {
-						if (c.getEntities().get(ent) == 1) {
-							oldSimpleConstraints.put(ent,
-									simpleConstraints.get(ent));
-							simpleConstraints.put(ent, c);
-						}
+			Map<BioEntity, Constraint> networkState = new HashMap<BioEntity, Constraint>();
+//			if (b.isLastSolveEmpty()) {
+				networkState = simpleConstraints;
+//			} else {
+//				for (BioEntity ent : b.getInteractionNetwork().getEntities()) {
+//
+//					Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
+//
+//					constMap.put(ent, 1.0);
+//					Constraint c = new Constraint(constMap,
+//							b.getSolvedValue(ent), b.getSolvedValue(ent));
+//
+//					networkState.put(ent, c);
+//				}
+//
+//				// for the external metabolites, we put the concentrations that
+//				// have been recalculated
+//				for (BioChemicalReaction reac : exchangeInteractions.keySet()) {
+//
+//					for (BioEntity metab : exchangeInteractions.get(reac)
+//							.keySet()) {
+//
+//						if (simpleConstraints.containsKey(metab)) {
+//
+//							Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
+//
+//							constMap.put(metab, 1.0);
+//							Constraint c = new Constraint(constMap,
+//									simpleConstraints.get(metab).getLb(),
+//									simpleConstraints.get(metab).getUb());
+//
+//							networkState.put(metab, c);
+//						}
+//					}
+//
+//				}
+//
+//			}
+
+			Map<Constraint, double[]> nextStepConsMap = b
+					.goToNextInteractionNetworkState(networkState);
+
+			for (Constraint c : nextStepConsMap.keySet()) {
+
+				double begins = nextStepConsMap.get(c)[0];
+
+				double lasts = nextStepConsMap.get(c)[1];
+
+				int iterBegin = (int) (i + begins / deltaT);
+
+				int iterEnd = iterBegin + (int) (lasts / deltaT);
+
+				for (int iter = iterBegin; iter <= iterEnd; iter++) {
+					if (iter < iterations) {
+
+						timeConstraintMap.get(iter).add(c);
 					}
 				}
-
 			}
 
-			
-			
-//			b.goToNextInteractionNetworkState();
-			for (Constraint c :  b.goToNextInteractionNetworkState()) {
-				constraintsToAdd.add(c);
-			}
-			//we check all interactions
-//			for (Constraint c :  b.findInteractionNetworkSteadyState()) {
-//				constraintsToAdd.add(c);
-//			}
-			
-			//we go back to the old simple constraints
-			for (BioEntity ent : oldSimpleConstraints.keySet()) {
-				simpleConstraints.put(ent, oldSimpleConstraints.get(ent));
-			}
-			
-			
 			// we add the constraints for the current iteration
 			for (Constraint c : timeConstraintMap.get(i)) {
-
 				c.setOverWritesBounds(false);
 				constraintsToAdd.add(c);
 
@@ -199,6 +223,7 @@ public class RFBAAnalysis extends Analysis {
 									simpleConstraints.get(reac).getLb(),
 									availableSubstrate);
 							metabConstraints.put(metab, c);
+
 						} else {
 							Map<BioEntity, Double> constraintMap = new HashMap<BioEntity, Double>();
 							constraintMap.put(reac, 1.0);
@@ -247,55 +272,27 @@ public class RFBAAnalysis extends Analysis {
 				return rFBAResult;
 			}
 
-			mu = b.getSolvedValue(b.getInteractionNetwork().getEntity(
-					biomassReac));
-
 			// if it's unfeasbile : no growth
 			if (result.flag != 0) {
 				mu = 0;
+			} else {
+				lastSolve = b.getLastSolve();
+
+				mu = b.getSolvedValue(b.getInteractionNetwork().getEntity(
+						biomassReac));
 			}
 
 			// we add the results for this iteration
 			for (String s : toPlot) {
-				valuesMap.put(s, b.getSolvedValue(b.getInteractionNetwork()
-						.getEntity(s)));
+				valuesMap.put(
+						s,
+						lastSolve.get(b.getInteractionNetwork().getEntity(s)
+								.getId()));
 			}
 
 			rFBAResult.addValues(deltaT * i, valuesMap);
 
 			if (mu == 0) {
-
-				// we check the activators
-				for (BioEntity ent : b.getInteractionsEntities().keySet()) {
-					Relation cause = b.getInteractionsEntitiesCause().get(ent);
-
-					if (cause.isTrue(simpleConstraints)) {
-
-						for (Relation r : b.getInteractionsEntities().get(ent)
-								.keySet()) {
-
-							double begins = b.getInteractionsEntities()
-									.get(ent).get(r)[0];
-							double lasts = b.getInteractionsEntities().get(ent)
-									.get(r)[1];
-
-							int iterBegin = (int) (i + begins / deltaT);
-
-							int iterEnd = iterBegin + (int) (lasts / deltaT);
-
-							for (int iter = iterBegin; iter <= iterEnd; iter++) {
-								if (iter < iterations) {
-
-									timeConstraintMap.get(iter).addAll(
-											r.createConstraints());
-
-								}
-							}
-						}
-
-					}
-
-				}
 
 				if (result.flag == 0) {
 					System.out.println(timeToString(i * deltaT) + " X = "
@@ -304,60 +301,11 @@ public class RFBAAnalysis extends Analysis {
 					unfeasibleSteps.add(i);
 					System.out.println(timeToString(i * deltaT) + " X = "
 							+ Vars.round(X) + " no growth : unfeasible");
+
+					b.resetLastSolve();
 					continue;
 				}
-				// noGrowthCount++;
-				// if (noGrowthCount > 1 / deltaT) {
-				// System.out
-				// .println("No feasible solution - nutrients exhausted");
-				//
-				// System.out.println("RFBA over "
-				// + ((System.currentTimeMillis() - startTime) / 1000)
-				// + "s");
-				//
-				// if (!unfeasibleSteps.isEmpty()) {
-				//
-				// String steps = "";
-				// for (int step : unfeasibleSteps) {
-				// steps += String.valueOf(step) + " ";
-				// }
-				//
-				// System.err.println("Warning : unfeasible steps : "
-				// + steps);
-				//
-				// }
-				// return rFBAResult;
-				// }
-				// continue;
 
-			}
-
-			// we check the activators
-			for (BioEntity ent : b.getInteractionsEntities().keySet()) {
-
-				for (Relation r : b.getInteractionsEntities().get(ent).keySet()) {
-
-					if (b.getSolvedValue(ent) > 0) {
-
-						double begins = b.getInteractionsEntities().get(ent)
-								.get(r)[0];
-						double lasts = b.getInteractionsEntities().get(ent)
-								.get(r)[1];
-
-						int iterBegin = (int) (i + begins / deltaT);
-
-						int iterEnd = iterBegin + (int) (lasts / deltaT);
-
-						for (int iter = iterBegin; iter <= iterEnd; iter++) {
-							if (iter < iterations) {
-
-								timeConstraintMap.get(iter).addAll(
-										r.createConstraints());
-
-							}
-						}
-					}
-				}
 			}
 
 			// System.out.println("mu = " + mu);
