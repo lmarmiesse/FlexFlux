@@ -36,6 +36,7 @@ package general;
 import interaction.And;
 import interaction.Interaction;
 import interaction.InteractionNetwork;
+import interaction.InversedRelation;
 import interaction.Or;
 import interaction.Relation;
 import interaction.RelationFactory;
@@ -89,6 +90,8 @@ import analyses.result.FVAResult;
  * @author lmarmiesse 6 mars 2013
  */
 public abstract class Bind {
+
+	private Map<BioEntity, Double> defaultValues = new HashMap<BioEntity, Double>();
 
 	/**
 	 * Used for pareto analysis, if set to false, the objective in the condition
@@ -604,13 +607,23 @@ public abstract class Bind {
 					continue;
 				}
 
+				// ////////////////////////////DEFAULT VALUE HANDLEING
 				Pattern pattern = Pattern
-						.compile("IF\\[([_a-zA-Z0-9]+)=\\?]THEN\\[[_a-zA-Z0-9]+=([_a-zA-Z0-9]+)\\]");
+						.compile("IF\\[([_a-zA-Z0-9]+)=\\?]THEN\\[([_a-zA-Z0-9]+)=([_a-zA-Z0-9]+)\\]");
 
 				Matcher matcher = pattern.matcher(line);
 
 				// if a default value is set
 				if (matcher.find()) {
+
+					if (!matcher.group(2).equals(matcher.group(1))) {
+
+						System.err.println("Error in default value line "
+								+ nbLine + " " + matcher.group(1) + " and "
+								+ matcher.group(2) + " don't match");
+						System.exit(0);
+					}
+
 					// if the entity does not exist yet
 					if (intNet.getEntity(matcher.group(1)) == null) {
 
@@ -624,7 +637,7 @@ public abstract class Bind {
 					double value = 0;
 
 					try {
-						value = Double.parseDouble(matcher.group(2));
+						value = Double.parseDouble(matcher.group(3));
 					} catch (Exception e) {
 
 						System.err.println("Error in interaction file line "
@@ -632,8 +645,11 @@ public abstract class Bind {
 						System.exit(0);
 					}
 
+					defaultValues.put(ent, value);
+
 					continue;
 				}
+				// ////////////////////////////
 
 				List<String> expressions = new ArrayList<String>();
 
@@ -642,7 +658,140 @@ public abstract class Bind {
 
 				double begins = 0.0, lasts = 0.0;
 
-				if (line.startsWith("IF") || line.contains("EQ")) {
+				if (line.startsWith("IF")) {
+
+					String interactionString = line;
+					String interactionString2 = "";
+
+					// ELSE TREATMENT
+					if (line.contains("ELSE")) {
+
+						int elseIndex = line.indexOf("ELSE");
+						interactionString = (String) line.subSequence(0,
+								elseIndex);
+						interactionString2 = (String) line.subSequence(
+								elseIndex, line.length());
+					}
+
+					// matches everything between []
+					pattern = Pattern.compile("\\[[^\\]]*\\]");
+
+					matcher = pattern.matcher(interactionString);
+
+					while (matcher.find()) {
+						expressions.add(matcher.group());
+					}
+
+					if (expressions.size() < 2 || expressions.size() > 4) {
+
+						System.err.println("Error in interaction file line "
+								+ nbLine);
+						condition = null;
+						nbLine++;
+						continue;
+					}
+
+					// we create the relation from this string
+					condition = makeRelationFromString(expressions.get(0),
+							nbLine);
+
+					Relation cons = makeRelationFromString(expressions.get(1),
+							nbLine);
+
+					// we set the time parameters of the interaction
+					if (expressions.size() > 2) {
+						begins = Double.parseDouble(expressions.get(2)
+								.replaceAll("\\[|\\]", ""));
+
+						if (expressions.size() > 3) {
+							lasts = Double.parseDouble(expressions.get(3)
+									.replaceAll("\\[|\\]", ""));
+						}
+
+					}
+
+					consequence = cons;
+
+					if (!line.contains("THEN")) {
+						System.err.println("Error in interaction file line "
+								+ nbLine + ", expected THEN");
+						condition = null;
+						nbLine++;
+						continue;
+					}
+
+					// if there was no error
+					if (condition != null && consequence != null) {
+						// we create the interaction
+						Interaction i = relationFactory.makeIfThenInteraction(
+								consequence, condition);
+
+						intNet.addAddedIntercation(i);
+
+						intToTimeInfos.put(i, new double[] { begins, lasts });
+
+					}
+
+					// /////////////////////if there was an ELSE
+					if (!interactionString2.equals("")) {
+						expressions = new ArrayList<String>();
+
+						Relation condition2 = null;
+						Relation consequence2 = null;
+
+						matcher = pattern.matcher(interactionString2);
+
+						while (matcher.find()) {
+							expressions.add(matcher.group());
+						}
+
+						if (expressions.size() < 1 || expressions.size() > 3) {
+
+							System.err
+									.println("Error in interaction file line "
+											+ nbLine);
+							condition2 = null;
+							nbLine++;
+							continue;
+						}
+
+						// we create the relation from this string
+						condition2 = new InversedRelation(condition);
+						Relation cons2 = makeRelationFromString(
+								expressions.get(0), nbLine);
+
+						// we set the time parameters of the interaction
+						if (expressions.size() > 1) {
+							begins = Double.parseDouble(expressions.get(1)
+									.replaceAll("\\[|\\]", ""));
+
+							if (expressions.size() > 2) {
+								lasts = Double.parseDouble(expressions.get(3)
+										.replaceAll("\\[|\\]", ""));
+							}
+
+						}
+
+						consequence2 = cons2;
+
+						// if there was no error
+						if (condition != null && consequence != null) {
+							// we create the interaction
+							Interaction i = relationFactory
+									.makeIfThenInteraction(consequence2,
+											condition2);
+
+							intNet.addAddedIntercation(i);
+
+							intToTimeInfos.put(i,
+									new double[] { begins, lasts });
+
+						}
+
+					}
+
+				} else if (line.contains("EQ")) {
+
 					// matches everything between []
 					pattern = Pattern.compile("\\[[^\\]]*\\]");
 
@@ -679,75 +828,8 @@ public abstract class Bind {
 						}
 
 					}
-					// Map<Relation, double[]> map = new HashMap<Relation,
-					// double[]>();
-					//
-					// map.put(cons, new double[] { begins, lasts });
-					//
-					// BioEntity ent = new BioEntity(
-					// "FlexFluxActivator_"
-					// + String.valueOf(interactionsEntitiesConsequence
-					// .size()));
-					//
-					// intNet.addNumEntity(ent);
-					// interactionsEntitiesConsequence.put(ent, map);
-					//
-					// consequence = (Unique) relationFactory.makeUnique(ent,
-					// operationFactory.makeEq(), 1);
-					//
-					// interactionsEntitiesCause.put(ent, condition);
-					//
-					// // we add the opposite interaction
-					// Interaction i = relationFactory
-					// .makeIfThenInteraction(
-					// (Unique) relationFactory.makeUnique(
-					// ent, operationFactory.makeEq(),
-					// 0),
-					// relationFactory
-					// .makeInversedRelation(condition));
-					//
-					// intNet.addAddedIntercation(i);
-					//
-					// System.out.println(i);
-					//
-					// // if the interaction has to start right away
-					// if (begins == 0) {
-					// Interaction i2 = relationFactory
-					// .makeIfThenInteraction(cons, condition);
-					//
-					// intNet.addAddedIntercation(i2);
-					// }
-
-					// } else {
 
 					consequence = cons;
-
-					// }
-				}
-
-				if (line.startsWith("IF")) {
-
-					if (!line.contains("THEN")) {
-						System.err.println("Error in interaction file line "
-								+ nbLine + ", expected THEN");
-						condition = null;
-						nbLine++;
-						continue;
-					}
-
-					// if there was no error
-					if (condition != null && consequence != null) {
-						// we create the interaction
-						Interaction i = relationFactory.makeIfThenInteraction(
-								consequence, condition);
-
-						intNet.addAddedIntercation(i);
-
-						intToTimeInfos.put(i, new double[] { begins, lasts });
-
-					}
-
-				} else if (line.contains("EQ")) {
 
 					// if there was no error
 					if (condition != null && consequence != null) {
@@ -2426,6 +2508,9 @@ public abstract class Bind {
 
 			}
 
+			Set<BioEntity> setEntities = new HashSet<BioEntity>();
+			Set<BioEntity> checkedEntities = new HashSet<BioEntity>();
+
 			if (areTheSame) {
 				System.out.println("Steady state found in " + (it - 1)
 						+ " iterations.");
@@ -2433,17 +2518,7 @@ public abstract class Bind {
 			}
 
 			// /////
-
 			allIterationsSimpleConstraints.add(thisStepSimpleConstraints);
-
-			// System.out.println("it = " + it);
-			// System.out.println("");
-			//
-			// for (BioEntity b : thisStepSimpleConstraints.keySet()) {
-			//
-			// System.out.println("" + b + "      "
-			// + thisStepSimpleConstraints.get(b));
-			// }
 
 			// we copy the previous state
 			Map<BioEntity, Constraint> nextStepSimpleConstraints = new HashMap<BioEntity, Constraint>();
@@ -2468,28 +2543,41 @@ public abstract class Bind {
 									if (consequence.getEntities().get(ent) == 1.0) {
 										nextStepSimpleConstraints.put(ent,
 												consequence);
+										setEntities.add(ent);
+										checkedEntities.add(ent);
+
 									}
 								}
 							}
 						}
 					}
-				} else {
-//					if (intToConstraint.containsKey(i)) {
-//						for (Constraint consequence : this.intToConstraint
-//								.get(i)) {
-//							// we check it's a simple constraint
-//							if (consequence.getEntities().size() == 1) {
-//								for (BioEntity ent : consequence.getEntities()
-//										.keySet()) {
-//									if (consequence.getEntities().get(ent) == 1.0) {
-//										nextStepSimpleConstraints.remove(ent);
-//									}
-//								}
-//							}
-//
-//						}
-//					}
 				}
+			}
+
+			// if it was not set, we put it's default value
+			for (BioEntity ent : nextStepSimpleConstraints.keySet()) {
+				if (!setEntities.contains(ent)) {
+					if (defaultValues.containsKey(ent)) {
+
+						Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
+						constMap.put(ent, 1.0);
+
+						nextStepSimpleConstraints.put(
+								ent,
+								new Constraint(constMap,
+										defaultValues.get(ent), defaultValues
+												.get(ent)));
+						checkedEntities.add(ent);
+					}
+				}
+			}
+
+			// print this stage
+			System.out.println("System state iteration " + (it));
+			for (BioEntity ent : checkedEntities) {
+
+				System.out.println(nextStepSimpleConstraints.get(ent));
+
 			}
 
 			thisStepSimpleConstraints = nextStepSimpleConstraints;

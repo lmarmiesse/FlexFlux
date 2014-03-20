@@ -1,0 +1,7 @@
+IF[aaa=?]THEN[aaa=5]
+IF[aaa=5]THEN[aab=6]ELSE[aab=10]
+IF[aab=6]THEN[aac=7]ELSE[aac=10]
+
+
+IF[aac=7]THEN[aad=8]ELSE[aad=10]
+IF[aad=8]THEN[aaa=6]
