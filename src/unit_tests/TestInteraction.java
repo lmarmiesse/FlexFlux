@@ -34,6 +34,9 @@
 package unit_tests;
 
 import static org.junit.Assert.assertTrue;
+import general.Bind;
+import general.CplexBind;
+import general.GLPKBind;
 import interaction.And;
 import interaction.Interaction;
 import interaction.Or;
@@ -45,10 +48,12 @@ import interaction.cplex.OrCPLEX;
 import interaction.cplex.UniqueCPLEX;
 import operation.OperationLeCPLEX;
 
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import analyses.Analysis;
+import analyses.FBAAnalysis;
+import analyses.result.AnalysisResult;
 import parsebionet.biodata.BioEntity;
 
 /**
@@ -103,6 +108,46 @@ public class TestInteraction {
 		Interaction i2 = new EqInteractionCplex(u1,u2);
 		
 		System.out.println(i2);
+		
+		
+		fbaTest(new GLPKBind(false));
+		fbaTest(new CplexBind(false));
+		
+		
+		
+	}
+
+	private void fbaTest(Bind bind) {
+
+		
+		bind = new GLPKBind(false);
+
+		bind.loadSbmlNetwork("Data/coli_core.xml", false);
+		
+		bind.loadConditionsFile("Data/condElseTest.txt");
+		bind.loadInteractionsFile("Data/intElseTest.txt");
+		
+		
+		for (Interaction inter : bind.getInteractionNetwork().getAddedInteractions()){
+			System.out.println(inter);
+		}
+		
+		
+		bind.prepareSolver();
+		
+	
+		
+		
+		Analysis analysis = new FBAAnalysis(bind);
+		AnalysisResult result = analysis.runAnalysis();
+		
+		result.plot();
+		
+//		boolean a=false;
+//		
+//		while (!a){
+//			
+//		}
 		
 	}
 }

@@ -1,0 +1,9 @@
+obj : MAX(R_Biomass_Ecoli_core_w_GAM)
+
+
+
+
+aaa 5 10
+aab 5 10
+aac 5 10
+aad 5 10
