@@ -2529,6 +2529,7 @@ public abstract class Bind {
 
 			for (Interaction i : toCheck) {
 
+
 				if (i.getCondition().isTrue(thisStepSimpleConstraints)) {
 					// we go through all the consequences (there should be only
 					// one)
