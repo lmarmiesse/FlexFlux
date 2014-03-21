@@ -119,9 +119,6 @@ public class TestInteraction {
 
 	private void fbaTest(Bind bind) {
 
-		
-		bind = new GLPKBind(false);
-
 		bind.loadSbmlNetwork("Data/coli_core.xml", false);
 		
 		bind.loadConditionsFile("Data/condElseTest.txt");
@@ -141,7 +138,9 @@ public class TestInteraction {
 		Analysis analysis = new FBAAnalysis(bind);
 		AnalysisResult result = analysis.runAnalysis();
 		
-		result.plot();
+//		result.plot();
+		
+		bind.end();
 		
 //		boolean a=false;
 //		
