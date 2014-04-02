@@ -1,9 +1,9 @@
 #IF[aaa=?]THEN[aaa=5]
-IF[aaa=5]THEN[aab=6]ELSE[aab=10]
-IF[aab=6]THEN[aac=7]ELSE[aac=10]
+IF[aaa=5]THEN[aab=6][2][1]ELSE[aab=10]
+IF[aab=6]THEN[aac=7]ELSE[aac=10][3][4]
 
 
-IF[aac=7]THEN[aad=8]ELSE[aad=10]
-IF[aad=8]THEN[aaa=6]
+IF[aac=7]THEN[aad=8][7][92]ELSE[aad=10][8][12]
+#IF[aad=8]THEN[aaa=6]
 
 IF[(aab=10 AND aac=10)]THEN[aae=6]ELSE[aae=7]

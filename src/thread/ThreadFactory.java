@@ -94,8 +94,6 @@ public abstract class ThreadFactory {
 	 * 
 	 * Makes a thread for an FVA analysis.
 	 * 
-	 * @param interactionInSolver
-	 *            Whether or not interactions are in the solver.
 	 * @param entQueue
 	 *            The queue of entities to perform the FVA on for maximization.
 	 * @param entQueueCopy
@@ -105,16 +103,13 @@ public abstract class ThreadFactory {
 	 *            An empty FVA result.
 	 * @return A FVA thread.
 	 */
-	public abstract ThreadFVA makeFVAThread(boolean interactionInSolver,
-			Queue<BioEntity> entQueue, Queue<BioEntity> entQueueCopy,
+	public abstract ThreadFVA makeFVAThread(Queue<BioEntity> entQueue, Queue<BioEntity> entQueueCopy,
 			FVAResult result);
 
 	/**
 	 * 
 	 * Makes a thread for a KO analysis.
 	 * 
-	 * @param interactionInSolver
-	 *            Whether or not interactions are in the solver.
 	 * @param reacsQueue
 	 *            The queue of entities to perform the KO on.
 	 * @param koResult
@@ -123,8 +118,7 @@ public abstract class ThreadFactory {
 	 *            The objective function.
 	 * @return A KO thread
 	 */
-	public abstract ThreadKO makeKOThread(boolean interactionInSolver,
-			Queue<BioEntity> reacsQueue, KOResult koResult, Objective obj);
+	public abstract ThreadKO makeKOThread(Queue<BioEntity> reacsQueue, KOResult koResult, Objective obj);
 
 	public void setBioNet(BioNetwork bioNet) {
 		this.bioNet = bioNet;
@@ -134,8 +128,6 @@ public abstract class ThreadFactory {
 	 * 
 	 * Makes a thread for an analysis with a varying variable.
 	 * 
-	 * @param interactionInSolver
-	 *            Whether or not interactions are in the solver.
 	 * @param fluxesQueue
 	 *            The queue of fluxes.
 	 * @param entities
@@ -146,16 +138,13 @@ public abstract class ThreadFactory {
 	 *            The objective function.
 	 * @return A Thread for an analysis with a varying variable.
 	 */
-	public abstract ThreadReac makeReacThread(boolean interactionInSolver,
-			Queue<Double> fluxesQueue, Map<BioEntity, Double> entities,
+	public abstract ThreadReac makeReacThread(Queue<Double> fluxesQueue, Map<BioEntity, Double> entities,
 			ReacAnalysisResult result, Objective obj);
 
 	/**
 	 * 
 	 * Makes a thread for an analysis with two varying variables.
 	 * 
-	 * @param interactionInSolver
-	 *            Whether or not interactions are in the solver.
 	 * @param fluxesQueue
 	 *            The queue of fluxes.
 	 * @param result
@@ -168,8 +157,7 @@ public abstract class ThreadFactory {
 	 *            The objective function.
 	 * @return A thread for an analysis with two varying variables.
 	 */
-	public abstract ResolveThread makeTwoReacsThread(
-			boolean interactionInSolver, Queue<double[]> fluxesQueue,
+	public abstract ResolveThread makeTwoReacsThread(Queue<double[]> fluxesQueue,
 			TwoReacsAnalysisResult result, Map<BioEntity, Double> entities1,
 			Map<BioEntity, Double> entities2, Objective obj);
 

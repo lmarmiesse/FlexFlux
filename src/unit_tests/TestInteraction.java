@@ -38,23 +38,19 @@ import general.Bind;
 import general.CplexBind;
 import general.GLPKBind;
 import interaction.And;
+import interaction.IfThenInteraction;
 import interaction.Interaction;
 import interaction.Or;
 import interaction.Unique;
-import interaction.cplex.AndCPLEX;
-import interaction.cplex.EqInteractionCplex;
-import interaction.cplex.IfThenInteractionCplex;
-import interaction.cplex.OrCPLEX;
-import interaction.cplex.UniqueCPLEX;
-import operation.OperationLeCPLEX;
+import operation.OperationLe;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import parsebionet.biodata.BioEntity;
 import analyses.Analysis;
 import analyses.FBAAnalysis;
 import analyses.result.AnalysisResult;
-import parsebionet.biodata.BioEntity;
 
 /**
  * @author lmarmiesse 8 mars 2013
@@ -82,38 +78,36 @@ public class TestInteraction {
 	@Test
 	public void test() {
 
-		And rel1= new AndCPLEX();
-		Or rel2 = new OrCPLEX();
-		Unique rel3 = new UniqueCPLEX(c);
+		And rel1= new And();
+		Or rel2 = new Or();
+		Unique rel3 = new Unique(c);
 		
 		
-		rel2.addRelation(new UniqueCPLEX(b));
+		rel2.addRelation(new Unique(b));
 		rel2.addRelation(rel3);
 		
-		rel1.addRelation(new UniqueCPLEX(a));
+		rel1.addRelation(new Unique(a));
 		rel1.addRelation(rel2);
 		
 		assertTrue(rel1.toString().equals("(a >= 0.0 AND (b >= 0.0 OR c >= 0.0))"));
 		
-		Unique intUnique = new UniqueCPLEX(f,new OperationLeCPLEX(),5.0);
+		Unique intUnique = new Unique(f,new OperationLe(),5.0);
 		
-		Interaction i1 = new IfThenInteractionCplex(intUnique,rel1);
+		Interaction i1 = new IfThenInteraction(intUnique,rel1);
 		System.out.println(i1);
 		
-		assertTrue(i1.toString().equals("IF : (a >= 0.0 AND (b >= 0.0 OR c >= 0.0)) THEN : f <= 5.0"));
+		assertTrue(i1.toString().equals("IF : (a >= 0.0 AND (b >= 0.0 OR c >= 0.0)) THEN : f <= 5.0 Begins after 0.0h, lasts 0.0h."));
 		
 		
-		Unique u1 = new UniqueCPLEX(b);
-		Unique u2 = new UniqueCPLEX(f);
-		Interaction i2 = new EqInteractionCplex(u1,u2);
+		Unique u1 = new Unique(b);
+		Unique u2 = new Unique(f);
+//		Interaction i2 = new EqInteraction(u1,u2);
 		
-		System.out.println(i2);
-		
-		
-		fbaTest(new GLPKBind(false));
-		fbaTest(new CplexBind(false));
+//		System.out.println(i2);
 		
 		
+		fbaTest(new GLPKBind());
+		fbaTest(new CplexBind());
 		
 	}
 

@@ -42,14 +42,11 @@ import interaction.Relation;
 import interaction.RelationFactory;
 import interaction.RelationWithList;
 import interaction.Unique;
-import interaction.UniqueProbability;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -57,7 +54,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -77,9 +73,7 @@ import parsebionet.biodata.BioProtein;
 import parsebionet.io.Sbml2Bionetwork;
 import thread.ThreadFactory;
 import analyses.FBAAnalysis;
-import analyses.FVAAnalysis;
 import analyses.result.FBAResult;
-import analyses.result.FVAResult;
 
 /**
  * 
@@ -143,12 +137,6 @@ public abstract class Bind {
 	protected Map<Interaction, List<Constraint>> intToConstraint = new HashMap<Interaction, List<Constraint>>();
 
 	/**
-	 * Links an interactions to when it begins and how long it lasts (only used
-	 * in time-dependent alanyses)
-	 */
-	protected Map<Interaction, double[]> intToTimeInfos = new HashMap<Interaction, double[]>();
-
-	/**
 	 * List of dead reactions.
 	 */
 	protected Collection<BioChemicalReaction> deadReactions = new ArrayList<BioChemicalReaction>();
@@ -179,11 +167,6 @@ public abstract class Bind {
 	protected Map<BioEntity, Object> solverSimpleConstraints = new HashMap<BioEntity, Object>();
 
 	/**
-	 * Decides if the interactions will be treated in ther solver or before.
-	 */
-	protected boolean interactionInSolver;
-
-	/**
 	 * If false the fba cannot strat.
 	 */
 	private boolean solverPrepared = false;
@@ -212,12 +195,6 @@ public abstract class Bind {
 	 * Transforms problem entities into the right solver variables.
 	 */
 	public abstract void entitiesToSolverVars();
-
-	/**
-	 * Transforms problem interactions into solver constraints.
-	 */
-	protected abstract void interactionsToSolverConstraints(
-			List<Interaction> interactions);
 
 	/**
 	 * Creates a constraint for the solver.
@@ -309,22 +286,7 @@ public abstract class Bind {
 	 */
 	public DoubleResult FBA(boolean saveResults, boolean chechInt) {
 		if (solverPrepared) {
-			if (chechInt && !interactionInSolver) {
-
-				// //////////////////////////////////////////////OLD VERSION
-
-				// List<Constraint> constraintsToAdd = new
-				// ArrayList<Constraint>();
-				//
-				// for (Constraint c : checkInteractions().keySet()) {
-				// c.setOverWritesBounds(false);
-				// constraintsToAdd.add(c);
-				//
-				// }
-				//
-				// return FBAWithConstraints(constraintsToAdd, saveResults,
-				// chechInt);
-				// //////////////////////////////////////////////
+			if (chechInt) {
 
 				List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 
@@ -366,14 +328,13 @@ public abstract class Bind {
 
 		if (solverPrepared) {
 
-			if (!interactionInSolver && chechInt) {
+			if (chechInt) {
 				// treatment to ensure there is no problem
 
 				Map<BioEntity, Constraint> oldSimpleConstraint = new HashMap<BioEntity, Constraint>();
 				// we add the simple constraints to be taken into account when
 				// checking interactions
 				for (Constraint constr : constraintsToAdd) {
-					System.out.println(constr);
 
 					if (constr.getEntities().size() == 1) {
 						for (BioEntity ent : constr.getEntities().keySet()) {
@@ -398,7 +359,6 @@ public abstract class Bind {
 				}
 
 				for (Constraint constr : constraintsToAdd) {
-					System.out.println(constr);
 					if (constr.getEntities().size() == 1) {
 						for (BioEntity ent : constr.getEntities().keySet()) {
 							if (constr.getEntities().get(ent) == 1.0) {
@@ -475,14 +435,10 @@ public abstract class Bind {
 	 *            Interaction network to copy.
 	 * @param bioNet
 	 *            BioNetwork to copy.
-	 * @param interactionInSolver
-	 *            Determines if interactions will be treated by the solver of
-	 *            before.
 	 */
 	public Bind(List<Constraint> constraints2,
 			Map<BioEntity, Constraint> simpleConstraints,
-			InteractionNetwork intNet, BioNetwork bioNet,
-			boolean interactionInSolver) {
+			InteractionNetwork intNet, BioNetwork bioNet) {
 
 		this.constraints.addAll(constraints2);
 		this.simpleConstraints.putAll(simpleConstraints);
@@ -503,20 +459,14 @@ public abstract class Bind {
 		for (Interaction inter : intNet.getGPRInteractions()) {
 			this.intNet.addGPRIntercation(inter);
 		}
-		for (BioEntity ent : intNet.getInteractionToCheck().keySet()) {
-			for (Interaction inter : intNet.getInteractionToCheck().get(ent)) {
-				this.intNet.addInteractionToCheck(inter);
-			}
-		}
 
 		// this.intNet = intNet;
 
 		this.bioNet = bioNet;
-		this.interactionInSolver = interactionInSolver;
 	}
 
-	public Bind(boolean interactionInSolver) {
-		this.interactionInSolver = interactionInSolver;
+	public Bind() {
+
 	}
 
 	/**
@@ -528,10 +478,8 @@ public abstract class Bind {
 	 *            If true : uses extended SBML format.
 	 */
 	public void loadSbmlNetwork(String path, boolean ext) {
-
 		Sbml2Bionetwork parser = new Sbml2Bionetwork(path, ext);
 		setNetwork(parser.getBioNetwork(), ext);
-
 	}
 
 	/**
@@ -583,7 +531,6 @@ public abstract class Bind {
 		setReactionsBounds();
 
 		// GPR to interaction
-
 		gprInteractions(ext);
 
 	}
@@ -602,7 +549,7 @@ public abstract class Bind {
 			String line;
 			int nbLine = 1;
 			while ((line = in.readLine()) != null) {
-				if (line.startsWith("#")) {
+				if (line.startsWith("#") || line.equals("")) {
 					nbLine++;
 					continue;
 				}
@@ -651,206 +598,96 @@ public abstract class Bind {
 				}
 				// ////////////////////////////
 
-				List<String> expressions = new ArrayList<String>();
+				Relation ifRelation = null;
+				Unique thenRelation = null;
+				Unique elseRelation = null;
 
-				Relation condition = null;
-				Relation consequence = null;
+				double thenBegins = 0.0, thenLasts = 0.0, elseBegins = 0.0, elseLasts = 0.0;
 
-				double begins = 0.0, lasts = 0.0;
+				pattern = Pattern
+						.compile("IF\\[([^\\]]*)\\]THEN\\[(.*)\\]ELSE\\[(.*)\\]");
 
-				if (line.startsWith("IF")) {
+				matcher = pattern.matcher(line);
 
-					String interactionString = line;
-					String interactionString2 = "";
+				if (matcher.find()) {
 
-					// ELSE TREATMENT
-					if (line.contains("ELSE")) {
-
-						int elseIndex = line.indexOf("ELSE");
-						interactionString = (String) line.subSequence(0,
-								elseIndex);
-						interactionString2 = (String) line.subSequence(
-								elseIndex, line.length());
-					}
-
-					// matches everything between []
-					pattern = Pattern.compile("\\[[^\\]]*\\]");
-
-					matcher = pattern.matcher(interactionString);
-
-					while (matcher.find()) {
-						expressions.add(matcher.group());
-					}
-
-					if (expressions.size() < 2 || expressions.size() > 4) {
-
+					if (matcher.groupCount() != 3) {
 						System.err.println("Error in interaction file line "
-								+ nbLine);
-						condition = null;
-						nbLine++;
-						continue;
+								+ nbLine + ", interaction not conform");
+
+						System.exit(0);
 					}
 
-					// we create the relation from this string
-					condition = makeRelationFromString(expressions.get(0),
-							nbLine);
+					String[] ifPart = matcher.group(1).split("\\]\\[");
+					ifRelation = makeRelationFromString(ifPart[0], nbLine);
 
-					Relation cons = makeRelationFromString(expressions.get(1),
-							nbLine);
+					String[] thenPart = matcher.group(2).split("\\]\\[");
+					thenRelation = makeUniqueFromCondition(thenPart[0], nbLine);
 
-					// we set the time parameters of the interaction
-					if (expressions.size() > 2) {
-						begins = Double.parseDouble(expressions.get(2)
-								.replaceAll("\\[|\\]", ""));
-
-						if (expressions.size() > 3) {
-							lasts = Double.parseDouble(expressions.get(3)
-									.replaceAll("\\[|\\]", ""));
-						}
-
+					if (thenPart.length > 1) {
+						thenBegins = Double.parseDouble(thenPart[1]);
+					}
+					if (thenPart.length > 2) {
+						thenLasts = Double.parseDouble(thenPart[2]);
 					}
 
-					consequence = cons;
+					String[] elsePart = matcher.group(3).split("\\]\\[");
+					elseRelation = makeUniqueFromCondition(elsePart[0], nbLine);
 
-					if (!line.contains("THEN")) {
+					if (elsePart.length > 1) {
+						elseBegins = Double.parseDouble(elsePart[1]);
+					}
+					if (elsePart.length > 2) {
+						elseLasts = Double.parseDouble(elsePart[2]);
+					}
+					
+					String thenEntity = thenPart[0].replaceAll("\\s", "").split(
+							"<=|>=|=|<|>|\\*")[0];
+					String elseEntity = elsePart[0].replaceAll("\\s", "").split(
+							"<=|>=|=|<|>|\\*")[0];
+
+					if(!thenEntity.equals(elseEntity)){
 						System.err.println("Error in interaction file line "
-								+ nbLine + ", expected THEN");
-						condition = null;
-						nbLine++;
-						continue;
+								+ nbLine + ", not the same entity in the THEN and the ELSE part");
+						System.exit(0);
 					}
+					
+					// /////////// we create and add the interactions
+					Interaction thenInteraction = relationFactory
+							.makeIfThenInteraction(thenRelation, ifRelation);
 
-					// if there was no error
-					if (condition != null && consequence != null) {
-						// we create the interaction
-						Interaction i = relationFactory.makeIfThenInteraction(
-								consequence, condition);
+					intNet.addAddedIntercation(thenInteraction);
+					thenInteraction.setTimeInfos(new double[] { thenBegins,
+							thenLasts });
 
-						intNet.addAddedIntercation(i);
+					Relation ifInversedRelation = new InversedRelation(
+							ifRelation);
 
-						intToTimeInfos.put(i, new double[] { begins, lasts });
+					// the else interaction
+					Interaction elseInteraction = relationFactory
+							.makeIfThenInteraction(elseRelation,
+									ifInversedRelation);
 
-					}
+					intNet.addAddedIntercation(elseInteraction);
+					elseInteraction.setTimeInfos(new double[] { elseBegins,
+							elseLasts });
+					// ///////////
 
-					// /////////////////////if there was an ELSE
-					if (!interactionString2.equals("")) {
-						expressions = new ArrayList<String>();
+				} 
+				
+//				else if {
+//					
+//					
+//				}
+				
+				
+				else {
+					System.err.println("Error in interaction file line "
+							+ nbLine + ", interaction not conform");
 
-						Relation condition2 = null;
-						Relation consequence2 = null;
-
-						matcher = pattern.matcher(interactionString2);
-
-						while (matcher.find()) {
-							expressions.add(matcher.group());
-						}
-
-						if (expressions.size() < 1 || expressions.size() > 3) {
-
-							System.err
-									.println("Error in interaction file line "
-											+ nbLine);
-							condition2 = null;
-							nbLine++;
-							continue;
-						}
-
-						// we create the relation from this string
-						condition2 = new InversedRelation(condition);
-						Relation cons2 = makeRelationFromString(
-								expressions.get(0), nbLine);
-
-						// we set the time parameters of the interaction
-						if (expressions.size() > 1) {
-							begins = Double.parseDouble(expressions.get(1)
-									.replaceAll("\\[|\\]", ""));
-
-							if (expressions.size() > 2) {
-								lasts = Double.parseDouble(expressions.get(3)
-										.replaceAll("\\[|\\]", ""));
-							}
-
-						}
-
-						consequence2 = cons2;
-
-						// if there was no error
-						if (condition != null && consequence != null) {
-							// we create the interaction
-							Interaction i = relationFactory
-									.makeIfThenInteraction(consequence2,
-											condition2);
-
-							intNet.addAddedIntercation(i);
-
-							intToTimeInfos.put(i,
-									new double[] { begins, lasts });
-
-						}
-
-					}
-
-				} else if (line.contains("EQ")) {
-
-					// matches everything between []
-					pattern = Pattern.compile("\\[[^\\]]*\\]");
-
-					matcher = pattern.matcher(line);
-
-					while (matcher.find()) {
-						expressions.add(matcher.group());
-					}
-
-					if (expressions.size() < 2 || expressions.size() > 4) {
-
-						System.err.println("Error in interaction file line "
-								+ nbLine);
-						condition = null;
-						nbLine++;
-						continue;
-					}
-
-					// we create the relation from this string
-					condition = makeRelationFromString(expressions.get(0),
-							nbLine);
-
-					Relation cons = makeRelationFromString(expressions.get(1),
-							nbLine);
-
-					// we set the time parameters of the interaction
-					if (expressions.size() > 2) {
-						begins = Double.parseDouble(expressions.get(2)
-								.replaceAll("\\[|\\]", ""));
-
-						if (expressions.size() > 3) {
-							lasts = Double.parseDouble(expressions.get(3)
-									.replaceAll("\\[|\\]", ""));
-						}
-
-					}
-
-					consequence = cons;
-
-					// if there was no error
-					if (condition != null && consequence != null) {
-						// we create the interaction
-
-						if (!interactionInSolver) {
-							System.err
-									.println("Warning : interaction file line "
-											+ nbLine
-											+ ", EQ interactions are not supported when interactions are not in the solver.\n"
-											+ "This interactions is considered as a IF .. THEN interaction.");
-						}
-
-						Interaction i = relationFactory.makeEqInteraction(
-								consequence, condition);
-						intNet.addAddedIntercation(i);
-
-						intToTimeInfos.put(i, new double[] { begins, lasts });
-					}
-
+					System.exit(0);
 				}
+
 				nbLine++;
 			}
 
@@ -876,7 +713,6 @@ public abstract class Bind {
 	 *            If it is a binary entity.
 	 */
 	private void addRightEntityType(BioEntity b, boolean integer, boolean binary) {
-
 		if (binary) {
 			intNet.addBinaryEntity(b);
 			return;
@@ -889,7 +725,6 @@ public abstract class Bind {
 			intNet.addNumEntity(b);
 			return;
 		}
-
 	}
 
 	/**
@@ -927,10 +762,12 @@ public abstract class Bind {
 				}
 				if (line.startsWith("INTEGER")) {
 					integer = true;
+					binary = false;
 				} else if (line.startsWith("EQUATIONS")) {
 					equations = true;
 				} else if (line.startsWith("BINARY")) {
 					binary = true;
+					integer = false;
 				} else if (line.startsWith("obj :")) {
 
 					boolean maximize = true;
@@ -944,7 +781,6 @@ public abstract class Bind {
 
 					objString.add(expr);
 					objStringMap.put(expr, maximize);
-
 					// we create the objective at the end
 				}
 
@@ -1545,37 +1381,6 @@ public abstract class Bind {
 
 		entitiesToSolverVars();
 
-		List<Interaction> normalInteractions = new ArrayList<Interaction>();
-		List<Interaction> probaInteractions = new ArrayList<Interaction>();
-		if (interactionInSolver) {
-			if (solverPrepared) {
-				System.err.println("Warning : preparing a non-empty solver");
-			}
-
-			// we fill the two lists of interactions
-
-			for (Interaction inter : intNet.getGPRInteractions()) {
-
-				if (inter.isProbabilityInteraction()) {
-					probaInteractions.add(inter);
-				} else {
-					normalInteractions.add(inter);
-				}
-
-			}
-			for (Interaction inter : intNet.getAddedInteractions()) {
-
-				if (inter.isProbabilityInteraction()) {
-					probaInteractions.add(inter);
-				} else {
-					normalInteractions.add(inter);
-				}
-
-			}
-
-			interactionsToSolverConstraints(normalInteractions);
-		}
-
 		constraintsToSolverConstraints();
 
 		if (obj != null) {
@@ -1585,66 +1390,15 @@ public abstract class Bind {
 		solverPrepared = true;
 
 		// we associate each interaction to the constraint(s) they could provoke
-		// we only treat not probabilistic interactions
-		if (!interactionInSolver) {
 
-			List<Interaction> interactions = intNet.getAddedInteractions();
-			interactions.addAll(intNet.getGPRInteractions());
+		List<Interaction> interactions = intNet.getAddedInteractions();
+		interactions.addAll(intNet.getGPRInteractions());
 
-			for (Interaction inter : interactions) {
-				if (!inter.isProbabilityInteraction()) {
-					intToConstraint.put(inter, inter.getConsequence()
-							.createConstraints());
+		for (Interaction inter : interactions) {
 
-				}
-			}
+			intToConstraint.put(inter, inter.getConsequence()
+					.createConstraints());
 
-		}
-
-		// if there are probabilities to create
-		// we make a fba to get the min and max values
-		// of the entities to scale
-		if (intNet.isNotTransformedUnique()) {
-
-			List<UniqueProbability> toTransform = new ArrayList<UniqueProbability>();
-
-			int size = intNet.getNotTransformedUniques().size();
-
-			for (int i = 0; i < size; i++) {
-				toTransform.add((UniqueProbability) intNet
-						.removeNotTransformedUnique());
-			}
-
-			Map<String, BioEntity> mapFVA = new HashMap<String, BioEntity>();
-
-			for (UniqueProbability unique : toTransform) {
-				BioEntity ent = unique.getEntity();
-
-				mapFVA.put(ent.getId(), ent);
-			}
-
-			System.out.println("SIZE1 " + simpleConstraints.size());
-
-			FVAAnalysis fva = new FVAAnalysis(this, mapFVA, null);
-			FVAResult result = fva.runAnalysis();
-
-			System.out.println("SIZE2 " + simpleConstraints.size());
-
-			for (UniqueProbability unique : toTransform) {
-				BioEntity ent = unique.getEntity();
-				unique.transform(result.getValuesForEntity(ent)[0],
-						result.getValuesForEntity(ent)[1], relationFactory,
-						operationFactory);
-
-			}
-
-			System.out.println("Probability creation over");
-
-			if (interactionInSolver) {
-
-				interactionsToSolverConstraints(probaInteractions);
-
-			}
 		}
 
 		Objective realObj = obj;
@@ -2057,7 +1811,7 @@ public abstract class Bind {
 						reacEqZero, rel1);
 
 				intNet.addGPRIntercation(inter);
-				intToTimeInfos.put(inter, new double[] { 0.0, 0.0 });
+				inter.setTimeInfos(new double[] { 0.0, 0.0 });
 
 				reactionToActiveGPR.put(intNet.getEntity(name), rel1Active);
 
@@ -2114,16 +1868,8 @@ public abstract class Bind {
 	 * @return The created Relation.
 	 */
 	private Relation makeRelationFromString(String line, int nbLine) {
-		String ifExpr = "";
-		try {
-			ifExpr = (String) line.subSequence(line.indexOf("[") + 1,
-					line.indexOf("]"));
-		} catch (StringIndexOutOfBoundsException e) {
-			System.err.println("Error in interaction file line " + nbLine
-					+ ", missformed line, expression must be between []");
-			return null;
 
-		}
+		String ifExpr = line;
 
 		String[] conditions = ifExpr.split(" AND | OR ");
 
@@ -2231,8 +1977,8 @@ public abstract class Bind {
 
 			if (ParenthesesExpressions.size() == 1) {
 
-				return makeRelationFromString(
-						"[" + ParenthesesExpressions.get(0) + "]", nbLine);
+				return makeRelationFromString(ParenthesesExpressions.get(0),
+						nbLine);
 			} else {
 
 				if (copy.contains(" AND ")) {
@@ -2284,54 +2030,11 @@ public abstract class Bind {
 		// if the entity does not exist yet
 		if (intNet.getEntity(name) == null) {
 
-			if (name.startsWith("GPR_")) {
+			System.err
+					.println("Error : unknown variable in interaction file : "
+							+ name + " line " + nbLine);
+			System.exit(0);
 
-				String reacName = name.substring(4);
-				if (intNet.getEntity(reacName) == null) {
-					System.err
-							.println("Error : unknown variable in interaction file : "
-									+ reacName + " line " + nbLine);
-					System.exit(0);
-				}
-				if (!reactionToActiveGPR
-						.containsKey(intNet.getEntity(reacName))) {
-
-					System.err.println("Error in interaction file : "
-							+ reacName + " line " + nbLine
-							+ ", this reaction has no GPR");
-
-				} else {
-
-					// if it is the first time we meet this gpr in the
-					// interaction file
-					if (intNet.getEntity(name) == null) {
-
-						BioEntity gpr = new BioEntity("GPR_" + reacName);
-						intNet.addBinaryEntity(gpr);
-
-						Unique gprActive = relationFactory.makeUnique(gpr,
-								operationFactory.makeEq(), 1.0);
-
-						Interaction inter = relationFactory
-								.makeIfThenInteraction(gprActive,
-										reactionToActiveGPR.get(intNet
-												.getEntity(reacName)));
-
-						intNet.addAddedIntercation(inter);
-						intToTimeInfos.put(inter, new double[] { 0.0, 0.0 });
-
-					}
-
-				}
-
-			}
-
-			else {
-				System.err
-						.println("Error : unknown variable in interaction file : "
-								+ name + " line " + nbLine);
-				System.exit(0);
-			}
 		}
 
 		if (splitedCondition.length == 1) {
@@ -2351,21 +2054,9 @@ public abstract class Bind {
 
 			}
 
-			if (condition.contains("*")) {
+			return (Unique) relationFactory.makeUnique(intNet.getEntity(name),
+					operationFactory.makeOperationFromString(condition), value);
 
-				UniqueProbability u = new UniqueProbability(
-						intNet.getEntity(name), value);
-				u.setProbabilityRelation(true);
-				intNet.addProbaUnique(u);
-
-				return u;
-			} else {
-
-				return (Unique) relationFactory.makeUnique(
-						intNet.getEntity(name),
-						operationFactory.makeOperationFromString(condition),
-						value);
-			}
 		}
 
 	}
@@ -2387,10 +2078,6 @@ public abstract class Bind {
 
 	public Objective getObjective() {
 		return obj;
-	}
-
-	public boolean isInteractionInSolver() {
-		return interactionInSolver;
 	}
 
 	public Map<Interaction, List<Constraint>> getIntToConstraint() {
@@ -2529,7 +2216,6 @@ public abstract class Bind {
 
 			for (Interaction i : toCheck) {
 
-
 				if (i.getCondition().isTrue(thisStepSimpleConstraints)) {
 					// we go through all the consequences (there should be only
 					// one)
@@ -2632,7 +2318,7 @@ public abstract class Bind {
 									// + " donc " + consequence);
 
 									contToTimeInfos.put(consequence,
-											intToTimeInfos.get(i));
+											i.getTimeInfos());
 									nextStepState.put(ent, consequence);
 
 									setEntities.add(ent);

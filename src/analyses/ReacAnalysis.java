@@ -127,8 +127,7 @@ public class ReacAnalysis extends Analysis {
 				end, deltaF);
 
 		for (int j = 0; j < Vars.maxThread; j++) {
-			threads.add(b.getThreadFactory().makeReacThread(
-					b.isInteractionInSolver(), fluxesQueue, entities, result, b.getObjective()));
+			threads.add(b.getThreadFactory().makeReacThread(fluxesQueue, entities, result, b.getObjective()));
 
 		}
 

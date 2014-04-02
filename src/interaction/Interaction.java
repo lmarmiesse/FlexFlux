@@ -33,7 +33,6 @@
  */
 package interaction;
 
-import general.Bind;
 
 
 /**
@@ -59,23 +58,32 @@ public abstract class Interaction {
 	 * consequence Relation.
 	 * 
 	 */
-	protected Relation consequence;
+	protected Unique consequence;
 	/**
 	 * condition Relation.
 	 */
 	protected Relation condition;
-	protected boolean probabilityInteraction = false;
+	
+	
+	/**
+	 * Links an interactions to when it begins and how long it lasts (only used
+	 * in time-dependent alanyses)
+	 */
+	protected double[] timeInfos = new  double[] {0.0, 0.0};
 
-	public Interaction(Relation consequence, Relation condition) {
-
-		if (consequence.isProbabilityRelation()
-				|| condition.isProbabilityRelation()) {
-			probabilityInteraction = true;
-		}
+	public Interaction(Unique consequence, Relation condition) {
 
 		this.consequence = consequence;
 		this.condition = condition;
 
+	}
+	
+	public void setTimeInfos(double[] timeInfos){
+		this.timeInfos = timeInfos;
+	}
+	
+	public double[] getTimeInfos(){
+		return timeInfos;
 	}
 
 	public Relation getConsequence() {
@@ -86,20 +94,4 @@ public abstract class Interaction {
 		return condition;
 	}
 
-	/**
-	 * 
-	 * Creates the interaction.
-	 * 
-	 * <p>
-	 * Only used when interactions are in the solver.
-	 * 
-	 * 
-	 * @param bind
-	 * @return The right object corresponding to the interaction for the solver.
-	 */
-	public abstract Object makeInteraction(Bind bind);
-
-	public boolean isProbabilityInteraction() {
-		return probabilityInteraction;
-	}
 }

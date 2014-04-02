@@ -45,7 +45,7 @@ import general.Bind;
  */
 public class IfThenInteraction extends Interaction {
 
-	public IfThenInteraction(Relation object, Relation r) {
+	public IfThenInteraction(Unique object, Relation r) {
 		super(object, r);
 	}
 
@@ -56,6 +56,8 @@ public class IfThenInteraction extends Interaction {
 		s += "IF : " + condition;
 
 		s += " THEN : " + consequence;
+		
+		s += " Begins after "+timeInfos[0]+"h, lasts "+timeInfos[1]+"h.";
 
 		return s;
 	}

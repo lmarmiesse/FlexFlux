@@ -42,17 +42,15 @@ import ilog.concert.IloObjectiveSense;
 import ilog.concert.IloRange;
 import ilog.cplex.IloCplex;
 import ilog.cplex.IloCplexModeler;
-import interaction.Interaction;
 import interaction.InteractionNetwork;
-import interaction.cplex.RelationFactoryCPLEX;
+import interaction.RelationFactory;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import operation.OperationFactoryCPLEX;
+import operation.OperationFactory;
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
 import thread.ThreadFactoryCPLEX;
@@ -116,25 +114,23 @@ public class CplexBind extends Bind {
 		}
 
 		// creation of the right factories
-		this.operationFactory = new OperationFactoryCPLEX();
-		this.relationFactory = new RelationFactoryCPLEX();
+		this.operationFactory = new OperationFactory();
+		this.relationFactory = new RelationFactory();
 		this.threadFactory = new ThreadFactoryCPLEX(constraints,
 				simpleConstraints, intNet);
 	}
 
-	public CplexBind(boolean interactionInSolver) {
+	public CplexBind() {
 
-		super(interactionInSolver);
+		super();
 		init();
 
 	}
 
 	public CplexBind(List<Constraint> constraints,
 			Map<BioEntity, Constraint> simpleConstraints,
-			InteractionNetwork intNet, BioNetwork bioNet,
-			boolean interactionInSolver) {
-		super(constraints, simpleConstraints, intNet, bioNet,
-				interactionInSolver);
+			InteractionNetwork intNet, BioNetwork bioNet) {
+		super(constraints, simpleConstraints, intNet, bioNet);
 		init();
 	}
 
@@ -240,22 +236,6 @@ public class CplexBind extends Bind {
 			}
 
 		} catch (IloException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	protected void interactionsToSolverConstraints(
-			List<Interaction> interactions) {
-
-		try {
-			for (Interaction i : interactions) {
-				// we create the logical constraints
-				cplex.add((IloConstraint) i.makeInteraction(this));
-
-			}
-		} catch (IloException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

@@ -146,7 +146,7 @@ public class TwoReacsAnalysis extends Analysis {
 
 		for (int j = 0; j < Vars.maxThread; j++) {
 			threads.add((ThreadTwoReacs) b.getThreadFactory()
-					.makeTwoReacsThread(b.isInteractionInSolver(), fluxesQueue,
+					.makeTwoReacsThread(fluxesQueue,
 							result, entities1, entities2, b.getObjective()));
 
 		}

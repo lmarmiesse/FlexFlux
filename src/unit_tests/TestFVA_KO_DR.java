@@ -68,7 +68,7 @@ import analyses.result.KOResult;
  */
 public class TestFVA_KO_DR {
 
-	static Bind bind = new CplexBind(false);
+	static Bind bind = new CplexBind();
 
 	static BioNetwork n;
 	static InteractionNetwork i;
@@ -94,7 +94,7 @@ public class TestFVA_KO_DR {
 	public void test() {
 
 		go();
-		bind = new GLPKBind(false);
+		bind = new GLPKBind();
 
 		bind.loadSbmlNetwork("Data/coli_core.xml", false);
 		n = bind.getBioNetwork();

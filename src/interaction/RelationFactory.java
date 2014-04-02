@@ -49,13 +49,7 @@ import parsebionet.biodata.BioEntity;
  */
 public class RelationFactory {
 
-	public EqInteraction makeEqInteraction(Relation object, Relation relation) {
-
-		return new EqInteraction(object, relation);
-
-	}
-
-	public IfThenInteraction makeIfThenInteraction(Relation object,
+	public IfThenInteraction makeIfThenInteraction(Unique object,
 			Relation relation) {
 
 		return new IfThenInteraction(object, relation);
