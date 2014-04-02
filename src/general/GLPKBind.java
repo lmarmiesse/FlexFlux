@@ -86,7 +86,6 @@ public class GLPKBind extends Bind {
 
 	public void init() {
 
-		interactionInSolver = false;
 		Vars.maxThread = 1;
 		model = GLPK.glp_create_prob();
 
@@ -107,17 +106,15 @@ public class GLPKBind extends Bind {
 				simpleConstraints, intNet);
 	}
 
-	public GLPKBind(boolean interactionInSolver) {
-		super(interactionInSolver);
+	public GLPKBind() {
+		super();
 		init();
 	}
 
 	public GLPKBind(List<Constraint> constraints,
 			Map<BioEntity, Constraint> simpleConstraints,
-			InteractionNetwork intNet, BioNetwork bioNet,
-			boolean interactionInSolver) {
-		super(constraints, simpleConstraints, intNet, bioNet,
-				interactionInSolver);
+			InteractionNetwork intNet, BioNetwork bioNet) {
+		super(constraints, simpleConstraints, intNet, bioNet);
 		init();
 	}
 
@@ -168,17 +165,6 @@ public class GLPKBind extends Bind {
 			GLPK.glp_set_col_kind(model, index, GLPKConstants.GLP_BV);
 
 		}
-
-	}
-
-	/**
-	 * 
-	 * Not used. This solver does not support interactions.
-	 * 
-	 */
-	protected void interactionsToSolverConstraints(
-			List<Interaction> interactions) {
-		// TODO Auto-generated method stub
 
 	}
 

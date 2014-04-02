@@ -89,12 +89,12 @@ public class KOAnalysis extends Analysis {
 
 		List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 		// we add the constraints corresponding to the interactions
-		if (!b.isInteractionInSolver()) {
+
 
 			for (Constraint c : b.findInteractionNetworkSteadyState()) {
 				constraintsToAdd.add(c);
 			}
-		}
+		
 
 		b.getConstraints().addAll(constraintsToAdd);
 
@@ -131,8 +131,7 @@ public class KOAnalysis extends Analysis {
 		}
 
 		for (int j = 0; j < Vars.maxThread; j++) {
-			threads.add(b.getThreadFactory().makeKOThread(
-					b.isInteractionInSolver(), tasks, koResult,
+			threads.add(b.getThreadFactory().makeKOThread(tasks, koResult,
 					b.getObjective()));
 		}
 

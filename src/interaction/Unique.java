@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 
 import operation.Operation;
+import operation.OperationGe;
 import parsebionet.biodata.BioEntity;
 
 /**
@@ -95,6 +96,7 @@ public class Unique extends Relation {
 	public Unique(BioEntity entity) {
 		this.entity = entity;
 		this.value = 0.0;
+		this.operation=new OperationGe();
 	}
 
 	public BioEntity getEntity() {

@@ -64,7 +64,7 @@ import analyses.result.RFBAResult;
  * 
  */
 public class TestRFBA {
-	static Bind bind = new GLPKBind(false);
+	static Bind bind = new GLPKBind();
 
 	static BioNetwork n;
 	static InteractionNetwork i;
@@ -92,7 +92,7 @@ public class TestRFBA {
 
 		
 		go();
-		bind = new CplexBind(false);
+		bind = new CplexBind();
 
 		bind.loadSbmlNetwork("Data/coli.xml", false);
 		n = bind.getBioNetwork();

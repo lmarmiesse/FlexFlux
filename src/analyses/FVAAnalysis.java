@@ -105,12 +105,12 @@ public class FVAAnalysis extends Analysis {
 		constraintsToAdd.addAll(constraints);
 
 		// we add the constraints corresponding to the interactions
-		if (!b.isInteractionInSolver()) {
+		
 
 			for (Constraint c : b.findInteractionNetworkSteadyState()) {
 				constraintsToAdd.add(c);
 			}
-		}
+	
 		b.getConstraints().addAll(constraintsToAdd);
 
 		FVAResult fvaResult = new FVAResult(result.result);
@@ -161,8 +161,7 @@ public class FVAAnalysis extends Analysis {
 		}
 
 		for (int j = 0; j < Vars.maxThread; j++) {
-			threads.add(b.getThreadFactory().makeFVAThread(
-					b.isInteractionInSolver(), entQueue, entQueueCopy,
+			threads.add(b.getThreadFactory().makeFVAThread(entQueue, entQueueCopy,
 					fvaResult));
 		}
 

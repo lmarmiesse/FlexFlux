@@ -77,12 +77,12 @@ public class DRAnalysis extends Analysis {
 
 		List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 		// we add the constraints corresponding to the interactions
-		if (!b.isInteractionInSolver()) {
+	
 
-			for (Constraint c :  b.findInteractionNetworkSteadyState()) {
-				constraintsToAdd.add(c);
-			}
+		for (Constraint c :  b.findInteractionNetworkSteadyState()) {
+			constraintsToAdd.add(c);
 		}
+		
 		b.getConstraints().addAll(constraintsToAdd);
 
 		DRResult drResult = new DRResult(0.0, b);
@@ -106,7 +106,7 @@ public class DRAnalysis extends Analysis {
 
 		for (int j = 0; j < Vars.maxThread; j++) {
 			threads.add(b.getThreadFactory()
-					.makeFVAThread(b.isInteractionInSolver(), entQueue,
+					.makeFVAThread(entQueue,
 							entQueueCopy, drResult));
 		}
 

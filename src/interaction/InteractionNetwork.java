@@ -74,15 +74,6 @@ public class InteractionNetwork {
 	 */
 	private List<Interaction> addedInteractions = new ArrayList<Interaction>();
 
-	private List<Unique> notTransformedProbaUnique = new ArrayList<Unique>();
-
-	// map containing the interactions to check if the bioentity is set to 0
-	protected Map<BioEntity, List<Interaction>> interactionsToCheck = new HashMap<BioEntity, List<Interaction>>();
-
-	public Map<BioEntity, List<Interaction>> getInteractionToCheck() {
-		return interactionsToCheck;
-	}
-
 	public List<BioEntity> getEntities() {
 
 		List<BioEntity> entities = new ArrayList<BioEntity>();
@@ -100,30 +91,11 @@ public class InteractionNetwork {
 		return entities;
 	}
 
-	public void addInteractionToCheck(Interaction i) {
-
-		List<BioEntity> entities = i.getCondition().getInvolvedEntities();
-
-		for (BioEntity ent : entities) {
-			if (interactionsToCheck.containsKey(ent)) {
-				interactionsToCheck.get(ent).add(i);
-			} else {
-				List<Interaction> toAdd = new ArrayList<Interaction>();
-				toAdd.add(i);
-				interactionsToCheck.put(ent, toAdd);
-			}
-
-		}
-
-	}
-
 	public void addGPRIntercation(Interaction i) {
-		addInteractionToCheck(i);
 		GPRInteractions.add(i);
 	}
 
 	public void addAddedIntercation(Interaction i) {
-		addInteractionToCheck(i);
 		addedInteractions.add(i);
 	}
 
@@ -208,18 +180,6 @@ public class InteractionNetwork {
 		return addedInteractions;
 	}
 
-	public void addProbaUnique(Unique unique) {
-		notTransformedProbaUnique.add(unique);
-	}
-
-	public List<Unique> getNotTransformedUniques() {
-		return notTransformedProbaUnique;
-	}
-
-	public Unique removeNotTransformedUnique() {
-		return notTransformedProbaUnique.remove(0);
-	}
-
 	/**
 	 * Clears all lists.
 	 */
@@ -229,15 +189,6 @@ public class InteractionNetwork {
 		binaryEntities.clear();
 		GPRInteractions.clear();
 		addedInteractions.clear();
-		interactionsToCheck.clear();
-	}
-
-	/**
-	 * 
-	 * @return True if there are not transformed unique probabilities.
-	 */
-	public boolean isNotTransformedUnique() {
-		return notTransformedProbaUnique.size() > 0;
 	}
 
 	public void removeNumEntity(BioEntity entity) {

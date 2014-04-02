@@ -62,8 +62,7 @@ import parsebionet.io.Sbml2Bionetwork;
  */
 public class TestBind {
 
-	static boolean intInSolver = false;
-	static Bind bind = new CplexBind(intInSolver);
+	static Bind bind = new CplexBind();
 	static BioNetwork n;
 	static InteractionNetwork i;
 
@@ -79,7 +78,7 @@ public class TestBind {
 	public void GeneralTest() {
 
 		go();
-		bind = new GLPKBind(false);
+		bind = new GLPKBind();
 
 		bind.loadSbmlNetwork("Data/coli.xml", false);
 		n = bind.getBioNetwork();
@@ -192,7 +191,7 @@ public class TestBind {
 		bind.loadInteractionsFile("Data/intTest");
 
 		bind.prepareSolver();
-		Assert.assertFalse(bind.isMIP() != intInSolver);
+		Assert.assertTrue(bind.isMIP());
 
 		
 		
@@ -200,14 +199,13 @@ public class TestBind {
 		
 
 		Assert.assertTrue(Math.abs(bind.getSolvedValue(new BioEntity("d")) - 40.0) < 0.001);
-		Assert.assertTrue(bind.getSolvedValue(new BioEntity("e")) >= 2.0
-				&& bind.getSolvedValue(new BioEntity("e")) <= 4.0);
+		Assert.assertTrue(bind.getSolvedValue(new BioEntity("e")) == 5.0);
 
 		
 		Assert.assertTrue(bind.getSolvedValue(new BioEntity("f")) == 122.0);
 		Assert.assertTrue(bind.getSolvedValue(new BioEntity("g")) == 58.0);
 
-		Bind bind2 = new CplexBind(true);
+		Bind bind2 = new CplexBind();
 		bind2.setNetwork(network, false);
 
 		Assert.assertTrue(bind2.getConstraints().size() == 13);

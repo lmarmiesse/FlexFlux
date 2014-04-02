@@ -91,9 +91,6 @@ public class FlexfluxCompFVA {
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
 	public String solver = "GLPK";
 
-	@Option(name = "-nointsolv", usage = "[OPTIONAL, default = false]Interactions are not in the solver")
-	public boolean nointInSolver = false;
-
 	@Option(name = "-plot", usage = "[OPTIONAL, default = false]Plots the results")
 	public boolean plot = false;
 
@@ -169,12 +166,12 @@ public class FlexfluxCompFVA {
 		}
 		try {
 			if (f.solver.equals("CPLEX")) {
-				bind = new CplexBind(!f.nointInSolver);
-				bind2 = new CplexBind(!f.nointInSolver);
+				bind = new CplexBind();
+				bind2 = new CplexBind();
 			} else if (f.solver.equals("GLPK")) {
 				Vars.maxThread = 1;
-				bind = new GLPKBind(false);
-				bind2 = new GLPKBind(false);
+				bind = new GLPKBind();
+				bind2 = new GLPKBind();
 			} else {
 				System.err.println("Unknown solver name");
 				parser.printUsage(System.err);

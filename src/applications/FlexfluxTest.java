@@ -33,7 +33,7 @@ public class FlexfluxTest {
 		try {
 
 			System.out.println(" --- GLPK SOLVER ---- ");
-			new GLPKBind(false);
+			new GLPKBind();
 			GLPKok = true;
 			System.out.println("GLPK solver : OK !");
 			okSolvers.add("GLPK");
@@ -50,7 +50,7 @@ public class FlexfluxTest {
 		try {
 
 			System.out.println(" --- CPLEX SOLVER ---- ");
-			new CplexBind(false);
+			new CplexBind();
 			CPLEXok = true;
 			System.out.println("CPLEX solver : OK !");
 			okSolvers.add("CPLEX");
