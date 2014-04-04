@@ -86,7 +86,7 @@ public abstract class Interaction {
 		return timeInfos;
 	}
 
-	public Relation getConsequence() {
+	public Unique getConsequence() {
 		return consequence;
 	}
 

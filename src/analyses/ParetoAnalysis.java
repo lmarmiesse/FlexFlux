@@ -323,9 +323,6 @@ public class ParetoAnalysis extends Analysis {
 				bestResult3D = new SimpleEntry<TwoReacsAnalysisResult, Double>(
 						result, result.getScore());
 			}
-
-			
-
 		}
 
 		if (plotAll) {
@@ -358,7 +355,6 @@ public class ParetoAnalysis extends Analysis {
 			for (int j = i + 1; j < objectives.size(); j++) {
 				pairsToTest.add(new Objective[] { objectives.get(i),
 						objectives.get(j) });
-
 			}
 		}
 

@@ -221,7 +221,7 @@ public class GLPKBind extends Bind {
 
 		// if the constraint overwrites
 		if (entities.size() == 1 && !constraint.getNot()
-				&& constraint.getOverWritesBounds()) {
+				&& false) {
 
 			// System.out.println(constraint);
 			for (BioEntity entity : entities.keySet()) {

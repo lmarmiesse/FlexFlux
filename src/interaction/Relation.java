@@ -53,15 +53,6 @@ import parsebionet.biodata.BioEntity;
  */
 public abstract class Relation {
 
-	/**
-	 * Used when interactions are in the solver.
-	 * 
-	 * @param b
-	 *            The bind to get the data from.
-	 * @return A solver constraint corresponding to the relation.
-	 */
-	public abstract Object runThrough(Bind b);
-
 	public abstract String toString();
 
 	protected boolean probabilityRelation = false;
@@ -117,4 +108,5 @@ public abstract class Relation {
 	 */
 	public abstract List<BioEntity> getInvolvedEntities();
 
+	public abstract boolean isUndeterminedVariable(Map<BioEntity, Constraint> simpleConstraints);
 }

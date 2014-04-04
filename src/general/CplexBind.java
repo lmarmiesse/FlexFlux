@@ -207,7 +207,7 @@ public class CplexBind extends Bind {
 			// if the constraint is just of the type : A = 5, we set
 			// the bounds of the var A
 			if (entities.size() == 1 && !constraint.getNot()
-					&& constraint.getOverWritesBounds()) {
+					&& false) {
 
 				for (BioEntity entity : entities.keySet()) {
 					// if it is a "simple" constraint

@@ -96,7 +96,7 @@ public class Unique extends Relation {
 	public Unique(BioEntity entity) {
 		this.entity = entity;
 		this.value = 0.0;
-		this.operation=new OperationGe();
+		this.operation = new OperationGe();
 	}
 
 	public BioEntity getEntity() {
@@ -129,6 +129,18 @@ public class Unique extends Relation {
 
 	}
 
+	public boolean isUndeterminedVariable(Map<BioEntity, Constraint> simpleConstraints) {
+
+		if (!simpleConstraints.containsKey(entity)) {
+
+			// System.err.println("unknown value for "+entity.getId()+", interaction ignored");
+			return true;
+
+		}
+		return false;
+
+	}
+
 	protected void makeConstraints() {
 
 		constraints = operation.makeConstraint(entity, value);
@@ -140,18 +152,6 @@ public class Unique extends Relation {
 		List<BioEntity> entities = new ArrayList<BioEntity>();
 		entities.add(entity);
 		return entities;
-	}
-
-	/**
-	 * Only used when interaction are in the solver.
-	 * 
-	 * <p>
-	 * in this case, this class must be extended.
-	 * 
-	 */
-	public Object runThrough(Bind b) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

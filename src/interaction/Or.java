@@ -77,11 +77,9 @@ public class Or extends RelationWithList {
 	public boolean isTrue(Map<BioEntity, Constraint> simpleConstraints) {
 
 		for (Relation rel : list) {
-
 			if (rel.isTrue(simpleConstraints)) {
 				return true;
 			}
-
 		}
 		return false;
 
@@ -95,18 +93,6 @@ public class Or extends RelationWithList {
 
 		constraints = new ArrayList<Constraint>();
 
-	}
-
-	/**
-	 * Only used when interaction are in the solver.
-	 * 
-	 * <p>
-	 * in this case, this class must be extended.
-	 * 
-	 */
-	public Object runThrough(Bind b) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

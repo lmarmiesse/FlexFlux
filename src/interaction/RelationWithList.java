@@ -33,8 +33,11 @@
  */
 package interaction;
 
+import general.Constraint;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import parsebionet.biodata.BioEntity;
 
@@ -75,5 +78,15 @@ public abstract class RelationWithList extends Relation {
 		}
 
 		return entities;
+	}
+	
+	public boolean isUndeterminedVariable(Map<BioEntity, Constraint> simpleConstraints) {
+
+		for (Relation rel : list) {
+			if (rel.isUndeterminedVariable(simpleConstraints)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

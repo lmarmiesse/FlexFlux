@@ -188,7 +188,7 @@ public class RFBAAnalysis extends Analysis {
 
 			// we add the constraints for the current iteration
 			for (Constraint c : timeConstraintMap.get(i)) {
-				c.setOverWritesBounds(false);
+//				c.setOverWritesBounds(false);
 				constraintsToAdd.add(c);
 
 			}
@@ -205,6 +205,8 @@ public class RFBAAnalysis extends Analysis {
 				for (BioEntity metab : exchangeInteractions.get(reac).keySet()) {
 
 					if (simpleConstraints.containsKey(metab)) {
+						
+						
 						valuesMap.put(metab.getId(),
 								simpleConstraints.get(metab).getUb());
 
@@ -222,6 +224,7 @@ public class RFBAAnalysis extends Analysis {
 							Constraint c = new Constraint(constraintMap,
 									simpleConstraints.get(reac).getLb(),
 									availableSubstrate);
+							
 							metabConstraints.put(metab, c);
 
 						} else {
@@ -241,7 +244,7 @@ public class RFBAAnalysis extends Analysis {
 			for (BioEntity metab : metabConstraints.keySet()) {
 
 				Constraint c = metabConstraints.get(metab);
-				c.setOverWritesBounds(false);
+//				c.setOverWritesBounds(false);
 
 				constraintsToAdd.add(c);
 

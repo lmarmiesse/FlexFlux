@@ -79,12 +79,11 @@ public class And extends RelationWithList {
 			if (!rel.isTrue(simpleConstraints)) {
 				return false;
 			}
-
 		}
-
 		return true;
-
 	}
+	
+
 
 	protected void makeConstraints() {
 
@@ -95,17 +94,4 @@ public class And extends RelationWithList {
 		}
 
 	}
-
-	/**
-	 * Only used when interaction are in the solver.
-	 * 
-	 * <p>
-	 * in this case, this class must be extended.
-	 * 
-	 */
-	public Object runThrough(Bind b) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

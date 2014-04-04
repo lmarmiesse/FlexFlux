@@ -120,14 +120,16 @@ public class TestInteraction {
 		
 		
 		for (Interaction inter : bind.getInteractionNetwork().getAddedInteractions()){
-			System.out.println(inter);
+//			System.out.println(inter);
 		}
 		
 		
 		bind.prepareSolver();
 		
-	
-		
+		System.out.println(bind.getSimpleConstraints().size());
+		for (BioEntity ent : bind.getSimpleConstraints().keySet()){
+			System.out.println(ent.getId() + " : " + bind.getSimpleConstraints().get(ent));
+		}
 		
 		Analysis analysis = new FBAAnalysis(bind);
 		AnalysisResult result = analysis.runAnalysis();
