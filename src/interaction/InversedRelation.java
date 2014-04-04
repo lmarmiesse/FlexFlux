@@ -63,39 +63,33 @@ public class InversedRelation extends Relation {
 	 * Return the opposite of the isTrue function of rel.
 	 */
 	public boolean isTrue(Map<BioEntity, Constraint> simpleConstraints) {
-		return (!rel.isTrue(simpleConstraints));
-	}
-
-	/**
-	 * Only used when interaction are in the solver.
-	 * 
-	 * <p>
-	 * in this case, this class must be extended.
-	 * 
-	 */
-	public Object runThrough(Bind b) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if (rel.isUndeterminedVariable(simpleConstraints)){
+			return false;
+		}
+		
+		return !rel.isTrue(simpleConstraints);
 	}
 
 	public String toString() {
 		return "opposite of ( " + rel + " )";
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * parsebionet.utils.flexconflux.interaction.Relation#makeConstraints(boolean
-	 * )
-	 */
-	@Override
-	protected void makeConstraints() {
-		// TODO Auto-generated method stub
-	}
-
 	public List<BioEntity> getInvolvedEntities() {
 		return rel.getInvolvedEntities();
 	}
 
+	@Override
+	protected void makeConstraints() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public boolean isUndeterminedVariable(
+			Map<BioEntity, Constraint> simpleConstraints) {
+		// TODO Auto-generated method stub
+		return rel.isUndeterminedVariable(simpleConstraints);
+	}
 }

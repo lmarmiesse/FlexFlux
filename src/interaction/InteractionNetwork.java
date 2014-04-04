@@ -70,9 +70,11 @@ public class InteractionNetwork {
 	private List<Interaction> GPRInteractions = new ArrayList<Interaction>();
 
 	/**
-	 * List of interation added in the interaction file.
+	 * List of interactions added in the interaction file.
 	 */
 	private List<Interaction> addedInteractions = new ArrayList<Interaction>();
+
+	private Map<BioEntity, Interaction[]> targetToInteractions = new HashMap<BioEntity, Interaction[]>();
 
 	public List<BioEntity> getEntities() {
 
@@ -91,6 +93,28 @@ public class InteractionNetwork {
 		return entities;
 	}
 
+	public void addTargetInteractions(BioEntity target, Interaction thenInt,
+			Interaction elseInt) {
+		
+		if (targetToInteractions.containsKey(target)){
+			
+			System.err.println("Error : a variable has two different interactions :");
+			System.err.println(targetToInteractions.get(target)[0]);
+			System.err.println(thenInt);
+			GPRInteractions.remove(targetToInteractions.get(target)[0]);
+			
+			
+//			System.exit(0);
+		}
+		
+		targetToInteractions
+				.put(target, new Interaction[] { thenInt, elseInt });
+	}
+
+	public  Map<BioEntity, Interaction[]> getTargetToInteractions(){
+		return targetToInteractions;
+	}
+	
 	public void addGPRIntercation(Interaction i) {
 		GPRInteractions.add(i);
 	}

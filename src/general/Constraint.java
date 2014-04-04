@@ -71,7 +71,7 @@ public class Constraint {
 	 * Determines if the constraints must overwrite an existing constraint for
 	 * the same entities.
 	 */
-	private boolean overWritesBounds = true;
+//	private boolean overWritesBounds = true;
 
 	/**
 	 * 
@@ -101,14 +101,14 @@ public class Constraint {
 	public boolean getNot() {
 		return not;
 	}
-
-	public void setOverWritesBounds(boolean b) {
-		this.overWritesBounds = b;
-	}
-
-	public boolean getOverWritesBounds() {
-		return overWritesBounds;
-	}
+//
+//	public void setOverWritesBounds(boolean b) {
+//		this.overWritesBounds = b;
+//	}
+//
+//	public boolean getOverWritesBounds() {
+//		return overWritesBounds;
+//	}
 
 	/**
 	 * Creates an inequality constraint.

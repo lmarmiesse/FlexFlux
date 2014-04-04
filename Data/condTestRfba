@@ -2,8 +2,6 @@ obj : MAX(R_Ec_biomass_iAF1260_core_59p81M)
 
 A 0 10
 B 0 10
-M_glc_D_b 10.4
-M_ac_b 0.3
 
 
 #M_lcts_b 5.8
