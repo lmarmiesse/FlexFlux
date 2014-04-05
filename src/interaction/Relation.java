@@ -109,4 +109,6 @@ public abstract class Relation {
 	public abstract List<BioEntity> getInvolvedEntities();
 
 	public abstract boolean isUndeterminedVariable(Map<BioEntity, Constraint> simpleConstraints);
+
+	public abstract boolean isInverseTrue(Map<BioEntity, Constraint> simpleConstraints);
 }

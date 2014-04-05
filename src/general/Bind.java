@@ -2205,7 +2205,7 @@ public abstract class Bind {
 		try {
 			out = new PrintWriter(
 					new File(
-							"/home/lmarmiesse/Documents/FBA/FlexFlux/RemiTests/ralsto/FFres.tab"));
+							"/home/lucas/Documents/FBA/FlexFlux/RemiTests/ralsto/FFres.tab"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2355,7 +2355,7 @@ public abstract class Bind {
 												.get(ent)));
 						checkedEntities.add(ent);
 					} else {
-						// toRemove.add(ent);
+						 toRemove.add(ent);
 					}
 				}
 			}
@@ -2372,19 +2372,21 @@ public abstract class Bind {
 		for (BioEntity b : thisStepSimpleConstraints.keySet()) {
 			
 			if(intNet.getTargetToInteractions().containsKey(b)){
-				System.out.println("oui "+b.getId());
+//				System.out.println("oui "+b.getId());
 			}
 			else{
-				System.out.println("non "+b.getId());
+//				System.out.println("non "+b.getId());
 			}
+			
+//			System.out.println(thisStepSimpleConstraints.get(b));
 			
 			steadyStateConstraints.add(thisStepSimpleConstraints.get(b));
 		}
 
 		out.close();
+		
+//		System.out.println(steadyStateConstraints.size());
 		return steadyStateConstraints;
-
-		// return new ArrayList<Constraint>();
 	}
 
 	public Map<Constraint, double[]> goToNextInteractionNetworkState(

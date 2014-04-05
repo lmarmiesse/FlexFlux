@@ -78,5 +78,10 @@ public class OperationLe extends Operation {
 		
 	}
 
+	public boolean isInverseTrue(Constraint cons, double value) {
+
+		return cons.getLb() > value;
+		
+	}
 	
 }

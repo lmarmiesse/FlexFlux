@@ -75,4 +75,16 @@ public class OperationEq extends Operation {
 		return cons.getLb() == value && cons.getUb() == value;
 	}
 
+	public boolean isInverseTrue(Constraint cons, double value) {
+		
+		if (cons.getLb() > value && cons.getUb() > value){
+			return true;
+		}
+		else if (cons.getLb() < value && cons.getUb() < value){
+			return true;
+		}
+		
+		return false;
+	}
+
 }
