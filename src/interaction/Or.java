@@ -84,6 +84,16 @@ public class Or extends RelationWithList {
 		return false;
 
 	}
+	
+	public boolean isInverseTrue(Map<BioEntity, Constraint> simpleConstraints) {
+
+		for (Relation rel : list) {
+			if (!rel.isInverseTrue(simpleConstraints)) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	protected void makeConstraints() {
 

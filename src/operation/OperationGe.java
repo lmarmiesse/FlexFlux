@@ -74,5 +74,10 @@ public class OperationGe extends Operation {
 		
 	}
 
+	public boolean isInverseTrue(Constraint cons, double value) {
+		
+		return cons.getUb() < value;
+	}
+
 
 }

@@ -128,6 +128,20 @@ public class Unique extends Relation {
 		}
 
 	}
+	
+	public boolean isInverseTrue(Map<BioEntity, Constraint> simpleConstraints) {
+		if (!simpleConstraints.containsKey(entity)) {
+
+			// System.err.println("unknown value for "+entity.getId()+", interaction ignored");
+			return false;
+
+		} else {
+
+			Constraint cons = simpleConstraints.get(entity);
+
+			return operation.isInverseTrue(cons, value);
+		}
+	}
 
 	public boolean isUndeterminedVariable(Map<BioEntity, Constraint> simpleConstraints) {
 
@@ -153,5 +167,7 @@ public class Unique extends Relation {
 		entities.add(entity);
 		return entities;
 	}
+
+
 
 }

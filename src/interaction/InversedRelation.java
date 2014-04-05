@@ -63,13 +63,9 @@ public class InversedRelation extends Relation {
 	 * Return the opposite of the isTrue function of rel.
 	 */
 	public boolean isTrue(Map<BioEntity, Constraint> simpleConstraints) {
-		
-		if (rel.isUndeterminedVariable(simpleConstraints)){
-			return false;
-		}
-		
-		return !rel.isTrue(simpleConstraints);
+		return rel.isInverseTrue(simpleConstraints);
 	}
+	
 
 	public String toString() {
 		return "opposite of ( " + rel + " )";
@@ -91,5 +87,9 @@ public class InversedRelation extends Relation {
 			Map<BioEntity, Constraint> simpleConstraints) {
 		// TODO Auto-generated method stub
 		return rel.isUndeterminedVariable(simpleConstraints);
+	}
+
+	public boolean isInverseTrue(Map<BioEntity, Constraint> simpleConstraints) {
+		return rel.isTrue(simpleConstraints);
 	}
 }

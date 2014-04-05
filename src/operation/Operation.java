@@ -82,4 +82,6 @@ public abstract class Operation {
 	 */
 	public abstract boolean isTrue(Constraint cons, double value);
 
+	public abstract boolean isInverseTrue(Constraint cons, double value);
+
 }

@@ -90,5 +90,11 @@ public class OperationLt extends Operation {
 		return cons.getUb() < value;
 
 	}
+	
+	public boolean isInverseTrue(Constraint cons, double value) {
+
+		return cons.getLb() >= value;
+
+	}
 
 }
