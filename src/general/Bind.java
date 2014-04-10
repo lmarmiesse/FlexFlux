@@ -41,7 +41,6 @@ import interaction.Or;
 import interaction.Relation;
 import interaction.RelationFactory;
 import interaction.RelationWithList;
-import interaction.UndeterminedUnique;
 import interaction.Unique;
 
 import java.io.BufferedReader;
@@ -89,7 +88,6 @@ import analyses.result.FBAResult;
 public abstract class Bind {
 
 	private Map<BioEntity, Double> defaultValues = new HashMap<BioEntity, Double>();
-	private Map<BioEntity, Double> initValues = new HashMap<BioEntity, Double>();
 
 	/**
 	 * Used for pareto analysis, if set to false, the objective in the condition
@@ -159,6 +157,7 @@ public abstract class Bind {
 	 * it easier to get and change them.
 	 */
 	protected Map<BioEntity, Constraint> simpleConstraints = new ConcurrentHashMap<BioEntity, Constraint>();
+	protected Map<BioEntity, Constraint> interactionNetworkSimpleConstraints = new ConcurrentHashMap<BioEntity, Constraint>();
 
 	/**
 	 * Contains all the constraints caused by the steady state assumption.
@@ -280,35 +279,6 @@ public abstract class Bind {
 	protected abstract DoubleResult go(boolean saveResults);
 
 	/**
-	 * Checks the interactions if it has to, and performs the FBA.
-	 * 
-	 */
-	public DoubleResult FBA(boolean saveResults, boolean chechInt) {
-		if (solverPrepared) {
-			if (chechInt) {
-
-				List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
-
-				for (Constraint c : findInteractionNetworkSteadyState()) {
-					// c.setOverWritesBounds(false);
-					constraintsToAdd.add(c);
-				}
-
-				return goWithConstraints(constraintsToAdd, saveResults);
-
-			}
-
-			else {
-				return go(saveResults);
-			}
-
-		} else {
-			System.err.println("Error : unprepared solver");
-			return new DoubleResult(0, 1);
-		}
-	}
-
-	/**
 	 * 
 	 * Takes constraints, checks interactions for those constraints, and
 	 * performs FBA.
@@ -322,7 +292,7 @@ public abstract class Bind {
 	 * @return A doubleResult object containing the result and a flag saying if
 	 *         the problem was feasible
 	 */
-	public DoubleResult FBAWithConstraints(List<Constraint> constraintsToAdd,
+	public DoubleResult FBA(List<Constraint> constraintsToAdd,
 			boolean saveResults, boolean chechInt) {
 
 		if (solverPrepared) {
@@ -357,6 +327,32 @@ public abstract class Bind {
 					intNetSteadyStateConstraints.add(c);
 				}
 
+				for (Constraint constr : intNetSteadyStateConstraints) {
+
+					if (constr.getEntities().size() == 1) {
+						for (BioEntity ent : constr.getEntities().keySet()) {
+							if (constr.getEntities().get(ent) == 1.0) {
+								// System.out.println("oui");
+								if (simpleConstraints.containsKey(ent)) {
+									oldSimpleConstraint.put(ent,
+											simpleConstraints.get(ent));
+								}
+								simpleConstraints.put(ent, constr);
+
+							}
+						}
+					}
+
+				}
+
+				List<Constraint> GPRConstraints = new ArrayList<Constraint>();
+				for (Interaction i : intNet.getGPRInteractions()) {
+					if (i.getCondition().isTrue(simpleConstraints)) {
+						GPRConstraints.addAll(intToConstraint.get(i));
+					}
+				}
+				//
+
 				for (Constraint constr : constraintsToAdd) {
 					if (constr.getEntities().size() == 1) {
 						for (BioEntity ent : constr.getEntities().keySet()) {
@@ -375,6 +371,12 @@ public abstract class Bind {
 				}
 
 				constraintsToAdd.addAll(intNetSteadyStateConstraints);
+				constraintsToAdd.addAll(GPRConstraints);
+
+				// System.out.println(GPRConstraints.size());
+				// for (Constraint c : GPRConstraints){
+				// System.out.println(c);
+				// }
 			}
 
 			return goWithConstraints(constraintsToAdd, saveResults);
@@ -712,8 +714,8 @@ public abstract class Bind {
 
 					Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
 					constMap.put(ent, 1.0);
-					simpleConstraints.put(ent, new Constraint(constMap,
-							initValue, initValue));
+					interactionNetworkSimpleConstraints.put(ent,
+							new Constraint(constMap, initValue, initValue));
 
 				}
 
@@ -1426,11 +1428,13 @@ public abstract class Bind {
 		solverPrepared = true;
 
 		// we associate each interaction to the constraint(s) they could provoke
+		for (Interaction inter : intNet.getAddedInteractions()) {
 
-		List<Interaction> interactions = intNet.getAddedInteractions();
-		interactions.addAll(intNet.getGPRInteractions());
+			intToConstraint.put(inter, inter.getConsequence()
+					.createConstraints());
 
-		for (Interaction inter : interactions) {
+		}
+		for (Interaction inter : intNet.getGPRInteractions()) {
 
 			intToConstraint.put(inter, inter.getConsequence()
 					.createConstraints());
@@ -1849,10 +1853,10 @@ public abstract class Bind {
 				intNet.addGPRIntercation(inter);
 				inter.setTimeInfos(new double[] { 0.0, 0.0 });
 
-				intNet.addTargetInteractions(intNet.getEntity(name), inter,
-						relationFactory.makeIfThenInteraction(
-								new UndeterminedUnique(intNet.getEntity(name)),
-								new InversedRelation(rel1)));
+				// intNet.addTargetInteractions(intNet.getEntity(name), inter,
+				// relationFactory.makeIfThenInteraction(
+				// new UndeterminedUnique(intNet.getEntity(name)),
+				// new InversedRelation(rel1)));
 
 			}
 
@@ -2134,6 +2138,10 @@ public abstract class Bind {
 		return simpleConstraints;
 	}
 
+	public Map<BioEntity, Constraint> getInteractionNetworkSimpleConstraints() {
+		return interactionNetworkSimpleConstraints;
+	}
+
 	public boolean isLastSolveEmpty() {
 		return lastSolve.size() == 0;
 	}
@@ -2183,15 +2191,19 @@ public abstract class Bind {
 
 		Set<Interaction> toCheck = new HashSet<Interaction>();
 		toCheck.addAll(intNet.getAddedInteractions());
-		toCheck.addAll(intNet.getGPRInteractions());
-
-		// System.out.println(simpleConstraints.size());
+		if (intNet.getTargetToInteractions().isEmpty()){
+			return new ArrayList<Constraint>();
+		}
 
 		// copy simpleConstraints
 		Map<BioEntity, Constraint> thisStepSimpleConstraints = new HashMap<BioEntity, Constraint>();
 
 		for (BioEntity b : simpleConstraints.keySet()) {
 			thisStepSimpleConstraints.put(b, simpleConstraints.get(b));
+		}
+		for (BioEntity b : interactionNetworkSimpleConstraints.keySet()) {
+			thisStepSimpleConstraints.put(b,
+					interactionNetworkSimpleConstraints.get(b));
 		}
 		//
 
@@ -2202,49 +2214,70 @@ public abstract class Bind {
 
 		// ////////////////////////////////////////WRITE TO FILE, TO CHANGE
 		PrintWriter out = null;
-		try {
-			out = new PrintWriter(
-					new File(
-							"/home/lucas/Documents/FBA/FlexFlux/RemiTests/ralsto/FFres.tab"));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		String s = "";
 		List<BioEntity> toWrite = new ArrayList<BioEntity>();
-		for (BioEntity ent : simpleConstraints.keySet()) {
-			s += ent.getId() + "\t";
-			toWrite.add(ent);
+		if (Vars.writeInteractionNetworkStates) {
+
+			try {
+				out = new PrintWriter(
+						new File(
+								"/home/lmarmiesse/Documents/FBA/FlexFlux/RemiTests/ralsto/FFres.tab"));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			String s = "";
+			for (BioEntity ent : simpleConstraints.keySet()) {
+				s += ent.getId() + "\t";
+				toWrite.add(ent);
+			}
+			for (BioEntity ent : interactionNetworkSimpleConstraints.keySet()) {
+				if (!toWrite.contains(ent)) {
+					s += ent.getId() + "\t";
+					toWrite.add(ent);
+				}
+			}
+			for (BioEntity ent : intNet.getTargetToInteractions().keySet()) {
+				if (!toWrite.contains(ent)) {
+					s += ent.getId() + "\t";
+					toWrite.add(ent);
+				}
+			}
+			out.println(s);
 		}
-		out.println(s);
 
 		// ////////////////////////////////////////
 
 		for (int it = 1; it < Vars.steadyStatesIterations; it++) {
 
 			// ////////////////////////////////////////WRITE TO FILE, TO CHANGE
+			if (Vars.writeInteractionNetworkStates) {
+				String line = "";
+				for (BioEntity ent : toWrite) {
+					if (thisStepSimpleConstraints.get(ent) != null) {
+						double lb = thisStepSimpleConstraints.get(ent).getLb();
+						double ub = thisStepSimpleConstraints.get(ent).getUb();
 
-			String line = "";
-			for (BioEntity ent : toWrite) {
-				if (thisStepSimpleConstraints.get(ent) != null) {
-					double lb = thisStepSimpleConstraints.get(ent).getLb();
-					double ub = thisStepSimpleConstraints.get(ent).getUb();
+						if (lb == ub) {
+							line += lb + "\t";
+						} else {
+							line += lb + ";" + ub + "\t";
 
-					if (lb == ub) {
-						line += lb + "\t";
+						}
+
+					} else {
+						line += "?\t";
 					}
-					else{
-						line += lb+";"+ub + "\t";
-						
-					}
-					
-				} else {
-					line += "?\t";
 				}
+				// System.out.println(line);
+				out.println(line);
 			}
-			// System.out.println(line);
-			out.println(line);
+
+			if (thisStepSimpleConstraints.size() == 0) {
+				System.out
+						.println("Warning : all values of the interaction network are undetermined.");
+				break;
+			}
 
 			// ////////////////////////////////////////
 
@@ -2258,6 +2291,7 @@ public abstract class Bind {
 
 				// the same size
 				if (thisStepSimpleConstraints.size() == previousStep.size()) {
+
 					for (BioEntity b : thisStepSimpleConstraints.keySet()) {
 						if (previousStep.containsKey(b)) {
 							Constraint c1 = thisStepSimpleConstraints.get(b);
@@ -2325,6 +2359,7 @@ public abstract class Bind {
 							if (consequence.getEntities().size() == 1) {
 								for (BioEntity ent : consequence.getEntities()
 										.keySet()) {
+
 									if (consequence.getEntities().get(ent) == 1.0) {
 										nextStepSimpleConstraints.put(ent,
 												consequence);
@@ -2355,7 +2390,10 @@ public abstract class Bind {
 												.get(ent)));
 						checkedEntities.add(ent);
 					} else {
-						 toRemove.add(ent);
+						//we say it is undetermined only if it is a target
+						if (intNet.getTargetToInteractions().containsKey(ent)) {
+							toRemove.add(ent);
+						}
 					}
 				}
 			}
@@ -2369,31 +2407,36 @@ public abstract class Bind {
 
 		List<Constraint> steadyStateConstraints = new ArrayList<Constraint>();
 
-		for (BioEntity b : thisStepSimpleConstraints.keySet()) {
-			
-			if(intNet.getTargetToInteractions().containsKey(b)){
-//				System.out.println("oui "+b.getId());
+		if (attractorSimpleConstraints.size() != 0) {
+
+			int nb = attractorSimpleConstraints.size() - 1;
+			// int nb = 0;
+//			System.out.println(attractorSimpleConstraints.get(nb).size());
+
+			for (BioEntity b : attractorSimpleConstraints.get(nb).keySet()) {
+
+				if (intNet.getTargetToInteractions().containsKey(b)) {
+//					System.out.println(attractorSimpleConstraints.get(
+//							attractorSimpleConstraints.size() - 1).get(b));
+					steadyStateConstraints.add(attractorSimpleConstraints.get(
+							nb).get(b));
+				}
 			}
-			else{
-//				System.out.println("non "+b.getId());
-			}
-			
-//			System.out.println(thisStepSimpleConstraints.get(b));
-			
-			steadyStateConstraints.add(thisStepSimpleConstraints.get(b));
 		}
 
-		out.close();
-		
-//		System.out.println(steadyStateConstraints.size());
+		if (Vars.writeInteractionNetworkStates) {
+			out.close();
+		}
+
+//		 System.out.println(steadyStateConstraints.size());
 		return steadyStateConstraints;
 	}
 
 	public Map<Constraint, double[]> goToNextInteractionNetworkState(
 			Map<BioEntity, Constraint> networkState) {
+
 		Set<Interaction> toCheck = new HashSet<Interaction>();
 		toCheck.addAll(intNet.getAddedInteractions());
-		toCheck.addAll(intNet.getGPRInteractions());
 
 		Map<Constraint, double[]> contToTimeInfos = new HashMap<Constraint, double[]>();
 
@@ -2412,7 +2455,7 @@ public abstract class Bind {
 
 			if (i.getCondition().isTrue(networkState)) {
 
-				System.out.println(i);
+				// System.out.println(i);
 
 				// we go through all the consequences (there should be only
 				// one)
@@ -2441,31 +2484,36 @@ public abstract class Bind {
 			}
 			// // if its not true, we remove the constraint associated if it was
 			// not set in this step
-			else {
-				if (intToConstraint.containsKey(i)) {
-					for (Constraint consequence : this.intToConstraint.get(i)) {
-						// we check it's a simple constraint
-						if (consequence.getEntities().size() == 1) {
-							for (BioEntity ent : consequence.getEntities()
-									.keySet()) {
-								if (consequence.getEntities().get(ent) == 1.0) {
-									if (!setEntities.contains(ent)) {
-										nextStepState.remove(ent);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+			// else {
+			// if (intToConstraint.containsKey(i)) {
+			// for (Constraint consequence : this.intToConstraint.get(i)) {
+			// // we check it's a simple constraint
+			// if (consequence.getEntities().size() == 1) {
+			// for (BioEntity ent : consequence.getEntities()
+			// .keySet()) {
+			// if (consequence.getEntities().get(ent) == 1.0) {
+			// if (!setEntities.contains(ent)) {
+			// nextStepState.remove(ent);
+			// }
+			// }
+			// }
+			// }
+			// }
+			// }
+			// }
 		}
 
 		Map<Constraint, double[]> steadyStateConstraints = new HashMap<Constraint, double[]>();
 
 		for (BioEntity ent : nextStepState.keySet()) {
 
-			steadyStateConstraints.put(nextStepState.get(ent),
-					contToTimeInfos.get(nextStepState.get(ent)));
+			if (intNet.getTargetToInteractions().containsKey(ent)) {
+				// System.out.println("oui "+ent.getId());
+				steadyStateConstraints.put(nextStepState.get(ent),
+						contToTimeInfos.get(nextStepState.get(ent)));
+			} else {
+				// System.out.println("non "+ent.getId());
+			}
 
 		}
 

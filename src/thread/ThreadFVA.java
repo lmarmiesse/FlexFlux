@@ -37,6 +37,7 @@ import general.Bind;
 import general.Constraint;
 import general.Objective;
 
+import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -101,7 +102,7 @@ public class ThreadFVA extends ResolveThread {
 			BioEntity entity = entities.poll();
 			
 			bind.changeObjVarValue(entity, 1.0);
-			result.setMin(entity, bind.FBA(false, false).result);
+			result.setMin(entity, bind.FBA(new ArrayList<Constraint>(),false, false).result);
 			bind.changeObjVarValue(entity, 0.0);
 
 			int percent = (int) Math.round((todo - size) / todo * 50);
@@ -120,7 +121,7 @@ public class ThreadFVA extends ResolveThread {
 			BioEntity reaction = entitiesCopy.poll();
 
 			bind.changeObjVarValue(reaction, 1.0);
-			result.setMax(reaction, bind.FBA(false, false).result);
+			result.setMax(reaction, bind.FBA(new ArrayList<Constraint>(),false, false).result);
 			bind.changeObjVarValue(reaction, 0.0);
 
 			int percent = (int) Math.round((todo - size) / todo * 50) + 50;

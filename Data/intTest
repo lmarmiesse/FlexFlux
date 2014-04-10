@@ -1,3 +1,4 @@
-IF[a]THEN[e=5]else[e=8]
-IF[a]THEN[f=122]else[f=150]
-IF[f=122]THEN[g=58]else[g=63]
+
+IF[a]THEN[e=5]ELSE[e=8]
+IF[a]THEN[f=122]ELSE[f=150]
+IF[f=122 OR g=58]THEN[g=58]ELSE[g=63]

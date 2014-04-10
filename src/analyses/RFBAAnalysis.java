@@ -104,6 +104,7 @@ public class RFBAAnalysis extends Analysis {
 		double startTime = System.currentTimeMillis();
 
 		Map<BioEntity, Constraint> simpleConstraints = b.getSimpleConstraints();
+		simpleConstraints.putAll(b.getInteractionNetworkSimpleConstraints());
 		Map<BioChemicalReaction, Map<BioEntity, Double>> exchangeInteractions = b
 				.getExchangeInteractions();
 
@@ -263,7 +264,7 @@ public class RFBAAnalysis extends Analysis {
 			DoubleResult result;
 
 			try {
-				result = b.FBAWithConstraints(constraintsToAdd, true, false);
+				result = b.FBA(constraintsToAdd, true, false);
 
 				fbaResult = result.result;
 

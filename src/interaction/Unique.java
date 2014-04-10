@@ -116,13 +116,17 @@ public class Unique extends Relation {
 	public boolean isTrue(Map<BioEntity, Constraint> simpleConstraints) {
 
 		if (!simpleConstraints.containsKey(entity)) {
+			
 
 			// System.err.println("unknown value for "+entity.getId()+", interaction ignored");
 			return false;
 
 		} else {
 
+			
+			
 			Constraint cons = simpleConstraints.get(entity);
+//			System.out.println(cons);
 
 			return operation.isTrue(cons, value);
 		}
@@ -138,6 +142,8 @@ public class Unique extends Relation {
 		} else {
 
 			Constraint cons = simpleConstraints.get(entity);
+			
+		
 
 			return operation.isInverseTrue(cons, value);
 		}

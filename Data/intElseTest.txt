@@ -1,16 +1,8 @@
-#IF[aaa=?]THEN[aaa=5]
-#IF[aaa=5]THEN[aab=6][2][1]ELSE[aab=10]
-#IF[aab=6]THEN[aac=7]ELSE[aac=10][3][4]
+a 5
 
-
-#IF[aac=7]THEN[aad=8][7][92]ELSE[aad=10][8][12]
-#IF[aad=8]THEN[aaa=6]
-aaa	5
-#IF[(aab=10 AND aac=10)]THEN[aae=6]ELSE[aae=7]
-
-IF[aaa=5 OR aae=5]THEN[aab=5]ELSE[aab=10]
-IF[aaa=5]THEN[aaa=10]ELSE[aaa=10]
-IF[aab=5]THEN[aac=5]ELSE[aac=10]
-IF[aac=5]THEN[aad=5]ELSE[aad=10]
-IF[aad=5]THEN[aae=5]ELSE[aae=10]
-#IF[aae=5]THEN[aab=5]ELSE[aab=10]
+IF[a=5]THEN[a=5]ELSE[a=8]
+IF[a=5]THEN[b=5]ELSE[b=8]
+IF[b=5]THEN[c=5]ELSE[c=8]
+IF[c=5]THEN[d=5]ELSE[d=8]
+IF[d=5]THEN[e=5]ELSE[e=5]
+IF[e=5]THEN[gene1=0]ELSE[gene1=1]
