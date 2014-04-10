@@ -92,7 +92,7 @@ public class FVAAnalysis extends Analysis {
 		
 		double startTime = System.currentTimeMillis();
 		
-		DoubleResult result = b.FBAWithConstraints(constraints, false, true);
+		DoubleResult result = b.FBA(constraints, false, true);
 		
 		if (result.flag != 0) {
 

@@ -102,7 +102,7 @@ public class TestFVA_KO_DR {
 
 		bind.loadConditionsFile("Data/condColiTest");
 
-		// bind.loadInteractionsFile("Data/intColiTest");
+//		 bind.loadInteractionsFile("Data/intColiTest");
 
 		bind.prepareSolver();
 		go();
@@ -142,15 +142,6 @@ public class TestFVA_KO_DR {
 
 				double min = Double.parseDouble(splittedLine[1]);
 				double max = Double.parseDouble(splittedLine[2]);
-
-//				System.out.println("min "+name);
-//				System.out.println(result.getValuesForEntity(bind
-//						.getInteractionNetwork().getEntity(name))[0]);
-//				System.out.println(min);
-//				System.out.println("max "+name);
-//				System.out.println(result.getValuesForEntity(bind
-//						.getInteractionNetwork().getEntity(name))[1]);
-//				System.out.println(max);
 
 				Assert.assertTrue(Math.abs(result.getValuesForEntity(bind
 						.getInteractionNetwork().getEntity(name))[0] - min) < 0.001);
@@ -214,11 +205,6 @@ public class TestFVA_KO_DR {
 				String name = splittedLine[0].replaceAll("\\s", "");
 
 				double value = Double.parseDouble(splittedLine[1]);
-
-//				System.out.println(name);
-//				System.out.println(Math.abs(resultKoGenes.getValueForEntity(bind
-//						.getInteractionNetwork().getEntity(name))));
-//				System.out.println(value);
 				
 				Assert.assertTrue(Math.abs(resultKoGenes.getValueForEntity(bind
 						.getInteractionNetwork().getEntity(name)) - value) < 0.001);

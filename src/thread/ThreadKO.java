@@ -38,6 +38,7 @@ import general.Constraint;
 import general.DoubleResult;
 import general.Objective;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,33 +91,14 @@ public class ThreadKO extends ResolveThread {
 
 			BioEntity entity = entities.poll();
 
-			// Map<BioEntity, double[]> entityValues = new HashMap<BioEntity,
-			// double[]>();
-			//
-			// entityValues.put(entity, new double[] { 0.0, 0.0 });
-
-			Constraint oldConst = bind.getSimpleConstraints().get(entity);
-			
 			Map<BioEntity, Double> entityMap = new HashMap<BioEntity, Double>();
 			entityMap.put(entity, 1.0);
 
-			
-			bind.getSimpleConstraints().put(entity,
-					new Constraint(entityMap, 0.0, 0.0));
+			List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 
-			List<Constraint> constraintsToAdd = bind
-					.findInteractionNetworkSteadyState();
+			constraintsToAdd.add(new Constraint(entityMap, 0.0, 0.0));
 
-			if (oldConst!=null){
-				bind.getSimpleConstraints().put(entity, oldConst);
-			}else{
-				bind.getSimpleConstraints().remove(entity);
-			}
-				
-				
-			
-			DoubleResult value = bind.FBAWithConstraints(constraintsToAdd,
-					false, false);
+			DoubleResult value = bind.FBA(constraintsToAdd, false, true);
 
 			result.addLine(entity, value.result);
 

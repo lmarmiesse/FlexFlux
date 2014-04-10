@@ -34,7 +34,12 @@
 package analyses;
 
 import general.Bind;
+import general.Constraint;
 import general.DoubleResult;
+import general.Vars;
+
+import java.util.ArrayList;
+
 import analyses.result.FBAResult;
 
 /**
@@ -54,9 +59,9 @@ public class FBAAnalysis extends Analysis {
 		
 		
 		FBAResult result = new FBAResult(b);
+		Vars.writeInteractionNetworkStates=true;
 		
-		
-		DoubleResult objValue = b.FBA(true,true);
+		DoubleResult objValue = b.FBA(new ArrayList<Constraint>(),true,true);
 		
 		if (objValue.flag!=0){
 			

@@ -78,6 +78,12 @@ public class Vars {
 	 * Maximal number of iterations to find a steady state in the interaction network.
 	 */
 	public static int steadyStatesIterations = 100;
+	
+	
+	/**
+	 * Whether or not the calculated interaction network steady states must be saved to a file;
+	 */
+	public static boolean writeInteractionNetworkStates = false;
 
 	/**
 	 * 

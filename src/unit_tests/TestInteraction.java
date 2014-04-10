@@ -34,7 +34,11 @@
 package unit_tests;
 
 import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+
 import general.Bind;
+import general.Constraint;
 import general.CplexBind;
 import general.GLPKBind;
 import interaction.And;
@@ -44,6 +48,7 @@ import interaction.Or;
 import interaction.Unique;
 import operation.OperationLe;
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -113,36 +118,16 @@ public class TestInteraction {
 
 	private void fbaTest(Bind bind) {
 
-		bind.loadSbmlNetwork("Data/coli_core.xml", false);
+		bind.loadSbmlNetwork("Data/test.xml", false);
 		
 		bind.loadConditionsFile("Data/condElseTest.txt");
 		bind.loadInteractionsFile("Data/intElseTest.txt");
 		
-		
-		for (Interaction inter : bind.getInteractionNetwork().getAddedInteractions()){
-//			System.out.println(inter);
-		}
-		
-		
 		bind.prepareSolver();
 		
-		System.out.println(bind.getSimpleConstraints().size());
-		for (BioEntity ent : bind.getSimpleConstraints().keySet()){
-			System.out.println(ent.getId() + " : " + bind.getSimpleConstraints().get(ent));
-		}
-		
-		Analysis analysis = new FBAAnalysis(bind);
-		AnalysisResult result = analysis.runAnalysis();
-		
-//		result.plot();
-		
-		bind.end();
-		
-//		boolean a=false;
-//		
-//		while (!a){
-//			
-//		}
+		double res = bind.FBA(new ArrayList<Constraint>(), true, true).result;
+
+		Assert.assertTrue(res == 9.0);
 		
 	}
 }

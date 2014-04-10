@@ -101,10 +101,10 @@ public class InteractionNetwork {
 			System.err.println("Error : a variable has two different interactions :");
 			System.err.println(targetToInteractions.get(target)[0]);
 			System.err.println(thenInt);
-			GPRInteractions.remove(targetToInteractions.get(target)[0]);
+//			GPRInteractions.remove(targetToInteractions.get(target)[0]);
 			
 			
-//			System.exit(0);
+			System.exit(0);
 		}
 		
 		targetToInteractions

@@ -113,8 +113,7 @@ public class ThreadReac extends ResolveThread {
 			List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 			constraintsToAdd.add(new Constraint(entities, value, value));
 
-			DoubleResult res = bind.FBAWithConstraints(constraintsToAdd, false,
-					true);
+			DoubleResult res = bind.FBA(constraintsToAdd, false, true);
 
 			if (res.flag != 0) {
 				done++;
@@ -139,8 +138,8 @@ public class ThreadReac extends ResolveThread {
 			constraintsToAdd.add(new Constraint(entities, value + 0.1,
 					value + 0.1));
 
-			DoubleResult resShadowPrice = bind.FBAWithConstraints(
-					constraintsToAdd, false, true);
+			DoubleResult resShadowPrice = bind.FBA(constraintsToAdd, false,
+					true);
 
 			shadowPrice = resShadowPrice.result - res.result;
 			boolean add = true;

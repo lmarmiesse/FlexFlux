@@ -147,12 +147,12 @@ public class CplexBind extends Bind {
 				// what default value ?
 
 				vars.put(entity.getId(),
-						cplex.numVar(0, Double.MAX_VALUE, entity.getId()));
+						cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, entity.getId()));
 			}
 			for (BioEntity entity : intNet.getIntEntities()) {
 				// System.out.println(entity.getId());
 				vars.put(entity.getId(),
-						cplex.intVar(0, Integer.MAX_VALUE, entity.getId()));
+						cplex.intVar(-Integer.MAX_VALUE, Integer.MAX_VALUE, entity.getId()));
 			}
 			for (BioEntity entity : intNet.getBinaryEntities()) {
 
@@ -357,7 +357,7 @@ public class CplexBind extends Bind {
 
 			} else {
 
-				// System.out.println("Solution status = " + cplex.getStatus());
+//				 System.out.println("Solution status = " + cplex.getStatus());
 
 				boolean displayConflict = false;
 
