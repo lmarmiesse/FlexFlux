@@ -88,7 +88,7 @@ public class FlexfluxReac {
 	@Option(name = "-r", usage = "Name of the reaction to test", metaVar = "String", required = true)
 	public String reac = "";
 
-	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "Filz")
+	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
 	public String outName = "";
 
 	@Option(name = "-init", usage = "Initial flux value of the reaction to test", metaVar = "Double", required = true)
