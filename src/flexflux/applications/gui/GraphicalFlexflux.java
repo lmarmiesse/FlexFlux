@@ -32,7 +32,7 @@ public class GraphicalFlexflux {
 
 		try {
 			new MainFrame(FlexfluxTest.okSolvers,
-					getClasses("applications"));
+					getClasses("flexflux.applications"));
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

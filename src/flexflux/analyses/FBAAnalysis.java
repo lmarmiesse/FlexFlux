@@ -58,7 +58,6 @@ public class FBAAnalysis extends Analysis {
 		
 		
 		FBAResult result = new FBAResult(b);
-		Vars.writeInteractionNetworkStates=true;
 		
 		DoubleResult objValue = b.FBA(new ArrayList<Constraint>(),true,true);
 		
