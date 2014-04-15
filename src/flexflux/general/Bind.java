@@ -2180,6 +2180,8 @@ public abstract class Bind {
 		return deadReactions;
 	}
 
+	public String statesFileName = "";
+
 	/**
 	 * 
 	 * Find a steady state in the interaction network and return the constraints
@@ -2190,7 +2192,7 @@ public abstract class Bind {
 
 		Set<Interaction> toCheck = new HashSet<Interaction>();
 		toCheck.addAll(intNet.getAddedInteractions());
-		if (intNet.getTargetToInteractions().isEmpty()){
+		if (intNet.getTargetToInteractions().isEmpty()) {
 			return new ArrayList<Constraint>();
 		}
 
@@ -2211,38 +2213,25 @@ public abstract class Bind {
 
 		int attractorSize = 0;
 
-		// ////////////////////////////////////////WRITE TO FILE, TO CHANGE
-		PrintWriter out = null;
-		List<BioEntity> toWrite = new ArrayList<BioEntity>();
-		if (Vars.writeInteractionNetworkStates) {
+		// ////////////////////////////////////////WRITE TO FILE
 
-			try {
-				out = new PrintWriter(
-						new File(
-								"/home/lmarmiesse/Documents/FBA/FlexFlux/RemiTests/ralsto/FFres.tab"));
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		Map<BioEntity, List<String>> toWrite = new HashMap<BioEntity, List<String>>();
+		if (Vars.writeInteractionNetworkStates) {
 
 			String s = "";
 			for (BioEntity ent : simpleConstraints.keySet()) {
-				s += ent.getId() + "\t";
-				toWrite.add(ent);
+				toWrite.put(ent, new ArrayList<String>());
 			}
 			for (BioEntity ent : interactionNetworkSimpleConstraints.keySet()) {
-				if (!toWrite.contains(ent)) {
-					s += ent.getId() + "\t";
-					toWrite.add(ent);
+				if (!toWrite.containsKey(ent)) {
+					toWrite.put(ent, new ArrayList<String>());
 				}
 			}
 			for (BioEntity ent : intNet.getTargetToInteractions().keySet()) {
-				if (!toWrite.contains(ent)) {
-					s += ent.getId() + "\t";
-					toWrite.add(ent);
+				if (!toWrite.containsKey(ent)) {
+					toWrite.put(ent, new ArrayList<String>());
 				}
 			}
-			out.println(s);
 		}
 
 		// ////////////////////////////////////////
@@ -2251,25 +2240,25 @@ public abstract class Bind {
 
 			// ////////////////////////////////////////WRITE TO FILE, TO CHANGE
 			if (Vars.writeInteractionNetworkStates) {
-				String line = "";
-				for (BioEntity ent : toWrite) {
+				for (BioEntity ent : toWrite.keySet()) {
 					if (thisStepSimpleConstraints.get(ent) != null) {
 						double lb = thisStepSimpleConstraints.get(ent).getLb();
 						double ub = thisStepSimpleConstraints.get(ent).getUb();
 
 						if (lb == ub) {
-							line += lb + "\t";
-						} else {
-							line += lb + ";" + ub + "\t";
 
+							toWrite.get(ent).add(String.valueOf(lb));
+						} else {
+
+							toWrite.get(ent).add(
+									String.valueOf(lb) + ";"
+											+ String.valueOf(ub));
 						}
 
 					} else {
-						line += "?\t";
+						toWrite.get(ent).add("?");
 					}
 				}
-				// System.out.println(line);
-				out.println(line);
 			}
 
 			if (thisStepSimpleConstraints.size() == 0) {
@@ -2389,7 +2378,7 @@ public abstract class Bind {
 												.get(ent)));
 						checkedEntities.add(ent);
 					} else {
-						//we say it is undetermined only if it is a target
+						// we say it is undetermined only if it is a target
 						if (intNet.getTargetToInteractions().containsKey(ent)) {
 							toRemove.add(ent);
 						}
@@ -2410,13 +2399,13 @@ public abstract class Bind {
 
 			int nb = attractorSimpleConstraints.size() - 1;
 			// int nb = 0;
-//			System.out.println(attractorSimpleConstraints.get(nb).size());
+			// System.out.println(attractorSimpleConstraints.get(nb).size());
 
 			for (BioEntity b : attractorSimpleConstraints.get(nb).keySet()) {
 
 				if (intNet.getTargetToInteractions().containsKey(b)) {
-//					System.out.println(attractorSimpleConstraints.get(
-//							attractorSimpleConstraints.size() - 1).get(b));
+					// System.out.println(attractorSimpleConstraints.get(
+					// attractorSimpleConstraints.size() - 1).get(b));
 					steadyStateConstraints.add(attractorSimpleConstraints.get(
 							nb).get(b));
 				}
@@ -2424,10 +2413,32 @@ public abstract class Bind {
 		}
 
 		if (Vars.writeInteractionNetworkStates) {
+
+			PrintWriter out = null;
+
+			try {
+				out = new PrintWriter(new File(statesFileName));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			for (BioEntity ent : toWrite.keySet()) {
+
+				out.print(ent.getId());
+
+				for (String s : toWrite.get(ent)) {
+					out.print("\t");
+					out.print(s);
+				}
+				out.print("\n");
+
+			}
+
 			out.close();
 		}
 
-//		 System.out.println(steadyStateConstraints.size());
+		// System.out.println(steadyStateConstraints.size());
 		return steadyStateConstraints;
 	}
 
