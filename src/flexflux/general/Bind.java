@@ -102,7 +102,7 @@ public abstract class Bind {
 	/**
 	 * List used when several objectives are given in the condition file.
 	 */
-	protected List<Objective> constraintObjectives = new ArrayList<Objective>();
+	public List<Objective> constraintObjectives = new ArrayList<Objective>();
 
 	/**
 	 * Will permit to create the right operations.
@@ -1444,7 +1444,7 @@ public abstract class Bind {
 
 		// if there are constraint objective, we treat them
 		if (constraintObjectives.size() != 0) {
-			System.out.println(Vars.libertyPercentage + "% of non optimality");
+			System.err.println(Vars.libertyPercentage + "% of non optimality");
 		}
 		for (Objective constObj : constraintObjectives) {
 
@@ -1468,7 +1468,7 @@ public abstract class Bind {
 			Constraint c = new Constraint(constMap, lb - delta, ub + delta);
 
 			constraints.add(c);
-			System.out.println("New constraint : \n" + c);
+			System.err.println("New constraint : \n" + c);
 
 			makeSolverConstraint(c, null, null);
 
@@ -1893,9 +1893,9 @@ public abstract class Bind {
 	 * Prints the constraints
 	 */
 	public void displayConstraints() {
-		System.out.println(constraints.size() + " constraints");
+		System.err.println(constraints.size() + " constraints");
 		for (Constraint c : constraints) {
-			System.out.println(c);
+			System.err.println(c);
 		}
 	}
 
@@ -2522,4 +2522,7 @@ public abstract class Bind {
 
 		return steadyStateConstraints;
 	}
+	
+	
+	
 }
