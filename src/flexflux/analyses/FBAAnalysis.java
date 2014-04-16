@@ -55,24 +55,24 @@ public class FBAAnalysis extends Analysis {
 	}
 
 	public FBAResult runAnalysis() {
-		
-		
+
 		FBAResult result = new FBAResult(b);
-		Vars.writeInteractionNetworkStates=true;
-		
-		DoubleResult objValue = b.FBA(new ArrayList<Constraint>(),true,true);
-		
-		if (objValue.flag!=0){
-			
-			System.out.println(objValue.result);
-			
-			System.out.println("Unfeasible");
-			System.exit(0);
-			
+		Vars.writeInteractionNetworkStates = true;
+
+		DoubleResult objValue = b.FBA(new ArrayList<Constraint>(), true, true);
+
+		if (objValue.flag != 0) {
+
+			System.err.println(objValue.result);
+
+			System.err.println("Unfeasible");
+			result.setObjValue(Double.NaN);
+
+		} else {
+
+			result.setObjValue(objValue.result);
+
 		}
-		
-		result.setObjValue(objValue.result);
-		
 		return (FBAResult) result;
 	}
 
