@@ -110,14 +110,14 @@ public class DRAnalysis extends Analysis {
 							entQueueCopy, drResult));
 		}
 
-		System.out.println("Progress : ");
+		System.err.println("Progress : ");
 
-		System.out.print("[");
+		System.err.print("[");
 		for (int i = 0; i < 50; i++) {
-			System.out.print(" ");
+			System.err.print(" ");
 		}
-		System.out.print("]\n");
-		System.out.print("[");
+		System.err.print("]\n");
+		System.err.print("[");
 
 		for (ResolveThread thread : threads) {
 			thread.start();
@@ -131,7 +131,7 @@ public class DRAnalysis extends Analysis {
 //				e.printStackTrace();
 			}
 		}
-		System.out.print("]\n");
+		System.err.print("]\n");
 
 		// we remove the threads to permit another analysis
 		while (threads.size() > 0) {
@@ -142,7 +142,7 @@ public class DRAnalysis extends Analysis {
 		// to permit other analysis
 		b.getConstraints().removeAll(constraintsToAdd);
 
-		System.out.println("FVA over "
+		System.err.println("FVA over "
 				+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
 				+ Vars.maxThread + " threads");
 

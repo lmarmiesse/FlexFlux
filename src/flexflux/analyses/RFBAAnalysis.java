@@ -124,8 +124,8 @@ public class RFBAAnalysis extends Analysis {
 
 			List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 
-			System.out.println("-----");
-			System.out.println("it number " + i);
+			System.err.println("-----");
+			System.err.println("it number " + i);
 
 			Map<BioEntity, Constraint> networkState = new HashMap<BioEntity, Constraint>();
 //			if (b.isLastSolveEmpty()) {
@@ -270,7 +270,7 @@ public class RFBAAnalysis extends Analysis {
 
 			} catch (Exception e) {
 				System.err.println("rFBA stopped");
-				System.out.println("RFBA over "
+				System.err.println("RFBA over "
 						+ ((System.currentTimeMillis() - startTime) / 1000)
 						+ "s");
 				return rFBAResult;
@@ -299,11 +299,11 @@ public class RFBAAnalysis extends Analysis {
 			if (mu == 0) {
 
 				if (result.flag == 0) {
-					System.out.println(timeToString(i * deltaT) + " X = "
+					System.err.println(timeToString(i * deltaT) + " X = "
 							+ Vars.round(X) + " no growth");
 				} else {
 					unfeasibleSteps.add(i);
-					System.out.println(timeToString(i * deltaT) + " X = "
+					System.err.println(timeToString(i * deltaT) + " X = "
 							+ Vars.round(X) + " no growth : unfeasible");
 
 					b.resetLastSolve();
@@ -312,8 +312,8 @@ public class RFBAAnalysis extends Analysis {
 
 			}
 
-			// System.out.println("mu = " + mu);
-			// System.out.println(i);
+			// System.err.println("mu = " + mu);
+			// System.err.println(i);
 
 			// we set the new concentrations for the metabolites according to
 			// the uptake
@@ -338,8 +338,8 @@ public class RFBAAnalysis extends Analysis {
 
 				}
 
-				// System.out.println(metab.getId() + " " + uptake);
-				// System.out.println(simpleConstraints.get(metab).getUb());
+				// System.err.println(metab.getId() + " " + uptake);
+				// System.err.println(simpleConstraints.get(metab).getUb());
 
 				// uptake is >0 when the metabolite goes out of the cell
 				// <0 when it comes in
@@ -409,13 +409,13 @@ public class RFBAAnalysis extends Analysis {
 			X *= Math.exp(mu * deltaT);
 
 			if (mu != 0) {
-				System.out.println(timeToString(i * deltaT) + " X = "
+				System.err.println(timeToString(i * deltaT) + " X = "
 						+ Vars.round(X));
 			}
 			// System.out.println("X = " + X);
 
 		}
-		System.out.println("RFBA over "
+		System.err.println("RFBA over "
 				+ ((System.currentTimeMillis() - startTime) / 1000) + "s");
 
 		if (!unfeasibleSteps.isEmpty()) {

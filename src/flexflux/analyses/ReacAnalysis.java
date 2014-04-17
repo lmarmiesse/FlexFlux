@@ -131,13 +131,13 @@ public class ReacAnalysis extends Analysis {
 
 		}
 
-		System.out.println("Progress : ");
-		System.out.print("[");
+		System.err.println("Progress : ");
+		System.err.print("[");
 		for (int i = 0; i < 50; i++) {
-			System.out.print(" ");
+			System.err.print(" ");
 		}
-		System.out.print("]\n");
-		System.out.print("[");
+		System.err.print("]\n");
+		System.err.print("[");
 
 		for (ResolveThread thread : threads) {
 			thread.start();
@@ -152,7 +152,7 @@ public class ReacAnalysis extends Analysis {
 			}
 		}
 
-		System.out.print("]\n");
+		System.err.print("]\n");
 
 		if (fva) {
 			threads.get(0).setShadowPriceGroups();
@@ -171,7 +171,7 @@ public class ReacAnalysis extends Analysis {
 			// group index => fvaresult
 			Map<Integer, FVAResult> fvaResults = new HashMap<Integer, FVAResult>();
 
-			System.out.println("Starting an FVA analysis for each of the "
+			System.err.println("Starting an FVA analysis for each of the "
 					+ groupIndex.size() + " phenotypic phases found");
 
 			for (double group : groupIndex.keySet()) {
@@ -194,7 +194,7 @@ public class ReacAnalysis extends Analysis {
 
 		}
 
-		System.out.println("Reac analysis over "
+		System.err.println("Reac analysis over "
 				+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
 				+ Vars.maxThread + " threads");
 

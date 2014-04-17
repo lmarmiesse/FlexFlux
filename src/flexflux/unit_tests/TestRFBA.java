@@ -142,7 +142,7 @@ public class TestRFBA {
 					double trueResult = Double.parseDouble(splittedLine[i]
 							.replaceAll("\\s+", ""));
 					double resultToTest = values.get(entities.get(i - 1));
-//					System.out.println(time + " " + entities.get(i - 1)
+//					System.err.println(time + " " + entities.get(i - 1)
 //							+ "  :  " + trueResult + " " + resultToTest);
 
 					Assert.assertTrue(Math.abs(trueResult - resultToTest) < 0.001);

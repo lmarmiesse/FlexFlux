@@ -549,7 +549,7 @@ public class TwoReacsAnalysisResult extends AnalysisResult {
 		try {
 			ImageIO.write((RenderedImage) bi, "PNG", file);
 
-			System.out.println("successfully saved PNG image : "
+			System.err.println("successfully saved PNG image : "
 					+ file.getAbsolutePath());
 		} catch (IllegalArgumentException ex) {
 		} catch (IOException e) {

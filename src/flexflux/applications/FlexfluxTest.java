@@ -32,10 +32,10 @@ public class FlexfluxTest {
 
 		try {
 
-			System.out.println(" --- GLPK SOLVER ---- ");
+			System.err.println(" --- GLPK SOLVER ---- ");
 			new GLPKBind();
 			GLPKok = true;
-			System.out.println("GLPK solver : OK !");
+			System.err.println("GLPK solver : OK !");
 			okSolvers.add("GLPK");
 
 		} catch (UnsatisfiedLinkError e) {
@@ -45,14 +45,14 @@ public class FlexfluxTest {
 			System.err
 					.println("Error, the solver GLPK cannot be found. There seems to be a problem with the .jar file of GLPK");
 		}
-		System.out.println();
+		System.err.println();
 
 		try {
 
-			System.out.println(" --- CPLEX SOLVER ---- ");
+			System.err.println(" --- CPLEX SOLVER ---- ");
 			new CplexBind();
 			CPLEXok = true;
-			System.out.println("CPLEX solver : OK !");
+			System.err.println("CPLEX solver : OK !");
 			okSolvers.add("CPLEX");
 		} catch (UnsatisfiedLinkError e) {
 			System.err
@@ -65,18 +65,18 @@ public class FlexfluxTest {
 			.println("Error, the solver CPLEX cannot be found. If you have installed this solver, check your solver installation and the configuration file.");
 		}
 
-		System.out.println();
+		System.err.println();
 
 		if (GLPKok) {
-			System.out.println("You can use FlexFlux with the solver GLPK !");
+			System.err.println("You can use FlexFlux with the solver GLPK !");
 		}
 		if (CPLEXok) {
-			System.out
+			System.err
 					.println("You can use FlexFlux with the solver CPLEX ! (to use it, add \"-sol CPLEX\" to your command lines.)");
 		}
 		if (!GLPKok && !CPLEXok) {
 
-			System.out
+			System.err
 					.println("You can't use FlexFlux, no solver is well configured. Check the configuration file.");
 
 		}
