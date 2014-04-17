@@ -307,7 +307,6 @@ public abstract class Bind {
 					if (constr.getEntities().size() == 1) {
 						for (BioEntity ent : constr.getEntities().keySet()) {
 							if (constr.getEntities().get(ent) == 1.0) {
-								// System.out.println("oui");
 								if (simpleConstraints.containsKey(ent)) {
 									oldSimpleConstraint.put(ent,
 											simpleConstraints.get(ent));
@@ -331,7 +330,6 @@ public abstract class Bind {
 					if (constr.getEntities().size() == 1) {
 						for (BioEntity ent : constr.getEntities().keySet()) {
 							if (constr.getEntities().get(ent) == 1.0) {
-								// System.out.println("oui");
 								if (simpleConstraints.containsKey(ent)) {
 									oldSimpleConstraint.put(ent,
 											simpleConstraints.get(ent));
@@ -372,9 +370,9 @@ public abstract class Bind {
 				constraintsToAdd.addAll(intNetSteadyStateConstraints);
 				constraintsToAdd.addAll(GPRConstraints);
 
-				// System.out.println(GPRConstraints.size());
+				// System.err.println(GPRConstraints.size());
 				// for (Constraint c : GPRConstraints){
-				// System.out.println(c);
+				// System.err.println(c);
 				// }
 			}
 
@@ -1732,7 +1730,7 @@ public abstract class Bind {
 			// so we transform the gpr from R = G1 AND G2
 			// to : if G1=0 OR G2=0 then R=0
 			// so we invert AND and OR
-			// System.out.println(name);
+			// System.err.println(name);
 
 			Map<String, BioPhysicalEntity> enzymes = reactionsMap.get(name)
 					.getEnzList();
@@ -1790,7 +1788,7 @@ public abstract class Bind {
 						// }
 					}
 					// for (String protName : listOfProteins.keySet()){
-					// System.out.println("prot : " + protName);
+					// System.err.println("prot : " + protName);
 					// }
 
 					Relation rel2 = null;
@@ -2268,7 +2266,7 @@ public abstract class Bind {
 						line += "?\t";
 					}
 				}
-				// System.out.println(line);
+				// System.err.println(line);
 				out.println(line);
 			}
 
@@ -2328,9 +2326,9 @@ public abstract class Bind {
 			Set<BioEntity> checkedEntities = new HashSet<BioEntity>();
 
 			if (areTheSame) {
-				System.out.println("Steady state found in " + (it - 1)
+				System.err.println("Steady state found in " + (it - 1)
 						+ " iterations.");
-				System.out.println("Attractor size : " + attractorSize);
+				System.err.println("Attractor size : " + attractorSize);
 				break;
 			}
 

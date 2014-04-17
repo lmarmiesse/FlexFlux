@@ -99,7 +99,7 @@ public class TestInteraction {
 		Unique intUnique = new Unique(f,new OperationLe(),5.0);
 		
 		Interaction i1 = new IfThenInteraction(intUnique,rel1);
-		System.out.println(i1);
+		System.err.println(i1);
 		
 		assertTrue(i1.toString().equals("IF : (a >= 0.0 AND (b >= 0.0 OR c >= 0.0)) THEN : f <= 5.0 Begins after 0.0h, lasts 0.0h."));
 		

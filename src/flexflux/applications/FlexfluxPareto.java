@@ -144,7 +144,7 @@ public class FlexfluxPareto {
 		}
 
 		if (f.h) {
-			System.out.println(f.message);
+			System.err.println(f.message);
 			parser.printUsage(System.out);
 			System.exit(1);
 		}

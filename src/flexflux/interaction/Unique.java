@@ -126,7 +126,7 @@ public class Unique extends Relation {
 			
 			
 			Constraint cons = simpleConstraints.get(entity);
-//			System.out.println(cons);
+//			System.err.println(cons);
 
 			return operation.isTrue(cons, value);
 		}

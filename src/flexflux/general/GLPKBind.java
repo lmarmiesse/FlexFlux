@@ -222,7 +222,7 @@ public class GLPKBind extends Bind {
 		if (entities.size() == 1 && !constraint.getNot()
 				&& false) {
 
-			// System.out.println(constraint);
+			// System.err.println(constraint);
 			for (BioEntity entity : entities.keySet()) {
 				// if it is a "simple" constraint
 				if (entities.get(entity) == 1.0) {
@@ -339,7 +339,7 @@ public class GLPKBind extends Bind {
 
 	protected DoubleResult go(boolean saveResults) {
 
-		// System.out.println(GLPK.glp_get_col_prim(model, 5430));
+		// System.err.println(GLPK.glp_get_col_prim(model, 5430));
 
 		int ret = GLPK.glp_simplex(model, parm);
 
@@ -386,7 +386,7 @@ public class GLPKBind extends Bind {
 			}
 		} else {
 
-			// System.out.println("The problem could not be solved");
+			// System.err.println("The problem could not be solved");
 
 		}
 		return new DoubleResult(0, 1);

@@ -135,14 +135,14 @@ public class KOAnalysis extends Analysis {
 					b.getObjective()));
 		}
 
-		System.out.println("Progress : ");
+		System.err.println("Progress : ");
 
-		System.out.print("[");
+		System.err.print("[");
 		for (int i = 0; i < 50; i++) {
-			System.out.print(" ");
+			System.err.print(" ");
 		}
-		System.out.print("]\n");
-		System.out.print("[");
+		System.err.print("]\n");
+		System.err.print("[");
 
 		for (ResolveThread thread : threads) {
 			thread.start();
@@ -158,7 +158,7 @@ public class KOAnalysis extends Analysis {
 			}
 
 		}
-		System.out.print("]\n");
+		System.err.print("]\n");
 
 		while (threads.size() > 0) {
 			threads.remove(0);
@@ -166,7 +166,7 @@ public class KOAnalysis extends Analysis {
 
 		b.getConstraints().removeAll(constraintsToAdd);
 
-		System.out.println("KO over "
+		System.err.println("KO over "
 				+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
 				+ Vars.maxThread + " threads");
 		return koResult;
