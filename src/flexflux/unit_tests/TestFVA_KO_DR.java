@@ -225,7 +225,7 @@ public class TestFVA_KO_DR {
 
 		List<BioEntity> dead = resultDr.getDeadReactions();
 
-		System.out.println(dead.size());
+		System.err.println(dead.size());
 		Assert.assertTrue(dead.size() == 8);
 
 		List<BioEntity> testDead = new ArrayList<BioEntity>();

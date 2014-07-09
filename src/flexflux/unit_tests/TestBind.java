@@ -163,7 +163,7 @@ public class TestBind {
 		boolean gpr = false;
 		for (Interaction interaction : i.getGPRInteractions()) {
 
-			// System.out.println(((Unique)
+			// System.err.println(((Unique)
 			// interaction.getObject()).getEntity().getId());
 			if (((Unique) interaction.getConsequence()).getEntity().getId()
 					.equals("R_GLCptspp")) {
@@ -199,7 +199,7 @@ public class TestBind {
 
 		double res = bind.FBA(new ArrayList<Constraint>(), true, true).result;
 
-		System.out.println(res);
+		System.err.println(res);
 		
 		Assert.assertTrue(res == 14.0);
 
@@ -223,7 +223,7 @@ public class TestBind {
 
 		Assert.assertTrue(bind2.isMIP());
 
-		System.out.println(bind2.FBA(new ArrayList<Constraint>(), true, true));
+		System.err.println(bind2.FBA(new ArrayList<Constraint>(), true, true));
 
 		Assert.assertTrue(bind2.FBA(new ArrayList<Constraint>(), true, false).result == 14.0);
 

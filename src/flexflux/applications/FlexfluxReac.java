@@ -69,7 +69,7 @@ public class FlexfluxReac {
 			+ "by making a reaction flux change.";
 
 	public String example = "Example : FlexfluxReac -s network.xml -cond cond.txt -int int.txt -r R_EX_o2_e_ -init -10 -end 0 -plot -out out.txt";
-
+	
 	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
 	public String sbmlFile = "";
 
@@ -136,7 +136,7 @@ public class FlexfluxReac {
 		}
 
 		if (f.h) {
-			System.out.println(f.message);
+			System.err.println(f.message);
 			parser.printUsage(System.out);
 			System.exit(1);
 		}

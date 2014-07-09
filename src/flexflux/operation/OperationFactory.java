@@ -89,7 +89,7 @@ public class OperationFactory {
 		} else if (s.contains("*")) {
 			return makeLt();
 		}
-		System.out.println("error in the interaction file");
+		System.err.println("error in the interaction file");
 
 		return null;
 	}

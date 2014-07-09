@@ -102,7 +102,7 @@ public abstract class Bind {
 	/**
 	 * List used when several objectives are given in the condition file.
 	 */
-	protected List<Objective> constraintObjectives = new ArrayList<Objective>();
+	public List<Objective> constraintObjectives = new ArrayList<Objective>();
 
 	/**
 	 * Will permit to create the right operations.
@@ -307,7 +307,6 @@ public abstract class Bind {
 					if (constr.getEntities().size() == 1) {
 						for (BioEntity ent : constr.getEntities().keySet()) {
 							if (constr.getEntities().get(ent) == 1.0) {
-								// System.out.println("oui");
 								if (simpleConstraints.containsKey(ent)) {
 									oldSimpleConstraint.put(ent,
 											simpleConstraints.get(ent));
@@ -331,7 +330,6 @@ public abstract class Bind {
 					if (constr.getEntities().size() == 1) {
 						for (BioEntity ent : constr.getEntities().keySet()) {
 							if (constr.getEntities().get(ent) == 1.0) {
-								// System.out.println("oui");
 								if (simpleConstraints.containsKey(ent)) {
 									oldSimpleConstraint.put(ent,
 											simpleConstraints.get(ent));
@@ -372,9 +370,9 @@ public abstract class Bind {
 				constraintsToAdd.addAll(intNetSteadyStateConstraints);
 				constraintsToAdd.addAll(GPRConstraints);
 
-				// System.out.println(GPRConstraints.size());
+				// System.err.println(GPRConstraints.size());
 				// for (Constraint c : GPRConstraints){
-				// System.out.println(c);
+				// System.err.println(c);
 				// }
 			}
 
@@ -1402,7 +1400,7 @@ public abstract class Bind {
 
 		// if there are constraint objective, we treat them
 		if (constraintObjectives.size() != 0) {
-			System.out.println(Vars.libertyPercentage + "% of non optimality");
+			System.err.println(Vars.libertyPercentage + "% of non optimality");
 		}
 		for (Objective constObj : constraintObjectives) {
 
@@ -1426,7 +1424,7 @@ public abstract class Bind {
 			Constraint c = new Constraint(constMap, lb - delta, ub + delta);
 
 			constraints.add(c);
-			System.out.println("New constraint : \n" + c);
+			System.err.println("New constraint : \n" + c);
 
 			makeSolverConstraint(c, null, null);
 
@@ -1689,7 +1687,7 @@ public abstract class Bind {
 			// so we transform the gpr from R = G1 AND G2
 			// to : if G1=0 OR G2=0 then R=0
 			// so we invert AND and OR
-			// System.out.println(name);
+			// System.err.println(name);
 
 			Map<String, BioPhysicalEntity> enzymes = reactionsMap.get(name)
 					.getEnzList();
@@ -1747,7 +1745,7 @@ public abstract class Bind {
 						// }
 					}
 					// for (String protName : listOfProteins.keySet()){
-					// System.out.println("prot : " + protName);
+					// System.err.println("prot : " + protName);
 					// }
 
 					Relation rel2 = null;
@@ -1850,9 +1848,9 @@ public abstract class Bind {
 	 * Prints the constraints
 	 */
 	public void displayConstraints() {
-		System.out.println(constraints.size() + " constraints");
+		System.err.println(constraints.size() + " constraints");
 		for (Constraint c : constraints) {
-			System.out.println(c);
+			System.err.println(c);
 		}
 	}
 
@@ -2215,6 +2213,7 @@ public abstract class Bind {
 						toWrite.get(ent).add("?");
 					}
 				}
+
 			}
 
 			if (thisStepSimpleConstraints.size() == 0) {
@@ -2273,9 +2272,9 @@ public abstract class Bind {
 			Set<BioEntity> checkedEntities = new HashSet<BioEntity>();
 
 			if (areTheSame) {
-				System.out.println("Steady state found in " + (it - 1)
+				System.err.println("Steady state found in " + (it - 1)
 						+ " iterations.");
-				System.out.println("Attractor size : " + attractorSize);
+				System.err.println("Attractor size : " + attractorSize);
 				break;
 			}
 
@@ -2496,4 +2495,7 @@ public abstract class Bind {
 
 		return steadyStateConstraints;
 	}
+	
+	
+	
 }

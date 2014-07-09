@@ -110,7 +110,7 @@ public class ThreadFVA extends ResolveThread {
 
 				percentage = percent;
 				if (percent % 2 == 0) {
-					System.out.print("*");
+					System.err.print("*");
 				}
 			}
 
@@ -128,7 +128,7 @@ public class ThreadFVA extends ResolveThread {
 			if (percent > percentage) {
 				percentage = percent;
 				if (percent % 2 == 0 && percentage != 0) {
-					System.out.print("*");
+					System.err.print("*");
 				}
 			}
 		}
