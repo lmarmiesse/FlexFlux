@@ -146,7 +146,7 @@ public class ParetoAnalysis extends Analysis {
 				objectivesBounds.get(obj)[0] = result2.getObjValue();
 			}
 			
-			System.out.println(obj.getName()+" min : "+objectivesBounds.get(obj)[0]+" max : "+objectivesBounds.get(obj)[1]);
+			System.err.println(obj.getName()+" min : "+objectivesBounds.get(obj)[0]+" max : "+objectivesBounds.get(obj)[1]);
 
 			// we normalize the values
 			List<Double> normalizedResults = new ArrayList<Double>();
@@ -183,7 +183,7 @@ public class ParetoAnalysis extends Analysis {
 		int nb=0;
 		for (Objective[] toTest : pairsToTest) {
 			nb++;
-			System.out.println("2D analysis "+nb+"/"+pairsToTest.size());
+			System.err.println("2D analysis "+nb+"/"+pairsToTest.size());
 			b.setObjective(toTest[0]);
 
 			double lb = objectivesBounds.get(toTest[1])[0];
@@ -255,7 +255,7 @@ public class ParetoAnalysis extends Analysis {
 		nb=0;
 		for (Objective[] toTest : tripletsToTest) {
 			nb++;
-			System.out.println("3D analysis "+nb+"/"+tripletsToTest.size());
+			System.err.println("3D analysis "+nb+"/"+tripletsToTest.size());
 
 			b.setObjective(toTest[0]);
 

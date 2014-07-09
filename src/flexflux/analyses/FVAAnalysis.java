@@ -94,10 +94,13 @@ public class FVAAnalysis extends Analysis {
 		
 		DoubleResult result = b.FBA(constraints, false, true);
 		
+		FVAResult fvaResult = null;
+		
 		if (result.flag != 0) {
 
-			System.out.println("Unfeasible");
-			System.exit(0);
+			System.err.println("Unfeasible");
+			fvaResult = new FVAResult(Double.NaN);
+			return fvaResult;
 
 		}
 		
@@ -113,7 +116,7 @@ public class FVAAnalysis extends Analysis {
 	
 		b.getConstraints().addAll(constraintsToAdd);
 
-		FVAResult fvaResult = new FVAResult(result.result);
+		fvaResult = new FVAResult(result.result);
 
 		Map<BioEntity, Double> constraintMap = new HashMap<BioEntity, Double>();
 
@@ -132,8 +135,8 @@ public class FVAAnalysis extends Analysis {
 
 		Constraint c = new Constraint(constraintMap, lb - delta, ub + delta);
 
-		System.out.println(Vars.libertyPercentage + "% of non optimality");
-		System.out.println("FVA initial constraint : \n" + c);
+		System.err.println(Vars.libertyPercentage + "% of non optimality");
+		System.err.println("FVA initial constraint : \n" + c);
 
 		b.getConstraints().add(c);
 		
@@ -165,14 +168,14 @@ public class FVAAnalysis extends Analysis {
 					fvaResult));
 		}
 
-		System.out.println("Progress : ");
+		System.err.println("Progress : ");
 
-		System.out.print("[");
+		System.err.print("[");
 		for (int i = 0; i < 50; i++) {
-			System.out.print(" ");
+			System.err.print(" ");
 		}
-		System.out.print("]\n");
-		System.out.print("[");
+		System.err.print("]\n");
+		System.err.print("[");
 
 
 		
@@ -190,7 +193,7 @@ public class FVAAnalysis extends Analysis {
 //				e.printStackTrace();
 			}
 		}
-		System.out.print("]\n");
+		System.err.print("]\n");
 
 		// we remove the threads to permit another analysis
 		while (threads.size() > 0) {
@@ -202,7 +205,7 @@ public class FVAAnalysis extends Analysis {
 		b.getConstraints().remove(c);
 		b.getConstraints().removeAll(constraintsToAdd);
 
-		System.out.println("FVA over "
+		System.err.println("FVA over "
 				+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
 				+ Vars.maxThread + " threads");
 		return fvaResult;

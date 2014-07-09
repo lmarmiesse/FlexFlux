@@ -137,8 +137,8 @@ public class FlexfluxKO {
 		}
 
 		if (f.h) {
-			System.out.println(f.message);
-			parser.printUsage(System.out);
+			System.err.println(f.message);
+			parser.printUsage(System.err);
 			System.exit(1);
 		}
 

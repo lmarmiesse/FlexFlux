@@ -192,4 +192,10 @@ public class KOResult extends AnalysisResult {
 
 	}
 
+	public Map<BioEntity, Double> getMap() {
+		return map;
+	}
+	
+	
+
 }

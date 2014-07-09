@@ -383,7 +383,7 @@ public class CplexBind extends Bind {
 
 					// find the number of SOSs in the model
 					int numSOS = cplex.getNSOSs();
-					System.out.println("Number of SOSs=" + numSOS);
+					System.err.println("Number of SOSs=" + numSOS);
 
 					// cols : number of variables
 					// rows : nb of ranges
@@ -422,14 +422,14 @@ public class CplexBind extends Bind {
 						}
 					}
 
-					System.out.println(constraints.length);
+					System.err.println(constraints.length);
 
 					double[] prefs = new double[constraints.length];
 					for (int c1 = 0; c1 < constraints.length; c1++) {
 						prefs[c1] = 1.0;
 					}
 					if (cplex.refineConflict(constraints, prefs)) {
-						System.out
+						System.err
 								.println("Conflict Refinement process finished: Printing Conflicts");
 						IloCplex.ConflictStatus[] conflict = cplex
 								.getConflict(constraints);
@@ -438,7 +438,7 @@ public class CplexBind extends Bind {
 						int numSOSConflicts = 0;
 						for (int c2 = 0; c2 < constraints.length; c2++) {
 							if (conflict[c2] == IloCplex.ConflictStatus.Member) {
-								System.out.println("  Proved  : "
+								System.err.println("  Proved  : "
 										+ constraints[c2]);
 								if (c2 < ranges.length)
 									numConConflicts++;
@@ -458,15 +458,15 @@ public class CplexBind extends Bind {
 									numSOSConflicts++;
 							}
 						}
-						System.out.println("Conflict Summary:");
-						System.out.println("  Constraint conflicts     = "
+						System.err.println("Conflict Summary:");
+						System.err.println("  Constraint conflicts     = "
 								+ numConConflicts);
-						System.out.println("  Variable Bound conflicts = "
+						System.err.println("  Variable Bound conflicts = "
 								+ numBoundConflicts);
-						System.out.println("  SOS conflicts            = "
+						System.err.println("  SOS conflicts            = "
 								+ numSOSConflicts);
 					} else {
-						System.out.println("Conflict could not be refined");
+						System.err.println("Conflict could not be refined");
 					}
 				}
 			}

@@ -106,7 +106,7 @@ public class ThreadKO extends ResolveThread {
 			if (percent > percentage) {
 				percentage = percent;
 				if (percent % 2 == 0) {
-					System.out.print("*");
+					System.err.print("*");
 				}
 			}
 
