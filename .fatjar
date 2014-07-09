@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Wed Jul 09 16:53:58 CEST 2014
+onejar.license.required=true
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=false
+jarname=/home/lmarmiesse/Documents/FBA/FlexFlux/new_FlexFlux/FlexFlux.jar
+manifest.mergeall=true
+manifest.mainclass=
+manifest.file=<createnew>
+jarname.isextern=true
+onejar.expand=
+excludes=<jar|cplex.jar>
+includes=

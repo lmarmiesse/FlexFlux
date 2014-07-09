@@ -1,8 +1,22 @@
 a 5
+b 0
+c 0
+d 0
+e 0
 
-IF[a=5]THEN[a=5]ELSE[a=8]
-IF[a=5]THEN[b=5]ELSE[b=8]
-IF[b=5]THEN[c=5]ELSE[c=8]
-IF[c=5]THEN[d=5]ELSE[d=8]
-IF[d=5]THEN[e=5]ELSE[e=5]
-IF[e=5]THEN[gene1=0]ELSE[gene1=1]
+#IF[a=5]THEN[a=5]ELSE[a=8]
+#IF[a=5]THEN[b=5]ELSE[b=8]
+#IF[b=5]THEN[c=5]ELSE[c=8]
+#IF[c=5]THEN[d=5]ELSE[d=8]
+#IF[d=5]THEN[e=5]ELSE[e=5]
+#IF[e=5]THEN[gene1=0]ELSE[gene1=1]
+
+
+
+
+IF[a=5]THEN[b=5]ELSE[b=0]
+IF[b=5 OR e=5]THEN[c=5]ELSE[c=0]
+IF[c=5]THEN[d=5]ELSE[d=0]
+IF[d=5]THEN[e=5]ELSE[e=0]
+IF[a=5 OR b=5 OR c=5 OR d=5 OR e=5]THEN[a=0]ELSE[a=5]
+IF[a=0]THEN[gene1=0]ELSE[gene1=1]
