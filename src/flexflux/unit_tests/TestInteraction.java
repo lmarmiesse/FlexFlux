@@ -44,6 +44,7 @@ import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.CplexBind;
 import flexflux.general.GLPKBind;
+import flexflux.general.Vars;
 import flexflux.interaction.And;
 import flexflux.interaction.IfThenInteraction;
 import flexflux.interaction.Interaction;
@@ -114,6 +115,7 @@ public class TestInteraction {
 		fbaTest(new GLPKBind());
 		fbaTest(new CplexBind());
 		
+		
 	}
 
 	private void fbaTest(Bind bind) {
@@ -126,8 +128,15 @@ public class TestInteraction {
 		bind.prepareSolver();
 		
 		double res = bind.FBA(new ArrayList<Constraint>(), true, true).result;
-
 		Assert.assertTrue(res == 9.0);
 		
+		Assert.assertTrue(bind.getSolvedValue(bind.getInteractionNetwork().getEntity("c"))>1.6);
+		Assert.assertTrue(bind.getSolvedValue(bind.getInteractionNetwork().getEntity("c"))<1.7);
+		
+		bind.end();
+		
 	}
+	
+
+	
 }

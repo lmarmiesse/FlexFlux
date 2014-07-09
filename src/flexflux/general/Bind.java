@@ -559,61 +559,17 @@ public abstract class Bind {
 					nbLine++;
 					continue;
 				}
-
-				// ////////////////////////////DEFAULT VALUE HANDLEING
-				Pattern pattern = Pattern
-						.compile("IF\\[([_a-zA-Z0-9]+)=\\?]THEN\\[([_a-zA-Z0-9]+)=([_a-zA-Z0-9]+)\\]");
-
-				Matcher matcher = pattern.matcher(line);
-
-				// if a default value is set
-				if (matcher.find()) {
-
-					if (!matcher.group(2).equals(matcher.group(1))) {
-
-						System.err.println("Error in default value line "
-								+ nbLine + " " + matcher.group(1) + " and "
-								+ matcher.group(2) + " don't match");
-						System.exit(0);
-					}
-
-					// if the entity does not exist yet
-					if (intNet.getEntity(matcher.group(1)) == null) {
-
-						System.err
-								.println("Error : unknown variable in interaction file : "
-										+ matcher.group(1) + " line " + nbLine);
-						System.exit(0);
-					}
-
-					BioEntity ent = intNet.getEntity(matcher.group(1));
-					double value = 0;
-
-					try {
-						value = Double.parseDouble(matcher.group(3));
-					} catch (Exception e) {
-
-						System.err.println("Error in interaction file line "
-								+ nbLine);
-						System.exit(0);
-					}
-
-					defaultValues.put(ent, value);
-
-					continue;
-				}
-				// ////////////////////////////
-
+				
 				Relation ifRelation = null;
 				Unique thenRelation = null;
 				Unique elseRelation = null;
 
 				double thenBegins = 0.0, thenLasts = 0.0, elseBegins = 0.0, elseLasts = 0.0;
 
-				pattern = Pattern
+				Pattern pattern = Pattern
 						.compile("IF\\[([^\\]]*)\\]THEN\\[(.*)\\]ELSE\\[(.*)\\]");
 
-				matcher = pattern.matcher(line);
+				Matcher matcher = pattern.matcher(line);
 
 				if (matcher.find()) {
 
@@ -626,10 +582,10 @@ public abstract class Bind {
 
 					String[] ifPart = matcher.group(1).split("\\]\\[");
 					ifRelation = makeRelationFromString(ifPart[0], nbLine);
-
+					
 					String[] thenPart = matcher.group(2).split("\\]\\[");
 					thenRelation = makeUniqueFromCondition(thenPart[0], nbLine);
-
+					
 					if (thenPart.length > 1) {
 						thenBegins = Double.parseDouble(thenPart[1]);
 					}
@@ -647,6 +603,7 @@ public abstract class Bind {
 						elseLasts = Double.parseDouble(elsePart[2]);
 					}
 
+					/////ERROR HANDLING
 					String thenEntity = thenPart[0].replaceAll("\\s", "")
 							.split("<=|>=|=|<|>|\\*")[0];
 
@@ -660,6 +617,7 @@ public abstract class Bind {
 										+ ", not the same entity in the THEN and the ELSE part");
 						System.exit(0);
 					}
+					/////
 
 					// /////////// we create and add the interactions
 					Interaction thenInteraction = relationFactory
@@ -1073,7 +1031,7 @@ public abstract class Bind {
 					constraintObjectives.add(makeObjectiveFromString(objStr,
 							objStringMap.get(objStr), objStr));
 				}
-
+				
 			}
 
 			if (isError) {
@@ -1670,7 +1628,7 @@ public abstract class Bind {
 
 				}
 			}
-
+			
 			constraints.add(c);
 
 		}
@@ -1717,7 +1675,6 @@ public abstract class Bind {
 	 */
 	private void gprInteractions(boolean ext) {
 
-		int go = 0;
 
 		Map<String, BioChemicalReaction> reactionsMap = bioNet
 				.getBiochemicalReactionList();
@@ -2218,7 +2175,6 @@ public abstract class Bind {
 		Map<BioEntity, List<String>> toWrite = new HashMap<BioEntity, List<String>>();
 		if (Vars.writeInteractionNetworkStates) {
 
-			String s = "";
 			for (BioEntity ent : simpleConstraints.keySet()) {
 				toWrite.put(ent, new ArrayList<String>());
 			}
@@ -2396,18 +2352,25 @@ public abstract class Bind {
 		List<Constraint> steadyStateConstraints = new ArrayList<Constraint>();
 
 		if (attractorSimpleConstraints.size() != 0) {
-
-			int nb = attractorSimpleConstraints.size() - 1;
-			// int nb = 0;
-			// System.out.println(attractorSimpleConstraints.get(nb).size());
-
-			for (BioEntity b : attractorSimpleConstraints.get(nb).keySet()) {
+			
+			for (BioEntity b : attractorSimpleConstraints.get(0).keySet()) {
 
 				if (intNet.getTargetToInteractions().containsKey(b)) {
-					// System.out.println(attractorSimpleConstraints.get(
-					// attractorSimpleConstraints.size() - 1).get(b));
-					steadyStateConstraints.add(attractorSimpleConstraints.get(
-							nb).get(b));
+					
+					//We make the average of the values of all states of the attractor
+					double lb=0;
+					double ub=0;
+					for (int nb=0;nb<attractorSimpleConstraints.size();nb++){
+						lb+=attractorSimpleConstraints.get(nb).get(b).getLb();
+						ub+=attractorSimpleConstraints.get(nb).get(b).getUb();
+					}
+					
+					lb=lb/attractorSimpleConstraints.size();
+					ub=ub/attractorSimpleConstraints.size();
+					
+					Map<BioEntity,Double> constMap = new HashMap<BioEntity,Double>();
+					constMap.put(b, 1.0);
+					steadyStateConstraints.add(new Constraint(constMap,lb,ub));
 				}
 			}
 		}
@@ -2417,6 +2380,7 @@ public abstract class Bind {
 			PrintWriter out = null;
 
 			try {
+				System.out.println(statesFileName);
 				out = new PrintWriter(new File(statesFileName));
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -2437,8 +2401,7 @@ public abstract class Bind {
 
 			out.close();
 		}
-
-		// System.out.println(steadyStateConstraints.size());
+		 
 		return steadyStateConstraints;
 	}
 

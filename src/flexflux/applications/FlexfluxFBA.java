@@ -33,6 +33,16 @@
  */
 package flexflux.applications;
 
+import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
+import org.kohsuke.args4j.Option;
+
+import parsebionet.biodata.BioChemicalReaction;
+import parsebionet.biodata.BioPhysicalEntityParticipant;
 import flexflux.analyses.Analysis;
 import flexflux.analyses.FBAAnalysis;
 import flexflux.analyses.result.AnalysisResult;
@@ -40,12 +50,6 @@ import flexflux.general.Bind;
 import flexflux.general.CplexBind;
 import flexflux.general.GLPKBind;
 import flexflux.general.Vars;
-
-import java.io.File;
-
-import org.kohsuke.args4j.CmdLineException;
-import org.kohsuke.args4j.CmdLineParser;
-import org.kohsuke.args4j.Option;
 
 /**
  * 
@@ -179,7 +183,7 @@ public class FlexfluxFBA {
 		if (!f.outName.equals("")) {
 			result.writeToFile(f.outName);
 		}
-
+	
 		bind.end();
 	}
 }

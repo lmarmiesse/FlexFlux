@@ -58,6 +58,7 @@ public class FBAAnalysis extends Analysis {
 		
 		
 		FBAResult result = new FBAResult(b);
+
 		
 		DoubleResult objValue = b.FBA(new ArrayList<Constraint>(),true,true);
 		
