@@ -169,7 +169,7 @@ public class CplexBind extends Bind {
 	}
 
 
-	public void makeSolverConstraint(Constraint constraint,
+	public void createSolverConstraint(Constraint constraint,
 			List<Object> toRemoveFromModel, Map<String, double[]> oldBounds) {
 
 		try {
@@ -181,6 +181,7 @@ public class CplexBind extends Bind {
 
 			int i = 0;
 			for (BioEntity entity : entities.keySet()) {
+				
 				somme[i] = (IloNumExpr) cplex.prod(entities.get(entity),
 						vars.get(entity.getId()));
 
@@ -337,6 +338,9 @@ public class CplexBind extends Bind {
 			if (cplex.solve()) {
 
 				if (saveResults) {
+					
+//					cplex.getc
+					
 					for (String name : vars.keySet()) {
 						try {
 							lastSolve.put(name, cplex.getValue(vars.get(name)));

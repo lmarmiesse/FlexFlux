@@ -32,17 +32,10 @@
  * 9 avr. 2013 
  */
 package flexflux.general;
-import flexflux.interaction.Interaction;
-import flexflux.interaction.InteractionNetwork;
-import flexflux.interaction.RelationFactory;
-import flexflux.operation.OperationFactory;
-import flexflux.thread.ThreadFactoryGLPK;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.gnu.glpk.GLPK;
 import org.gnu.glpk.GLPKConstants;
@@ -54,6 +47,10 @@ import org.gnu.glpk.glp_smcp;
 
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
+import flexflux.interaction.InteractionNetwork;
+import flexflux.interaction.RelationFactory;
+import flexflux.operation.OperationFactory;
+import flexflux.thread.ThreadFactoryGLPK;
 
 /**
  * 
@@ -169,7 +166,7 @@ public class GLPKBind extends Bind {
 
 	// list and map are used to fill the constraints and old bounds
 	// to be able to come back to the previous state after
-	protected void makeSolverConstraint(Constraint constraint,
+	protected void createSolverConstraint(Constraint constraint,
 			List<Object> toRemoveFromModel, Map<String, double[]> oldBounds) {
 
 		double ub = constraint.getUb();
@@ -348,7 +345,7 @@ public class GLPKBind extends Bind {
 		}
 
 		if (ret == 0) {
-
+			
 			// if the problem is a LP
 			if (!isMIP()) {
 				// if there is an optimal solution

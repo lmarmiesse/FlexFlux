@@ -63,7 +63,7 @@ import parsebionet.biodata.BioEntity;
  */
 public class FlexfluxTwoReacs {
 
-	public String message = "FlexfluxTwoReacs [options...]\n"
+	public static String message = "FlexfluxTwoReacs\n"
 
 			+ "Computes different FBA analysis given a metabolic network, an objective function and constraints, "
 			+ "by making two reactions fluxes change.";

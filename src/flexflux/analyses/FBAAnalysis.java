@@ -73,6 +73,7 @@ public class FBAAnalysis extends Analysis {
 			result.setObjValue(objValue.result);
 
 		}
+		result.formatResult();
 		return (FBAResult) result;
 	}
 

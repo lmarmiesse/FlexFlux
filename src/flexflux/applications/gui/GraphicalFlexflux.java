@@ -53,7 +53,7 @@ public class GraphicalFlexflux {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	private static List<Class> getClasses(String packageName)
+	public static List<Class> getClasses(String packageName)
 			throws ClassNotFoundException, IOException {
 
 		ArrayList<Class> classes = new ArrayList<Class>();

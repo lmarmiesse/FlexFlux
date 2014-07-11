@@ -83,7 +83,7 @@ import org.kohsuke.args4j.Option;
  */
 public class FlexfluxPareto {
 
-	public String message = "FlexfluxPareto [options...]\n"
+	public static String message = "FlexfluxPareto\n"
 			+ "The goal of this analysis is to determine what objective (or set of objectives) an organism is optimizing.\n"
 
 			+ "It take as an argument a file containing the objective functions to test and"
