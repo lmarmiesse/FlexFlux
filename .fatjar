@@ -1,6 +1,6 @@
 #Fat Jar Configuration File
-#Wed Jul 09 16:53:58 CEST 2014
-onejar.license.required=true
+#Thu Jul 10 10:11:16 CEST 2014
+onejar.license.required=false
 manifest.classpath=
 manifest.removesigners=true
 onejar.checkbox=false
@@ -10,5 +10,5 @@ manifest.mainclass=
 manifest.file=<createnew>
 jarname.isextern=true
 onejar.expand=
-excludes=<jar|cplex.jar>
+excludes=<po|FlexFlux>~flexflux/~unit_tests/;<po|FlexFlux>~.gitignore;<jar|cplex.jar>;<jar|junit.jar>;<jar|org.hamcrest.core_1.3.0.v201303031735.jar>
 includes=

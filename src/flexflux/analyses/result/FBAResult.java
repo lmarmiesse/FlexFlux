@@ -33,17 +33,14 @@
  */
 package flexflux.analyses.result;
 
-import flexflux.general.Bind;
-import flexflux.general.Constraint;
-import flexflux.general.Vars;
-import flexflux.interaction.Interaction;
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -64,6 +61,9 @@ import javax.swing.table.TableRowSorter;
 import org.jfree.ui.RefineryUtilities;
 
 import parsebionet.biodata.BioEntity;
+import flexflux.general.Bind;
+import flexflux.general.Constraint;
+import flexflux.general.Vars;
 
 /**
  * 
@@ -91,8 +91,36 @@ public class FBAResult extends AnalysisResult {
 
 	private Bind bind;
 
+	private Map<String, String> entToResult = new HashMap<String, String>();
+
 	public FBAResult(Bind b) {
+
 		this.bind = b;
+	}
+
+	public void formatResult() {
+		
+		for (BioEntity entity : bind.getInteractionNetwork().getEntities()) {
+			if (!entity.getId().contains(Vars.Irrev1)
+					&& !entity.getId().contains(Vars.Irrev2)) {
+
+				if (bind.constrainedEntities.contains(entity)) {
+
+					if (bind.getDeadReactions().contains(entity)) {
+						entToResult.put(entity.getId() + " (Dead)",
+								String.valueOf(Vars.round(bind
+										.getSolvedValue(entity))));
+					} else {
+						entToResult.put(entity.getId(), String.valueOf(Vars
+								.round(bind.getSolvedValue(entity))));
+					}
+				} else {
+					entToResult.put(entity.getId(), "Not Constrained");
+				}
+
+			}
+		}
+
 	}
 
 	public void writeToFile(String path) {
@@ -102,20 +130,9 @@ public class FBAResult extends AnalysisResult {
 			out.println("FBA result\n");
 			out.println("obj : " + Vars.round(objValue));
 
-			for (BioEntity entity : bind.getInteractionNetwork().getEntities()) {
-				if (!entity.getId().contains(Vars.Irrev1)
-						&& !entity.getId().contains(Vars.Irrev2)) {
+			for (String entName : entToResult.keySet()) {
 
-					if (bind.getDeadReactions().contains(entity)) {
-
-						out.println(entity.getId() + "\t" + "Dead");
-
-					} else {
-						out.println(entity.getId() + "\t"
-								+ Vars.round(bind.getSolvedValue(entity)));
-					}
-
-				}
+				out.println(entName + "\t" + entToResult.get(entName));
 
 			}
 			out.close();
@@ -134,75 +151,20 @@ public class FBAResult extends AnalysisResult {
 
 		String[] columnNames = { "Entity name", "Value" };
 
-		// The entites displayed will be the ones that are contained in a
-		// constraint or
-		// in an interaction
-		Set<BioEntity> concernedEntities = new LinkedHashSet<BioEntity>();
-
-		// we first add the ones in constraints
-		for (Constraint c : bind.getConstraints()) {
-
-			for (BioEntity ent : c.getEntities().keySet()) {
-				if (!ent.getId().contains(Vars.Irrev1)
-						&& !ent.getId().contains(Vars.Irrev2)) {
-					concernedEntities.add(ent);
-
-				}
-			}
-		}
-		//and the ones in interactions
-		for (Interaction i : bind.getInteractionNetwork().getGPRInteractions()) {
-			for (BioEntity ent : i.getCondition().getInvolvedEntities()) {
-				if (!ent.getId().contains(Vars.Irrev1)
-						&& !ent.getId().contains(Vars.Irrev2)) {
-					concernedEntities.add(ent);
-				}
-			}
-			for (BioEntity ent : i.getConsequence().getInvolvedEntities()) {
-				if (!ent.getId().contains(Vars.Irrev1)
-						&& !ent.getId().contains(Vars.Irrev2)) {
-					concernedEntities.add(ent);
-				}
-			}
-		}
-		for (Interaction i : bind.getInteractionNetwork()
-				.getAddedInteractions()) {
-			for (BioEntity ent : i.getCondition().getInvolvedEntities()) {
-				if (!ent.getId().contains(Vars.Irrev1)
-						&& !ent.getId().contains(Vars.Irrev2)) {
-					concernedEntities.add(ent);
-				}
-			}
-			for (BioEntity ent : i.getConsequence().getInvolvedEntities()) {
-				if (!ent.getId().contains(Vars.Irrev1)
-						&& !ent.getId().contains(Vars.Irrev2)) {
-					concernedEntities.add(ent);
-				}
-			}
-		}
-
-		Object[][] data = new Object[concernedEntities.size()][columnNames.length];
+		Object[][] data = new Object[entToResult.size()][columnNames.length];
 
 		int i = 0;
-		for (BioEntity ent : concernedEntities) {
+		for (String entName : entToResult.keySet()) {
 
-			if (bind.getDeadReactions().contains(ent)) {
-
-				data[i] = new Object[] { ent.getId() + " (Dead)",
-						Vars.round(bind.getSolvedValue(ent)) };
-
-			} else {
-				
-				data[i] = new Object[] { ent.getId(),
-						Vars.round(bind.getSolvedValue(ent)) };
-			}
+			data[i] = new Object[] { entName, entToResult.get(entName) };
 			i++;
 		}
 
 		DefaultTableModel model = new MyTableModel(data, columnNames);
 		resultTable.setModel(model);
-		final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(
+		final MyTableRowSorter<TableModel> sorter = new MyTableRowSorter<TableModel>(
 				resultTable.getModel());
+
 		resultTable.setRowSorter(sorter);
 
 		JPanel northPanel = new JPanel();

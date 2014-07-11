@@ -69,7 +69,7 @@ import parsebionet.biodata.BioEntity;
  */
 public class FlexfluxKO {
 
-	public String message = "FlexfluxKO [options...]\n"
+	public static String message = "FlexfluxKO\n"
 
 			+ "Computes an KO analysis given a metabolic network, an objective function and constraints.\n"
 			+ "A KO analysis consists in setting network entities values to 0, and observe the effect on the objective function.\n"

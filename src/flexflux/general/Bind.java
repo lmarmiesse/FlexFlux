@@ -193,6 +193,12 @@ public abstract class Bind {
 	 */
 	public abstract void entitiesToSolverVars();
 
+	
+	/**
+	 * List used for FBA to know which variables are constrained.
+	 */
+	public List<BioEntity> constrainedEntities = new ArrayList<BioEntity>();
+	
 	/**
 	 * Creates a constraint for the solver.
 	 * 
@@ -204,7 +210,16 @@ public abstract class Bind {
 	 *            is used to come back to how it was before.
 	 */
 
-	protected abstract void makeSolverConstraint(Constraint c,
+	protected  void makeSolverConstraint(Constraint c,
+			List<Object> toRemoveFromModel, Map<String, double[]> oldBounds){
+		
+		constrainedEntities.addAll(c.getEntities().keySet());
+		
+		createSolverConstraint(c, toRemoveFromModel, oldBounds);
+		
+	}
+	
+	protected abstract void createSolverConstraint(Constraint c,
 			List<Object> toRemoveFromModel, Map<String, double[]> oldBounds);
 
 	/**
@@ -2400,7 +2415,7 @@ public abstract class Bind {
 
 			out.close();
 		}
-		 
+		
 		return steadyStateConstraints;
 	}
 

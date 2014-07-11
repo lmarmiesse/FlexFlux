@@ -40,9 +40,11 @@ import java.util.ArrayList;
 import flexflux.analyses.Analysis;
 import flexflux.analyses.FBAAnalysis;
 import flexflux.analyses.result.AnalysisResult;
+import flexflux.analyses.result.FBAResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.CplexBind;
+import flexflux.general.DoubleResult;
 import flexflux.general.GLPKBind;
 import flexflux.general.Vars;
 import flexflux.interaction.And;
@@ -127,13 +129,40 @@ public class TestInteraction {
 		
 		bind.prepareSolver();
 		
-		double res = bind.FBA(new ArrayList<Constraint>(), true, true).result;
-		Assert.assertTrue(res == 9.0);
+//		double res = bind.FBA(new ArrayList<Constraint>(), true, true).result;
+
+//		bind.end();
 		
+		FBAResult result = new FBAResult(bind);
+
+
+		DoubleResult objValue = bind.FBA(new ArrayList<Constraint>(), true, true);
+
+		if (objValue.flag != 0) {
+
+			System.err.println(objValue.result);
+
+			System.err.println("Unfeasible");
+			result.setObjValue(Double.NaN);
+
+		} else {
+
+			result.setObjValue(objValue.result);
+
+		}
+		result.formatResult();
+		
+		result.plot();
+		
+		Assert.assertTrue(result.getObjValue() == 9.0);
 		Assert.assertTrue(bind.getSolvedValue(bind.getInteractionNetwork().getEntity("c"))>1.6);
 		Assert.assertTrue(bind.getSolvedValue(bind.getInteractionNetwork().getEntity("c"))<1.7);
 		
-		bind.end();
+		int a = 3;
+		
+		while (a==3){
+			
+		}
 		
 	}
 	
