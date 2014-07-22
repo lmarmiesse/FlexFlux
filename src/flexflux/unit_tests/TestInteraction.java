@@ -158,14 +158,11 @@ public class TestInteraction {
 		Assert.assertTrue(bind.getSolvedValue(bind.getInteractionNetwork().getEntity("c"))>1.6);
 		Assert.assertTrue(bind.getSolvedValue(bind.getInteractionNetwork().getEntity("c"))<1.7);
 		
-		int a = 3;
-		
-		while (a==3){
-			
-		}
+//		int a = 3;
+//		
+//		while (a==3){
+//			
+//		}
 		
 	}
-	
-
-	
 }
