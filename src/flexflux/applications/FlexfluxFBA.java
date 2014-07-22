@@ -61,7 +61,7 @@ import flexflux.general.Vars;
  */
 public class FlexfluxFBA {
 
-	public static String message = "FlexfluxFBA\n"
+	public static String message = "FlexfluxFBA [options...]\n"
 			+ "Computes an FBA given a metabolic network, an objective function and constraints.";
 
 	public String example = "Example : FlexfluxFBA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -states res.tab";
