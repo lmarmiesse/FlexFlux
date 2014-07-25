@@ -385,10 +385,6 @@ public abstract class Bind {
 				constraintsToAdd.addAll(intNetSteadyStateConstraints);
 				constraintsToAdd.addAll(GPRConstraints);
 
-				// System.err.println(GPRConstraints.size());
-				// for (Constraint c : GPRConstraints){
-				// System.err.println(c);
-				// }
 			}
 
 			return goWithConstraints(constraintsToAdd, saveResults);
@@ -2170,6 +2166,7 @@ public abstract class Bind {
 		Map<BioEntity, Constraint> thisStepSimpleConstraints = new HashMap<BioEntity, Constraint>();
 
 		for (BioEntity b : simpleConstraints.keySet()) {
+			System.out.println(b.getId());
 			thisStepSimpleConstraints.put(b, simpleConstraints.get(b));
 		}
 		for (BioEntity b : interactionNetworkSimpleConstraints.keySet()) {
@@ -2510,7 +2507,5 @@ public abstract class Bind {
 
 		return steadyStateConstraints;
 	}
-	
-	
 	
 }
