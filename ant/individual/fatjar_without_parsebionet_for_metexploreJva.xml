@@ -16,9 +16,10 @@
     -->
     <!-- uncomment the above lines to use ANT outside of Eclipse -->
 	   <property name="dir.build" value="/home/lcottret/workspaces/git_repositories/FlexFlux"/>
-	
+		<property name="out.build" value="/home/lcottret/workspaces/workspaceMetExploreJava/metexploreJava/metexploreJava/lib"/>
+		
     <target name="main">
-        <fatjar.build output="${dir.build}/jars/FlexFlux_without_parseBioNet.jar">
+        <fatjar.build output="${out.build}/flexFlux.jar">
             <fatjar.manifest/>
             <fatjar.filesource path="${dir.build}/bin" relpath=""/>
             <fatjar.jarsource file="${dir.build}/lib/args4j-2.0.17.jar" relpath=""/>

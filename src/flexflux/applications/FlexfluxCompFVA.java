@@ -54,12 +54,14 @@ import parsebionet.biodata.BioEntity;
 
 /**
  * 
- * <p>Compares the results of two FVA analyses given a metabolic network, an
- * objective function and two different set of constraints.</p> An FVA analysis
- * consists in getting the optimal value for the objective function,
- * setting this value as a constraint and, given a list of entities, minimize
- * and maximize their values. If no entity is specified in argument -e, the FVA
- * analysis is performed on all reactions.
+ * <p>
+ * Compares the results of two FVA analyses given a metabolic network, an
+ * objective function and two different set of constraints.
+ * </p>
+ * An FVA analysis consists in getting the optimal value for the objective
+ * function, setting this value as a constraint and, given a list of entities,
+ * minimize and maximize their values. If no entity is specified in argument -e,
+ * the FVA analysis is performed on all reactions.
  * 
  * @author lmarmiesse 6 mars 2013
  * 
@@ -94,7 +96,7 @@ public class FlexfluxCompFVA {
 	@Option(name = "-plot", usage = "[OPTIONAL, default = false]Plots the results")
 	public boolean plot = false;
 
-	@Option(name = "-e", usage = "[OPTIONAL]Biological entities to perfrom the FVA analysis on (Space-separated list of entities, example : \"R1 R2 G1 G2\"). If empty, FVA is done on all reactions", metaVar = "String")
+	@Option(name = "-e", usage = "[OPTIONAL]Biological entities to perform the FVA analysis on (Space-separated list of entities, example : \"R1 R2 G1 G2\"). If empty, FVA is done on all reactions", metaVar = "String")
 	public String entities = "";
 
 	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
@@ -146,8 +148,6 @@ public class FlexfluxCompFVA {
 			System.err.println("The number of threads must be at least 1");
 			System.exit(0);
 		}
-
-		
 
 		Bind bind = null;
 		Bind bind2 = null;
