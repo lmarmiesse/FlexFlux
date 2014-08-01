@@ -1,0 +1,5 @@
+ConditionCode	maxR_B	maxR_D
+C1	R1,R_A_EX,R_B_EX	R2,R_C_EX,R_D_EX
+C2	R1,R_A_EX,R_B_EX	
+C3	R1,R_A_EX,R_B_EX	R2,R_C_EX,R_D_EX
+C4	R1,R_A_EX,R_B_EX	

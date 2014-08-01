@@ -616,6 +616,7 @@ public abstract class Bind {
 				if (matcher.find()) {
 
 					if (matcher.groupCount() != 3) {
+						System.err.println(line);
 						System.err.println("Error in interaction file line "
 								+ nbLine + ", interaction not conform");
 
@@ -717,6 +718,7 @@ public abstract class Bind {
 				}
 
 				else {
+					System.err.println(line);
 					System.err.println("Error in interaction file line "
 							+ nbLine + ", interaction not conform");
 
@@ -747,7 +749,7 @@ public abstract class Bind {
 	 * @param binary
 	 *            If it is a binary entity.
 	 */
-	private void addRightEntityType(BioEntity b, boolean integer, boolean binary) {
+	public void addRightEntityType(BioEntity b, boolean integer, boolean binary) {
 		if (binary) {
 			intNet.addBinaryEntity(b);
 			return;
@@ -1102,7 +1104,7 @@ public abstract class Bind {
 	 *            If it is a binary entity.
 	 */
 
-	private void setRightEntityType(BioEntity entity, boolean integer,
+	public void setRightEntityType(BioEntity entity, boolean integer,
 			boolean binary) {
 
 		intNet.removeNumEntity(entity);
@@ -2058,6 +2060,9 @@ public abstract class Bind {
 	 * @param nbLine
 	 *            Line number of the interaction file.
 	 * @return The created Unique.
+	 * 
+	 * TODO : Manque de commentaires : a quoi ca sert ????
+	 * 
 	 */
 	private Unique makeUniqueFromCondition(String condition, int nbLine) {
 
@@ -2217,24 +2222,32 @@ public abstract class Bind {
 			try {
 				out = new PrintWriter(
 						new File(
-								"/home/lmarmiesse/Documents/FBA/FlexFlux/RemiTests/ralsto/FFres.tab"));
+								"/tmp/FFres.tab"));
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 			String s = "";
+			
+			
 			for (BioEntity ent : simpleConstraints.keySet()) {
 				s += ent.getId() + "\t";
 				toWrite.add(ent);
 			}
+			
+			
 			for (BioEntity ent : interactionNetworkSimpleConstraints.keySet()) {
+				
 				if (!toWrite.contains(ent)) {
 					s += ent.getId() + "\t";
 					toWrite.add(ent);
 				}
 			}
+			
+			
 			for (BioEntity ent : intNet.getTargetToInteractions().keySet()) {
+				
 				if (!toWrite.contains(ent)) {
 					s += ent.getId() + "\t";
 					toWrite.add(ent);
@@ -2520,6 +2533,18 @@ public abstract class Bind {
 
 		return steadyStateConstraints;
 	}
+	
+	
+	/**
+	 * 
+	 * @param e
+	 * @param c
+	 */
+	public void addSimpleConstraint(BioEntity e, Constraint c) {
+		this.simpleConstraints.put(e, c);
+	}
+	
+	
 	
 	
 	
