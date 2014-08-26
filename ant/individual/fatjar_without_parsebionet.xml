@@ -30,6 +30,7 @@
             <fatjar.jarsource file="${dir.build}/lib/junit-4.11.jar" relpath=""/>
             <fatjar.jarsource file="${dir.build}/lib/xerces.jar" relpath=""/>
             <fatjar.jarsource file="${dir.build}/lib/hamcrest-all-1.3.jar" relpath=""/>
+        	<fatjar.jarsource file="${dir.build}/lib/junit-addons-1.4/junit-addons-1.4.jar" relpath=""/>
         </fatjar.build>
     </target>
 </project>

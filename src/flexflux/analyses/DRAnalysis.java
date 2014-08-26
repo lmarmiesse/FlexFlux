@@ -142,7 +142,7 @@ public class DRAnalysis extends Analysis {
 		// to permit other analysis
 		b.getConstraints().removeAll(constraintsToAdd);
 
-		System.err.println("FVA over "
+		System.err.println("DR over "
 				+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
 				+ Vars.maxThread + " threads");
 

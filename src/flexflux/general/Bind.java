@@ -193,12 +193,11 @@ public abstract class Bind {
 	 */
 	public abstract void entitiesToSolverVars();
 
-	
 	/**
 	 * List used for FBA to know which variables are constrained.
 	 */
 	public List<BioEntity> constrainedEntities = new ArrayList<BioEntity>();
-	
+
 	/**
 	 * Creates a constraint for the solver.
 	 * 
@@ -210,15 +209,15 @@ public abstract class Bind {
 	 *            is used to come back to how it was before.
 	 */
 
-	protected  void makeSolverConstraint(Constraint c,
-			List<Object> toRemoveFromModel, Map<String, double[]> oldBounds){
-		
+	protected void makeSolverConstraint(Constraint c,
+			List<Object> toRemoveFromModel, Map<String, double[]> oldBounds) {
+
 		constrainedEntities.addAll(c.getEntities().keySet());
-		
+
 		createSolverConstraint(c, toRemoveFromModel, oldBounds);
-		
+
 	}
-	
+
 	protected abstract void createSolverConstraint(Constraint c,
 			List<Object> toRemoveFromModel, Map<String, double[]> oldBounds);
 
@@ -568,7 +567,7 @@ public abstract class Bind {
 					nbLine++;
 					continue;
 				}
-				
+
 				Relation ifRelation = null;
 				Unique thenRelation = null;
 				Unique elseRelation = null;
@@ -583,6 +582,7 @@ public abstract class Bind {
 				if (matcher.find()) {
 
 					if (matcher.groupCount() != 3) {
+						System.err.println(line);
 						System.err.println("Error in interaction file line "
 								+ nbLine + ", interaction not conform");
 
@@ -591,10 +591,10 @@ public abstract class Bind {
 
 					String[] ifPart = matcher.group(1).split("\\]\\[");
 					ifRelation = makeRelationFromString(ifPart[0], nbLine);
-					
+
 					String[] thenPart = matcher.group(2).split("\\]\\[");
 					thenRelation = makeUniqueFromCondition(thenPart[0], nbLine);
-					
+
 					if (thenPart.length > 1) {
 						thenBegins = Double.parseDouble(thenPart[1]);
 					}
@@ -612,7 +612,7 @@ public abstract class Bind {
 						elseLasts = Double.parseDouble(elsePart[2]);
 					}
 
-					/////ERROR HANDLING
+					// ///ERROR HANDLING
 					String thenEntity = thenPart[0].replaceAll("\\s", "")
 							.split("<=|>=|=|<|>|\\*")[0];
 
@@ -626,7 +626,7 @@ public abstract class Bind {
 										+ ", not the same entity in the THEN and the ELSE part");
 						System.exit(0);
 					}
-					/////
+					// ///
 
 					// /////////// we create and add the interactions
 					Interaction thenInteraction = relationFactory
@@ -686,6 +686,7 @@ public abstract class Bind {
 				}
 
 				else {
+					System.err.println(line);
 					System.err.println("Error in interaction file line "
 							+ nbLine + ", interaction not conform");
 
@@ -716,7 +717,7 @@ public abstract class Bind {
 	 * @param binary
 	 *            If it is a binary entity.
 	 */
-	private void addRightEntityType(BioEntity b, boolean integer, boolean binary) {
+	public void addRightEntityType(BioEntity b, boolean integer, boolean binary) {
 		if (binary) {
 			intNet.addBinaryEntity(b);
 			return;
@@ -1040,7 +1041,7 @@ public abstract class Bind {
 					constraintObjectives.add(makeObjectiveFromString(objStr,
 							objStringMap.get(objStr), objStr));
 				}
-				
+
 			}
 
 			if (isError) {
@@ -1071,7 +1072,7 @@ public abstract class Bind {
 	 *            If it is a binary entity.
 	 */
 
-	private void setRightEntityType(BioEntity entity, boolean integer,
+	public void setRightEntityType(BioEntity entity, boolean integer,
 			boolean binary) {
 
 		intNet.removeNumEntity(entity);
@@ -1637,7 +1638,7 @@ public abstract class Bind {
 
 				}
 			}
-			
+
 			constraints.add(c);
 
 		}
@@ -1683,7 +1684,6 @@ public abstract class Bind {
 	 *            true : uses extended SBML format.
 	 */
 	private void gprInteractions(boolean ext) {
-
 
 		Map<String, BioChemicalReaction> reactionsMap = bioNet
 				.getBiochemicalReactionList();
@@ -2026,6 +2026,9 @@ public abstract class Bind {
 	 * @param nbLine
 	 *            Line number of the interaction file.
 	 * @return The created Unique.
+	 * 
+	 *         TODO : Manque de commentaires : a quoi ca sert ????
+	 * 
 	 */
 	private Unique makeUniqueFromCondition(String condition, int nbLine) {
 
@@ -2166,7 +2169,6 @@ public abstract class Bind {
 		Map<BioEntity, Constraint> thisStepSimpleConstraints = new HashMap<BioEntity, Constraint>();
 
 		for (BioEntity b : simpleConstraints.keySet()) {
-			System.out.println(b.getId());
 			thisStepSimpleConstraints.put(b, simpleConstraints.get(b));
 		}
 		for (BioEntity b : interactionNetworkSimpleConstraints.keySet()) {
@@ -2188,14 +2190,20 @@ public abstract class Bind {
 			for (BioEntity ent : simpleConstraints.keySet()) {
 				toWrite.put(ent, new ArrayList<String>());
 			}
+
 			for (BioEntity ent : interactionNetworkSimpleConstraints.keySet()) {
+
 				if (!toWrite.containsKey(ent)) {
 					toWrite.put(ent, new ArrayList<String>());
+
 				}
 			}
+
 			for (BioEntity ent : intNet.getTargetToInteractions().keySet()) {
+
 				if (!toWrite.containsKey(ent)) {
 					toWrite.put(ent, new ArrayList<String>());
+
 				}
 			}
 		}
@@ -2204,9 +2212,10 @@ public abstract class Bind {
 
 		for (int it = 1; it < Vars.steadyStatesIterations; it++) {
 
-			// ////////////////////////////////////////WRITE TO FILE, TO CHANGE
+			// ////////////////////////////////////////WRITE TO FILE
 			if (Vars.writeInteractionNetworkStates) {
 				for (BioEntity ent : toWrite.keySet()) {
+					
 					if (thisStepSimpleConstraints.get(ent) != null) {
 						double lb = thisStepSimpleConstraints.get(ent).getLb();
 						double ub = thisStepSimpleConstraints.get(ent).getUb();
@@ -2363,42 +2372,49 @@ public abstract class Bind {
 		List<Constraint> steadyStateConstraints = new ArrayList<Constraint>();
 
 		if (attractorSimpleConstraints.size() != 0) {
-			
+
 			for (BioEntity b : attractorSimpleConstraints.get(0).keySet()) {
 
 				if (intNet.getTargetToInteractions().containsKey(b)) {
-					
-					//We make the average of the values of all states of the attractor
-					double lb=0;
-					double ub=0;
-					for (int nb=0;nb<attractorSimpleConstraints.size();nb++){
-						lb+=attractorSimpleConstraints.get(nb).get(b).getLb();
-						ub+=attractorSimpleConstraints.get(nb).get(b).getUb();
+
+					// We make the average of the values of all states of the
+					// attractor
+					double lb = 0;
+					double ub = 0;
+					for (int nb = 0; nb < attractorSimpleConstraints.size(); nb++) {
+						
+						lb += attractorSimpleConstraints.get(nb).get(b).getLb();
+						ub += attractorSimpleConstraints.get(nb).get(b).getUb();
 					}
-					
-					lb=lb/attractorSimpleConstraints.size();
-					ub=ub/attractorSimpleConstraints.size();
-					
-					Map<BioEntity,Double> constMap = new HashMap<BioEntity,Double>();
+
+					lb = lb / attractorSimpleConstraints.size();
+					ub = ub / attractorSimpleConstraints.size();
+
+					Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
 					constMap.put(b, 1.0);
-					steadyStateConstraints.add(new Constraint(constMap,lb,ub));
+					steadyStateConstraints
+							.add(new Constraint(constMap, lb, ub));
 				}
 			}
 		}
 
+		
 		if (Vars.writeInteractionNetworkStates) {
 
 			PrintWriter out = null;
-
+			
 			try {
 				System.out.println(statesFileName);
 				out = new PrintWriter(new File(statesFileName));
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				
 			}
 
 			for (BioEntity ent : toWrite.keySet()) {
+				
+			
 
 				out.print(ent.getId());
 
@@ -2412,7 +2428,7 @@ public abstract class Bind {
 
 			out.close();
 		}
-		
+
 		return steadyStateConstraints;
 	}
 
@@ -2507,5 +2523,14 @@ public abstract class Bind {
 
 		return steadyStateConstraints;
 	}
-	
+
+	/**
+	 * 
+	 * @param e
+	 * @param c
+	 */
+	public void addSimpleConstraint(BioEntity e, Constraint c) {
+		this.simpleConstraints.put(e, c);
+	}
+
 }

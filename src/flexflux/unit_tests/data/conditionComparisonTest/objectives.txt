@@ -1,0 +1,2 @@
+maxR_B	MAX(R_B_EX)
+maxR_D	MAX(R_D_EX)
