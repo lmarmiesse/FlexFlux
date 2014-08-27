@@ -89,7 +89,7 @@ public abstract class Bind {
 	private Map<BioEntity, Double> defaultValues = new HashMap<BioEntity, Double>();
 
 	/**
-	 * Used for pareto analysis, if set to false, the objective in the condition
+	 * Used for pareto analysis and conditionComparison, if set to false, the objective in the condition
 	 * file is ignored.
 	 */
 	private boolean loadObjective = true;
@@ -194,6 +194,11 @@ public abstract class Bind {
 	public abstract void entitiesToSolverVars();
 
 	/**
+	 * List used for FBA to know which variables are constrained.
+	 */
+	public List<BioEntity> constrainedEntities = new ArrayList<BioEntity>();
+
+	/**
 	 * Creates a constraint for the solver.
 	 * 
 	 * @param c
@@ -204,7 +209,16 @@ public abstract class Bind {
 	 *            is used to come back to how it was before.
 	 */
 
-	protected abstract void makeSolverConstraint(Constraint c,
+	protected void makeSolverConstraint(Constraint c,
+			List<Object> toRemoveFromModel, Map<String, double[]> oldBounds) {
+
+		constrainedEntities.addAll(c.getEntities().keySet());
+
+		createSolverConstraint(c, toRemoveFromModel, oldBounds);
+
+	}
+
+	protected abstract void createSolverConstraint(Constraint c,
 			List<Object> toRemoveFromModel, Map<String, double[]> oldBounds);
 
 	/**
@@ -370,10 +384,6 @@ public abstract class Bind {
 				constraintsToAdd.addAll(intNetSteadyStateConstraints);
 				constraintsToAdd.addAll(GPRConstraints);
 
-				// System.err.println(GPRConstraints.size());
-				// for (Constraint c : GPRConstraints){
-				// System.err.println(c);
-				// }
 			}
 
 			return goWithConstraints(constraintsToAdd, saveResults);
@@ -558,60 +568,16 @@ public abstract class Bind {
 					continue;
 				}
 
-				// ////////////////////////////DEFAULT VALUE HANDLEING
-				Pattern pattern = Pattern
-						.compile("IF\\[([_a-zA-Z0-9]+)=\\?]THEN\\[([_a-zA-Z0-9]+)=([_a-zA-Z0-9]+)\\]");
-
-				Matcher matcher = pattern.matcher(line);
-
-				// if a default value is set
-				if (matcher.find()) {
-
-					if (!matcher.group(2).equals(matcher.group(1))) {
-
-						System.err.println("Error in default value line "
-								+ nbLine + " " + matcher.group(1) + " and "
-								+ matcher.group(2) + " don't match");
-						System.exit(0);
-					}
-
-					// if the entity does not exist yet
-					if (intNet.getEntity(matcher.group(1)) == null) {
-
-						System.err
-								.println("Error : unknown variable in interaction file : "
-										+ matcher.group(1) + " line " + nbLine);
-						System.exit(0);
-					}
-
-					BioEntity ent = intNet.getEntity(matcher.group(1));
-					double value = 0;
-
-					try {
-						value = Double.parseDouble(matcher.group(3));
-					} catch (Exception e) {
-
-						System.err.println("Error in interaction file line "
-								+ nbLine);
-						System.exit(0);
-					}
-
-					defaultValues.put(ent, value);
-
-					continue;
-				}
-				// ////////////////////////////
-
 				Relation ifRelation = null;
 				Unique thenRelation = null;
 				Unique elseRelation = null;
 
 				double thenBegins = 0.0, thenLasts = 0.0, elseBegins = 0.0, elseLasts = 0.0;
 
-				pattern = Pattern
+				Pattern pattern = Pattern
 						.compile("IF\\[([^\\]]*)\\]THEN\\[(.*)\\]ELSE\\[(.*)\\]");
 
-				matcher = pattern.matcher(line);
+				Matcher matcher = pattern.matcher(line);
 
 				if (matcher.find()) {
 
@@ -646,6 +612,7 @@ public abstract class Bind {
 						elseLasts = Double.parseDouble(elsePart[2]);
 					}
 
+					// ///ERROR HANDLING
 					String thenEntity = thenPart[0].replaceAll("\\s", "")
 							.split("<=|>=|=|<|>|\\*")[0];
 
@@ -659,6 +626,7 @@ public abstract class Bind {
 										+ ", not the same entity in the THEN and the ELSE part");
 						System.exit(0);
 					}
+					// ///
 
 					// /////////// we create and add the interactions
 					Interaction thenInteraction = relationFactory
@@ -1717,8 +1685,6 @@ public abstract class Bind {
 	 */
 	private void gprInteractions(boolean ext) {
 
-		int go = 0;
-
 		Map<String, BioChemicalReaction> reactionsMap = bioNet
 				.getBiochemicalReactionList();
 
@@ -2061,7 +2027,7 @@ public abstract class Bind {
 	 *            Line number of the interaction file.
 	 * @return The created Unique.
 	 * 
-	 * TODO : Manque de commentaires : a quoi ca sert ????
+	 *         TODO : Manque de commentaires : a quoi ca sert ????
 	 * 
 	 */
 	private Unique makeUniqueFromCondition(String condition, int nbLine) {
@@ -2183,6 +2149,8 @@ public abstract class Bind {
 		return deadReactions;
 	}
 
+	public String statesFileName = "";
+
 	/**
 	 * 
 	 * Find a steady state in the interaction network and return the constraints
@@ -2193,7 +2161,7 @@ public abstract class Bind {
 
 		Set<Interaction> toCheck = new HashSet<Interaction>();
 		toCheck.addAll(intNet.getAddedInteractions());
-		if (intNet.getTargetToInteractions().isEmpty()){
+		if (intNet.getTargetToInteractions().isEmpty()) {
 			return new ArrayList<Constraint>();
 		}
 
@@ -2214,73 +2182,59 @@ public abstract class Bind {
 
 		int attractorSize = 0;
 
-		// ////////////////////////////////////////WRITE TO FILE, TO CHANGE
-		PrintWriter out = null;
-		List<BioEntity> toWrite = new ArrayList<BioEntity>();
+		// ////////////////////////////////////////WRITE TO FILE
+
+		Map<BioEntity, List<String>> toWrite = new HashMap<BioEntity, List<String>>();
 		if (Vars.writeInteractionNetworkStates) {
 
-			try {
-				out = new PrintWriter(
-						new File(
-								"/tmp/FFres.tab"));
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			for (BioEntity ent : simpleConstraints.keySet()) {
+				toWrite.put(ent, new ArrayList<String>());
 			}
 
-			String s = "";
-			
-			
-			for (BioEntity ent : simpleConstraints.keySet()) {
-				s += ent.getId() + "\t";
-				toWrite.add(ent);
-			}
-			
-			
 			for (BioEntity ent : interactionNetworkSimpleConstraints.keySet()) {
-				
-				if (!toWrite.contains(ent)) {
-					s += ent.getId() + "\t";
-					toWrite.add(ent);
+
+				if (!toWrite.containsKey(ent)) {
+					toWrite.put(ent, new ArrayList<String>());
+
 				}
 			}
-			
-			
+
 			for (BioEntity ent : intNet.getTargetToInteractions().keySet()) {
-				
-				if (!toWrite.contains(ent)) {
-					s += ent.getId() + "\t";
-					toWrite.add(ent);
+
+				if (!toWrite.containsKey(ent)) {
+					toWrite.put(ent, new ArrayList<String>());
+
 				}
 			}
-			out.println(s);
 		}
 
 		// ////////////////////////////////////////
 
 		for (int it = 1; it < Vars.steadyStatesIterations; it++) {
 
-			// ////////////////////////////////////////WRITE TO FILE, TO CHANGE
+			// ////////////////////////////////////////WRITE TO FILE
 			if (Vars.writeInteractionNetworkStates) {
-				String line = "";
-				for (BioEntity ent : toWrite) {
+				for (BioEntity ent : toWrite.keySet()) {
+					
 					if (thisStepSimpleConstraints.get(ent) != null) {
 						double lb = thisStepSimpleConstraints.get(ent).getLb();
 						double ub = thisStepSimpleConstraints.get(ent).getUb();
 
 						if (lb == ub) {
-							line += lb + "\t";
-						} else {
-							line += lb + ";" + ub + "\t";
 
+							toWrite.get(ent).add(String.valueOf(lb));
+						} else {
+
+							toWrite.get(ent).add(
+									String.valueOf(lb) + ";"
+											+ String.valueOf(ub));
 						}
 
 					} else {
-						line += "?\t";
+						toWrite.get(ent).add("?");
 					}
 				}
-				// System.err.println(line);
-				out.println(line);
+
 			}
 
 			if (thisStepSimpleConstraints.size() == 0) {
@@ -2400,7 +2354,7 @@ public abstract class Bind {
 												.get(ent)));
 						checkedEntities.add(ent);
 					} else {
-						//we say it is undetermined only if it is a target
+						// we say it is undetermined only if it is a target
 						if (intNet.getTargetToInteractions().containsKey(ent)) {
 							toRemove.add(ent);
 						}
@@ -2419,26 +2373,62 @@ public abstract class Bind {
 
 		if (attractorSimpleConstraints.size() != 0) {
 
-			int nb = attractorSimpleConstraints.size() - 1;
-			// int nb = 0;
-//			System.out.println(attractorSimpleConstraints.get(nb).size());
-
-			for (BioEntity b : attractorSimpleConstraints.get(nb).keySet()) {
+			for (BioEntity b : attractorSimpleConstraints.get(0).keySet()) {
 
 				if (intNet.getTargetToInteractions().containsKey(b)) {
-//					System.out.println(attractorSimpleConstraints.get(
-//							attractorSimpleConstraints.size() - 1).get(b));
-					steadyStateConstraints.add(attractorSimpleConstraints.get(
-							nb).get(b));
+
+					// We make the average of the values of all states of the
+					// attractor
+					double lb = 0;
+					double ub = 0;
+					for (int nb = 0; nb < attractorSimpleConstraints.size(); nb++) {
+						
+						lb += attractorSimpleConstraints.get(nb).get(b).getLb();
+						ub += attractorSimpleConstraints.get(nb).get(b).getUb();
+					}
+
+					lb = lb / attractorSimpleConstraints.size();
+					ub = ub / attractorSimpleConstraints.size();
+
+					Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
+					constMap.put(b, 1.0);
+					steadyStateConstraints
+							.add(new Constraint(constMap, lb, ub));
 				}
 			}
 		}
 
+		
 		if (Vars.writeInteractionNetworkStates) {
+
+			PrintWriter out = null;
+			
+			try {
+				System.out.println(statesFileName);
+				out = new PrintWriter(new File(statesFileName));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				
+			}
+
+			for (BioEntity ent : toWrite.keySet()) {
+				
+			
+
+				out.print(ent.getId());
+
+				for (String s : toWrite.get(ent)) {
+					out.print("\t");
+					out.print(s);
+				}
+				out.print("\n");
+
+			}
+
 			out.close();
 		}
 
-//		 System.out.println(steadyStateConstraints.size());
 		return steadyStateConstraints;
 	}
 
@@ -2533,8 +2523,7 @@ public abstract class Bind {
 
 		return steadyStateConstraints;
 	}
-	
-	
+
 	/**
 	 * 
 	 * @param e
@@ -2543,9 +2532,5 @@ public abstract class Bind {
 	public void addSimpleConstraint(BioEntity e, Constraint c) {
 		this.simpleConstraints.put(e, c);
 	}
-	
-	
-	
-	
-	
+
 }
