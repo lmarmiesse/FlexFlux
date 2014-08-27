@@ -160,6 +160,8 @@ public class ReacAnalysisResult extends AnalysisResult {
 
 		for (double x = init; x <= end; x += deltaF) {
 			for (double group : this.shadowPriceGroups.keySet()) {
+				
+			
 
 				if (notYetAddedGroup.contains(group)) {
 

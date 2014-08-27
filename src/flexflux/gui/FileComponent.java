@@ -17,35 +17,35 @@ import javax.swing.JTextField;
  */
 public class FileComponent extends ArgumentComponent {
 
-	JTextField textField = new JTextField(10);
-	JButton chooserButton = new JButton("Choose file");
-	final JFileChooser fc = new JFileChooser(".");
+	private JTextField textField = new JTextField(10);
+	private JButton chooserButton = new JButton("Choose file");
+	private JFileChooser fc;
 	
+	private static String lastUsedDirectory = ".";
 	
 	public FileComponent(String arg) {
 		super(arg);
-
+		
 		add(textField);
 		add(chooserButton);
-		
 		
 		chooserButton.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent arg0) {
 				
+				fc = new JFileChooser(lastUsedDirectory);
+				
 				int returnVal = fc.showOpenDialog(FileComponent.this);
-
+				
 		        if (returnVal == JFileChooser.APPROVE_OPTION) {
 		            File file = fc.getSelectedFile();
 		            
+		            lastUsedDirectory=file.getAbsolutePath();
 		            textField.setText(file.getAbsolutePath());
+		            
 		        } 
 				
 			}
-			
-			
-			
-			
 		});
 		
 		

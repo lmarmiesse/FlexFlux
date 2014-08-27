@@ -144,44 +144,22 @@ public class GuiRunAnalysis extends Thread {
 
 			BufferedReader stdInput = new BufferedReader(new InputStreamReader(
 					p.getInputStream()));
-			BufferedReader stdError = new BufferedReader(new InputStreamReader(
-					p.getErrorStream()));
 
-			int ci;
+			String line;
+
 			double t1 = System.currentTimeMillis();
-			while ((ci = stdInput.read()) != -1) {
-				char c = (char) ci;
 
-				logContent += c;
+			while ((line = stdInput.readLine()) != null) {
+				logContent += line + "\n";
+
 				double t2 = System.currentTimeMillis();
-
-				if (t2 - t1 > 500) {
+				if (t2 - t1 > 100) {
 					logArea.setText(logContent);
 					logArea.setCaretPosition(logArea.getText().length());
 					t1 = t2;
 				}
 
 			}
-
-			logArea.setText(logContent);
-			logArea.setCaretPosition(logArea.getText().length());
-
-			while ((ci = stdError.read()) != -1) {
-				char c = (char) ci;
-
-				logContent += c;
-				double t2 = System.currentTimeMillis();
-
-				if (t2 - t1 > 500) {
-					logArea.setText(logContent);
-					logArea.setCaretPosition(logArea.getText().length());
-					t1 = t2;
-				}
-
-			}
-
-			logArea.setText(logContent);
-			logArea.setCaretPosition(logArea.getText().length());
 
 			logContent += "Command line : \n";
 

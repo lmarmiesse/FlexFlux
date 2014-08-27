@@ -57,7 +57,7 @@ public class FBAAnalysis extends Analysis {
 	public FBAResult runAnalysis() {
 
 		FBAResult result = new FBAResult(b);
-		Vars.writeInteractionNetworkStates = true;
+
 
 		DoubleResult objValue = b.FBA(new ArrayList<Constraint>(), true, true);
 
@@ -73,6 +73,7 @@ public class FBAAnalysis extends Analysis {
 			result.setObjValue(objValue.result);
 
 		}
+		result.formatResult();
 		return (FBAResult) result;
 	}
 
