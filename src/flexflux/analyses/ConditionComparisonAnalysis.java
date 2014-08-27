@@ -32,6 +32,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 	String conditionFile = "";
 	String objectiveFile = "";
 	String interactionFile = "";
+	String constraintFile = "";
 	String sbmlFile = "";
 	Boolean extended = false;
 	String solver = "GLPK";
@@ -49,7 +50,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 	public HashMap<String, String> objectives = new HashMap<String, String>();
 
 	public ConditionComparisonAnalysis(Bind bind, String sbmlFile,
-			String interactionFile, String conditionFile, String objectiveFile,
+			String interactionFile, String conditionFile, String constraintFile, String objectiveFile,
 			ConstraintType type, Boolean extended, String solver) {
 
 		super(bind);
@@ -61,6 +62,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 		this.interactionFile = interactionFile;
 		this.objectiveFile = objectiveFile;
 		this.constraintType = type;
+		this.constraintFile = constraintFile;
 
 		/**
 		 * Reads the conditionFile
@@ -82,6 +84,12 @@ public class ConditionComparisonAnalysis extends Analysis {
 				Sbml2Bionetwork parser = new Sbml2Bionetwork(this.sbmlFile,
 						extended);
 				this.network = parser.getBioNetwork();
+				
+				/**
+				 * Loads the constraints applied on the metabolic network
+				 */
+				if(this.constraintFile != "")
+					bind.loadConditionsFile(this.constraintFile);
 			}
 		}
 	}
@@ -153,8 +161,10 @@ public class ConditionComparisonAnalysis extends Analysis {
 		/**
 		 * Loads interaction file
 		 */
-		if (this.interactionFile.compareTo("") != 0)
+		if (this.interactionFile.compareTo("") != 0) {
+			System.err.println("Load interaction file");
 			b.loadInteractionsFile(this.interactionFile);
+		}
 
 		
 		String expr = objectives.get(objName);
@@ -219,14 +229,11 @@ public class ConditionComparisonAnalysis extends Analysis {
 
 		for (String objName : objectiveNames) {
 
-			
-
 			for (Condition condition : conditions) {
 
 				// We reinit the bind
 				this.init(objName, condition);
 
-				
 				/**
 				 * Computes FBA
 				 */

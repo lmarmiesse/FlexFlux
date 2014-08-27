@@ -30,10 +30,13 @@ public class FlexfluxConditionComparison {
 	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-c", usage = "File containing several conditions", metaVar = "File", required = true)
+	@Option(name = "-cond", usage = "File containing several conditions", metaVar = "File", required = true)
 	public String conditionFile = "";
+	
+	@Option(name = "-cons", usage = "File containing the constraints applied on the metabolic network", metaVar = "File", required = false)
+	public String constraintFile = "";
 
-	@Option(name = "-o", usage = "File containing the objectiver functions", metaVar = "File", required = true)
+	@Option(name = "-o", usage = "File containing the objective functions", metaVar = "File", required = true)
 	public String objectiveFile = "";
 
 	@Option(name = "-int", usage = "[OPTIONAL]Interaction file path", metaVar = "File")
@@ -136,11 +139,11 @@ public class FlexfluxConditionComparison {
 							+ f.solver + ".");
 			System.exit(0);
 		}
-
-		/**
-		 * Loads the metabolic network
-		 */
-		bind.loadSbmlNetwork(f.sbmlFile, f.extended);
+		
+		bind.setLoadObjective(false);
+		if (f.constraintFile != "") {
+			bind.loadConditionsFile(f.constraintFile);
+		}
 
 		ConstraintType c;
 		if (f.type == "BINARY") {
@@ -152,7 +155,7 @@ public class FlexfluxConditionComparison {
 		}
 
 		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
-				f.sbmlFile, f.intFile, f.conditionFile, f.objectiveFile, c, f.extended, 
+				f.sbmlFile, f.intFile, f.conditionFile, f.constraintFile, f.objectiveFile, c, f.extended, 
 				f.solver);
 		
 		AnalysisResult r = a.runAnalysis();
