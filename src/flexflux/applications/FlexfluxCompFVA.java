@@ -68,7 +68,7 @@ import parsebionet.biodata.BioEntity;
  */
 public class FlexfluxCompFVA {
 
-	public String message = "FlexfluxCompFVA [options...]\n"
+	public static String message = "FlexfluxCompFVA\n"
 
 			+ "Compares the results of two FVA analyses given a metabolic network, an objective function and two different set of constraints.\n"
 			+ "An FVA analysis consists in getting the optimal value for the objective function, setting this value as a\n"

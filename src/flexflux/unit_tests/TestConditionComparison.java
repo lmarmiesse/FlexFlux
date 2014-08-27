@@ -56,15 +56,16 @@ public class TestConditionComparison {
 		java.nio.file.Path tmpResultUsed = null;
 		java.nio.file.Path tmpResultDead = null;
 
-		Vars.writeInteractionNetworkStates = true;
-		
+//		Vars.writeInteractionNetworkStates = true;
+
 		try {
 			tmpSbml = java.nio.file.Files.createTempFile("test", ".xml");
 			tmpCondition = java.nio.file.Files.createTempFile("test", ".tab");
 			tmpInteraction = java.nio.file.Files.createTempFile("test", ".txt");
 			tmpObjective = java.nio.file.Files.createTempFile("test", ".tab");
 			tmpResultFba = java.nio.file.Files.createTempFile("test", ".tab");
-			tmpResultEssential = java.nio.file.Files.createTempFile("test", ".tab");
+			tmpResultEssential = java.nio.file.Files.createTempFile("test",
+					".tab");
 			tmpResultUsed = java.nio.file.Files.createTempFile("test", ".tab");
 			tmpResultDead = java.nio.file.Files.createTempFile("test", ".tab");
 
@@ -82,14 +83,11 @@ public class TestConditionComparison {
 		tempResultEssentialFile = tmpResultEssential.toFile();
 		tempResultUsedFile = tmpResultUsed.toFile();
 		tempResultDeadFile = tmpResultDead.toFile();
-		
-		
-		String referenceFbaFile  ="";
-		String referenceEssentialFile  ="";
-		String referenceUsedFile  ="";
-		String referenceDeadFile  ="";
-		
-		
+
+		String referenceFbaFile = "";
+		String referenceEssentialFile = "";
+		String referenceUsedFile = "";
+		String referenceDeadFile = "";
 
 		try {
 			f.sbmlFile = TestUtils
@@ -104,12 +102,12 @@ public class TestConditionComparison {
 					.copyProjectResource(
 							"flexflux/unit_tests/data/conditionComparisonTest/interactions.txt",
 							tempInteractionFile);
-			
+
 			f.objectiveFile = TestUtils
 					.copyProjectResource(
 							"flexflux/unit_tests/data/conditionComparisonTest/objectives.txt",
 							tempObjectiveFile);
-			
+
 			referenceFbaFile = TestUtils
 					.copyProjectResource(
 							"flexflux/unit_tests/data/conditionComparisonTest/resultFBA.tab",
@@ -126,19 +124,20 @@ public class TestConditionComparison {
 					.copyProjectResource(
 							"flexflux/unit_tests/data/conditionComparisonTest/resultDead.tab",
 							tempResultDeadFile);
-			
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Assert.fail("problem while copying the reference files");
 		}
-		
+
 		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
 				f.sbmlFile, f.intFile, f.conditionFile, "", f.objectiveFile,
 				ConstraintType.DOUBLE, false, solver);
+
 		
 		AnalysisResult r = a.runAnalysis();
+		
 
 		File createdFolder;
 		String dir = "";
@@ -150,35 +149,43 @@ public class TestConditionComparison {
 		}
 
 		basePath = dir + "/test_";
-
+		
 		r.writeToFile(basePath);
 
 		String pathFileTest = basePath + "fba_results";
 		File fileTest = new File(pathFileTest);
 		File fileRef = new File(referenceFbaFile);
+
 		
-		FileAssert.assertEquals("Fba results are different from the reference", fileRef, fileTest);
+		FileAssert.assertEquals("Fba results are different from the reference",
+				fileRef, fileTest);
 		
 		
+
 		pathFileTest = basePath + "essential_reactions";
 		fileTest = new File(pathFileTest);
 		fileRef = new File(referenceEssentialFile);
-		
-		FileAssert.assertEquals("Essential reactions are different from the reference", fileRef, fileTest);
-		
+
+		FileAssert.assertEquals(
+				"Essential reactions are different from the reference",
+				fileRef, fileTest);
+
 		pathFileTest = basePath + "used_reactions";
 		fileTest = new File(pathFileTest);
 		fileRef = new File(referenceUsedFile);
-		
-		FileAssert.assertEquals("Used reactions are different from the reference", fileRef, fileTest);
-		
+
+		FileAssert.assertEquals(
+				"Used reactions are different from the reference", fileRef,
+				fileTest);
+
 		pathFileTest = basePath + "dead_reactions";
 		fileTest = new File(pathFileTest);
 		fileRef = new File(referenceDeadFile);
-		
-		FileAssert.assertEquals("Dead reactions are different from the reference", fileRef, fileTest);
-		
-		
+
+		FileAssert.assertEquals(
+				"Dead reactions are different from the reference", fileRef,
+				fileTest);
+
 	}
 
 	@AfterClass

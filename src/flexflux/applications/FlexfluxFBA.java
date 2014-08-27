@@ -33,6 +33,16 @@
  */
 package flexflux.applications;
 
+import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
+import org.kohsuke.args4j.Option;
+
+import parsebionet.biodata.BioChemicalReaction;
+import parsebionet.biodata.BioPhysicalEntityParticipant;
 import flexflux.analyses.Analysis;
 import flexflux.analyses.FBAAnalysis;
 import flexflux.analyses.result.AnalysisResult;
@@ -41,25 +51,20 @@ import flexflux.general.CplexBind;
 import flexflux.general.GLPKBind;
 import flexflux.general.Vars;
 
-import java.io.File;
-
-import org.kohsuke.args4j.CmdLineException;
-import org.kohsuke.args4j.CmdLineParser;
-import org.kohsuke.args4j.Option;
-
 /**
  * 
- * Computes an FBA analysis given a metabolic network, an objective function and constraints.
+ * Computes an FBA analysis given a metabolic network, an objective function and
+ * constraints.
  * 
  * @author lmarmiesse 6 mars 2013
  * 
  */
 public class FlexfluxFBA {
 
-	public String message = "FlexfluxFBA [options...]\n"
+	public static String message = "FlexfluxFBA [options...]\n"
 			+ "Computes an FBA given a metabolic network, an objective function and constraints.";
 
-	public String example = "Example : FlexfluxFBA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt";
+	public String example = "Example : FlexfluxFBA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -states res.tab";
 
 	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
 	public String sbmlFile = "";
@@ -78,6 +83,9 @@ public class FlexfluxFBA {
 
 	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
 	public String outName = "";
+
+	@Option(name = "-states", usage = "[OPTIONAL]Interaction network states file name", metaVar = "File")
+	public String stateFile = "";
 
 	@Option(name = "-lib", usage = "[OPTIONAL, default = 0]Percentage of non optimality for new constraints", metaVar = "Double")
 	public double liberty = 0;
@@ -116,8 +124,6 @@ public class FlexfluxFBA {
 		Vars.libertyPercentage = f.liberty;
 		Vars.decimalPrecision = f.precision;
 
-	
-
 		Bind bind = null;
 
 		if (!new File(f.sbmlFile).isFile()) {
@@ -154,6 +160,11 @@ public class FlexfluxFBA {
 			System.exit(0);
 		}
 
+		if (f.stateFile != "") {
+			Vars.writeInteractionNetworkStates = true;
+			bind.statesFileName=f.stateFile;
+		}
+		
 		bind.loadSbmlNetwork(f.sbmlFile, f.extended);
 		if (f.condFile != "") {
 			bind.loadConditionsFile(f.condFile);
@@ -172,7 +183,7 @@ public class FlexfluxFBA {
 		if (!f.outName.equals("")) {
 			result.writeToFile(f.outName);
 		}
-
+	
 		bind.end();
 	}
 }

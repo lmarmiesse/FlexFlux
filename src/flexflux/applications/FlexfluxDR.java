@@ -66,7 +66,7 @@ import parsebionet.io.Sbml2Bionetwork;
  */
 public class FlexfluxDR {
 
-	public String message = "FlexfluxDR [options...]\n"
+	public static String message = "FlexfluxDR\n"
 
 	+ "Finds dead reactions in a given metabolic network.\n"
 			+ "Dead reactions are those unable to carry a steady state flux.";

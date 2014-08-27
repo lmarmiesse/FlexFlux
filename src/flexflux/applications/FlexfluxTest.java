@@ -21,7 +21,7 @@ public class FlexfluxTest {
 
 	public static List<String> okSolvers = new ArrayList<String>();
 	
-	public String message = "Sover test function";
+	public static String message = "Solver test function";
 	
 	public static void main(String[] args) {
 

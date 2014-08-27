@@ -74,7 +74,7 @@ import parsebionet.biodata.BioEntity;
  */
 public class FlexfluxRFBA {
 
-	public String message = "FlexfluxRFBA [options...]\n"
+	public static String message = "FlexfluxRFBA\n"
 
 			+ "Computes a time dependent analysis given a metabolic network, an objective function and constraints.\n"
 			+ "This analysis is based on external metabolic concentrations and cell density.\n"
