@@ -89,7 +89,7 @@ public abstract class Bind {
 	private Map<BioEntity, Double> defaultValues = new HashMap<BioEntity, Double>();
 
 	/**
-	 * Used for pareto analysis, if set to false, the objective in the condition
+	 * Used for pareto analysis and conditionComparison, if set to false, the objective in the condition
 	 * file is ignored.
 	 */
 	private boolean loadObjective = true;
