@@ -85,11 +85,6 @@ public class ConditionComparisonAnalysis extends Analysis {
 						extended);
 				this.network = parser.getBioNetwork();
 				
-				/**
-				 * Loads the constraints applied on the metabolic network
-				 */
-				if(this.constraintFile != "")
-					bind.loadConditionsFile(this.constraintFile);
 			}
 		}
 	}
@@ -126,6 +121,8 @@ public class ConditionComparisonAnalysis extends Analysis {
 			return false;
 		}
 
+		b.setLoadObjective(false);
+		
 		Boolean integer = false;
 		Boolean binary = false;
 
@@ -145,6 +142,13 @@ public class ConditionComparisonAnalysis extends Analysis {
 		 */
 		b.setNetwork(this.network, this.extended);
 
+		/**
+		 * Loads the constraints applied on the metabolic network
+		 */
+		if(this.constraintFile != "")
+			b.loadConditionsFile(this.constraintFile);
+		
+		
 		/**
 		 * Loads entities
 		 */

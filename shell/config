@@ -11,4 +11,4 @@ CPLEX_JAR=/usr/local/ILOG/CPLEX_Studio124/cplex/lib/cplex.jar
 #IF YOU ARE USING GLPK YOU MUST SET THE RIGHE VALUE FOR THOSE TWO VARIABLES
 #link to the GLPK shared library (directory containing libglpk_java.so)
 GLPK_shared_library=/usr/lib/jni:/usr/local/lib/jni:/usr/lib/x86_64-linux-gnu/jni
-GLPK_JAR=/home/lcottret/Src/FlexFlux/new_FlexFlux/lib/glpk-java-linux.jar
+GLPK_JAR=/home/lcottret/workspaces/git_repositories/FlexFlux/lib/glpk-java-linux.jar
