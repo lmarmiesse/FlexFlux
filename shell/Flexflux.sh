@@ -16,7 +16,7 @@ do
     
 done
 
-source config
+source $path/config
 
 cmd="java -Djava.library.path=$CPLEX_shared_library:$GLPK_shared_library -cp $GLPK_JAR:$path/lib/flexflux.jar flexflux.applications.Flexflux$1 $foo"
 
