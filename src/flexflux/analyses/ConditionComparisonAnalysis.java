@@ -162,7 +162,6 @@ public class ConditionComparisonAnalysis extends Analysis {
 		 * Loads interaction file
 		 */
 		if (this.interactionFile.compareTo("") != 0) {
-			System.err.println("Load interaction file");
 			b.loadInteractionsFile(this.interactionFile);
 		}
 
@@ -206,8 +205,8 @@ public class ConditionComparisonAnalysis extends Analysis {
 
 			constraints.add(constraint);
 
-			b.addSimpleConstraint(e, constraint);
-			b.getConstraints().add(constraint);
+			b.addInteractionNetworkSimpleConstraint(e, constraint);
+//			b.getConstraints().add(constraint);
 
 		}
 

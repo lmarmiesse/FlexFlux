@@ -33,34 +33,34 @@ public class FlexfluxConditionComparison {
 	@Option(name = "-cond", usage = "File containing several conditions", metaVar = "File", required = true)
 	public String conditionFile = "";
 	
-	@Option(name = "-cons", usage = "File containing the constraints applied on the metabolic network", metaVar = "File", required = false)
+	@Option(name = "-cons", usage = "[OPTIONAL] File containing the constraints applied on the metabolic network", metaVar = "File", required = false)
 	public String constraintFile = "";
 
 	@Option(name = "-o", usage = "File containing the objective functions", metaVar = "File", required = true)
 	public String objectiveFile = "";
 
-	@Option(name = "-int", usage = "[OPTIONAL]Interaction file path", metaVar = "File")
+	@Option(name = "-int", usage = "[OPTIONAL] Interaction file path", metaVar = "File")
 	public String intFile = "";
 
-	@Option(name = "-type", usage = "[OPTIONAL] Type of the condition states", metaVar = "[BINARY,INTEGER,DOUBLE]")
-	public String type = "BINARY";
+	@Option(name = "-type", usage = "[OPTIONAL, default=DOUBLE] Type of the condition states", metaVar = "[BINARY,INTEGER,DOUBLE]")
+	public String type = "DOUBLE";
 
-	@Option(name = "-plot", usage = "[OPTIONAL, default = false]Plots the results")
+	@Option(name = "-plot", usage = "[OPTIONAL, default = false] Plots the results")
 	public Boolean plot = false;
 
-	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL] Output file name", metaVar = "File")
 	public String outName = "";
 
-	@Option(name = "-n", usage = "[OPTIONAL, default = number of available processors]Number of threads", metaVar = "Integer")
+	@Option(name = "-n", usage = "[OPTIONAL, default = number of available processors] Number of threads", metaVar = "Integer")
 	public int nThreads = Runtime.getRuntime().availableProcessors();
 
-	@Option(name = "-lib", usage = "[OPTIONAL, default = 0]Percentage of non optimality for new constraints", metaVar = "Double")
+	@Option(name = "-lib", usage = "[OPTIONAL, default = 0] Percentage of non optimality for new constraints", metaVar = "Double")
 	public double liberty = 0;
 
-	@Option(name = "-pre", usage = "[OPTIONAL, default = 6]Number of decimals of precision for calculations and results", metaVar = "Integer")
+	@Option(name = "-pre", usage = "[OPTIONAL, default = 6] Number of decimals of precision for calculations and results", metaVar = "Integer")
 	public int precision = 6;
 
-	@Option(name = "-ext", usage = "[OPTIONAL, default = false]Uses the extended SBML format")
+	@Option(name = "-ext", usage = "[OPTIONAL, default = false] Uses the extended SBML format")
 	public Boolean extended = false;
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")

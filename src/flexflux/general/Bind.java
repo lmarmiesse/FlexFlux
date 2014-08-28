@@ -362,6 +362,7 @@ public abstract class Bind {
 						GPRConstraints.addAll(intToConstraint.get(i));
 					}
 				}
+				
 				//
 
 				for (Constraint constr : constraintsToAdd) {
@@ -2389,7 +2390,7 @@ public abstract class Bind {
 
 					lb = lb / attractorSimpleConstraints.size();
 					ub = ub / attractorSimpleConstraints.size();
-
+					
 					Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
 					constMap.put(b, 1.0);
 					steadyStateConstraints
@@ -2531,6 +2532,15 @@ public abstract class Bind {
 	 */
 	public void addSimpleConstraint(BioEntity e, Constraint c) {
 		this.simpleConstraints.put(e, c);
+	}
+	
+	/**
+	 * 
+	 * @param e
+	 * @param c
+	 */
+	public void addInteractionNetworkSimpleConstraint(BioEntity e, Constraint c) {
+		this.interactionNetworkSimpleConstraints.put(e, c);
 	}
 
 }
