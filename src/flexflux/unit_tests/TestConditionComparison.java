@@ -26,6 +26,7 @@ public class TestConditionComparison {
 	private static File tempConditionFile = null;
 	private static File tempInteractionFile = null;
 	private static File tempObjectiveFile = null;
+	private static File tempConstraintFile = null;
 	private static File tempResultFbaFile = null;
 	private static File tempResultEssentialFile = null;
 	private static File tempResultUsedFile = null;
@@ -51,6 +52,7 @@ public class TestConditionComparison {
 		java.nio.file.Path tmpCondition = null;
 		java.nio.file.Path tmpInteraction = null;
 		java.nio.file.Path tmpObjective = null;
+		java.nio.file.Path tmpConstraint = null;
 		java.nio.file.Path tmpResultFba = null;
 		java.nio.file.Path tmpResultEssential = null;
 		java.nio.file.Path tmpResultUsed = null;
@@ -68,6 +70,7 @@ public class TestConditionComparison {
 					".tab");
 			tmpResultUsed = java.nio.file.Files.createTempFile("test", ".tab");
 			tmpResultDead = java.nio.file.Files.createTempFile("test", ".tab");
+			tmpConstraint = java.nio.file.Files.createTempFile("test", ".tab");
 
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -83,6 +86,7 @@ public class TestConditionComparison {
 		tempResultEssentialFile = tmpResultEssential.toFile();
 		tempResultUsedFile = tmpResultUsed.toFile();
 		tempResultDeadFile = tmpResultDead.toFile();
+		tempConstraintFile = tmpConstraint.toFile();
 
 		String referenceFbaFile = "";
 		String referenceEssentialFile = "";
@@ -107,6 +111,11 @@ public class TestConditionComparison {
 					.copyProjectResource(
 							"flexflux/unit_tests/data/conditionComparisonTest/objectives.txt",
 							tempObjectiveFile);
+			
+			f.constraintFile = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/conditionComparisonTest/constraints.txt",
+							tempConstraintFile);
 
 			referenceFbaFile = TestUtils
 					.copyProjectResource(
@@ -132,7 +141,7 @@ public class TestConditionComparison {
 		}
 
 		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
-				f.sbmlFile, f.intFile, f.conditionFile, "", f.objectiveFile,
+				f.sbmlFile, f.intFile, f.conditionFile, f.constraintFile, f.objectiveFile,
 				ConstraintType.DOUBLE, false, solver);
 
 		
