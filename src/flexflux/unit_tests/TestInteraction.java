@@ -196,6 +196,8 @@ public class TestInteraction {
 		
 		result.plot();
 
+		System.out.println(result.getObjValue());
+		
 		Assert.assertTrue(result.getObjValue() == 6.0);
 
 	}
