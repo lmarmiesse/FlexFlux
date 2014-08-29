@@ -530,6 +530,12 @@ public class CplexBind extends Bind {
 
 	}
 
+	@Override
+	public void sensitivityAnalysis(String fileName) {
+		System.err.println("Error : sensitivityAnalysis not implemented");
+		System.exit(0);
+	}
+
 
 
 }
