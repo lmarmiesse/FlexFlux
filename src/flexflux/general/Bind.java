@@ -33,20 +33,6 @@
  */
 package flexflux.general;
 
-import flexflux.analyses.FBAAnalysis;
-import flexflux.analyses.result.FBAResult;
-import flexflux.interaction.And;
-import flexflux.interaction.Interaction;
-import flexflux.interaction.InteractionNetwork;
-import flexflux.interaction.InversedRelation;
-import flexflux.interaction.Or;
-import flexflux.interaction.Relation;
-import flexflux.interaction.RelationFactory;
-import flexflux.interaction.RelationWithList;
-import flexflux.interaction.Unique;
-import flexflux.operation.OperationFactory;
-import flexflux.thread.ThreadFactory;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -75,6 +61,19 @@ import parsebionet.biodata.BioPhysicalEntity;
 import parsebionet.biodata.BioPhysicalEntityParticipant;
 import parsebionet.biodata.BioProtein;
 import parsebionet.io.Sbml2Bionetwork;
+import flexflux.analyses.FBAAnalysis;
+import flexflux.analyses.result.FBAResult;
+import flexflux.interaction.And;
+import flexflux.interaction.Interaction;
+import flexflux.interaction.InteractionNetwork;
+import flexflux.interaction.InversedRelation;
+import flexflux.interaction.Or;
+import flexflux.interaction.Relation;
+import flexflux.interaction.RelationFactory;
+import flexflux.interaction.RelationWithList;
+import flexflux.interaction.Unique;
+import flexflux.operation.OperationFactory;
+import flexflux.thread.ThreadFactory;
 
 /**
  * 
@@ -89,8 +88,8 @@ public abstract class Bind {
 	private Map<BioEntity, Double> defaultValues = new HashMap<BioEntity, Double>();
 
 	/**
-	 * Used for pareto analysis and conditionComparison, if set to false, the objective in the condition
-	 * file is ignored.
+	 * Used for pareto analysis and conditionComparison, if set to false, the
+	 * objective in the condition file is ignored.
 	 */
 	private boolean loadObjective = true;
 
@@ -362,7 +361,7 @@ public abstract class Bind {
 						GPRConstraints.addAll(intToConstraint.get(i));
 					}
 				}
-				
+
 				//
 
 				for (Constraint constr : constraintsToAdd) {
@@ -387,6 +386,49 @@ public abstract class Bind {
 
 			}
 
+			///////////////////
+			///////////////////
+			//if a constraint is an external metab set to 0, we change the bound of the exchange reaction
+			List<Constraint> extMetabConstraints = new ArrayList<Constraint>();
+			for (Constraint c : constraintsToAdd){
+				if (c.getEntities().size()==1 && c.getLb()==0 && c.getUb()==0){
+					BioEntity b = null;
+					for (BioEntity ent : c.getEntities().keySet()){
+						b=ent;
+					}
+					if(b.getClass().getSimpleName().equals("BioPhysicalEntity")){
+						BioPhysicalEntity metab = (BioPhysicalEntity) b;
+						if (metab.getBoundaryCondition()){
+							//now we need to find the exchangReaction concerned and change one of its bound
+							for (String reacName : metab.getReactionsAsSubstrate().keySet()){
+								BioChemicalReaction reac = metab.getReactionsAsSubstrate().get(reacName);				
+								double lb=simpleConstraints.get(reac).getLb();
+								double ub=0.0; 
+								
+								Map<BioEntity,Double> constMap = new HashMap<BioEntity,Double>();
+								constMap.put(reac, 1.0);
+								
+								extMetabConstraints.add(new Constraint(constMap,lb,ub));
+							}
+							for (String reacName : metab.getReactionsAsProduct().keySet()){
+								BioChemicalReaction reac = metab.getReactionsAsProduct().get(reacName);				
+								double lb=0.0; 
+								double ub=simpleConstraints.get(reac).getUb();
+								
+								Map<BioEntity,Double> constMap = new HashMap<BioEntity,Double>();
+								constMap.put(reac, 1.0);
+								
+								extMetabConstraints.add(new Constraint(constMap,lb,ub));
+							}
+						}
+					}
+				}
+			}
+			constraintsToAdd.addAll(extMetabConstraints);
+			//////////////////
+			//////////////////
+			
+			
 			return goWithConstraints(constraintsToAdd, saveResults);
 
 		} else {
@@ -2162,7 +2204,8 @@ public abstract class Bind {
 
 		Set<Interaction> toCheck = new HashSet<Interaction>();
 		toCheck.addAll(intNet.getAddedInteractions());
-		if (intNet.getTargetToInteractions().isEmpty()) {
+		if (intNet.getTargetToInteractions().isEmpty()
+				&& interactionNetworkSimpleConstraints.isEmpty()) {
 			return new ArrayList<Constraint>();
 		}
 
@@ -2216,7 +2259,7 @@ public abstract class Bind {
 			// ////////////////////////////////////////WRITE TO FILE
 			if (Vars.writeInteractionNetworkStates) {
 				for (BioEntity ent : toWrite.keySet()) {
-					
+
 					if (thisStepSimpleConstraints.get(ent) != null) {
 						double lb = thisStepSimpleConstraints.get(ent).getLb();
 						double ub = thisStepSimpleConstraints.get(ent).getUb();
@@ -2376,46 +2419,58 @@ public abstract class Bind {
 
 			for (BioEntity b : attractorSimpleConstraints.get(0).keySet()) {
 
-				if (intNet.getTargetToInteractions().containsKey(b)) {
+				// If it is an external metab, we set a constraint
+				boolean isExtMetab = false;
+
+				if (b.getClass().getSimpleName().equals("BioPhysicalEntity")) {
+					BioPhysicalEntity metab = (BioPhysicalEntity) b;
+					// If it is external
+					if (metab.getBoundaryCondition()) {
+						isExtMetab = true;
+					}
+				}
+
+				if (intNet.getTargetToInteractions().containsKey(b)
+						|| isExtMetab) {
 
 					// We make the average of the values of all states of the
 					// attractor
 					double lb = 0;
 					double ub = 0;
 					for (int nb = 0; nb < attractorSimpleConstraints.size(); nb++) {
-						
+
 						lb += attractorSimpleConstraints.get(nb).get(b).getLb();
 						ub += attractorSimpleConstraints.get(nb).get(b).getUb();
 					}
 
 					lb = lb / attractorSimpleConstraints.size();
 					ub = ub / attractorSimpleConstraints.size();
-					
+
 					Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
 					constMap.put(b, 1.0);
 					steadyStateConstraints
 							.add(new Constraint(constMap, lb, ub));
 				}
+
+				else {
+
+				}
 			}
 		}
 
-		
 		if (Vars.writeInteractionNetworkStates) {
 
 			PrintWriter out = null;
-			
+
 			try {
-				System.out.println(statesFileName);
 				out = new PrintWriter(new File(statesFileName));
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				
+
 			}
 
 			for (BioEntity ent : toWrite.keySet()) {
-				
-			
 
 				out.print(ent.getId());
 
@@ -2429,6 +2484,7 @@ public abstract class Bind {
 
 			out.close();
 		}
+
 
 		return steadyStateConstraints;
 	}
@@ -2533,7 +2589,7 @@ public abstract class Bind {
 	public void addSimpleConstraint(BioEntity e, Constraint c) {
 		this.simpleConstraints.put(e, c);
 	}
-	
+
 	/**
 	 * 
 	 * @param e
@@ -2542,12 +2598,12 @@ public abstract class Bind {
 	public void addInteractionNetworkSimpleConstraint(BioEntity e, Constraint c) {
 		this.interactionNetworkSimpleConstraints.put(e, c);
 	}
-	
+
 	/**
 	 * Computes reduced costs and shadow prices
+	 * 
 	 * @param fileName
 	 */
 	public abstract void sensitivityAnalysis(String fileName);
-	
 
 }

@@ -45,7 +45,7 @@ public class Vars {
 	/**
 	 * Maximum number of threads created.
 	 */
-	public static int maxThread = Runtime.getRuntime().availableProcessors();
+	public static int maxThread = Runtime.getRuntime().availableProcessors()/2;
 
 	/**
 	 * Determines if FlexFlux uses epsilon.
