@@ -407,4 +407,9 @@ public class GLPKBind extends Bind {
 		}
 	}
 
+	@Override
+	public void sensitivityAnalysis(String fileName) {
+		GLPK.glp_print_ranges(model, 0, null, 0, fileName);
+	}
+
 }
