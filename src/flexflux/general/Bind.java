@@ -390,7 +390,11 @@ public abstract class Bind {
 			///////////////////
 			//if a constraint is an external metab set to 0, we change the bound of the exchange reaction
 			List<Constraint> extMetabConstraints = new ArrayList<Constraint>();
-			for (Constraint c : constraintsToAdd){
+			
+			List<Constraint> constraintsToTest = new ArrayList<Constraint>();
+			constraintsToTest.addAll(constraintsToAdd);
+			constraintsToTest.addAll(constraints);
+			for (Constraint c : constraintsToTest){
 				if (c.getEntities().size()==1 && c.getLb()==0 && c.getUb()==0){
 					BioEntity b = null;
 					for (BioEntity ent : c.getEntities().keySet()){
