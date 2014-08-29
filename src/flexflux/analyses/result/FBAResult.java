@@ -99,7 +99,7 @@ public class FBAResult extends AnalysisResult {
 	}
 
 	public void formatResult() {
-		
+
 		for (BioEntity entity : bind.getInteractionNetwork().getEntities()) {
 			if (!entity.getId().contains(Vars.Irrev1)
 					&& !entity.getId().contains(Vars.Irrev2)) {
@@ -221,6 +221,14 @@ public class FBAResult extends AnalysisResult {
 					"(?i)" + Pattern.quote(text), 0));
 		}
 
+	}
+
+	/**
+	 * Prints a sensitivity analysis in fileName
+	 * @param fileName
+	 */
+	public void sensitivityAnalysis(String fileName) {
+		this.bind.sensitivityAnalysis(fileName);
 	}
 
 	public double getObjValue() {
