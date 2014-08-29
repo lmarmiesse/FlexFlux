@@ -300,17 +300,17 @@ public abstract class Bind {
 	 *            List of constraints to add before the FBA.
 	 * @param saveResults
 	 *            Determines if the results will be saved.
-	 * @param chechInt
+	 * @param checkInteractions
 	 *            Determines if all interactions will be checked.
 	 * @return A doubleResult object containing the result and a flag saying if
 	 *         the problem was feasible
 	 */
 	public DoubleResult FBA(List<Constraint> constraintsToAdd,
-			boolean saveResults, boolean chechInt) {
+			boolean saveResults, boolean checkInteractions) {
 
 		if (solverPrepared) {
 
-			if (chechInt) {
+			if (checkInteractions) {
 				// treatment to ensure there is no problem
 
 				Map<BioEntity, Constraint> oldSimpleConstraint = new HashMap<BioEntity, Constraint>();
@@ -2542,5 +2542,12 @@ public abstract class Bind {
 	public void addInteractionNetworkSimpleConstraint(BioEntity e, Constraint c) {
 		this.interactionNetworkSimpleConstraints.put(e, c);
 	}
+	
+	/**
+	 * Computes reduced costs and shadow prices
+	 * @param fileName
+	 */
+	public abstract void sensitivityAnalysis(String fileName);
+	
 
 }

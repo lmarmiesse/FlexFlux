@@ -46,6 +46,7 @@ import parsebionet.biodata.BioPhysicalEntityParticipant;
 import flexflux.analyses.Analysis;
 import flexflux.analyses.FBAAnalysis;
 import flexflux.analyses.result.AnalysisResult;
+import flexflux.analyses.result.FBAResult;
 import flexflux.general.Bind;
 import flexflux.general.CplexBind;
 import flexflux.general.GLPKBind;
@@ -95,6 +96,9 @@ public class FlexfluxFBA {
 
 	@Option(name = "-ext", usage = "[OPTIONAL, default = false]Uses the extended SBML format")
 	public boolean extended = false;
+	
+	@Option(name = "-senFile", usage = "[OPTIONAL] A sensitivity analysis is performed and saved in the indicated file name", metaVar = "File")
+	public String senFile="";
 
 	@Option(name = "-h", usage = "Prints this help")
 	public boolean h = false;
@@ -175,13 +179,17 @@ public class FlexfluxFBA {
 		bind.prepareSolver();
 
 		Analysis analysis = new FBAAnalysis(bind);
-		AnalysisResult result = analysis.runAnalysis();
+		FBAResult result = (FBAResult) analysis.runAnalysis();
 
 		if (f.plot) {
 			result.plot();
 		}
 		if (!f.outName.equals("")) {
 			result.writeToFile(f.outName);
+		}
+		
+		if(f.senFile != "") {
+			result.sensitivityAnalysis(f.senFile);
 		}
 	
 		bind.end();
