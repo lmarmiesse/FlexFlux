@@ -50,7 +50,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import parsebionet.biodata.BioEntity;
 
-
 /**
  * 
  * Class to run an FVA analysis.
@@ -89,13 +88,13 @@ public class FVAAnalysis extends Analysis {
 	}
 
 	public FVAResult runAnalysis() {
-		
+
 		double startTime = System.currentTimeMillis();
-		
+
 		DoubleResult result = b.FBA(constraints, false, true);
-		
+
 		FVAResult fvaResult = null;
-		
+
 		if (result.flag != 0) {
 
 			System.err.println("Unfeasible");
@@ -103,17 +102,16 @@ public class FVAAnalysis extends Analysis {
 			return fvaResult;
 
 		}
-		
+
 		List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 		constraintsToAdd.addAll(constraints);
 
 		// we add the constraints corresponding to the interactions
-		
 
-			for (Constraint c : b.findInteractionNetworkSteadyState()) {
-				constraintsToAdd.add(c);
-			}
-	
+		for (Constraint c : b.findInteractionNetworkSteadyState()) {
+			constraintsToAdd.add(c);
+		}
+
 		b.getConstraints().addAll(constraintsToAdd);
 
 		fvaResult = new FVAResult(result.result);
@@ -127,8 +125,6 @@ public class FVAAnalysis extends Analysis {
 			constraintMap.put(entities[i], coeffs[i]);
 		}
 
-
-		
 		double lb = result.result;
 		double ub = result.result;
 		double delta = Math.abs(result.result) * Vars.libertyPercentage / 100;
@@ -139,7 +135,7 @@ public class FVAAnalysis extends Analysis {
 		System.err.println("FVA initial constraint : \n" + c);
 
 		b.getConstraints().add(c);
-		
+
 		Map<String, BioEntity> FVAMap = new HashMap<String, BioEntity>();
 
 		if (mapEntities == null) {
@@ -152,8 +148,6 @@ public class FVAAnalysis extends Analysis {
 			FVAMap = mapEntities;
 		}
 
-
-		
 		// one queue to minimize and the other to maximize
 		Queue<BioEntity> entQueue = new LinkedBlockingQueue<BioEntity>();
 		Queue<BioEntity> entQueueCopy = new LinkedBlockingQueue<BioEntity>();
@@ -164,8 +158,8 @@ public class FVAAnalysis extends Analysis {
 		}
 
 		for (int j = 0; j < Vars.maxThread; j++) {
-			threads.add(b.getThreadFactory().makeFVAThread(entQueue, entQueueCopy,
-					fvaResult));
+			threads.add(b.getThreadFactory().makeFVAThread(entQueue,
+					entQueueCopy, fvaResult));
 		}
 
 		System.err.println("Progress : ");
@@ -177,10 +171,6 @@ public class FVAAnalysis extends Analysis {
 		System.err.print("]\n");
 		System.err.print("[");
 
-
-		
-		
-		
 		for (ResolveThread thread : threads) {
 			thread.start();
 		}
@@ -190,7 +180,7 @@ public class FVAAnalysis extends Analysis {
 			try {
 				thread.join();
 			} catch (InterruptedException e) {
-//				e.printStackTrace();
+				// e.printStackTrace();
 			}
 		}
 		System.err.print("]\n");

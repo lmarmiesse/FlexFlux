@@ -117,6 +117,8 @@ public class TestInteraction {
 		fbaTest(new GLPKBind());
 		fbaTest(new CplexBind());
 		
+		extMetabTest(new GLPKBind());
+		extMetabTest(new CplexBind());
 		
 	}
 
@@ -158,11 +160,49 @@ public class TestInteraction {
 		Assert.assertTrue(bind.getSolvedValue(bind.getInteractionNetwork().getEntity("c"))>1.6);
 		Assert.assertTrue(bind.getSolvedValue(bind.getInteractionNetwork().getEntity("c"))<1.7);
 		
-//		int a = 3;
-//		
-//		while (a==3){
-//			
-//		}
 		
 	}
+	
+	/// TEST THAT A EXTERNAL METAB AT 0 MAKES R_EX = 0
+	
+	
+	private void extMetabTest(Bind bind) {
+		
+		bind.loadSbmlNetwork("Data/test.xml", false);
+		bind.loadConditionsFile("Data/condExtMetab.txt");
+		
+		bind.loadInteractionsFile("Data/intExtMetab.txt");
+		
+		bind.prepareSolver();
+		
+		FBAResult result = new FBAResult(bind);
+
+
+		DoubleResult objValue = bind.FBA(new ArrayList<Constraint>(), true, true);
+
+		if (objValue.flag != 0) {
+
+			System.err.println(objValue.result);
+
+			System.err.println("Unfeasible");
+			result.setObjValue(Double.NaN);
+
+		} else {
+
+			result.setObjValue(objValue.result);
+
+		}
+		result.formatResult();
+		
+		result.plot();
+
+		Assert.assertTrue(result.getObjValue() == 6.0);
+
+	}
+	
+	
+	
+	
+	
+	
 }
