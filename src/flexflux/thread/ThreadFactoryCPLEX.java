@@ -61,39 +61,44 @@ public class ThreadFactoryCPLEX extends ThreadFactory {
 
 	public ThreadFactoryCPLEX(List<Constraint> constraints,
 			Map<BioEntity, Constraint> simpleConstraints,
-			InteractionNetwork intNet) {
-		super(constraints, simpleConstraints, intNet);
+			InteractionNetwork intNet,
+			Map<BioEntity, Constraint> interactionNetworkSimpleConstraints) {
+		super(constraints, simpleConstraints, intNet,
+				interactionNetworkSimpleConstraints);
 	}
 
-	public ThreadFVA makeFVAThread(Queue<BioEntity> ents, Queue<BioEntity> entsCopy, FVAResult result) {
+	public ThreadFVA makeFVAThread(Queue<BioEntity> ents,
+			Queue<BioEntity> entsCopy, FVAResult result) {
 
 		Bind bind = new CplexBind(constraints, simpleConstraints, intNet,
-				bioNet);
+				bioNet, interactionNetworkSimpleConstraints);
 
 		return new ThreadFVA(bind, ents, entsCopy, result);
 	}
 
-	public ThreadKO makeKOThread(Queue<BioEntity> entities, KOResult result, Objective obj) {
+	public ThreadKO makeKOThread(Queue<BioEntity> entities, KOResult result,
+			Objective obj) {
 
 		Bind bind = new CplexBind(constraints, simpleConstraints, intNet,
-				bioNet);
+				bioNet,interactionNetworkSimpleConstraints);
 
 		return new ThreadKO(bind, entities, result, obj);
 	}
 
-	public ThreadReac makeReacThread(Queue<Double> fluxesQueue, Map<BioEntity, Double> entities,
-			ReacAnalysisResult result, Objective obj) {
+	public ThreadReac makeReacThread(Queue<Double> fluxesQueue,
+			Map<BioEntity, Double> entities, ReacAnalysisResult result,
+			Objective obj) {
 		Bind bind = new CplexBind(constraints, simpleConstraints, intNet,
-				bioNet);
+				bioNet,interactionNetworkSimpleConstraints);
 
 		return new ThreadReac(bind, fluxesQueue, entities, result, obj);
 	}
 
-	public ResolveThread makeTwoReacsThread(Queue<double[]> fluxesQueue, TwoReacsAnalysisResult result,
-			Map<BioEntity, Double> entities1, Map<BioEntity, Double> entities2,
-			Objective obj) {
+	public ResolveThread makeTwoReacsThread(Queue<double[]> fluxesQueue,
+			TwoReacsAnalysisResult result, Map<BioEntity, Double> entities1,
+			Map<BioEntity, Double> entities2, Objective obj) {
 		Bind bind = new CplexBind(constraints, simpleConstraints, intNet,
-				bioNet);
+				bioNet,interactionNetworkSimpleConstraints);
 
 		return new ThreadTwoReacs(bind, fluxesQueue, result, entities1,
 				entities2, obj);

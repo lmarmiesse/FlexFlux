@@ -315,6 +315,8 @@ public abstract class Bind {
 				Map<BioEntity, Constraint> oldSimpleConstraint = new HashMap<BioEntity, Constraint>();
 				// we add the simple constraints to be taken into account when
 				// checking interactions
+				List<BioEntity> hadNoSimpleConstraint = new ArrayList<BioEntity>();
+
 				for (Constraint constr : constraintsToAdd) {
 
 					if (constr.getEntities().size() == 1) {
@@ -323,6 +325,8 @@ public abstract class Bind {
 								if (simpleConstraints.containsKey(ent)) {
 									oldSimpleConstraint.put(ent,
 											simpleConstraints.get(ent));
+								} else {
+									hadNoSimpleConstraint.add(ent);
 								}
 								simpleConstraints.put(ent, constr);
 
@@ -343,7 +347,8 @@ public abstract class Bind {
 					if (constr.getEntities().size() == 1) {
 						for (BioEntity ent : constr.getEntities().keySet()) {
 							if (constr.getEntities().get(ent) == 1.0) {
-								if (simpleConstraints.containsKey(ent)) {
+								if (simpleConstraints.containsKey(ent)
+										&& !hadNoSimpleConstraint.contains(ent)) {
 									oldSimpleConstraint.put(ent,
 											simpleConstraints.get(ent));
 								}
@@ -368,7 +373,6 @@ public abstract class Bind {
 					if (constr.getEntities().size() == 1) {
 						for (BioEntity ent : constr.getEntities().keySet()) {
 							if (constr.getEntities().get(ent) == 1.0) {
-
 								if (oldSimpleConstraint.containsKey(ent)) {
 									simpleConstraints.put(ent,
 											oldSimpleConstraint.get(ent));
@@ -386,53 +390,63 @@ public abstract class Bind {
 
 			}
 
-			///////////////////
-			///////////////////
-			//if a constraint is an external metab set to 0, we change the bound of the exchange reaction
+			// /////////////////
+			// /////////////////
+			// if a constraint is an external metab set to 0, we change the
+			// bound of the exchange reaction
 			List<Constraint> extMetabConstraints = new ArrayList<Constraint>();
-			
+
 			List<Constraint> constraintsToTest = new ArrayList<Constraint>();
 			constraintsToTest.addAll(constraintsToAdd);
 			constraintsToTest.addAll(constraints);
-			for (Constraint c : constraintsToTest){
-				if (c.getEntities().size()==1 && c.getLb()==0 && c.getUb()==0){
+			for (Constraint c : constraintsToTest) {
+				if (c.getEntities().size() == 1 && c.getLb() == 0
+						&& c.getUb() == 0) {
 					BioEntity b = null;
-					for (BioEntity ent : c.getEntities().keySet()){
-						b=ent;
+					for (BioEntity ent : c.getEntities().keySet()) {
+						b = ent;
 					}
-					if(b.getClass().getSimpleName().equals("BioPhysicalEntity")){
+					if (b.getClass().getSimpleName()
+							.equals("BioPhysicalEntity")) {
 						BioPhysicalEntity metab = (BioPhysicalEntity) b;
-						if (metab.getBoundaryCondition()){
-							//now we need to find the exchangReaction concerned and change one of its bound
-							for (String reacName : metab.getReactionsAsSubstrate().keySet()){
-								BioChemicalReaction reac = metab.getReactionsAsSubstrate().get(reacName);				
-								double lb=simpleConstraints.get(reac).getLb();
-								double ub=0.0; 
-								
-								Map<BioEntity,Double> constMap = new HashMap<BioEntity,Double>();
+						if (metab.getBoundaryCondition()) {
+							// now we need to find the exchangReaction concerned
+							// and change one of its bound
+							for (String reacName : metab
+									.getReactionsAsSubstrate().keySet()) {
+								BioChemicalReaction reac = metab
+										.getReactionsAsSubstrate()
+										.get(reacName);
+								double lb = simpleConstraints.get(reac).getLb();
+								double ub = 0.0;
+
+								Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
 								constMap.put(reac, 1.0);
-								
-								extMetabConstraints.add(new Constraint(constMap,lb,ub));
+
+								extMetabConstraints.add(new Constraint(
+										constMap, lb, ub));
 							}
-							for (String reacName : metab.getReactionsAsProduct().keySet()){
-								BioChemicalReaction reac = metab.getReactionsAsProduct().get(reacName);				
-								double lb=0.0; 
-								double ub=simpleConstraints.get(reac).getUb();
-								
-								Map<BioEntity,Double> constMap = new HashMap<BioEntity,Double>();
+							for (String reacName : metab
+									.getReactionsAsProduct().keySet()) {
+								BioChemicalReaction reac = metab
+										.getReactionsAsProduct().get(reacName);
+								double lb = 0.0;
+								double ub = simpleConstraints.get(reac).getUb();
+
+								Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
 								constMap.put(reac, 1.0);
-								
-								extMetabConstraints.add(new Constraint(constMap,lb,ub));
+
+								extMetabConstraints.add(new Constraint(
+										constMap, lb, ub));
 							}
 						}
 					}
 				}
 			}
 			constraintsToAdd.addAll(extMetabConstraints);
-			//////////////////
-			//////////////////
-			
-			
+			// ////////////////
+			// ////////////////
+
 			return goWithConstraints(constraintsToAdd, saveResults);
 
 		} else {
@@ -493,10 +507,13 @@ public abstract class Bind {
 	 */
 	public Bind(List<Constraint> constraints2,
 			Map<BioEntity, Constraint> simpleConstraints,
-			InteractionNetwork intNet, BioNetwork bioNet) {
+			InteractionNetwork intNet, BioNetwork bioNet,
+			Map<BioEntity, Constraint> interactionNetworkSimpleConstraints) {
 
 		this.constraints.addAll(constraints2);
 		this.simpleConstraints.putAll(simpleConstraints);
+		this.interactionNetworkSimpleConstraints
+				.putAll(interactionNetworkSimpleConstraints);
 
 		// we copy the interaction network
 		for (BioEntity ent : intNet.getNumEntities()) {
@@ -2217,7 +2234,23 @@ public abstract class Bind {
 		Map<BioEntity, Constraint> thisStepSimpleConstraints = new HashMap<BioEntity, Constraint>();
 
 		for (BioEntity b : simpleConstraints.keySet()) {
+
 			thisStepSimpleConstraints.put(b, simpleConstraints.get(b));
+
+			// if the entity is already set by a constraint, we remove te
+			// interactions
+			// that have this entity as a target
+			if (simpleConstraints.get(b).getLb() == simpleConstraints.get(b)
+					.getUb()) {
+				if (intNet.getTargetToInteractions().containsKey(b)) {
+					for (Interaction i : intNet.getTargetToInteractions()
+							.get(b)) {
+						toCheck.remove(i);
+					}
+				}
+
+			}
+
 		}
 		for (BioEntity b : interactionNetworkSimpleConstraints.keySet()) {
 			thisStepSimpleConstraints.put(b,
@@ -2357,6 +2390,7 @@ public abstract class Bind {
 						thisStepSimpleConstraints.get(b));
 			}
 
+
 			for (Interaction i : toCheck) {
 				if (i.getCondition().isTrue(thisStepSimpleConstraints)) {
 
@@ -2373,6 +2407,7 @@ public abstract class Bind {
 										.keySet()) {
 
 									if (consequence.getEntities().get(ent) == 1.0) {
+
 										nextStepSimpleConstraints.put(ent,
 												consequence);
 										setEntities.add(ent);
@@ -2404,7 +2439,20 @@ public abstract class Bind {
 					} else {
 						// we say it is undetermined only if it is a target
 						if (intNet.getTargetToInteractions().containsKey(ent)) {
-							toRemove.add(ent);
+							// we remove only if one of the interaction is in
+							// "toCheck"
+							boolean hasInteractionToCheck = false;
+							for (Interaction i : intNet
+									.getTargetToInteractions().get(ent)) {
+								if (toCheck.contains(i)) {
+									hasInteractionToCheck = true;
+									break;
+								}
+							}
+
+							if (hasInteractionToCheck) {
+								toRemove.add(ent);
+							}
 						}
 					}
 				}
@@ -2442,7 +2490,6 @@ public abstract class Bind {
 					double lb = 0;
 					double ub = 0;
 					for (int nb = 0; nb < attractorSimpleConstraints.size(); nb++) {
-
 						lb += attractorSimpleConstraints.get(nb).get(b).getLb();
 						ub += attractorSimpleConstraints.get(nb).get(b).getUb();
 					}
@@ -2488,7 +2535,6 @@ public abstract class Bind {
 
 			out.close();
 		}
-
 
 		return steadyStateConstraints;
 	}

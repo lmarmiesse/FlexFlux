@@ -79,16 +79,18 @@ public abstract class ThreadFactory {
 	 * Bind bioNetwork to copy.
 	 */
 	protected BioNetwork bioNet;
+	
+	protected Map<BioEntity, Constraint> interactionNetworkSimpleConstraints = new HashMap<BioEntity, Constraint>();
 
 	public ThreadFactory(List<Constraint> constraints,
 			Map<BioEntity, Constraint> simpleConstraints,
-			InteractionNetwork intNet) {
+			InteractionNetwork intNet,
+			Map<BioEntity, Constraint> interactionNetworkSimpleConstraints) {
+		this.interactionNetworkSimpleConstraints=interactionNetworkSimpleConstraints;
 		this.constraints = constraints;
 		this.simpleConstraints = simpleConstraints;
 		this.intNet = intNet;
 	}
-
-
 
 	/**
 	 * 
@@ -103,8 +105,8 @@ public abstract class ThreadFactory {
 	 *            An empty FVA result.
 	 * @return A FVA thread.
 	 */
-	public abstract ThreadFVA makeFVAThread(Queue<BioEntity> entQueue, Queue<BioEntity> entQueueCopy,
-			FVAResult result);
+	public abstract ThreadFVA makeFVAThread(Queue<BioEntity> entQueue,
+			Queue<BioEntity> entQueueCopy, FVAResult result);
 
 	/**
 	 * 
@@ -118,7 +120,8 @@ public abstract class ThreadFactory {
 	 *            The objective function.
 	 * @return A KO thread
 	 */
-	public abstract ThreadKO makeKOThread(Queue<BioEntity> reacsQueue, KOResult koResult, Objective obj);
+	public abstract ThreadKO makeKOThread(Queue<BioEntity> reacsQueue,
+			KOResult koResult, Objective obj);
 
 	public void setBioNet(BioNetwork bioNet) {
 		this.bioNet = bioNet;
@@ -138,8 +141,9 @@ public abstract class ThreadFactory {
 	 *            The objective function.
 	 * @return A Thread for an analysis with a varying variable.
 	 */
-	public abstract ThreadReac makeReacThread(Queue<Double> fluxesQueue, Map<BioEntity, Double> entities,
-			ReacAnalysisResult result, Objective obj);
+	public abstract ThreadReac makeReacThread(Queue<Double> fluxesQueue,
+			Map<BioEntity, Double> entities, ReacAnalysisResult result,
+			Objective obj);
 
 	/**
 	 * 
@@ -157,8 +161,9 @@ public abstract class ThreadFactory {
 	 *            The objective function.
 	 * @return A thread for an analysis with two varying variables.
 	 */
-	public abstract ResolveThread makeTwoReacsThread(Queue<double[]> fluxesQueue,
-			TwoReacsAnalysisResult result, Map<BioEntity, Double> entities1,
-			Map<BioEntity, Double> entities2, Objective obj);
+	public abstract ResolveThread makeTwoReacsThread(
+			Queue<double[]> fluxesQueue, TwoReacsAnalysisResult result,
+			Map<BioEntity, Double> entities1, Map<BioEntity, Double> entities2,
+			Objective obj);
 
 }

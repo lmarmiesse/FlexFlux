@@ -1,6 +1,6 @@
 package flexflux.unit_tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import parsebionet.unit_tests.TestUtils;
 import flexflux.analyses.KOAnalysis;
+import flexflux.analyses.result.KOResult;
 import flexflux.general.Bind;
 import flexflux.general.CplexBind;
 import flexflux.general.GLPKBind;
@@ -86,9 +87,14 @@ public class TestKoWithInteractions {
 		bind.loadSbmlNetwork(sbmlFile, false);
 		bind.loadConditionsFile(conditionFile);
 		bind.loadInteractionsFile(intFile);
-		KOAnalysis a = new KOAnalysis(bind, 1, null);
-		a.runAnalysis();
+		
 
+		
+		bind.prepareSolver();
+
+		KOAnalysis a = new KOAnalysis(bind, 1, null);
+		KOResult res = a.runAnalysis();
+		
 	}
 
 }
