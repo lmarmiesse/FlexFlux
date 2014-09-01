@@ -97,7 +97,7 @@ public class ThreadKO extends ResolveThread {
 			List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 
 			constraintsToAdd.add(new Constraint(entityMap, 0.0, 0.0));
-
+			
 			DoubleResult value = bind.FBA(constraintsToAdd, false, true);
 
 			result.addLine(entity, value.result);

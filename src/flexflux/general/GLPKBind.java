@@ -32,6 +32,7 @@
  * 9 avr. 2013 
  */
 package flexflux.general;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -99,7 +100,7 @@ public class GLPKBind extends Bind {
 		this.operationFactory = new OperationFactory();
 		this.relationFactory = new RelationFactory();
 		this.threadFactory = new ThreadFactoryGLPK(constraints,
-				simpleConstraints, intNet);
+				simpleConstraints, intNet,interactionNetworkSimpleConstraints);
 	}
 
 	public GLPKBind() {
@@ -109,8 +110,10 @@ public class GLPKBind extends Bind {
 
 	public GLPKBind(List<Constraint> constraints,
 			Map<BioEntity, Constraint> simpleConstraints,
-			InteractionNetwork intNet, BioNetwork bioNet) {
-		super(constraints, simpleConstraints, intNet, bioNet);
+			InteractionNetwork intNet, BioNetwork bioNet,
+			Map<BioEntity, Constraint> interactionNetworkSimpleConstraints) {
+		super(constraints, simpleConstraints, intNet, bioNet,
+				interactionNetworkSimpleConstraints);
 		init();
 	}
 
@@ -216,8 +219,7 @@ public class GLPKBind extends Bind {
 		GLPK.delete_doubleArray(varsCoeffs);
 
 		// if the constraint overwrites
-		if (entities.size() == 1 && !constraint.getNot()
-				&& false) {
+		if (entities.size() == 1 && !constraint.getNot() && false) {
 
 			// System.err.println(constraint);
 			for (BioEntity entity : entities.keySet()) {
@@ -345,7 +347,7 @@ public class GLPKBind extends Bind {
 		}
 
 		if (ret == 0) {
-			
+
 			// if the problem is a LP
 			if (!isMIP()) {
 				// if there is an optimal solution

@@ -32,6 +32,7 @@
  * 6 mars 2013 
  */
 package flexflux.general;
+
 import flexflux.interaction.InteractionNetwork;
 import flexflux.interaction.RelationFactory;
 import flexflux.operation.OperationFactory;
@@ -77,13 +78,12 @@ public class CplexBind extends Bind {
 	 */
 	public Map<String, IloNumVar> vars = new HashMap<String, IloNumVar>();
 
-	
 	/**
 	 * 
 	 * Initialization of CPLEX parameters and of the right factories.
 	 * 
 	 */
-	
+
 	public void init() {
 		try {
 			cplex = new IloCplex();
@@ -117,7 +117,7 @@ public class CplexBind extends Bind {
 		this.operationFactory = new OperationFactory();
 		this.relationFactory = new RelationFactory();
 		this.threadFactory = new ThreadFactoryCPLEX(constraints,
-				simpleConstraints, intNet);
+				simpleConstraints, intNet,interactionNetworkSimpleConstraints);
 	}
 
 	public CplexBind() {
@@ -129,8 +129,9 @@ public class CplexBind extends Bind {
 
 	public CplexBind(List<Constraint> constraints,
 			Map<BioEntity, Constraint> simpleConstraints,
-			InteractionNetwork intNet, BioNetwork bioNet) {
-		super(constraints, simpleConstraints, intNet, bioNet);
+			InteractionNetwork intNet, BioNetwork bioNet,
+			Map<BioEntity, Constraint> interactionNetworkSimpleConstraints) {
+		super(constraints, simpleConstraints, intNet, bioNet,interactionNetworkSimpleConstraints);
 		init();
 	}
 
@@ -146,13 +147,13 @@ public class CplexBind extends Bind {
 				// System.out.println(entity.getId());
 				// what default value ?
 
-				vars.put(entity.getId(),
-						cplex.numVar(-Double.MAX_VALUE, Double.MAX_VALUE, entity.getId()));
+				vars.put(entity.getId(), cplex.numVar(-Double.MAX_VALUE,
+						Double.MAX_VALUE, entity.getId()));
 			}
 			for (BioEntity entity : intNet.getIntEntities()) {
 				// System.out.println(entity.getId());
-				vars.put(entity.getId(),
-						cplex.intVar(-Integer.MAX_VALUE, Integer.MAX_VALUE, entity.getId()));
+				vars.put(entity.getId(), cplex.intVar(-Integer.MAX_VALUE,
+						Integer.MAX_VALUE, entity.getId()));
 			}
 			for (BioEntity entity : intNet.getBinaryEntities()) {
 
@@ -168,7 +169,6 @@ public class CplexBind extends Bind {
 
 	}
 
-
 	public void createSolverConstraint(Constraint constraint,
 			List<Object> toRemoveFromModel, Map<String, double[]> oldBounds) {
 
@@ -181,7 +181,7 @@ public class CplexBind extends Bind {
 
 			int i = 0;
 			for (BioEntity entity : entities.keySet()) {
-				
+
 				somme[i] = (IloNumExpr) cplex.prod(entities.get(entity),
 						vars.get(entity.getId()));
 
@@ -207,8 +207,7 @@ public class CplexBind extends Bind {
 
 			// if the constraint is just of the type : A = 5, we set
 			// the bounds of the var A
-			if (entities.size() == 1 && !constraint.getNot()
-					&& false) {
+			if (entities.size() == 1 && !constraint.getNot() && false) {
 
 				for (BioEntity entity : entities.keySet()) {
 					// if it is a "simple" constraint
@@ -338,9 +337,9 @@ public class CplexBind extends Bind {
 			if (cplex.solve()) {
 
 				if (saveResults) {
-					
-//					cplex.getc
-					
+
+					// cplex.getc
+
 					for (String name : vars.keySet()) {
 						try {
 							lastSolve.put(name, cplex.getValue(vars.get(name)));
@@ -361,7 +360,7 @@ public class CplexBind extends Bind {
 
 			} else {
 
-//				 System.out.println("Solution status = " + cplex.getStatus());
+				// System.out.println("Solution status = " + cplex.getStatus());
 
 				boolean displayConflict = false;
 
@@ -535,7 +534,5 @@ public class CplexBind extends Bind {
 		System.err.println("Error : sensitivityAnalysis not implemented");
 		System.exit(0);
 	}
-
-
 
 }
