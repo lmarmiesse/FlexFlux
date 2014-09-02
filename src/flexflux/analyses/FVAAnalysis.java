@@ -106,11 +106,6 @@ public class FVAAnalysis extends Analysis {
 		List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 		constraintsToAdd.addAll(constraints);
 
-		// we add the constraints corresponding to the interactions
-
-		for (Constraint c : b.findInteractionNetworkSteadyState()) {
-			constraintsToAdd.add(c);
-		}
 
 		b.getConstraints().addAll(constraintsToAdd);
 
