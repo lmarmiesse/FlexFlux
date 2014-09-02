@@ -15,6 +15,7 @@ import parsebionet.biodata.BioPhysicalEntity;
 import parsebionet.io.Sbml2Bionetwork;
 import flexflux.analyses.result.AnalysisResult;
 import flexflux.analyses.result.FVAResult;
+import flexflux.analyses.result.KOResult;
 import flexflux.analyses.result.conditionComparison.ConditionComparisonResult;
 import flexflux.condition.Condition;
 import flexflux.general.Bind;
@@ -39,9 +40,8 @@ public class ConditionComparisonAnalysis extends Analysis {
 	ConstraintType constraintType = null;
 	Boolean flag = true;
 	BioNetwork network = null;
-	
+
 	Objective obj = null;
-	
 
 	HashMap<String, HashMap<String, Double>> conditionConstraints;
 	ArrayList<String> entities;
@@ -50,8 +50,9 @@ public class ConditionComparisonAnalysis extends Analysis {
 	public HashMap<String, String> objectives = new HashMap<String, String>();
 
 	public ConditionComparisonAnalysis(Bind bind, String sbmlFile,
-			String interactionFile, String conditionFile, String constraintFile, String objectiveFile,
-			ConstraintType type, Boolean extended, String solver) {
+			String interactionFile, String conditionFile,
+			String constraintFile, String objectiveFile, ConstraintType type,
+			Boolean extended, String solver) {
 
 		super(bind);
 
@@ -84,7 +85,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 				Sbml2Bionetwork parser = new Sbml2Bionetwork(this.sbmlFile,
 						extended);
 				this.network = parser.getBioNetwork();
-				
+
 			}
 		}
 	}
@@ -122,7 +123,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 		}
 
 		b.setLoadObjective(false);
-		
+
 		Boolean integer = false;
 		Boolean binary = false;
 
@@ -145,10 +146,9 @@ public class ConditionComparisonAnalysis extends Analysis {
 		/**
 		 * Loads the constraints applied on the metabolic network
 		 */
-		if(this.constraintFile != "")
+		if (this.constraintFile != "")
 			b.loadConditionsFile(this.constraintFile);
-		
-		
+
 		/**
 		 * Loads entities
 		 */
@@ -169,7 +169,6 @@ public class ConditionComparisonAnalysis extends Analysis {
 			b.loadInteractionsFile(this.interactionFile);
 		}
 
-		
 		String expr = objectives.get(objName);
 
 		String objString = (String) expr.subSequence(expr.indexOf("(") + 1,
@@ -182,9 +181,8 @@ public class ConditionComparisonAnalysis extends Analysis {
 		} else if (expr.contains("MAX(")) {
 			maximize = true;
 		}
-		
-		obj = b.makeObjectiveFromString(objString, maximize,
-				objName);
+
+		obj = b.makeObjectiveFromString(objString, maximize, objName);
 
 		b.setObjective(obj);
 		b.setObjSense(obj.getMaximize());
@@ -204,19 +202,17 @@ public class ConditionComparisonAnalysis extends Analysis {
 			Map<BioEntity, Double> constraintMap = new HashMap<BioEntity, Double>();
 			constraintMap.put(e, 1.0);
 
-			Constraint constraint = new Constraint(constraintMap, c.lb,
-					c.ub);
+			Constraint constraint = new Constraint(constraintMap, c.lb, c.ub);
 
 			constraints.add(constraint);
 
 			b.addInteractionNetworkSimpleConstraint(e, constraint);
-//			b.getConstraints().add(constraint);
+			// b.getConstraints().add(constraint);
 
 		}
 
 		b.prepareSolver();
-		
-		
+
 		return true;
 
 	}
@@ -225,7 +221,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 	public AnalysisResult runAnalysis() {
 
 		ConditionComparisonResult result = new ConditionComparisonResult(
-				conditions, objectives);
+				conditions, objectives, network);
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
 				objectives.keySet());
@@ -240,7 +236,8 @@ public class ConditionComparisonAnalysis extends Analysis {
 				/**
 				 * Computes FBA
 				 */
-				DoubleResult objValue = b.FBA(new ArrayList<Constraint>(), true, true);
+				DoubleResult objValue = b.FBA(new ArrayList<Constraint>(),
+						true, true);
 
 				result.addFbaResult(obj, condition, objValue.result);
 
@@ -250,10 +247,35 @@ public class ConditionComparisonAnalysis extends Analysis {
 				// We reinit the bind
 				// It does not work if don't reinit
 				this.init(objName, condition);
-				FVAAnalysis fvaAnalysis = new FVAAnalysis(b, null, new ArrayList<Constraint>());
+				FVAAnalysis fvaAnalysis = new FVAAnalysis(b, null,
+						new ArrayList<Constraint>());
 				FVAResult resultFva = fvaAnalysis.runAnalysis();
-				
+
 				result.addFvaResult(obj, condition, resultFva);
+
+				/**
+				 * Computes gene KO
+				 */
+				// We reinit the bind
+				this.init(objName, condition);
+				KOAnalysis koAnalysis = new KOAnalysis(b, 1, null);
+				KOResult resultKo = koAnalysis.runAnalysis();
+
+				result.addKoResult(obj, condition, resultKo);
+
+				System.err.println(result.koResults.get(condition.code)
+						.keySet());
+
+				/**
+				 * Computes dead genes and dispensable genes from ko genes and
+				 * FVa
+				 */
+				result.addGeneResult(
+						obj,
+						condition,
+						result.koResults.get(condition.code).get(obj.getName()),
+						result.fvaResults.get(condition.code)
+								.get(obj.getName()));
 
 			}
 

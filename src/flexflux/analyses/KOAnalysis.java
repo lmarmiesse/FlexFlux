@@ -78,6 +78,12 @@ public class KOAnalysis extends Analysis {
 	 */
 	protected List<ResolveThread> threads = new ArrayList<ResolveThread>();
 
+	/**
+	 * Constructor
+	 * @param b : Bind
+	 * @param mode O:reactions, 1:genes
+	 * @param entities: list of entities to take into account
+	 */
 	public KOAnalysis(Bind b, int mode, Map<String, BioEntity> entities) {
 		super(b);
 		this.mode = mode;
