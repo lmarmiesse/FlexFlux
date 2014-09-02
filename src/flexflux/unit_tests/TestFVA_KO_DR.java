@@ -68,7 +68,7 @@ import parsebionet.biodata.BioNetwork;
  */
 public class TestFVA_KO_DR {
 
-	static Bind bind = new CplexBind();
+	static Bind bind = new GLPKBind();
 
 	static BioNetwork n;
 	static InteractionNetwork i;

@@ -16,7 +16,6 @@ import flexflux.analyses.ConditionComparisonAnalysis;
 import flexflux.analyses.result.AnalysisResult;
 import flexflux.applications.FlexfluxConditionComparison;
 import flexflux.general.ConstraintType;
-import flexflux.general.Vars;
 
 public class TestConditionComparison {
 
@@ -31,6 +30,9 @@ public class TestConditionComparison {
 	private static File tempResultEssentialFile = null;
 	private static File tempResultUsedFile = null;
 	private static File tempResultDeadFile = null;
+	private static File tempResultEssentialGeneFile = null;
+	private static File tempResultUsedGeneFile = null;
+	private static File tempResultDeadGeneFile = null;
 
 	private static String basePath = "";
 
@@ -57,6 +59,9 @@ public class TestConditionComparison {
 		java.nio.file.Path tmpResultEssential = null;
 		java.nio.file.Path tmpResultUsed = null;
 		java.nio.file.Path tmpResultDead = null;
+		java.nio.file.Path tmpResultEssentialGenes = null;
+		java.nio.file.Path tmpResultUsedGenes = null;
+		java.nio.file.Path tmpResultDeadGenes = null;
 
 //		Vars.writeInteractionNetworkStates = true;
 
@@ -71,6 +76,11 @@ public class TestConditionComparison {
 			tmpResultUsed = java.nio.file.Files.createTempFile("test", ".tab");
 			tmpResultDead = java.nio.file.Files.createTempFile("test", ".tab");
 			tmpConstraint = java.nio.file.Files.createTempFile("test", ".tab");
+			
+			tmpResultEssentialGenes = java.nio.file.Files.createTempFile("test",
+					".tab");
+			tmpResultUsedGenes = java.nio.file.Files.createTempFile("test", ".tab");
+			tmpResultDeadGenes = java.nio.file.Files.createTempFile("test", ".tab");
 
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -86,12 +96,18 @@ public class TestConditionComparison {
 		tempResultEssentialFile = tmpResultEssential.toFile();
 		tempResultUsedFile = tmpResultUsed.toFile();
 		tempResultDeadFile = tmpResultDead.toFile();
+		tempResultEssentialGeneFile = tmpResultEssential.toFile();
+		tempResultUsedGeneFile = tmpResultUsed.toFile();
+		tempResultDeadGeneFile = tmpResultDead.toFile();
 		tempConstraintFile = tmpConstraint.toFile();
 
 		String referenceFbaFile = "";
 		String referenceEssentialFile = "";
 		String referenceUsedFile = "";
 		String referenceDeadFile = "";
+		String referenceEssentialGeneFile = "";
+		String referenceUsedGeneFile = "";
+		String referenceDeadGeneFile = "";
 
 		try {
 			f.sbmlFile = TestUtils
@@ -133,6 +149,19 @@ public class TestConditionComparison {
 					.copyProjectResource(
 							"flexflux/unit_tests/data/conditionComparisonTest/resultDead.tab",
 							tempResultDeadFile);
+			
+			referenceUsedGeneFile = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/conditionComparisonTest/resultUsedGenes.tab",
+							tempResultUsedGeneFile);
+			referenceEssentialGeneFile = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/conditionComparisonTest/resultEssentialGenes.tab",
+							tempResultEssentialGeneFile);
+			referenceDeadGeneFile = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/conditionComparisonTest/resultDeadGenes.tab",
+							tempResultDeadGeneFile);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -161,7 +190,7 @@ public class TestConditionComparison {
 		
 		r.writeToFile(basePath);
 
-		String pathFileTest = basePath + "fba_results";
+		String pathFileTest = basePath + "/fba_results";
 		File fileTest = new File(pathFileTest);
 		File fileRef = new File(referenceFbaFile);
 
@@ -171,7 +200,7 @@ public class TestConditionComparison {
 		
 		
 
-		pathFileTest = basePath + "essential_reactions";
+		pathFileTest = basePath + "/essential_reactions";
 		fileTest = new File(pathFileTest);
 		fileRef = new File(referenceEssentialFile);
 
@@ -179,7 +208,7 @@ public class TestConditionComparison {
 				"Essential reactions are different from the reference",
 				fileRef, fileTest);
 
-		pathFileTest = basePath + "used_reactions";
+		pathFileTest = basePath + "/dispensable_reactions";
 		fileTest = new File(pathFileTest);
 		fileRef = new File(referenceUsedFile);
 
@@ -187,13 +216,39 @@ public class TestConditionComparison {
 				"Used reactions are different from the reference", fileRef,
 				fileTest);
 
-		pathFileTest = basePath + "dead_reactions";
+		pathFileTest = basePath + "/dead_reactions";
 		fileTest = new File(pathFileTest);
 		fileRef = new File(referenceDeadFile);
 
 		FileAssert.assertEquals(
 				"Dead reactions are different from the reference", fileRef,
 				fileTest);
+		
+		pathFileTest = basePath + "/dead_genes";
+		fileTest = new File(pathFileTest);
+		fileRef = new File(referenceDeadGeneFile);
+
+		FileAssert.assertEquals(
+				"Dead genes are different from the reference", fileRef,
+				fileTest);
+		
+		pathFileTest = basePath + "/dispensable_genes";
+		fileTest = new File(pathFileTest);
+		fileRef = new File(referenceUsedGeneFile);
+
+		FileAssert.assertEquals(
+				"Dispensable genes are different from the reference", fileRef,
+				fileTest);
+		
+		pathFileTest = basePath + "/essential_genes";
+		fileTest = new File(pathFileTest);
+		fileRef = new File(referenceEssentialGeneFile);
+
+		FileAssert.assertEquals(
+				"Essential genes are different from the reference", fileRef,
+				fileTest);
+		
+		
 
 	}
 

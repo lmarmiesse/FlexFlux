@@ -203,7 +203,7 @@ public class FVAResult extends AnalysisResult {
 		return essentials;
 
 	}
-
+	
 	public void writeToFile(String path) {
 		try {
 			PrintWriter out = new PrintWriter(new File(path));
