@@ -1,9 +1,12 @@
 package flexflux.unit_tests;
 
 import static org.junit.Assert.fail;
+import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -54,15 +57,15 @@ public class TestKoWithInteractions {
 		try {
 			sbmlFile = TestUtils
 					.copyProjectResource(
-							"flexflux/unit_tests/data/conditionComparisonTest/test.xml",
+							"flexflux/unit_tests/data/ko/test.xml",
 							tempSbmlFile);
 			conditionFile = TestUtils
 					.copyProjectResource(
-							"flexflux/unit_tests/data/conditionComparisonTest/constraintsWithVariables.txt",
+							"flexflux/unit_tests/data/ko/constraintsWithVariables.txt",
 							tempConditionFile);
 			intFile = TestUtils
 					.copyProjectResource(
-							"flexflux/unit_tests/data/conditionComparisonTest/interactions.txt",
+							"flexflux/unit_tests/data/ko/interactions.txt",
 							tempInteractionFile);
 
 		} catch (IOException e) {
@@ -86,15 +89,24 @@ public class TestKoWithInteractions {
 
 		bind.loadSbmlNetwork(sbmlFile, false);
 		bind.loadConditionsFile(conditionFile);
-		bind.loadInteractionsFile(intFile);
-		
-
+		//bind.loadInteractionsFile(intFile);
 		
 		bind.prepareSolver();
 
+		/**
+		 * Test essential genes
+		 */
 		KOAnalysis a = new KOAnalysis(bind, 1, null);
 		KOResult res = a.runAnalysis();
 		
+		Set<String> refEssentialGenes = new HashSet<String>();
+		refEssentialGenes.add("G2");
+		Set<String> essentialGenes = res.getEssentialGenes().keySet();
+		
+		Assert.assertEquals(refEssentialGenes, essentialGenes);
+		
+		
+		fail("Not completely implemented");
 	}
 
 }
