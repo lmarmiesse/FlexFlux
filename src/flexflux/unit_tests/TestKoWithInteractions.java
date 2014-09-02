@@ -89,7 +89,7 @@ public class TestKoWithInteractions {
 
 		bind.loadSbmlNetwork(sbmlFile, false);
 		bind.loadConditionsFile(conditionFile);
-		//bind.loadInteractionsFile(intFile);
+		bind.loadInteractionsFile(intFile);
 		
 		bind.prepareSolver();
 
