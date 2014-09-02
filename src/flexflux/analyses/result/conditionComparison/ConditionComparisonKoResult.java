@@ -23,7 +23,7 @@ public class ConditionComparisonKoResult {
 		this.condition = c;
 		this.koResult = result;
 		
-		essentialGenes = result.getEssentialGenes();
+		essentialGenes = result.getEssentialEntities();
 	}
 	
 }

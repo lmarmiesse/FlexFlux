@@ -176,7 +176,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 		writeFvaResultsToFiles(path);
 
-		 writeGeneResultsToFiles(path);
+		writeGeneResultsToFiles(path);
 
 		writeSummaryReactionFile(path);
 
@@ -549,10 +549,10 @@ public class ConditionComparisonResult extends AnalysisResult {
 						+ jsPath);
 			}
 		}
-		
+
 		String cssPath = webPath + "/" + "css";
 		File cssFile = new File(cssPath);
-		
+
 		if (!cssFile.exists()) {
 			try {
 				cssFile.mkdir();
@@ -562,7 +562,6 @@ public class ConditionComparisonResult extends AnalysisResult {
 						+ cssPath);
 			}
 		}
-		
 
 		// Copy required files
 		try {
@@ -623,6 +622,27 @@ public class ConditionComparisonResult extends AnalysisResult {
 			}
 		}
 
+	}
+
+	/**
+	 * Write the files that will be used to generate heatmap with inCHlib
+	 * 
+	 * @param directoryPath
+	 */
+	public void writeFilesForHeatMap(String directoryPath) {
+		// Create directories
+		String webPath = directoryPath + "/" + "web";
+		File webFile = new File(webPath);
+
+		if (!webFile.exists()) {
+			try {
+				webFile.mkdir();
+			} catch (SecurityException se) {
+				se.printStackTrace();
+				System.err.println("Security Exception during creation of "
+						+ webPath);
+			}
+		}
 	}
 
 	@Override
