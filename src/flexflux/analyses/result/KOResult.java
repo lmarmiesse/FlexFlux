@@ -200,7 +200,7 @@ public class KOResult extends AnalysisResult {
 	 * 
 	 * @return a hashMap of the essential genes
 	 */
-	public HashMap<String, BioEntity> getEssentialGenes() {
+	public HashMap<String, BioEntity> getEssentialEntities() {
 		
 		HashMap<String, BioEntity> essentialGenes = new HashMap<String, BioEntity>();
 		

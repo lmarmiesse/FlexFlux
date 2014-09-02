@@ -50,6 +50,9 @@ public class ConditionComparisonGeneResult {
 			HashMap<String, BioGene> genes = reaction.getListOfGenes();
 			potentiallyUsedGenes.putAll(genes);
 		}
+		System.err.println(condition.code+"\t"+objective.getName());
+		System.err.println("Potentially used genes : "+potentiallyUsedGenes);
+		System.err.println("Essential genes :"+essentialGenes);
 		
 		/**
 		 * Get dispensable genes (potentially used but not dispensable)

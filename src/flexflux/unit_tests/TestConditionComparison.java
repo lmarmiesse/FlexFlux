@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import junitx.framework.FileAssert;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -41,7 +42,7 @@ public class TestConditionComparison {
 	public TemporaryFolder temp = new TemporaryFolder();
 
 	@Test
-	public void testMain() {
+	public void testMain() throws IOException {
 
 		String solver = "GLPK";
 		if (System.getProperties().containsKey("solver")) {
@@ -96,9 +97,9 @@ public class TestConditionComparison {
 		tempResultEssentialFile = tmpResultEssential.toFile();
 		tempResultUsedFile = tmpResultUsed.toFile();
 		tempResultDeadFile = tmpResultDead.toFile();
-		tempResultEssentialGeneFile = tmpResultEssential.toFile();
-		tempResultUsedGeneFile = tmpResultUsed.toFile();
-		tempResultDeadGeneFile = tmpResultDead.toFile();
+		tempResultEssentialGeneFile = tmpResultEssentialGenes.toFile();
+		tempResultUsedGeneFile = tmpResultUsedGenes.toFile();
+		tempResultDeadGeneFile = tmpResultDeadGenes.toFile();
 		tempConstraintFile = tmpConstraint.toFile();
 
 		String referenceFbaFile = "";
@@ -204,6 +205,8 @@ public class TestConditionComparison {
 		fileTest = new File(pathFileTest);
 		fileRef = new File(referenceEssentialFile);
 
+//		System.err.println(FileUtils.readFileToString(fileTest));
+		
 		FileAssert.assertEquals(
 				"Essential reactions are different from the reference",
 				fileRef, fileTest);
