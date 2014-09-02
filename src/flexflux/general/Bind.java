@@ -352,7 +352,7 @@ public abstract class Bind {
 									oldSimpleConstraint.put(ent,
 											simpleConstraints.get(ent));
 
-								} 
+								}
 								simpleConstraints.put(ent, constr);
 
 							}
@@ -371,12 +371,12 @@ public abstract class Bind {
 				//
 				constraintsToAdd.addAll(intNetSteadyStateConstraints);
 				constraintsToAdd.addAll(GPRConstraints);
-				
+
 				for (Constraint constr : constraintsToAdd) {
 					if (constr.getEntities().size() == 1) {
 						for (BioEntity ent : constr.getEntities().keySet()) {
 							if (constr.getEntities().get(ent) == 1.0) {
-								
+
 								if (oldSimpleConstraint.containsKey(ent)) {
 									simpleConstraints.put(ent,
 											oldSimpleConstraint.get(ent));
@@ -388,8 +388,6 @@ public abstract class Bind {
 						}
 					}
 				}
-
-				
 
 			}
 
@@ -449,7 +447,7 @@ public abstract class Bind {
 			constraintsToAdd.addAll(extMetabConstraints);
 			// ////////////////
 			// ////////////////
-			
+
 			return goWithConstraints(constraintsToAdd, saveResults);
 
 		} else {
@@ -2245,21 +2243,31 @@ public abstract class Bind {
 			// that have this entity as a target
 			if (simpleConstraints.get(b).getLb() == simpleConstraints.get(b)
 					.getUb()) {
+
 				if (intNet.getTargetToInteractions().containsKey(b)) {
 					for (Interaction i : intNet.getTargetToInteractions()
 							.get(b)) {
 						toCheck.remove(i);
 					}
 				}
-
 			}
-
-		}
-		for (BioEntity b : interactionNetworkSimpleConstraints.keySet()) {
-			thisStepSimpleConstraints.put(b,
-					interactionNetworkSimpleConstraints.get(b));
 		}
 		//
+		for (BioEntity b : interactionNetworkSimpleConstraints.keySet()) {
+
+			if (!thisStepSimpleConstraints.containsKey(b)) {
+				thisStepSimpleConstraints.put(b,
+						interactionNetworkSimpleConstraints.get(b));
+			}
+			//if this entity had a simple constraint, but not fix (ub!=lb) we overwrite it
+			else{
+				if(simpleConstraints.get(b).getLb() != simpleConstraints.get(b)
+						.getUb()){
+					thisStepSimpleConstraints.put(b,
+							interactionNetworkSimpleConstraints.get(b));
+				}
+			}
+		}
 
 		List<Map<BioEntity, Constraint>> allIterationsSimpleConstraints = new ArrayList<Map<BioEntity, Constraint>>();
 		List<Map<BioEntity, Constraint>> attractorSimpleConstraints = new ArrayList<Map<BioEntity, Constraint>>();
@@ -2426,7 +2434,9 @@ public abstract class Bind {
 			// if it was not set, we put it's default value
 			List<BioEntity> toRemove = new ArrayList<BioEntity>();
 			for (BioEntity ent : nextStepSimpleConstraints.keySet()) {
+
 				if (!setEntities.contains(ent)) {
+
 					if (defaultValues.containsKey(ent)) {
 
 						Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
@@ -2441,6 +2451,7 @@ public abstract class Bind {
 					} else {
 						// we say it is undetermined only if it is a target
 						if (intNet.getTargetToInteractions().containsKey(ent)) {
+
 							// we remove only if one of the interaction is in
 							// "toCheck"
 							boolean hasInteractionToCheck = false;
@@ -2486,6 +2497,8 @@ public abstract class Bind {
 
 				if (intNet.getTargetToInteractions().containsKey(b)
 						|| isExtMetab) {
+
+					System.out.println(b.getId());
 
 					// We make the average of the values of all states of the
 					// attractor
