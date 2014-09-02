@@ -101,12 +101,24 @@ public class TestKoWithInteractions {
 		
 		Set<String> refEssentialGenes = new HashSet<String>();
 		refEssentialGenes.add("G2");
-		Set<String> essentialGenes = res.getEssentialGenes().keySet();
+		Set<String> essentialGenes = res.getEssentialEntities().keySet();
 		
 		Assert.assertEquals(refEssentialGenes, essentialGenes);
 		
+		/**
+		 * Test essential reactions
+		 */
+		a = new KOAnalysis(bind, 0, null);
+		res = a.runAnalysis();
 		
-		fail("Not completely implemented");
+		Set<String> refEssentialReactions = new HashSet<String>();
+		refEssentialReactions.add("R2");
+		refEssentialReactions.add("R_D_EX");
+		refEssentialReactions.add("R_C_EX");
+		Set<String> essentialReactions = res.getEssentialEntities().keySet();
+		
+		Assert.assertEquals(refEssentialReactions, essentialReactions);
+		
 	}
 
 }
