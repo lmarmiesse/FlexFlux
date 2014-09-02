@@ -250,7 +250,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 				FVAAnalysis fvaAnalysis = new FVAAnalysis(b, null,
 						new ArrayList<Constraint>());
 				FVAResult resultFva = fvaAnalysis.runAnalysis();
-
+				
 				result.addFvaResult(obj, condition, resultFva);
 
 				/**

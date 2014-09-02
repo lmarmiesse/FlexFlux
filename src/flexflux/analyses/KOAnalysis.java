@@ -93,17 +93,6 @@ public class KOAnalysis extends Analysis {
 	public KOResult runAnalysis() {
 		// Objective obj =bind.get
 
-		List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
-		// we add the constraints corresponding to the interactions
-
-
-			for (Constraint c : b.findInteractionNetworkSteadyState()) {
-				constraintsToAdd.add(c);
-			}
-		
-
-		b.getConstraints().addAll(constraintsToAdd);
-
 		double startTime = System.currentTimeMillis();
 
 		KOResult koResult = new KOResult();
@@ -169,8 +158,6 @@ public class KOAnalysis extends Analysis {
 		while (threads.size() > 0) {
 			threads.remove(0);
 		}
-
-		b.getConstraints().removeAll(constraintsToAdd);
 
 		System.err.println("KO over "
 				+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
