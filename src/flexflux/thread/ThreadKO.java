@@ -88,7 +88,7 @@ public class ThreadKO extends ResolveThread {
 	public void run() {
 		double size;
 		while ((size = entities.size()) > 0) {
-
+			
 			BioEntity entity = entities.poll();
 
 			Map<BioEntity, Double> entityMap = new HashMap<BioEntity, Double>();

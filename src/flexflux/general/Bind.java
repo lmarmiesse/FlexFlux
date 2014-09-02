@@ -315,7 +315,7 @@ public abstract class Bind {
 				Map<BioEntity, Constraint> oldSimpleConstraint = new HashMap<BioEntity, Constraint>();
 				// we add the simple constraints to be taken into account when
 				// checking interactions
-				List<BioEntity> hadNoSimpleConstraint = new ArrayList<BioEntity>();
+				Set<BioEntity> hadNoSimpleConstraint = new HashSet<BioEntity>();
 
 				for (Constraint constr : constraintsToAdd) {
 
@@ -351,7 +351,8 @@ public abstract class Bind {
 										&& !hadNoSimpleConstraint.contains(ent)) {
 									oldSimpleConstraint.put(ent,
 											simpleConstraints.get(ent));
-								}
+
+								} 
 								simpleConstraints.put(ent, constr);
 
 							}
@@ -368,11 +369,14 @@ public abstract class Bind {
 				}
 
 				//
-
+				constraintsToAdd.addAll(intNetSteadyStateConstraints);
+				constraintsToAdd.addAll(GPRConstraints);
+				
 				for (Constraint constr : constraintsToAdd) {
 					if (constr.getEntities().size() == 1) {
 						for (BioEntity ent : constr.getEntities().keySet()) {
 							if (constr.getEntities().get(ent) == 1.0) {
+								
 								if (oldSimpleConstraint.containsKey(ent)) {
 									simpleConstraints.put(ent,
 											oldSimpleConstraint.get(ent));
@@ -385,8 +389,7 @@ public abstract class Bind {
 					}
 				}
 
-				constraintsToAdd.addAll(intNetSteadyStateConstraints);
-				constraintsToAdd.addAll(GPRConstraints);
+				
 
 			}
 
@@ -446,7 +449,7 @@ public abstract class Bind {
 			constraintsToAdd.addAll(extMetabConstraints);
 			// ////////////////
 			// ////////////////
-
+			
 			return goWithConstraints(constraintsToAdd, saveResults);
 
 		} else {
@@ -2389,7 +2392,6 @@ public abstract class Bind {
 				nextStepSimpleConstraints.put(b,
 						thisStepSimpleConstraints.get(b));
 			}
-
 
 			for (Interaction i : toCheck) {
 				if (i.getCondition().isTrue(thisStepSimpleConstraints)) {
