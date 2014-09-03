@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,6 +39,8 @@ public class ConditionComparisonAnalysis extends Analysis {
 	String reactionMetaDataFile = "";
 	String geneMetaDataFile = "";
 	String sbmlFile = "";
+	String inchlibPath = "";
+
 	Boolean extended = false;
 	String solver = "GLPK";
 	ConstraintType constraintType = null;
@@ -61,7 +64,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 			String interactionFile, String conditionFile,
 			String constraintFile, String objectiveFile, ConstraintType type,
 			Boolean extended, String solver, String reactionMetaDataFile,
-			String geneMetaDataFile, String mdSep) {
+			String geneMetaDataFile, String mdSep, String inchlibPath) {
 
 		super(bind);
 
@@ -76,6 +79,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 		this.reactionMetaDataFile = reactionMetaDataFile;
 		this.geneMetaDataFile = geneMetaDataFile;
 		this.mdSep = mdSep;
+		this.inchlibPath = inchlibPath;
 
 		/**
 		 * Reads the conditionFile
@@ -200,7 +204,18 @@ public class ConditionComparisonAnalysis extends Analysis {
 		b.setObjSense(obj.getMaximize());
 
 		List<Constraint> constraints = new ArrayList<Constraint>();
-
+		
+		BioEntity fluxSumEnt = b.createFluxesSummation();
+		
+		BioEntity fluxSumEntArray[] = {fluxSumEnt};
+		double fluxSumCoeff[] = {1.0};
+		
+		Objective objMinFluxSum = new Objective(fluxSumEntArray, fluxSumCoeff, "fluxSum", false);
+		
+		b.constraintObjectives.add(obj);
+		
+		b.constraintObjectives.add(objMinFluxSum);
+		
 		for (SimpleConstraint c : condition.constraints) {
 			String id = c.entityId;
 			BioEntity e = null;
@@ -233,7 +248,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 	public AnalysisResult runAnalysis() {
 
 		ConditionComparisonResult result = new ConditionComparisonResult(
-				conditions, objectives, network);
+				conditions, objectives, network, inchlibPath);
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
 				objectives.keySet());
@@ -275,9 +290,6 @@ public class ConditionComparisonAnalysis extends Analysis {
 
 				result.addKoResult(obj, condition, resultKo);
 
-				System.err.println(result.koResults.get(condition.code)
-						.keySet());
-
 				/**
 				 * Computes dead genes and dispensable genes from ko genes and
 				 * FVa
@@ -306,12 +318,12 @@ public class ConditionComparisonAnalysis extends Analysis {
 									this.mdSep);
 					result.reactionMetaData = reactionMetaData;
 				}
-				
-				
-				for(BioEntity e : this.b.getInteractionNetwork().getTargetToInteractions().keySet()) {
+
+				for (BioEntity e : this.b.getInteractionNetwork()
+						.getTargetToInteractions().keySet()) {
 					result.interactionTargets.add(e.getId());
 				}
-				
+
 			}
 
 		}
@@ -605,22 +617,14 @@ public class ConditionComparisonAnalysis extends Analysis {
 						}
 
 						String id = tab[0];
-						
-						System.err.println(ids);
-						System.err.println(id);
 
 						if (ids.contains(id)) {
-							
-							System.err.println("match");
 
 							for (int i = 1; i < nbColumns; i++) {
-								
-								String colName = columns.get(i-1);
+
+								String colName = columns.get(i - 1);
 
 								String value = tab[i];
-								
-								
-								System.err.println(id+"__"+colName+"__"+value);
 
 								metaData.get(colName).put(id, value);
 

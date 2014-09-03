@@ -2,9 +2,11 @@ package flexflux.analyses.result.conditionComparison;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,9 +58,9 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 	public HashMap<String, HashMap<String, String>> reactionMetaData = null;
 	public HashMap<String, HashMap<String, String>> geneMetaData = null;
-	
+
 	public Set<String> interactionTargets;
- 	
+
 	/**
 	 * Table with all results.
 	 */
@@ -82,6 +84,8 @@ public class ConditionComparisonResult extends AnalysisResult {
 	private String jsPath;
 	private String genePath;
 
+	private String inchlibPath;
+
 	/**
 	 * Constructor
 	 * 
@@ -91,20 +95,23 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 *            : list of objectives
 	 */
 	public ConditionComparisonResult(ArrayList<Condition> conditions,
-			HashMap<String, String> objectives, BioNetwork network) {
+			HashMap<String, String> objectives, BioNetwork network,
+			String inchlibPath) {
 		fbaResults = new ConditionComparisonFbaResultSet();
 		fvaResults = new ConditionComparisonFvaResultSet();
 		koResults = new ConditionComparisonKoResultSet();
 		geneResults = new ConditionComparisonGeneResultSet();
 
+		this.inchlibPath = inchlibPath;
+
 		this.conditions = conditions;
 		this.objectives = objectives;
 
 		this.network = network;
-		
+
 		// Sets the interaction targets
 		this.interactionTargets = new HashSet<String>();
-		
+
 	}
 
 	/**
@@ -284,7 +291,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 		writeFilesForHeatMap(true);
 		writeFilesForHeatMap(false);
-
+		
 	}
 
 	/**
@@ -736,7 +743,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		String outPath = genePath;
 		HashMap<String, HashMap<String, String>> metaData = geneMetaData;
 		Set<String> ids = network.getGeneList().keySet();
-		
+
 		Set<String> chokes = new HashSet<String>();
 
 		if (isReaction) {
@@ -745,13 +752,10 @@ public class ConditionComparisonResult extends AnalysisResult {
 			ids = network.getBiochemicalReactionList().keySet();
 			chokes = network.getChokeReactions();
 		}
-		
-		System.err.println(metaData);
 
 		// Create the data and metadata files
 		try {
-			outData = new PrintWriter(new File(outPath
-					+ "/heatMapData.csv"));
+			outData = new PrintWriter(new File(outPath + "/heatMapData.csv"));
 			outMetaData = new PrintWriter(new File(outPath
 					+ "/heatMapMetaData.csv"));
 
@@ -818,40 +822,36 @@ public class ConditionComparisonResult extends AnalysisResult {
 					outMetaData.write("," + pathwayStr + ",");
 
 					// Prints the number of enzymes
-					outMetaData.write(Integer.toString(reaction.getEnzList().size()));
-					
+					outMetaData.write(Integer.toString(reaction.getEnzList()
+							.size()));
+
 					// Checks if the reaction is a choke reaction
 					String choke = "-";
-					if(chokes.contains(id)) {
+					if (chokes.contains(id)) {
 						choke = "+";
 					}
-					outMetaData.write("," +choke);
-					
-					
-					
-				}
-				else {
+					outMetaData.write("," + choke);
+
+				} else {
 					// It's a gene
-					
+
 					/**
 					 * number of reactions in which the gene is involved
 					 */
 					int nbReactions = network.getReactionsFromGene(id).size();
-					outMetaData.write(","+Integer.toString(nbReactions));
-					
+					outMetaData.write("," + Integer.toString(nbReactions));
+
 					/**
 					 * Checks if the gene is a target of the interaction network
 					 */
 					String target = "-";
-					
-					if(this.interactionTargets.contains(id)) {
+
+					if (this.interactionTargets.contains(id)) {
 						target = "+";
 					}
-					
-					outMetaData.write(","+target);
-					
-					
-					
+
+					outMetaData.write("," + target);
+
 				}
 
 				for (String col : additionalMetaDataColumns) {
@@ -928,6 +928,35 @@ public class ConditionComparisonResult extends AnalysisResult {
 				outMetaData.close();
 			}
 		}
+		
+		// Build inchlib cmd
+		if(inchlibPath != "")
+		{
+			if(inchlibPath.contains(" ") || ! inchlibPath.contains("inchlib") || ! inchlibPath.endsWith(".py")) {
+				System.err.println("Inchlib command not valid");
+				return;
+			}
+			File f = new File(inchlibPath);
+			if(! f.exists() || f.isDirectory()) {
+				System.err.println("The python file "+inchlibPath+" does not exist");
+				return;
+			}
+			
+			String cmd = "python "+inchlibPath+" "+outPath + "/heatMapData.csv"+" -m "+outPath + "/heatMapMetaData.csv"+" -dh -mh -a both -html "+outPath;
+			
+			try {
+				this.runInchlib(cmd);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.err.println("Problem while running inchlib");
+			}
+			
+			
+		}
+		
+		
+		
 
 	}
 
@@ -1051,6 +1080,49 @@ public class ConditionComparisonResult extends AnalysisResult {
 		public void removeUpdate(DocumentEvent arg0) {
 			updateTable(fbaTableSorter, arg0);
 		}
+	}
+
+	/**
+	 * Run the inchlib command
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	public Boolean runInchlib(String inchlibCmd) throws IOException {
+
+		Process p = null;
+		try {
+			p = Runtime.getRuntime().exec(inchlibCmd);
+			String lineError;
+			BufferedReader bre = new BufferedReader(new InputStreamReader(
+					p.getErrorStream()));
+			while ((lineError = bre.readLine()) != null) {
+				System.err.println(lineError);
+			}
+			p.waitFor();
+		} catch (IOException e) {
+			System.err.println("Error in launching the command "
+					+ inchlibCmd);
+			e.printStackTrace();
+			return false;
+		} catch (InterruptedException e) {
+			System.err
+					.println("Interruption of the command " + inchlibCmd);
+			e.printStackTrace();
+			return false;
+		} finally {
+			if (p != null) {
+				if (p.getOutputStream() != null)
+					p.getOutputStream().close();
+				if (p.getInputStream() != null)
+					p.getInputStream().close();
+				if (p.getErrorStream() != null)
+					p.getErrorStream().close();
+			}
+		}
+
+		return true;
+
 	}
 
 }

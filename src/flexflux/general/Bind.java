@@ -1501,7 +1501,6 @@ public abstract class Bind {
 			Constraint c = new Constraint(constMap, lb - delta, ub + delta);
 
 			constraints.add(c);
-			System.err.println("New constraint : \n" + c);
 
 			makeSolverConstraint(c, null, null);
 
@@ -1924,7 +1923,6 @@ public abstract class Bind {
 	 * Prints the constraints
 	 */
 	public void displayConstraints() {
-		System.err.println(constraints.size() + " constraints");
 		for (Constraint c : constraints) {
 			System.err.println(c);
 		}
@@ -2330,7 +2328,7 @@ public abstract class Bind {
 			}
 
 			if (thisStepSimpleConstraints.size() == 0) {
-				System.out
+				System.err
 						.println("Warning : all values of the interaction network are undetermined.");
 				break;
 			}
@@ -2385,9 +2383,9 @@ public abstract class Bind {
 			Set<BioEntity> checkedEntities = new HashSet<BioEntity>();
 
 			if (areTheSame) {
-				System.err.println("Steady state found in " + (it - 1)
-						+ " iterations.");
-				System.err.println("Attractor size : " + attractorSize);
+//				System.err.println("Steady state found in " + (it - 1)
+//						+ " iterations.");
+//				System.err.println("Attractor size : " + attractorSize);
 				break;
 			}
 
@@ -2497,8 +2495,6 @@ public abstract class Bind {
 
 				if (intNet.getTargetToInteractions().containsKey(b)
 						|| isExtMetab) {
-
-					System.out.println(b.getId());
 
 					// We make the average of the values of all states of the
 					// attractor
