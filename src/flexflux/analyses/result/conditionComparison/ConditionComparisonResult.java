@@ -9,7 +9,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.swing.BoxLayout;
@@ -28,12 +30,17 @@ import javax.swing.table.TableRowSorter;
 
 import org.jfree.ui.RefineryUtilities;
 
+import parsebionet.biodata.BioChemicalReaction;
+import parsebionet.biodata.BioEntity;
+import parsebionet.biodata.BioGene;
 import parsebionet.biodata.BioNetwork;
+import parsebionet.biodata.BioPathway;
 import flexflux.analyses.result.AnalysisResult;
 import flexflux.analyses.result.FVAResult;
 import flexflux.analyses.result.KOResult;
 import flexflux.analyses.result.MyTableModel;
 import flexflux.condition.Condition;
+import flexflux.general.Bind;
 import flexflux.general.Objective;
 import flexflux.io.Utils;
 
@@ -47,6 +54,11 @@ public class ConditionComparisonResult extends AnalysisResult {
 	ArrayList<Condition> conditions = null;
 	HashMap<String, String> objectives = null;
 
+	public HashMap<String, HashMap<String, String>> reactionMetaData = null;
+	public HashMap<String, HashMap<String, String>> geneMetaData = null;
+	
+	public Set<String> interactionTargets;
+ 	
 	/**
 	 * Table with all results.
 	 */
@@ -62,6 +74,13 @@ public class ConditionComparisonResult extends AnalysisResult {
 	private JTextField fbaTableSearchField;
 
 	private BioNetwork network;
+
+	private String directoryPath = ".";
+	private String webPath;
+	private String cssPath;
+	private String reactionPath;
+	private String jsPath;
+	private String genePath;
 
 	/**
 	 * Constructor
@@ -82,7 +101,10 @@ public class ConditionComparisonResult extends AnalysisResult {
 		this.objectives = objectives;
 
 		this.network = network;
-
+		
+		// Sets the interaction targets
+		this.interactionTargets = new HashSet<String>();
+		
 	}
 
 	/**
@@ -159,6 +181,8 @@ public class ConditionComparisonResult extends AnalysisResult {
 	@Override
 	public void writeToFile(String path) {
 
+		this.directoryPath = path;
+
 		// First create the directory if it does not exist
 		File theDir = new File(path);
 
@@ -172,15 +196,94 @@ public class ConditionComparisonResult extends AnalysisResult {
 			}
 		}
 
-		writeFbaResultsToFile(path);
+		// Create web directories
+		// Create directories
+		this.webPath = directoryPath + "/" + "web";
+		File webFile = new File(webPath);
 
-		writeFvaResultsToFiles(path);
+		if (!webFile.exists()) {
+			try {
+				webFile.mkdir();
+			} catch (SecurityException se) {
+				se.printStackTrace();
+				System.err.println("Security Exception during creation of "
+						+ webPath);
+			}
+		}
+		this.reactionPath = webPath + "/" + "reactions";
+		File reactionFile = new File(reactionPath);
 
-		writeGeneResultsToFiles(path);
+		if (!reactionFile.exists()) {
+			try {
+				reactionFile.mkdir();
+			} catch (SecurityException se) {
+				se.printStackTrace();
+				System.err.println("Security Exception during creation of "
+						+ reactionPath);
+			}
+		}
+		this.genePath = webPath + "/" + "genes";
+		File geneFile = new File(genePath);
 
-		writeSummaryReactionFile(path);
+		if (!geneFile.exists()) {
+			try {
+				geneFile.mkdir();
+			} catch (SecurityException se) {
+				se.printStackTrace();
+				System.err.println("Security Exception during creation of "
+						+ genePath);
+			}
+		}
+		this.jsPath = webPath + "/" + "js";
+		File jsFile = new File(jsPath);
 
-		writeD3Files(path);
+		if (!jsFile.exists()) {
+			try {
+				jsFile.mkdir();
+			} catch (SecurityException se) {
+				se.printStackTrace();
+				System.err.println("Security Exception during creation of "
+						+ jsPath);
+			}
+		}
+
+		this.cssPath = webPath + "/" + "css";
+		File cssFile = new File(cssPath);
+
+		if (!cssFile.exists()) {
+			try {
+				cssFile.mkdir();
+			} catch (SecurityException se) {
+				se.printStackTrace();
+				System.err.println("Security Exception during creation of "
+						+ cssPath);
+			}
+		}
+
+		// copy summary.html in index.html
+		try {
+			Utils.copyProjectResource(
+					"flexflux/data/web/templates/summary.html", webPath,
+					"index.html");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Error while copying web files");
+			return;
+		}
+
+		writeFbaResultsToFile();
+
+		writeFvaResultsToFiles();
+
+		writeGeneResultsToFiles();
+
+		writeSummaryReactionFile();
+
+		writeD3Files(true);
+		writeD3Files(false);
+
+		writeFilesForHeatMap(true);
+		writeFilesForHeatMap(false);
 
 	}
 
@@ -188,7 +291,9 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 * 
 	 * @param path
 	 */
-	public void writeFbaResultsToFile(String path) {
+	public void writeFbaResultsToFile() {
+
+		String path = this.directoryPath;
 
 		PrintWriter out = null;
 
@@ -238,7 +343,9 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 * 
 	 * @param path
 	 */
-	public void writeFvaResultsToFiles(String path) {
+	public void writeFvaResultsToFiles() {
+
+		String path = this.directoryPath;
 
 		PrintWriter outEssential = null;
 		PrintWriter outDispensable = null;
@@ -351,7 +458,9 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 * 
 	 * @param path
 	 */
-	public void writeGeneResultsToFiles(String path) {
+	public void writeGeneResultsToFiles() {
+
+		String path = this.directoryPath;
 
 		PrintWriter outEssential = null;
 		PrintWriter outDispensable = null;
@@ -462,7 +571,10 @@ public class ConditionComparisonResult extends AnalysisResult {
 	/**
 	 * Write a tabulated file with the number of reactions by type
 	 */
-	public void writeSummaryReactionFile(String path) {
+	public void writeSummaryReactionFile() {
+
+		String path = this.directoryPath;
+
 		PrintWriter out = null;
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
@@ -510,67 +622,21 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 * 
 	 * @throws IOException
 	 */
-	public void writeD3Files(String directoryPath) {
+	public void writeD3Files(Boolean isReaction) {
 
-		// Create directories
-		String webPath = directoryPath + "/" + "web";
-		File webFile = new File(webPath);
-
-		if (!webFile.exists()) {
-			try {
-				webFile.mkdir();
-			} catch (SecurityException se) {
-				se.printStackTrace();
-				System.err.println("Security Exception during creation of "
-						+ webPath);
-			}
-		}
-		String reactionPath = webPath + "/" + "reactions";
-		File reactionFile = new File(reactionPath);
-
-		if (!reactionFile.exists()) {
-			try {
-				reactionFile.mkdir();
-			} catch (SecurityException se) {
-				se.printStackTrace();
-				System.err.println("Security Exception during creation of "
-						+ reactionPath);
-			}
-		}
-		String jsPath = webPath + "/" + "js";
-		File jsFile = new File(jsPath);
-
-		if (!jsFile.exists()) {
-			try {
-				jsFile.mkdir();
-			} catch (SecurityException se) {
-				se.printStackTrace();
-				System.err.println("Security Exception during creation of "
-						+ jsPath);
-			}
-		}
-
-		String cssPath = webPath + "/" + "css";
-		File cssFile = new File(cssPath);
-
-		if (!cssFile.exists()) {
-			try {
-				cssFile.mkdir();
-			} catch (SecurityException se) {
-				se.printStackTrace();
-				System.err.println("Security Exception during creation of "
-						+ cssPath);
-			}
+		String outPath = genePath;
+		if (isReaction) {
+			outPath = reactionPath;
 		}
 
 		// Copy required files
 		try {
 			Utils.copyProjectResource(
 					"flexflux/data/web/templates/multiBar/multiBar.html",
-					reactionPath, "summaryReactions.html");
+					outPath, "summary.html");
 			Utils.copyProjectResource(
 					"flexflux/data/web/templates/multiBar/multiBar.js",
-					reactionPath, "multiBar.js");
+					outPath, "multiBar.js");
 			Utils.copyProjectResource("flexflux/data/web/js/d3.v3.js", jsPath,
 					"d3.v3.js");
 			Utils.copyProjectResource("flexflux/data/web/js/nv.d3.js", jsPath,
@@ -588,24 +654,44 @@ public class ConditionComparisonResult extends AnalysisResult {
 				objectives.keySet());
 		PrintWriter out = null;
 		try {
-			out = new PrintWriter(new File(reactionPath + "/data.js"));
+			out = new PrintWriter(new File(outPath + "/data.js"));
 			out.write("var str = \"name,essential,dispensable,dead\\n");
 
 			for (Condition c : conditions) {
-				HashMap<String, ConditionComparisonFvaResult> results = fvaResults
-						.get(c.code);
+
 				for (String objName : objectiveNames) {
 
-					ConditionComparisonFvaResult result = results.get(objName);
+					int nbEssential = 0;
+					int nbDispensable = 0;
+					int nbDead = 0;
 
-					int nbEssential = result.essentialReactions.size();
-					int nbDispensable = result.dispensableReactions.size();
-					int nbDead = result.deadReactions.size();
+					if (isReaction) {
+
+						HashMap<String, ConditionComparisonFvaResult> results = fvaResults
+								.get(c.code);
+
+						ConditionComparisonFvaResult result = results
+								.get(objName);
+
+						nbEssential = result.essentialReactions.size();
+						nbDispensable = result.dispensableReactions.size();
+						nbDead = result.deadReactions.size();
+					} else {
+						HashMap<String, ConditionComparisonGeneResult> results = geneResults
+								.get(c.code);
+
+						ConditionComparisonGeneResult result = results
+								.get(objName);
+
+						nbEssential = result.essentialGenes.size();
+						nbDispensable = result.dispensableGenes.size();
+						nbDead = result.deadGenes.size();
+					}
 
 					out.write(c.code + "__" + objName + "," + nbEssential + ","
 							+ nbDispensable + "," + nbDead + "\\n");
-
 				}
+
 			}
 
 			out.write("\"\n");
@@ -627,22 +713,222 @@ public class ConditionComparisonResult extends AnalysisResult {
 	/**
 	 * Write the files that will be used to generate heatmap with inCHlib
 	 * 
+	 * Launch this command to create the html page called inchlib.html that
+	 * contains the heatmap python inchlib_clust.py reactionsVsConditions.csv -m
+	 * reactionsMetaData.csv -dh -mh -a both -html htmlPath
+	 * 
+	 * Be careful, to have the same color code in the whole heatmap, the
+	 * inchlib_clust.py template has been transformed to integrate the parameter
+	 * independent_columns: false
+	 * 
 	 * @param directoryPath
+	 *            : global result path
+	 * @param isReaction
+	 *            : if true, builds heatmap for reactions, otherwise for genes
 	 */
-	public void writeFilesForHeatMap(String directoryPath) {
-		// Create directories
-		String webPath = directoryPath + "/" + "web";
-		File webFile = new File(webPath);
+	public void writeFilesForHeatMap(Boolean isReaction) {
 
-		if (!webFile.exists()) {
-			try {
-				webFile.mkdir();
-			} catch (SecurityException se) {
-				se.printStackTrace();
-				System.err.println("Security Exception during creation of "
-						+ webPath);
+		PrintWriter outData = null;
+		PrintWriter outMetaData = null;
+		ArrayList<String> objectiveNames = new ArrayList<String>(
+				objectives.keySet());
+
+		String outPath = genePath;
+		HashMap<String, HashMap<String, String>> metaData = geneMetaData;
+		Set<String> ids = network.getGeneList().keySet();
+		
+		Set<String> chokes = new HashSet<String>();
+
+		if (isReaction) {
+			outPath = reactionPath;
+			metaData = reactionMetaData;
+			ids = network.getBiochemicalReactionList().keySet();
+			chokes = network.getChokeReactions();
+		}
+		
+		System.err.println(metaData);
+
+		// Create the data and metadata files
+		try {
+			outData = new PrintWriter(new File(outPath
+					+ "/heatMapData.csv"));
+			outMetaData = new PrintWriter(new File(outPath
+					+ "/heatMapMetaData.csv"));
+
+			// Prints the header
+			outData.write("id");
+
+			for (Condition c : conditions) {
+				for (String objName : objectiveNames) {
+					outData.write("," + c.code + "__" + objName);
+				}
+			}
+			outData.write("\n");
+
+			/**
+			 * Header for metadata file
+			 */
+			if (isReaction) {
+				outMetaData.write("id,pathway,nbEnzymes,choke");
+			} else {
+				outMetaData.write("id,nbReactions,interactionTarget");
+			}
+
+			ArrayList<String> additionalMetaDataColumns = new ArrayList<String>();
+
+			if (metaData != null && metaData.size() != 0) {
+				additionalMetaDataColumns = new ArrayList<String>(
+						metaData.keySet());
+
+				for (String col : additionalMetaDataColumns) {
+					outMetaData.write("," + col);
+				}
+
+			}
+
+			outMetaData.write("\n");
+
+			for (String id : ids) {
+
+				outMetaData.write(id);
+
+				if (isReaction) {
+					BioChemicalReaction reaction = network
+							.getBiochemicalReactionList().get(id);
+					HashMap<String, BioPathway> pathways = reaction
+							.getPathwayList();
+					// Build pathway string
+					ArrayList<String> pathwayArray = new ArrayList<String>(
+							pathways.keySet());
+					Collections.sort(pathwayArray);
+					String pathwayStr = "";
+
+					if (reaction.isExchangeReaction()) {
+						pathwayStr = "Exchange";
+					} else {
+						for (int i = 0; i < pathwayArray.size(); i++) {
+							if (i != 0) {
+								pathwayStr += "__";
+							} else {
+								pathwayStr += pathwayArray.get(i);
+							}
+						}
+					}
+
+					outMetaData.write("," + pathwayStr + ",");
+
+					// Prints the number of enzymes
+					outMetaData.write(Integer.toString(reaction.getEnzList().size()));
+					
+					// Checks if the reaction is a choke reaction
+					String choke = "-";
+					if(chokes.contains(id)) {
+						choke = "+";
+					}
+					outMetaData.write("," +choke);
+					
+					
+					
+				}
+				else {
+					// It's a gene
+					
+					/**
+					 * number of reactions in which the gene is involved
+					 */
+					int nbReactions = network.getReactionsFromGene(id).size();
+					outMetaData.write(","+Integer.toString(nbReactions));
+					
+					/**
+					 * Checks if the gene is a target of the interaction network
+					 */
+					String target = "-";
+					
+					if(this.interactionTargets.contains(id)) {
+						target = "+";
+					}
+					
+					outMetaData.write(","+target);
+					
+					
+					
+				}
+
+				for (String col : additionalMetaDataColumns) {
+					String value = "NA";
+					if (metaData.get(col).containsKey(id)) {
+						value = metaData.get(col).get(id);
+					}
+					outMetaData.write("," + value);
+				}
+
+				outMetaData.write("\n");
+
+				/**
+				 * Prints the values in the data file
+				 */
+				outData.write(id);
+				for (Condition c : conditions) {
+
+					if (isReaction) {
+						HashMap<String, ConditionComparisonFvaResult> results = fvaResults
+								.get(c.code);
+						for (String objName : objectiveNames) {
+							ConditionComparisonFvaResult result = results
+									.get(objName);
+
+							int value = 0;
+
+							if (result.essentialReactions.containsKey(id)) {
+								value = 3;
+							} else if (result.dispensableReactions
+									.containsKey(id)) {
+								value = 2;
+							} else if (result.deadReactions.containsKey(id)) {
+								value = 1;
+							}
+							outData.write("," + value);
+						}
+					} else {
+						HashMap<String, ConditionComparisonGeneResult> results = geneResults
+								.get(c.code);
+						for (String objName : objectiveNames) {
+							ConditionComparisonGeneResult result = results
+									.get(objName);
+
+							int value = 0;
+
+							if (result.essentialGenes.containsKey(id)) {
+								value = 3;
+							} else if (result.dispensableGenes.containsKey(id)) {
+								value = 2;
+							} else if (result.deadGenes.containsKey(id)) {
+								value = 1;
+							}
+							outData.write("," + value);
+						}
+					}
+				}
+				outData.write("\n");
+			}
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.err
+					.println("Error while creating the data files for clustering");
+			return;
+		}
+
+		finally {
+			if (outData != null) {
+				outData.close();
+			}
+			if (outMetaData != null) {
+				outMetaData.close();
 			}
 		}
+
 	}
 
 	@Override

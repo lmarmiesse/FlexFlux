@@ -96,6 +96,7 @@
   <reaction id="R1" name ="R1" reversible="false">
     <notes>
       <html:p>GENE_ASSOCIATION: G1</html:p>
+      <html:p>SUBSYSTEM: Pathway1</html:p>
       <html:p>PROTEIN_ASSOCIATION: ( P1 )</html:p>
     </notes>
     <listOfReactants>
@@ -118,6 +119,7 @@
     <notes>
       <html:p>GENE_ASSOCIATION: G2</html:p>
       <html:p>PROTEIN_ASSOCIATION: ( P2 )</html:p>
+      <html:p>SUBSYSTEM: Pathway2</html:p>
     </notes>
     <listOfReactants>
       <speciesReference species="C" stoichiometry="1"/>
