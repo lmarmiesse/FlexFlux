@@ -205,10 +205,8 @@ public class KOResult extends AnalysisResult {
 		HashMap<String, BioEntity> essentialGenes = new HashMap<String, BioEntity>();
 		
 		for (BioEntity entity : map.keySet()) {
-			System.err.println(entity.getId());
 			
 			Double value = Vars.round(map.get(entity));
-			System.err.println(value);
 			if(value == 0.0)
 				essentialGenes.put(entity.getId(), entity);
 		}

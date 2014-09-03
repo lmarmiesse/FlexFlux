@@ -75,6 +75,10 @@ public class FlexfluxConditionComparison {
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
 	public String solver = "GLPK";
+	
+	@Option(name = "-inchlibPath", usage ="[default=/usr/local/inchlib_clust/inchlib_clust.py]", metaVar = "String")
+	public String inchlibPath = "/usr/local/inchlib_clust/inchlib_clust.py";
+	
 
 	@Option(name = "-h", usage = "Prints this help")
 	public Boolean h = false;
@@ -166,7 +170,7 @@ public class FlexfluxConditionComparison {
 
 		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
 				f.sbmlFile, f.intFile, f.conditionFile, f.constraintFile, f.objectiveFile, c, f.extended, 
-				f.solver, f.metaReactionDataFile, f.metaGeneDataFile, f.mdSep);
+				f.solver, f.metaReactionDataFile, f.metaGeneDataFile, f.mdSep, f.inchlibPath);
 		
 		AnalysisResult r = a.runAnalysis();
 
