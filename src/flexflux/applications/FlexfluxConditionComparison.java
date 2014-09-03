@@ -29,6 +29,16 @@ public class FlexfluxConditionComparison {
 
 	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
 	public String sbmlFile = "";
+	
+	
+	@Option(name = "-mdr", usage = "[OPTIONAL] Reaction metadata file used for heatmap analysis", metaVar = "File", required = false)
+	public String metaReactionDataFile = "";
+	
+	@Option(name = "-mdg", usage = "[OPTIONAL] Gene metadata file used for heatmap analysis", metaVar = "File", required = false)
+	public String metaGeneDataFile = "";
+	
+	@Option(name = "-mdSep", usage = "[Default=,] Separator for the columns in the metaData file", metaVar = "String", required = false)
+	public String mdSep = ",";
 
 	@Option(name = "-cond", usage = "File containing several conditions", metaVar = "File", required = true)
 	public String conditionFile = "";
@@ -156,7 +166,7 @@ public class FlexfluxConditionComparison {
 
 		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
 				f.sbmlFile, f.intFile, f.conditionFile, f.constraintFile, f.objectiveFile, c, f.extended, 
-				f.solver);
+				f.solver, f.metaReactionDataFile, f.metaGeneDataFile, f.mdSep);
 		
 		AnalysisResult r = a.runAnalysis();
 

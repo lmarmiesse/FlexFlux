@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
@@ -34,12 +35,19 @@ public class ConditionComparisonAnalysis extends Analysis {
 	String objectiveFile = "";
 	String interactionFile = "";
 	String constraintFile = "";
+	String reactionMetaDataFile = "";
+	String geneMetaDataFile = "";
 	String sbmlFile = "";
 	Boolean extended = false;
 	String solver = "GLPK";
 	ConstraintType constraintType = null;
 	Boolean flag = true;
 	BioNetwork network = null;
+
+	/**
+	 * Separator for columns in metadata file
+	 */
+	String mdSep = ",";
 
 	Objective obj = null;
 
@@ -52,7 +60,8 @@ public class ConditionComparisonAnalysis extends Analysis {
 	public ConditionComparisonAnalysis(Bind bind, String sbmlFile,
 			String interactionFile, String conditionFile,
 			String constraintFile, String objectiveFile, ConstraintType type,
-			Boolean extended, String solver) {
+			Boolean extended, String solver, String reactionMetaDataFile,
+			String geneMetaDataFile, String mdSep) {
 
 		super(bind);
 
@@ -64,6 +73,9 @@ public class ConditionComparisonAnalysis extends Analysis {
 		this.objectiveFile = objectiveFile;
 		this.constraintType = type;
 		this.constraintFile = constraintFile;
+		this.reactionMetaDataFile = reactionMetaDataFile;
+		this.geneMetaDataFile = geneMetaDataFile;
+		this.mdSep = mdSep;
 
 		/**
 		 * Reads the conditionFile
@@ -250,7 +262,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 				FVAAnalysis fvaAnalysis = new FVAAnalysis(b, null,
 						new ArrayList<Constraint>());
 				FVAResult resultFva = fvaAnalysis.runAnalysis();
-				
+
 				result.addFvaResult(obj, condition, resultFva);
 
 				/**
@@ -277,6 +289,29 @@ public class ConditionComparisonAnalysis extends Analysis {
 						result.fvaResults.get(condition.code)
 								.get(obj.getName()));
 
+				/**
+				 * Reads the metaDataFile
+				 */
+
+				if (geneMetaDataFile != "") {
+					HashMap<String, HashMap<String, String>> geneMetaData = this
+							.readMetaDataFile(geneMetaDataFile, false,
+									this.mdSep);
+					result.geneMetaData = geneMetaData;
+				}
+
+				if (reactionMetaDataFile != "") {
+					HashMap<String, HashMap<String, String>> reactionMetaData = this
+							.readMetaDataFile(reactionMetaDataFile, true,
+									this.mdSep);
+					result.reactionMetaData = reactionMetaData;
+				}
+				
+				
+				for(BioEntity e : this.b.getInteractionNetwork().getTargetToInteractions().keySet()) {
+					result.interactionTargets.add(e.getId());
+				}
+				
 			}
 
 		}
@@ -503,6 +538,126 @@ public class ConditionComparisonAnalysis extends Analysis {
 		}
 
 		return flag;
+
+	}
+
+	/**
+	 * 
+	 * @param isReaction
+	 *            : if true, considers ids as reaction ids, otherwise considers
+	 *            ids as gene ids
+	 * @return
+	 */
+	public HashMap<String, HashMap<String, String>> readMetaDataFile(
+			String metaDataFile, Boolean isReaction, String sep) {
+
+		HashMap<String, HashMap<String, String>> metaData = new HashMap<String, HashMap<String, String>>();
+
+		Set<String> ids;
+
+		if (isReaction) {
+			ids = network.getBiochemicalReactionList().keySet();
+		} else {
+			ids = network.getGeneList().keySet();
+		}
+
+		BufferedReader in = null;
+
+		try {
+			in = new BufferedReader(new FileReader(metaDataFile));
+
+			String line;
+
+			int nbLine = 0;
+
+			int nbColumns = 0;
+
+			ArrayList<String> columns = new ArrayList<>();
+
+			while ((line = in.readLine()) != null) {
+				if (line.startsWith("#") || line.equals("")) {
+					nbLine++;
+					continue;
+				}
+
+				String[] tab = line.split(this.mdSep);
+
+				if (tab.length > 1) {
+
+					if (nbLine == 0) {
+						nbColumns = tab.length;
+						// reads the header
+						for (int i = 1; i < nbColumns; i++) {
+							String colName = tab[i];
+
+							columns.add(colName);
+
+							metaData.put(colName, new HashMap<String, String>());
+
+						}
+					} else {
+
+						if (tab.length != nbColumns) {
+							System.err
+									.println("[ERROR] Bad number of columns line "
+											+ nbLine);
+							return null;
+						}
+
+						String id = tab[0];
+						
+						System.err.println(ids);
+						System.err.println(id);
+
+						if (ids.contains(id)) {
+							
+							System.err.println("match");
+
+							for (int i = 1; i < nbColumns; i++) {
+								
+								String colName = columns.get(i-1);
+
+								String value = tab[i];
+								
+								
+								System.err.println(id+"__"+colName+"__"+value);
+
+								metaData.get(colName).put(id, value);
+
+							}
+
+						}
+
+					}
+				} else {
+					System.err
+							.println("[ERROR] Not enough columns in the metadata file "
+									+ metaDataFile);
+					return null;
+				}
+
+				nbLine++;
+
+			}
+		} catch (IOException e) {
+			System.err.println("[ERROR] Error reading the metadata file "
+					+ metaDataFile);
+			return null;
+		}
+
+		finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					System.err
+							.println("Error while closing the objective file");
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return metaData;
 
 	}
 

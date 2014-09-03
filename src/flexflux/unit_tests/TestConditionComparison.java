@@ -172,7 +172,7 @@ public class TestConditionComparison {
 
 		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
 				f.sbmlFile, f.intFile, f.conditionFile, f.constraintFile, f.objectiveFile,
-				ConstraintType.DOUBLE, false, solver);
+				ConstraintType.DOUBLE, false, solver, "","", ",");
 
 		
 		AnalysisResult r = a.runAnalysis();
@@ -205,8 +205,6 @@ public class TestConditionComparison {
 		fileTest = new File(pathFileTest);
 		fileRef = new File(referenceEssentialFile);
 
-//		System.err.println(FileUtils.readFileToString(fileTest));
-		
 		FileAssert.assertEquals(
 				"Essential reactions are different from the reference",
 				fileRef, fileTest);
@@ -239,9 +237,13 @@ public class TestConditionComparison {
 		fileTest = new File(pathFileTest);
 		fileRef = new File(referenceUsedGeneFile);
 
+		System.err.println(FileUtils.readFileToString(fileTest));
+		
 		FileAssert.assertEquals(
 				"Dispensable genes are different from the reference", fileRef,
 				fileTest);
+		
+		
 		
 		pathFileTest = basePath + "/essential_genes";
 		fileTest = new File(pathFileTest);
