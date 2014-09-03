@@ -413,33 +413,43 @@ public abstract class Bind {
 						if (metab.getBoundaryCondition()) {
 							// now we need to find the exchangReaction concerned
 							// and change one of its bound
+
 							for (String reacName : metab
 									.getReactionsAsSubstrate().keySet()) {
 								BioChemicalReaction reac = metab
 										.getReactionsAsSubstrate()
 										.get(reacName);
-								double lb = simpleConstraints.get(reac).getLb();
-								double ub = 0.0;
 
-								Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
-								constMap.put(reac, 1.0);
+								if (reac.getLeftList().containsKey(metab.getId()) && reac.getLeftList().size() == 1) {
 
-								extMetabConstraints.add(new Constraint(
-										constMap, lb, ub));
+									double lb = simpleConstraints.get(reac)
+											.getLb();
+									double ub = 0.0;
+
+									Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
+									constMap.put(reac, 1.0);
+
+									extMetabConstraints.add(new Constraint(
+											constMap, lb, ub));
+								}
+							
+
+								if (reac.getRightList().containsKey(metab.getId()) && reac.getRightList().size() == 1
+										&& reac.isReversible() == true) {
+
+									double lb = 0.0;
+									
+									double ub = simpleConstraints.get(reac)
+											.getUb();
+
+									Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
+									constMap.put(reac, 1.0);
+
+									extMetabConstraints.add(new Constraint(
+											constMap, lb, ub));
+								}
 							}
-							for (String reacName : metab
-									.getReactionsAsProduct().keySet()) {
-								BioChemicalReaction reac = metab
-										.getReactionsAsProduct().get(reacName);
-								double lb = 0.0;
-								double ub = simpleConstraints.get(reac).getUb();
 
-								Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
-								constMap.put(reac, 1.0);
-
-								extMetabConstraints.add(new Constraint(
-										constMap, lb, ub));
-							}
 						}
 					}
 				}
@@ -895,9 +905,9 @@ public abstract class Bind {
 							} else {
 
 								knownEntity = false;
-								System.err
-										.println("Warning : new entity created : "
-												+ expr[0]);
+								// System.err
+								// .println("Warning : new entity created : "
+								// + expr[0]);
 								BioEntity b = new BioEntity(expr[0]);
 								b.setId(expr[0]);
 								addRightEntityType(b, integer, binary);
@@ -2257,10 +2267,11 @@ public abstract class Bind {
 				thisStepSimpleConstraints.put(b,
 						interactionNetworkSimpleConstraints.get(b));
 			}
-			//if this entity had a simple constraint, but not fix (ub!=lb) we overwrite it
-			else{
-				if(simpleConstraints.get(b).getLb() != simpleConstraints.get(b)
-						.getUb()){
+			// if this entity had a simple constraint, but not fix (ub!=lb) we
+			// overwrite it
+			else {
+				if (simpleConstraints.get(b).getLb() != simpleConstraints
+						.get(b).getUb()) {
 					thisStepSimpleConstraints.put(b,
 							interactionNetworkSimpleConstraints.get(b));
 				}
@@ -2383,9 +2394,9 @@ public abstract class Bind {
 			Set<BioEntity> checkedEntities = new HashSet<BioEntity>();
 
 			if (areTheSame) {
-//				System.err.println("Steady state found in " + (it - 1)
-//						+ " iterations.");
-//				System.err.println("Attractor size : " + attractorSize);
+				// System.err.println("Steady state found in " + (it - 1)
+				// + " iterations.");
+				// System.err.println("Attractor size : " + attractorSize);
 				break;
 			}
 

@@ -109,9 +109,13 @@ public class ConditionComparisonAnalysis extends Analysis {
 	/**
 	 * Inits the bind
 	 * 
+	 * @param forFBA
+	 *            : if true, considers only the main objective, if false,
+	 *            considers the main objective + min(FluxSum)
+	 * 
 	 * @return
 	 */
-	public Boolean init(String objName, Condition condition) {
+	public Boolean init(String objName, Condition condition, Boolean forFBA) {
 
 		try {
 			if (solver.equals("CPLEX")) {
@@ -200,22 +204,28 @@ public class ConditionComparisonAnalysis extends Analysis {
 
 		obj = b.makeObjectiveFromString(objString, maximize, objName);
 
-		b.setObjective(obj);
-		b.setObjSense(obj.getMaximize());
-
 		List<Constraint> constraints = new ArrayList<Constraint>();
-		
-		BioEntity fluxSumEnt = b.createFluxesSummation();
-		
-		BioEntity fluxSumEntArray[] = {fluxSumEnt};
-		double fluxSumCoeff[] = {1.0};
-		
-		Objective objMinFluxSum = new Objective(fluxSumEntArray, fluxSumCoeff, "fluxSum", false);
-		
-		b.constraintObjectives.add(obj);
-		
-		b.constraintObjectives.add(objMinFluxSum);
-		
+
+		if (forFBA == false) {
+			BioEntity fluxSumEnt = b.createFluxesSummation();
+
+			BioEntity fluxSumEntArray[] = { fluxSumEnt };
+			double fluxSumCoeff[] = { 1.0 };
+
+			Objective objMinFluxSum = new Objective(fluxSumEntArray,
+					fluxSumCoeff, "fluxSum", false);
+
+			b.setObjective(objMinFluxSum);
+			b.setObjSense(objMinFluxSum.getMaximize());
+
+			b.constraintObjectives.add(obj);
+
+		}
+		else {
+			b.setObjective(obj);
+			b.setObjSense(obj.getMaximize());
+		}
+
 		for (SimpleConstraint c : condition.constraints) {
 			String id = c.entityId;
 			BioEntity e = null;
@@ -258,13 +268,15 @@ public class ConditionComparisonAnalysis extends Analysis {
 			for (Condition condition : conditions) {
 
 				// We reinit the bind
-				this.init(objName, condition);
+				this.init(objName, condition, true);
 
 				/**
 				 * Computes FBA
 				 */
 				DoubleResult objValue = b.FBA(new ArrayList<Constraint>(),
 						true, true);
+				
+				System.err.println(condition.code+"__"+obj.getName()+" : "+objValue.result);
 
 				result.addFbaResult(obj, condition, objValue.result);
 
@@ -273,7 +285,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 				 */
 				// We reinit the bind
 				// It does not work if don't reinit
-				this.init(objName, condition);
+				this.init(objName, condition, false);
 				FVAAnalysis fvaAnalysis = new FVAAnalysis(b, null,
 						new ArrayList<Constraint>());
 				FVAResult resultFva = fvaAnalysis.runAnalysis();
@@ -284,7 +296,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 				 * Computes gene KO
 				 */
 				// We reinit the bind
-				this.init(objName, condition);
+				this.init(objName, condition, false);
 				KOAnalysis koAnalysis = new KOAnalysis(b, 1, null);
 				KOResult resultKo = koAnalysis.runAnalysis();
 
@@ -445,7 +457,6 @@ public class ConditionComparisonAnalysis extends Analysis {
 								return false;
 							}
 						}
-
 						condition.addConstraint(entityId, value, value,
 								constraintType);
 

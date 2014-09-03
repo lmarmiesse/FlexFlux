@@ -316,6 +316,7 @@ public class CplexBind extends Bind {
 	public void setObjSense(boolean maximize) {
 		try {
 			if (maximize) {
+				System.err.println(cplexObj.getName());
 				cplexObj.setSense(IloObjectiveSense.Maximize);
 			} else {
 				cplexObj.setSense(IloObjectiveSense.Minimize);
