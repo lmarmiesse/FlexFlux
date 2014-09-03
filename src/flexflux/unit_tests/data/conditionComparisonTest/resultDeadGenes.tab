@@ -1,5 +1,5 @@
 ConditionCode	maxR_B	maxR_D
-C1		
+C1	G2	G1
 C2	G2	
-C3		
+C3	G2	G1
 C4	G2	

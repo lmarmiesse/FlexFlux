@@ -127,8 +127,9 @@ public class InteractionNetwork {
 		if (numEntities.containsKey(e.getId())
 				|| intEntities.containsKey(e.getId())
 				|| binaryEntities.containsKey(e.getId())) {
-			System.err.println("Warning: two entites have the same name : "
-					+ e.getId() + ", second one not added");
+			
+//			System.err.println("Warning: two entites have the same name : "
+//					+ e.getId() + ", second one not added");
 
 			return;
 		}
@@ -148,8 +149,8 @@ public class InteractionNetwork {
 		if (numEntities.containsKey(e.getId())
 				|| intEntities.containsKey(e.getId())
 				|| binaryEntities.containsKey(e.getId())) {
-			System.err.println("Warning: two entites have the same name : "
-					+ e.getId() + ", second one not added");
+//			System.err.println("Warning: two entites have the same name : "
+//					+ e.getId() + ", second one not added");
 			return;
 		}
 		intEntities.put(e.getId(), e);
@@ -168,8 +169,8 @@ public class InteractionNetwork {
 		if (numEntities.containsKey(e.getId())
 				|| intEntities.containsKey(e.getId())
 				|| binaryEntities.containsKey(e.getId())) {
-			System.err.println("Warning: two entites have the same name : "
-					+ e.getId() + ", second one not added");
+//			System.err.println("Warning: two entites have the same name : "
+//					+ e.getId() + ", second one not added");
 			return;
 		}
 		binaryEntities.put(e.getId(), e);

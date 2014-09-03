@@ -229,6 +229,8 @@ public class TestConditionComparison {
 		fileTest = new File(pathFileTest);
 		fileRef = new File(referenceDeadGeneFile);
 
+		System.err.println(FileUtils.readFileToString(fileTest));
+		
 		FileAssert.assertEquals(
 				"Dead genes are different from the reference", fileRef,
 				fileTest);
@@ -237,8 +239,6 @@ public class TestConditionComparison {
 		fileTest = new File(pathFileTest);
 		fileRef = new File(referenceUsedGeneFile);
 
-		System.err.println(FileUtils.readFileToString(fileTest));
-		
 		FileAssert.assertEquals(
 				"Dispensable genes are different from the reference", fileRef,
 				fileTest);
