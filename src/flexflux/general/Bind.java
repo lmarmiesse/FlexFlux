@@ -419,34 +419,41 @@ public abstract class Bind {
 								BioChemicalReaction reac = metab
 										.getReactionsAsSubstrate()
 										.get(reacName);
+								//
+								if (simpleConstraints.containsKey(reac)) {
 
-								if (reac.getLeftList().containsKey(metab.getId()) && reac.getLeftList().size() == 1) {
+									if (reac.getLeftList().containsKey(
+											metab.getId())
+											&& reac.getLeftList().size() == 1) {
 
-									double lb = simpleConstraints.get(reac)
-											.getLb();
-									double ub = 0.0;
+										double lb = simpleConstraints.get(reac)
+												.getLb();
+										double ub = 0.0;
 
-									Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
-									constMap.put(reac, 1.0);
+										Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
+										constMap.put(reac, 1.0);
 
-									extMetabConstraints.add(new Constraint(
-											constMap, lb, ub));
-								}
-							
+										extMetabConstraints.add(new Constraint(
+												constMap, lb, ub));
+									}
 
-								if (reac.getRightList().containsKey(metab.getId()) && reac.getRightList().size() == 1
-										&& reac.isReversible() == true) {
+									if (reac.getRightList().containsKey(
+											metab.getId())
+											&& reac.getRightList().size() == 1
+											&& reac.isReversible() == true) {
 
-									double lb = 0.0;
-									
-									double ub = simpleConstraints.get(reac)
-											.getUb();
+										double lb = 0.0;
 
-									Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
-									constMap.put(reac, 1.0);
+										double ub = simpleConstraints.get(reac)
+												.getUb();
 
-									extMetabConstraints.add(new Constraint(
-											constMap, lb, ub));
+										Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
+										constMap.put(reac, 1.0);
+
+										extMetabConstraints.add(new Constraint(
+												constMap, lb, ub));
+									}
+
 								}
 							}
 
