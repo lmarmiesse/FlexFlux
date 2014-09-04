@@ -83,11 +83,13 @@ public class ThreadKO extends ResolveThread {
 		this.todo = entities.size();
 		this.entities = entities;
 		this.result = result;
+		percentage = 0;
 	}
 
 	public void run() {
 		double size;
 		while ((size = entities.size()) > 0) {
+			
 			
 			BioEntity entity = entities.poll();
 
