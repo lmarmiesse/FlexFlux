@@ -403,9 +403,12 @@ public abstract class Bind {
 			// bound of the exchange reaction
 			List<Constraint> extMetabConstraints = new ArrayList<Constraint>();
 
-			List<Constraint> constraintsToTest = new ArrayList<Constraint>();
+			Set<Constraint> constraintsToTest = new HashSet<Constraint>();
 			constraintsToTest.addAll(constraintsToAdd);
-			constraintsToTest.addAll(constraints);
+//			constraintsToTest.addAll(constraints);
+			constraintsToTest.addAll(simpleConstraints.values());
+
+			
 			for (Constraint c : constraintsToTest) {
 				if (c.getEntities().size() == 1 && c.getLb() == 0
 						&& c.getUb() == 0) {
@@ -425,6 +428,7 @@ public abstract class Bind {
 								BioChemicalReaction reac = metab
 										.getReactionsAsSubstrate()
 										.get(reacName);
+								
 								//
 								if (simpleConstraints.containsKey(reac)) {
 
