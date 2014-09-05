@@ -41,9 +41,11 @@ import flexflux.general.Objective;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 
 import parsebionet.biodata.BioEntity;
 
@@ -77,20 +79,26 @@ public class ThreadKO extends ResolveThread {
 	 */
 	private static int percentage = 0;
 
+	protected Set<BioEntity> entitiesInInteractionNetwork = new HashSet<BioEntity>();
+
+	protected List<Constraint> interactionNetwotkConstraints = new ArrayList<Constraint>();
+
 	public ThreadKO(Bind b, Queue<BioEntity> entities, KOResult result,
-			Objective obj) {
+			Objective obj, Set<BioEntity> entitiesInInteractionNetwork,
+			List<Constraint> interactionNetwotkConstraints) {
 		super(b, obj);
 		this.todo = entities.size();
 		this.entities = entities;
 		this.result = result;
+		this.entitiesInInteractionNetwork = entitiesInInteractionNetwork;
+		this.interactionNetwotkConstraints = interactionNetwotkConstraints;
 		percentage = 0;
 	}
 
 	public void run() {
 		double size;
 		while ((size = entities.size()) > 0) {
-			
-			
+
 			BioEntity entity = entities.poll();
 
 			Map<BioEntity, Double> entityMap = new HashMap<BioEntity, Double>();
@@ -100,6 +108,12 @@ public class ThreadKO extends ResolveThread {
 
 			constraintsToAdd.add(new Constraint(entityMap, 0.0, 0.0));
 			
+			//if the entity is not in the interaction network
+			if (!entitiesInInteractionNetwork.contains(entity)){
+				constraintsToAdd.addAll(interactionNetwotkConstraints);
+				bind.checkInteractionNetwork = false;
+			}
+
 			DoubleResult value = bind.FBA(constraintsToAdd, false, true);
 
 			result.addLine(entity, value.result);

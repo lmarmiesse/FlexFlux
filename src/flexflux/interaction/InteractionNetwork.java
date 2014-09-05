@@ -115,6 +115,10 @@ public class InteractionNetwork {
 		return targetToInteractions;
 	}
 	
+	public void removeAddedInteraction(){
+		this.addedInteractions=new ArrayList<Interaction>();
+	}
+	
 	public void addGPRIntercation(Interaction i) {
 		GPRInteractions.add(i);
 	}

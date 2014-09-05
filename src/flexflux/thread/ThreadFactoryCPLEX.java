@@ -33,6 +33,12 @@
  */
 package flexflux.thread;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+
+import parsebionet.biodata.BioEntity;
 import flexflux.analyses.result.FVAResult;
 import flexflux.analyses.result.KOResult;
 import flexflux.analyses.result.ReacAnalysisResult;
@@ -42,13 +48,6 @@ import flexflux.general.Constraint;
 import flexflux.general.CplexBind;
 import flexflux.general.Objective;
 import flexflux.interaction.InteractionNetwork;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-
-import parsebionet.biodata.BioEntity;
 
 /**
  * 
@@ -77,19 +76,21 @@ public class ThreadFactoryCPLEX extends ThreadFactory {
 	}
 
 	public ThreadKO makeKOThread(Queue<BioEntity> entities, KOResult result,
-			Objective obj) {
+			Objective obj, Set<BioEntity> entitiesInInteractionNetwork,
+			List<Constraint> interactionNetwotkConstraints) {
 
 		Bind bind = new CplexBind(constraints, simpleConstraints, intNet,
-				bioNet,interactionNetworkSimpleConstraints);
+				bioNet, interactionNetworkSimpleConstraints);
 
-		return new ThreadKO(bind, entities, result, obj);
+		return new ThreadKO(bind, entities, result, obj,
+				entitiesInInteractionNetwork, interactionNetwotkConstraints);
 	}
 
 	public ThreadReac makeReacThread(Queue<Double> fluxesQueue,
 			Map<BioEntity, Double> entities, ReacAnalysisResult result,
 			Objective obj) {
 		Bind bind = new CplexBind(constraints, simpleConstraints, intNet,
-				bioNet,interactionNetworkSimpleConstraints);
+				bioNet, interactionNetworkSimpleConstraints);
 
 		return new ThreadReac(bind, fluxesQueue, entities, result, obj);
 	}
@@ -98,7 +99,7 @@ public class ThreadFactoryCPLEX extends ThreadFactory {
 			TwoReacsAnalysisResult result, Map<BioEntity, Double> entities1,
 			Map<BioEntity, Double> entities2, Objective obj) {
 		Bind bind = new CplexBind(constraints, simpleConstraints, intNet,
-				bioNet,interactionNetworkSimpleConstraints);
+				bioNet, interactionNetworkSimpleConstraints);
 
 		return new ThreadTwoReacs(bind, fluxesQueue, result, entities1,
 				entities2, obj);

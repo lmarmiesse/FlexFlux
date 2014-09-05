@@ -85,6 +85,8 @@ import flexflux.thread.ThreadFactory;
  */
 public abstract class Bind {
 
+	public boolean checkInteractionNetwork = true;
+
 	private Map<BioEntity, Double> defaultValues = new HashMap<BioEntity, Double>();
 
 	/**
@@ -336,29 +338,34 @@ public abstract class Bind {
 
 				}
 
-				List<Constraint> intNetSteadyStateConstraints = new ArrayList<Constraint>();
-				for (Constraint c : findInteractionNetworkSteadyState()) {
-					// c.setOverWritesBounds(false);
-					intNetSteadyStateConstraints.add(c);
-				}
+				if (checkInteractionNetwork) {
 
-				for (Constraint constr : intNetSteadyStateConstraints) {
-
-					if (constr.getEntities().size() == 1) {
-						for (BioEntity ent : constr.getEntities().keySet()) {
-							if (constr.getEntities().get(ent) == 1.0) {
-								if (simpleConstraints.containsKey(ent)
-										&& !hadNoSimpleConstraint.contains(ent)) {
-									oldSimpleConstraint.put(ent,
-											simpleConstraints.get(ent));
-
-								}
-								simpleConstraints.put(ent, constr);
-
-							}
-						}
+					List<Constraint> intNetSteadyStateConstraints = new ArrayList<Constraint>();
+					for (Constraint c : findInteractionNetworkSteadyState()) {
+						// c.setOverWritesBounds(false);
+						intNetSteadyStateConstraints.add(c);
 					}
 
+					for (Constraint constr : intNetSteadyStateConstraints) {
+
+						if (constr.getEntities().size() == 1) {
+							for (BioEntity ent : constr.getEntities().keySet()) {
+								if (constr.getEntities().get(ent) == 1.0) {
+									if (simpleConstraints.containsKey(ent)
+											&& !hadNoSimpleConstraint
+													.contains(ent)) {
+										oldSimpleConstraint.put(ent,
+												simpleConstraints.get(ent));
+
+									}
+									simpleConstraints.put(ent, constr);
+
+								}
+							}
+						}
+
+					}
+					constraintsToAdd.addAll(intNetSteadyStateConstraints);
 				}
 
 				List<Constraint> GPRConstraints = new ArrayList<Constraint>();
@@ -367,9 +374,8 @@ public abstract class Bind {
 						GPRConstraints.addAll(intToConstraint.get(i));
 					}
 				}
-
 				//
-				constraintsToAdd.addAll(intNetSteadyStateConstraints);
+				
 				constraintsToAdd.addAll(GPRConstraints);
 
 				for (Constraint constr : constraintsToAdd) {
@@ -2241,6 +2247,7 @@ public abstract class Bind {
 
 		Set<Interaction> toCheck = new HashSet<Interaction>();
 		toCheck.addAll(intNet.getAddedInteractions());
+
 		if (intNet.getTargetToInteractions().isEmpty()
 				&& interactionNetworkSimpleConstraints.isEmpty()) {
 			return new ArrayList<Constraint>();

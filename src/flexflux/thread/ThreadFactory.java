@@ -121,7 +121,7 @@ public abstract class ThreadFactory {
 	 * @return A KO thread
 	 */
 	public abstract ThreadKO makeKOThread(Queue<BioEntity> reacsQueue,
-			KOResult koResult, Objective obj);
+			KOResult koResult, Objective obj,Set<BioEntity> entitiesInInteractionNetwork,List<Constraint> interactionNetwotkConstraints);
 
 	public void setBioNet(BioNetwork bioNet) {
 		this.bioNet = bioNet;
