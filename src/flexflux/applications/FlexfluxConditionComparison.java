@@ -72,6 +72,9 @@ public class FlexfluxConditionComparison {
 
 	@Option(name = "-ext", usage = "[OPTIONAL, default = false] Uses the extended SBML format")
 	public Boolean extended = false;
+	
+	@Option(name = "-minFlux", usage = "[OPTIONAL, default = false] Minimize the flux when performing the fva")
+	public Boolean minFlux = false;
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
 	public String solver = "GLPK";
@@ -170,7 +173,7 @@ public class FlexfluxConditionComparison {
 
 		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
 				f.sbmlFile, f.intFile, f.conditionFile, f.constraintFile, f.objectiveFile, c, f.extended, 
-				f.solver, f.metaReactionDataFile, f.metaGeneDataFile, f.mdSep, f.inchlibPath);
+				f.solver, f.metaReactionDataFile, f.metaGeneDataFile, f.mdSep, f.inchlibPath, f.minFlux);
 		
 		AnalysisResult r = a.runAnalysis();
 

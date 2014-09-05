@@ -46,6 +46,9 @@ public class ConditionComparisonAnalysis extends Analysis {
 	ConstraintType constraintType = null;
 	Boolean flag = true;
 	BioNetwork network = null;
+	
+	Boolean minFlux=false;
+	
 
 	/**
 	 * Separator for columns in metadata file
@@ -64,7 +67,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 			String interactionFile, String conditionFile,
 			String constraintFile, String objectiveFile, ConstraintType type,
 			Boolean extended, String solver, String reactionMetaDataFile,
-			String geneMetaDataFile, String mdSep, String inchlibPath) {
+			String geneMetaDataFile, String mdSep, String inchlibPath, Boolean minFlux) {
 
 		super(bind);
 
@@ -80,6 +83,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 		this.geneMetaDataFile = geneMetaDataFile;
 		this.mdSep = mdSep;
 		this.inchlibPath = inchlibPath;
+		this.minFlux = minFlux;
 
 		/**
 		 * Reads the conditionFile
@@ -109,13 +113,13 @@ public class ConditionComparisonAnalysis extends Analysis {
 	/**
 	 * Inits the bind
 	 * 
-	 * @param forFBA
-	 *            : if true, considers only the main objective, if false,
-	 *            considers the main objective + min(FluxSum)
+	 * @param minimizeFlux
+	 *            : if false, considers only the main objective, if true,
+	 *            considers the main objective + min(FluxSum) if the global parameter minFlux is set to true
 	 * 
 	 * @return
 	 */
-	public Boolean init(String objName, Condition condition, Boolean forFBA) {
+	public Boolean init(String objName, Condition condition, Boolean minimizeFlux) {
 
 		try {
 			if (solver.equals("CPLEX")) {
@@ -206,7 +210,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 
 		List<Constraint> constraints = new ArrayList<Constraint>();
 
-		if (forFBA == false) {
+		if (minimizeFlux == true && this.minFlux == true) {
 			BioEntity fluxSumEnt = b.createFluxesSummation();
 
 			BioEntity fluxSumEntArray[] = { fluxSumEnt };
@@ -216,14 +220,12 @@ public class ConditionComparisonAnalysis extends Analysis {
 					fluxSumCoeff, "fluxSum", false);
 
 			b.setObjective(objMinFluxSum);
-			b.setObjSense(objMinFluxSum.getMaximize());
 
 			b.constraintObjectives.add(obj);
 
 		}
 		else {
 			b.setObjective(obj);
-			b.setObjSense(obj.getMaximize());
 		}
 
 		for (SimpleConstraint c : condition.constraints) {
@@ -268,10 +270,10 @@ public class ConditionComparisonAnalysis extends Analysis {
 			for (Condition condition : conditions) {
 
 				// We reinit the bind
-				this.init(objName, condition, true);
+				this.init(objName, condition, false);
 
 				/**
-				 * Computes FBA
+				 * Computes FBA (we don't minimize the fluxes)
 				 */
 				DoubleResult objValue = b.FBA(new ArrayList<Constraint>(),
 						true, true);
@@ -281,11 +283,11 @@ public class ConditionComparisonAnalysis extends Analysis {
 				result.addFbaResult(obj, condition, objValue.result);
 
 				/**
-				 * Computes FVA
+				 * Computes FVA (we minimize the fluxes)
 				 */
 				// We reinit the bind
 				// It does not work if don't reinit
-				this.init(objName, condition, false);
+				this.init(objName, condition, true);
 				FVAAnalysis fvaAnalysis = new FVAAnalysis(b, null,
 						new ArrayList<Constraint>());
 				FVAResult resultFva = fvaAnalysis.runAnalysis();
@@ -293,7 +295,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 				result.addFvaResult(obj, condition, resultFva);
 
 				/**
-				 * Computes gene KO
+				 * Computes gene KO (without minimizing the fluxes)
 				 */
 				// We reinit the bind
 				this.init(objName, condition, false);
