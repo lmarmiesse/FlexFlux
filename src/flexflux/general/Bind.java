@@ -953,10 +953,10 @@ public abstract class Bind {
 									&& entities.containsKey(entity)) {
 
 								if (entities.get(entity) == 1) {
-									System.err
-											.println("Warning : condition file line "
-													+ nbLine
-													+ " : this constraint removes an existing one");
+//									System.err
+//											.println("Warning : condition file line "
+//													+ nbLine
+//													+ " : this constraint removes an existing one");
 									toDelete = c;
 
 									break;
