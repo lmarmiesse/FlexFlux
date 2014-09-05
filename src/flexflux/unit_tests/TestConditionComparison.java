@@ -172,7 +172,7 @@ public class TestConditionComparison {
 
 		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
 				f.sbmlFile, f.intFile, f.conditionFile, f.constraintFile, f.objectiveFile,
-				ConstraintType.DOUBLE, false, solver, "","", ",", "");
+				ConstraintType.DOUBLE, false, solver, "","", ",", "", true);
 
 		
 		AnalysisResult r = a.runAnalysis();

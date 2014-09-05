@@ -37,13 +37,16 @@ import flexflux.analyses.result.KOResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.Vars;
+import flexflux.interaction.Interaction;
 import flexflux.thread.ResolveThread;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import parsebionet.biodata.BioChemicalReaction;
@@ -71,6 +74,9 @@ public class KOAnalysis extends Analysis {
 	 * 
 	 */
 	protected Map<String, BioEntity> entities;
+	
+	
+	protected Set<BioEntity> entitiesInInteractionNetwork = new HashSet<BioEntity>();
 
 	/**
 	 * List containing the threads that will knock out each entity.
@@ -91,6 +97,9 @@ public class KOAnalysis extends Analysis {
 	}
 
 	public KOResult runAnalysis() {
+		
+		
+		
 		// Objective obj =bind.get
 
 		double startTime = System.currentTimeMillis();
@@ -118,6 +127,27 @@ public class KOAnalysis extends Analysis {
 		} else {
 			reactionsMap = entities;
 		}
+		
+		/////////this part is to optimize a ko analysis, not to look for the steady states of 
+		//the interaction network when the entity is not in it
+		
+		
+		for(Interaction i : b.getInteractionNetwork().getAddedInteractions()){
+			for (BioEntity ent : i.getCondition().getInvolvedEntities()){
+				if (reactionsMap.containsKey(ent.getId())){
+					entitiesInInteractionNetwork.add(ent);
+				}
+			}
+			for (BioEntity ent : i.getConsequence().getInvolvedEntities()){
+				if (reactionsMap.containsKey(ent.getId())){
+					entitiesInInteractionNetwork.add(ent);
+				}
+			}
+		}
+		
+		List<Constraint> interactionNetwotkConstraints = b.findInteractionNetworkSteadyState();
+		//////////////////
+		
 
 		Queue<BioEntity> tasks = new LinkedBlockingQueue<BioEntity>();
 
@@ -127,7 +157,7 @@ public class KOAnalysis extends Analysis {
 
 		for (int j = 0; j < Vars.maxThread; j++) {
 			threads.add(b.getThreadFactory().makeKOThread(tasks, koResult,
-					b.getObjective()));
+					b.getObjective(),entitiesInInteractionNetwork,interactionNetwotkConstraints));
 		}
 
 		System.err.println("Progress : ");

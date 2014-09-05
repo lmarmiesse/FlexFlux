@@ -79,12 +79,14 @@ public class ThreadFactoryGLPK extends ThreadFactory {
 	}
 
 	public ThreadKO makeKOThread(Queue<BioEntity> entities, KOResult result,
-			Objective obj) {
+			Objective obj, Set<BioEntity> entitiesInInteractionNetwork,
+			List<Constraint> interactionNetwotkConstraints) {
 
 		Bind bind = new GLPKBind(constraints, simpleConstraints, intNet,
 				bioNet, interactionNetworkSimpleConstraints);
 
-		return new ThreadKO(bind, entities, result, obj);
+		return new ThreadKO(bind, entities, result, obj,
+				entitiesInInteractionNetwork, interactionNetwotkConstraints);
 	}
 
 	public ThreadReac makeReacThread(Queue<Double> fluxesQueue,
