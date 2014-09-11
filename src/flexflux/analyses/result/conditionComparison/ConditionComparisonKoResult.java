@@ -12,18 +12,21 @@ public class ConditionComparisonKoResult {
 	public Objective objective;
 
 	public Condition condition;
-	
+
 	public KOResult koResult;
-	
+
 	HashMap<String, BioEntity> essentialGenes;
-	
-	public ConditionComparisonKoResult(Objective o, Condition c,
-			KOResult result) {
+
+	public ConditionComparisonKoResult(Objective o, Condition c, KOResult result) {
 		this.objective = o;
 		this.condition = c;
 		this.koResult = result;
-		
-		essentialGenes = result.getEssentialEntities();
+
+		if (result != null) {
+			essentialGenes = result.getEssentialEntities();
+		} else {
+			essentialGenes = new HashMap<String, BioEntity>();
+		}
 	}
-	
+
 }

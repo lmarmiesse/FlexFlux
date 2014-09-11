@@ -172,7 +172,8 @@ public class TestConditionComparison {
 
 		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
 				f.sbmlFile, f.intFile, f.conditionFile, f.constraintFile, f.objectiveFile,
-				ConstraintType.DOUBLE, false, solver, "","", ",", "", true, false, false);
+ ConstraintType.DOUBLE, false, solver, "", "",
+				",", "", true, false, false, 0.0, 6);
 
 		
 		AnalysisResult r = a.runAnalysis();
@@ -199,7 +200,7 @@ public class TestConditionComparison {
 		FileAssert.assertEquals("Fba results are different from the reference",
 				fileRef, fileTest);
 		
-		pathFileTest = basePath + "/essential_reactions";
+		pathFileTest = basePath + "/essential_reactions.tsv";
 		fileTest = new File(pathFileTest);
 		fileRef = new File(referenceEssentialFile);
 
@@ -207,7 +208,7 @@ public class TestConditionComparison {
 				"Essential reactions are different from the reference",
 				fileRef, fileTest);
 
-		pathFileTest = basePath + "/dispensable_reactions";
+		pathFileTest = basePath + "/dispensable_reactions.tsv";
 		fileTest = new File(pathFileTest);
 		fileRef = new File(referenceUsedFile);
 
@@ -215,7 +216,7 @@ public class TestConditionComparison {
 				"Used reactions are different from the reference", fileRef,
 				fileTest);
 
-		pathFileTest = basePath + "/dead_reactions";
+		pathFileTest = basePath + "/dead_reactions.tsv";
 		fileTest = new File(pathFileTest);
 		fileRef = new File(referenceDeadFile);
 
@@ -223,7 +224,7 @@ public class TestConditionComparison {
 				"Dead reactions are different from the reference", fileRef,
 				fileTest);
 		
-		pathFileTest = basePath + "/dead_genes";
+		pathFileTest = basePath + "/dead_genes.tsv";
 		fileTest = new File(pathFileTest);
 		fileRef = new File(referenceDeadGeneFile);
 
@@ -233,7 +234,7 @@ public class TestConditionComparison {
 				"Dead genes are different from the reference", fileRef,
 				fileTest);
 		
-		pathFileTest = basePath + "/dispensable_genes";
+		pathFileTest = basePath + "/dispensable_genes.tsv";
 		fileTest = new File(pathFileTest);
 		fileRef = new File(referenceUsedGeneFile);
 
@@ -243,7 +244,7 @@ public class TestConditionComparison {
 		
 		
 		
-		pathFileTest = basePath + "/essential_genes";
+		pathFileTest = basePath + "/essential_genes.tsv";
 		fileTest = new File(pathFileTest);
 		fileRef = new File(referenceEssentialGeneFile);
 

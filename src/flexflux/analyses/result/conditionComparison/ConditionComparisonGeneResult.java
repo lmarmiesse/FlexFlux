@@ -37,8 +37,12 @@ public class ConditionComparisonGeneResult {
 		deadGenes = new HashMap<String, BioEntity>();
 		essentialGenes = new HashMap<String, BioEntity>();
 
-		Double objValue = fvaResult.fvaResult.getObjValue();
-
+		Double objValue = 0.0;
+		
+		if(fvaResult.fvaResult != null) {
+			objValue = fvaResult.fvaResult.getObjValue();
+		}
+		
 		if (objValue != 0) {
 			/**
 			 * Get essential genes
