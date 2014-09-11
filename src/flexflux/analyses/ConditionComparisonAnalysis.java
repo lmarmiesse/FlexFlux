@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -70,7 +69,8 @@ public class ConditionComparisonAnalysis extends Analysis {
 			String constraintFile, String objectiveFile, ConstraintType type,
 			Boolean extended, String solver, String reactionMetaDataFile,
 			String geneMetaDataFile, String mdSep, String inchlibPath,
-			Boolean minFlux, Boolean noReactionAnalysis, Boolean noGeneAnalysis) {
+			Boolean minFlux, Boolean noReactionAnalysis,
+			Boolean noGeneAnalysis, Double liberty, int precision) {
 
 		super(bind);
 
@@ -89,7 +89,10 @@ public class ConditionComparisonAnalysis extends Analysis {
 		this.minFlux = minFlux;
 		this.launchGeneAnalysis = !noGeneAnalysis;
 		this.launchReactionAnalysis = !noReactionAnalysis;
-
+		
+		Vars.libertyPercentage = liberty;
+		Vars.decimalPrecision = precision;
+		
 		/**
 		 * Reads the conditionFile
 		 */
@@ -266,7 +269,8 @@ public class ConditionComparisonAnalysis extends Analysis {
 	public AnalysisResult runAnalysis() {
 
 		ConditionComparisonResult result = new ConditionComparisonResult(
-				conditions, objectives, network, inchlibPath, launchReactionAnalysis, launchGeneAnalysis);
+				conditions, objectives, network, inchlibPath,
+				launchReactionAnalysis, launchGeneAnalysis);
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
 				objectives.keySet());
@@ -284,8 +288,10 @@ public class ConditionComparisonAnalysis extends Analysis {
 				DoubleResult objValue = b.FBA(new ArrayList<Constraint>(),
 						true, true);
 
+				Double res = objValue.result;
+
 				System.err.println(condition.code + "__" + obj.getName()
-						+ " : " + objValue.result);
+						+ " : " + res);
 
 				result.addFbaResult(obj, condition, objValue.result);
 
@@ -293,14 +299,19 @@ public class ConditionComparisonAnalysis extends Analysis {
 					/**
 					 * Computes FVA (we minimize the fluxes)
 					 */
-					// We reinit the bind
-					// It does not work if don't reinit
-					this.init(objName, condition, true);
-					FVAAnalysis fvaAnalysis = new FVAAnalysis(b, null,
-							new ArrayList<Constraint>());
-					FVAResult resultFva = fvaAnalysis.runAnalysis();
+					// We don't do the analysis if the result equals to 0
+					if (res != 0) {
+						// We reinit the bind
+						// It does not work if don't reinit
+						this.init(objName, condition, true);
+						FVAAnalysis fvaAnalysis = new FVAAnalysis(b, null,
+								new ArrayList<Constraint>());
+						FVAResult resultFva = fvaAnalysis.runAnalysis();
 
-					result.addFvaResult(obj, condition, resultFva);
+						result.addFvaResult(obj, condition, resultFva);
+					} else {
+						result.addFvaResult(obj, condition, null);
+					}
 
 				}
 
@@ -308,17 +319,23 @@ public class ConditionComparisonAnalysis extends Analysis {
 					/**
 					 * Computes gene KO (without minimizing the fluxes)
 					 */
-					// We reinit the bind
-					this.init(objName, condition, false);
-					KOAnalysis koAnalysis = new KOAnalysis(b, 1, null);
-					KOResult resultKo = koAnalysis.runAnalysis();
 
-					result.addKoResult(obj, condition, resultKo);
+					if (res != 0) {
+						// We reinit the bind
+						this.init(objName, condition, false);
+						KOAnalysis koAnalysis = new KOAnalysis(b, 1, null);
+						KOResult resultKo = koAnalysis.runAnalysis();
+
+						result.addKoResult(obj, condition, resultKo);
+					} else {
+						result.addKoResult(obj, condition, null);
+					}
 
 					/**
 					 * Computes dead genes and dispensable genes from ko genes
 					 * and FVa
 					 */
+
 					result.addGeneResult(
 							obj,
 							condition,

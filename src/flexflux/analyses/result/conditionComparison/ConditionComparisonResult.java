@@ -173,7 +173,6 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 		ConditionComparisonKoResult result = new ConditionComparisonKoResult(
 				obj, condition, koResult);
-
 		koResults.add(result);
 
 		return;
@@ -192,7 +191,6 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 		ConditionComparisonGeneResult result = new ConditionComparisonGeneResult(
 				obj, condition, koResult, fvaResult, network);
-
 		geneResults.add(result);
 
 		return;
@@ -291,15 +289,15 @@ public class ConditionComparisonResult extends AnalysisResult {
 		}
 
 		if (launchGeneAnalysis) {
+			writeSummaryGeneFile();
 			writeGeneResultsToFiles();
-			createBarplot(false);
+			writeBarplot(false);
 			writeFilesForHeatMap(false);
 		}
 
 		if (launchReactionAnalysis) {
-			System.err.println("Launch reaction analysis");
 			writeSummaryReactionFile();
-			createBarplot(true);
+			writeBarplot(true);
 			writeFilesForHeatMap(true);
 			writePathwayHeatMap();
 		}
@@ -377,10 +375,10 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 		try {
 			outEssential = new PrintWriter(new File(path
-					+ "/essential_reactions"));
+					+ "/essential_reactions.tsv"));
 			outDispensable = new PrintWriter(new File(path
-					+ "/dispensable_reactions"));
-			outDead = new PrintWriter(new File(path + "/dead_reactions"));
+					+ "/dispensable_reactions.tsv"));
+			outDead = new PrintWriter(new File(path + "/dead_reactions.tsv"));
 
 			// Prints the header
 			outEssential.print("ConditionCode");
@@ -415,42 +413,45 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 					ConditionComparisonFvaResult result = results.get(objName);
 
-					ArrayList<String> essentialReactionIds = new ArrayList<String>(
-							result.essentialReactions.keySet());
-					Collections.sort(essentialReactionIds);
+					if (result != null) {
 
-					ArrayList<String> usedReactionIds = new ArrayList<String>(
-							result.dispensableReactions.keySet());
-					Collections.sort(usedReactionIds);
+						ArrayList<String> essentialReactionIds = new ArrayList<String>(
+								result.essentialReactions.keySet());
+						Collections.sort(essentialReactionIds);
 
-					ArrayList<String> deadReactionIds = new ArrayList<String>(
-							result.deadReactions.keySet());
-					Collections.sort(deadReactionIds);
+						ArrayList<String> usedReactionIds = new ArrayList<String>(
+								result.dispensableReactions.keySet());
+						Collections.sort(usedReactionIds);
 
-					for (int i = 0; i < essentialReactionIds.size(); i++) {
-						if (i > 0) {
-							outEssential.write(",");
+						ArrayList<String> deadReactionIds = new ArrayList<String>(
+								result.deadReactions.keySet());
+						Collections.sort(deadReactionIds);
+
+						for (int i = 0; i < essentialReactionIds.size(); i++) {
+							if (i > 0) {
+								outEssential.write(",");
+							}
+
+							outEssential.write(essentialReactionIds.get(i));
 						}
 
-						outEssential.write(essentialReactionIds.get(i));
-					}
+						for (int i = 0; i < usedReactionIds.size(); i++) {
+							if (i > 0) {
+								outDispensable.write(",");
+							}
 
-					for (int i = 0; i < usedReactionIds.size(); i++) {
-						if (i > 0) {
-							outDispensable.write(",");
+							outDispensable.write(usedReactionIds.get(i));
 						}
 
-						outDispensable.write(usedReactionIds.get(i));
-					}
+						for (int i = 0; i < deadReactionIds.size(); i++) {
+							if (i > 0) {
+								outDead.write(",");
+							}
 
-					for (int i = 0; i < deadReactionIds.size(); i++) {
-						if (i > 0) {
-							outDead.write(",");
+							outDead.write(deadReactionIds.get(i));
 						}
 
-						outDead.write(deadReactionIds.get(i));
 					}
-
 				}
 
 				outEssential.print("\n");
@@ -491,10 +492,11 @@ public class ConditionComparisonResult extends AnalysisResult {
 				objectives.keySet());
 
 		try {
-			outEssential = new PrintWriter(new File(path + "/essential_genes"));
+			outEssential = new PrintWriter(new File(path
+					+ "/essential_genes.tsv"));
 			outDispensable = new PrintWriter(new File(path
-					+ "/dispensable_genes"));
-			outDead = new PrintWriter(new File(path + "/dead_genes"));
+					+ "/dispensable_genes.tsv"));
+			outDead = new PrintWriter(new File(path + "/dead_genes.tsv"));
 
 			// Prints the header
 			outEssential.print("ConditionCode");
@@ -529,42 +531,45 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 					ConditionComparisonGeneResult result = results.get(objName);
 
-					ArrayList<String> essentialGeneIds = new ArrayList<String>(
-							result.essentialGenes.keySet());
-					Collections.sort(essentialGeneIds);
+					if (result != null) {
 
-					ArrayList<String> dispensableGeneIds = new ArrayList<String>(
-							result.dispensableGenes.keySet());
-					Collections.sort(dispensableGeneIds);
+						ArrayList<String> essentialGeneIds = new ArrayList<String>(
+								result.essentialGenes.keySet());
+						Collections.sort(essentialGeneIds);
 
-					ArrayList<String> deadGeneIds = new ArrayList<String>(
-							result.deadGenes.keySet());
-					Collections.sort(deadGeneIds);
+						ArrayList<String> dispensableGeneIds = new ArrayList<String>(
+								result.dispensableGenes.keySet());
+						Collections.sort(dispensableGeneIds);
 
-					for (int i = 0; i < essentialGeneIds.size(); i++) {
-						if (i > 0) {
-							outEssential.write(",");
+						ArrayList<String> deadGeneIds = new ArrayList<String>(
+								result.deadGenes.keySet());
+						Collections.sort(deadGeneIds);
+
+						for (int i = 0; i < essentialGeneIds.size(); i++) {
+							if (i > 0) {
+								outEssential.write(",");
+							}
+
+							outEssential.write(essentialGeneIds.get(i));
 						}
 
-						outEssential.write(essentialGeneIds.get(i));
-					}
+						for (int i = 0; i < dispensableGeneIds.size(); i++) {
+							if (i > 0) {
+								outDispensable.write(",");
+							}
 
-					for (int i = 0; i < dispensableGeneIds.size(); i++) {
-						if (i > 0) {
-							outDispensable.write(",");
+							outDispensable.write(dispensableGeneIds.get(i));
 						}
 
-						outDispensable.write(dispensableGeneIds.get(i));
-					}
+						for (int i = 0; i < deadGeneIds.size(); i++) {
+							if (i > 0) {
+								outDead.write(",");
+							}
 
-					for (int i = 0; i < deadGeneIds.size(); i++) {
-						if (i > 0) {
-							outDead.write(",");
+							outDead.write(deadGeneIds.get(i));
 						}
 
-						outDead.write(deadGeneIds.get(i));
 					}
-
 				}
 
 				outEssential.print("\n");
@@ -620,12 +625,10 @@ public class ConditionComparisonResult extends AnalysisResult {
 			}
 
 			String jsonFile = this.summaryPath + "/fba_results.json";
-			String jsFile = this.summaryPath + "/data.js";
+			String jsFile = this.summaryPath + "/heatmap_data.js";
 
 			String cmd = "python " + inchlibPath + " " + this.directoryPath
 					+ "/fba_results.csv" + " -dh -mh -a both -o " + jsonFile;
-
-			System.err.println(cmd);
 
 			try {
 				this.runInchlib(cmd);
@@ -690,11 +693,65 @@ public class ConditionComparisonResult extends AnalysisResult {
 	}
 
 	/**
+	 * Write a tabulated file with the number of genes by type
+	 */
+	public void writeSummaryGeneFile() {
+
+		String path = this.directoryPath;
+
+		PrintWriter out = null;
+
+		ArrayList<String> objectiveNames = new ArrayList<String>(
+				objectives.keySet());
+
+		try {
+			out = new PrintWriter(new File(path + "/summary_genes"));
+
+			out.write("name,essential,dispensable,dead\n");
+
+			for (Condition c : conditions) {
+				HashMap<String, ConditionComparisonGeneResult> results = geneResults
+						.get(c.code);
+				for (String objName : objectiveNames) {
+
+					ConditionComparisonGeneResult result = results.get(objName);
+
+					int nbEssential = 0;
+					int nbDispensable = 0;
+					int nbDead = 0;
+
+					if (result != null) {
+						nbEssential = result.essentialGenes.size();
+						nbDispensable = result.dispensableGenes.size();
+						nbDead = result.deadGenes.size();
+					}
+
+					out.write(c.code + "__" + objName + "," + nbEssential + ","
+							+ nbDispensable + "," + nbDead + "\n");
+
+				}
+
+			}
+
+		} catch (IOException e) {
+			System.err.println("Error while writing the gene summary results");
+			e.printStackTrace();
+		}
+
+		finally {
+			if (out != null) {
+				out.close();
+			}
+		}
+
+	}
+
+	/**
 	 * Create web architecture to display barplots with the D3 library
 	 * 
 	 * @throws IOException
 	 */
-	public void createBarplot(Boolean isReaction) {
+	public void writeBarplot(Boolean isReaction) {
 
 		String outPath = genePath;
 		if (isReaction) {
@@ -720,7 +777,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 				objectives.keySet());
 		PrintWriter out = null;
 		try {
-			out = new PrintWriter(new File(outPath + "/data.js"));
+			out = new PrintWriter(new File(outPath + "/multiBar_data.js"));
 			out.write("var str = \"name,essential,dispensable,dead\\n");
 
 			for (Condition c : conditions) {
@@ -739,9 +796,11 @@ public class ConditionComparisonResult extends AnalysisResult {
 						ConditionComparisonFvaResult result = results
 								.get(objName);
 
-						nbEssential = result.essentialReactions.size();
-						nbDispensable = result.dispensableReactions.size();
-						nbDead = result.deadReactions.size();
+						if (result != null) {
+							nbEssential = result.essentialReactions.size();
+							nbDispensable = result.dispensableReactions.size();
+							nbDead = result.deadReactions.size();
+						}
 					} else {
 						HashMap<String, ConditionComparisonGeneResult> results = geneResults
 								.get(c.code);
@@ -749,9 +808,11 @@ public class ConditionComparisonResult extends AnalysisResult {
 						ConditionComparisonGeneResult result = results
 								.get(objName);
 
-						nbEssential = result.essentialGenes.size();
-						nbDispensable = result.dispensableGenes.size();
-						nbDead = result.deadGenes.size();
+						if (result != null) {
+							nbEssential = result.essentialGenes.size();
+							nbDispensable = result.dispensableGenes.size();
+							nbDead = result.deadGenes.size();
+						}
 					}
 
 					out.write(c.code + "__" + objName + "," + nbEssential + ","
@@ -948,13 +1009,15 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 							int value = 0;
 
-							if (result.essentialReactions.containsKey(id)) {
-								value = 3;
-							} else if (result.dispensableReactions
-									.containsKey(id)) {
-								value = 2;
-							} else if (result.deadReactions.containsKey(id)) {
-								value = 1;
+							if (result != null) {
+								if (result.essentialReactions.containsKey(id)) {
+									value = 3;
+								} else if (result.dispensableReactions
+										.containsKey(id)) {
+									value = 2;
+								} else if (result.deadReactions.containsKey(id)) {
+									value = 1;
+								}
 							}
 							outData.write("," + value);
 						}
@@ -1012,11 +1075,12 @@ public class ConditionComparisonResult extends AnalysisResult {
 				return;
 			}
 
-			String jsonFile = outPath + "/data.json";
-			String jsFile = outPath + "/data.js";
+			String jsonFile = outPath + "/heatmap_data.json";
+			String jsFile = outPath + "/heatmap_data.js";
 
-			String cmd = "python " + inchlibPath + " " + outPath + "/heatMapData.csv -m "
-					+ outPath+"/heatMapMetaData.csv" + " -dh -mh -a both -o " + jsonFile;
+			String cmd = "python " + inchlibPath + " " + outPath
+					+ "/heatMapData.csv -m " + outPath + "/heatMapMetaData.csv"
+					+ " -dh -mh -a both -o " + jsonFile;
 
 			try {
 				this.runInchlib(cmd);
@@ -1161,9 +1225,6 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 */
 	public Boolean runInchlib(String inchlibCmd) throws IOException {
 
-		
-		System.err.println(inchlibCmd);
-		
 		Process p = null;
 		try {
 			p = Runtime.getRuntime().exec(inchlibCmd);
@@ -1390,8 +1451,6 @@ public class ConditionComparisonResult extends AnalysisResult {
 			 */
 			outMetaData.write("id,nbReactions\n");
 
-			HashMap<String, Double> scoreEssential = new HashMap<String, Double>();
-
 			for (String id : ids) {
 
 				BioPathway pathway = network.getPathwayList().get(id);
@@ -1413,10 +1472,13 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 						int nbEssential = 0;
 
-						for (String idReaction : reactions.keySet()) {
-							if (result.essentialReactions
-									.containsKey(idReaction)) {
-								nbEssential++;
+						if (result != null) {
+
+							for (String idReaction : reactions.keySet()) {
+								if (result.essentialReactions
+										.containsKey(idReaction)) {
+									nbEssential++;
+								}
 							}
 						}
 
@@ -1459,11 +1521,12 @@ public class ConditionComparisonResult extends AnalysisResult {
 				return;
 			}
 
-			String jsonFile = outPath + "/data.json";
-			String jsFile = outPath + "/data.js";
+			String jsonFile = outPath + "/heatmap_data.json";
+			String jsFile = outPath + "/heatmap_data.js";
 
-			String cmd = "python " + inchlibPath + " " + outPath + "/heatMapData.csv -m "
-					+ outPath+"/heatMapMetaData.csv" + " -dh -mh -a both -o " + jsonFile;
+			String cmd = "python " + inchlibPath + " " + outPath
+					+ "/heatMapData.csv -m " + outPath + "/heatMapMetaData.csv"
+					+ " -dh -mh -a both -o " + jsonFile;
 
 			try {
 				this.runInchlib(cmd);

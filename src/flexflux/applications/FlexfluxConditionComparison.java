@@ -180,7 +180,7 @@ public class FlexfluxConditionComparison {
 				f.objectiveFile, c, f.extended, f.solver,
 				f.metaReactionDataFile, f.metaGeneDataFile, f.mdSep,
 				f.inchlibPath, f.minFlux, f.noReactionAnalysis,
-				f.noGeneAnalysis);
+				f.noGeneAnalysis, f.liberty, f.precision);
 
 		AnalysisResult r = a.runAnalysis();
 
