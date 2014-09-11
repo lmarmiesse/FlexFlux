@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <script src="../js/jquery-2.0.3.min.js"></script>
+        <script src="../js/kinetic-v5.0.0.min.js"></script>
+        <script src="../js/inchlib-1.0.1.min.js"></script>
+        <script src="data.js"></script>
+        <script>
+        $(document).ready(function() { //run when the whole page is loaded
+            window.inchlib = new InCHlib({ //instantiate InCHlib
+                target: "inchlib", //ID of a target HTML element
+                metadata: true, //turn on the metadata 
+                max_height: 1200, //set maximum height of visualization in pixels
+                width: 1000, //set width of visualization in pixels
+                heatmap_colors: "Greens", //set color scale for clustered data
+                metadata_colors: "Reds", //set color scale for metadata
+                independent_columns: false
+            });
+
+        	inchlib.read_data(data);
+            inchlib.draw(); //draw cluster heatmap
+        });
+        </script>
+    </head>
+
+    <body>
+        <div id="inchlib"></div>
+    </body>
+ </html>    

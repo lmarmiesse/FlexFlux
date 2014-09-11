@@ -65,17 +65,17 @@ public class TestExternalMetaboliteConstraints {
 							tempSbmlFile);
 			conditionFile = TestUtils
 					.copyProjectResource(
-							"flexflux/unit_tests/data/ko/constraintsWithVariables.txt",
+							"flexflux/unit_tests/data/externalMetaboliteConstraints/constraintsWithVariables.txt",
 							tempConditionFile);
 			
 			conditionFile2 = TestUtils
 					.copyProjectResource(
-							"flexflux/unit_tests/data/ko/constraintsWithVariables2.txt",
+							"flexflux/unit_tests/data/externalMetaboliteConstraints/constraintsWithVariables.txt",
 							tempConditionFile2);
 			
 			intFile = TestUtils
 					.copyProjectResource(
-							"flexflux/unit_tests/data/ko/interactions.txt",
+							"flexflux/unit_tests/data/externalMetaboliteConstraints/interactions.txt",
 							tempInteractionFile);
 
 		} catch (IOException e) {

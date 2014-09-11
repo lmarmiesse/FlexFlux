@@ -46,9 +46,8 @@ public class ConditionComparisonAnalysis extends Analysis {
 	ConstraintType constraintType = null;
 	Boolean flag = true;
 	BioNetwork network = null;
-	
-	Boolean minFlux=false;
-	
+
+	Boolean minFlux = false;
 
 	/**
 	 * Separator for columns in metadata file
@@ -63,11 +62,15 @@ public class ConditionComparisonAnalysis extends Analysis {
 	public ArrayList<Condition> conditions = new ArrayList<Condition>();
 	public HashMap<String, String> objectives = new HashMap<String, String>();
 
+	public Boolean launchReactionAnalysis;
+	public Boolean launchGeneAnalysis;
+
 	public ConditionComparisonAnalysis(Bind bind, String sbmlFile,
 			String interactionFile, String conditionFile,
 			String constraintFile, String objectiveFile, ConstraintType type,
 			Boolean extended, String solver, String reactionMetaDataFile,
-			String geneMetaDataFile, String mdSep, String inchlibPath, Boolean minFlux) {
+			String geneMetaDataFile, String mdSep, String inchlibPath,
+			Boolean minFlux, Boolean noReactionAnalysis, Boolean noGeneAnalysis) {
 
 		super(bind);
 
@@ -84,6 +87,8 @@ public class ConditionComparisonAnalysis extends Analysis {
 		this.mdSep = mdSep;
 		this.inchlibPath = inchlibPath;
 		this.minFlux = minFlux;
+		this.launchGeneAnalysis = !noGeneAnalysis;
+		this.launchReactionAnalysis = !noReactionAnalysis;
 
 		/**
 		 * Reads the conditionFile
@@ -115,11 +120,13 @@ public class ConditionComparisonAnalysis extends Analysis {
 	 * 
 	 * @param minimizeFlux
 	 *            : if false, considers only the main objective, if true,
-	 *            considers the main objective + min(FluxSum) if the global parameter minFlux is set to true
+	 *            considers the main objective + min(FluxSum) if the global
+	 *            parameter minFlux is set to true
 	 * 
 	 * @return
 	 */
-	public Boolean init(String objName, Condition condition, Boolean minimizeFlux) {
+	public Boolean init(String objName, Condition condition,
+			Boolean minimizeFlux) {
 
 		try {
 			if (solver.equals("CPLEX")) {
@@ -223,8 +230,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 
 			b.constraintObjectives.add(obj);
 
-		}
-		else {
+		} else {
 			b.setObjective(obj);
 		}
 
@@ -260,7 +266,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 	public AnalysisResult runAnalysis() {
 
 		ConditionComparisonResult result = new ConditionComparisonResult(
-				conditions, objectives, network, inchlibPath);
+				conditions, objectives, network, inchlibPath, launchReactionAnalysis, launchGeneAnalysis);
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
 				objectives.keySet());
@@ -277,56 +283,64 @@ public class ConditionComparisonAnalysis extends Analysis {
 				 */
 				DoubleResult objValue = b.FBA(new ArrayList<Constraint>(),
 						true, true);
-				
-				System.err.println(condition.code+"__"+obj.getName()+" : "+objValue.result);
+
+				System.err.println(condition.code + "__" + obj.getName()
+						+ " : " + objValue.result);
 
 				result.addFbaResult(obj, condition, objValue.result);
 
-				/**
-				 * Computes FVA (we minimize the fluxes)
-				 */
-				// We reinit the bind
-				// It does not work if don't reinit
-				this.init(objName, condition, true);
-				FVAAnalysis fvaAnalysis = new FVAAnalysis(b, null,
-						new ArrayList<Constraint>());
-				FVAResult resultFva = fvaAnalysis.runAnalysis();
+				if (this.launchReactionAnalysis || this.launchGeneAnalysis) {
+					/**
+					 * Computes FVA (we minimize the fluxes)
+					 */
+					// We reinit the bind
+					// It does not work if don't reinit
+					this.init(objName, condition, true);
+					FVAAnalysis fvaAnalysis = new FVAAnalysis(b, null,
+							new ArrayList<Constraint>());
+					FVAResult resultFva = fvaAnalysis.runAnalysis();
 
-				result.addFvaResult(obj, condition, resultFva);
+					result.addFvaResult(obj, condition, resultFva);
 
-				/**
-				 * Computes gene KO (without minimizing the fluxes)
-				 */
-				// We reinit the bind
-				this.init(objName, condition, false);
-				KOAnalysis koAnalysis = new KOAnalysis(b, 1, null);
-				KOResult resultKo = koAnalysis.runAnalysis();
+				}
 
-				result.addKoResult(obj, condition, resultKo);
+				if (this.launchGeneAnalysis) {
+					/**
+					 * Computes gene KO (without minimizing the fluxes)
+					 */
+					// We reinit the bind
+					this.init(objName, condition, false);
+					KOAnalysis koAnalysis = new KOAnalysis(b, 1, null);
+					KOResult resultKo = koAnalysis.runAnalysis();
 
-				/**
-				 * Computes dead genes and dispensable genes from ko genes and
-				 * FVa
-				 */
-				result.addGeneResult(
-						obj,
-						condition,
-						result.koResults.get(condition.code).get(obj.getName()),
-						result.fvaResults.get(condition.code)
-								.get(obj.getName()));
+					result.addKoResult(obj, condition, resultKo);
+
+					/**
+					 * Computes dead genes and dispensable genes from ko genes
+					 * and FVa
+					 */
+					result.addGeneResult(
+							obj,
+							condition,
+							result.koResults.get(condition.code).get(
+									obj.getName()),
+							result.fvaResults.get(condition.code).get(
+									obj.getName()));
+
+				}
 
 				/**
 				 * Reads the metaDataFile
 				 */
 
-				if (geneMetaDataFile != "") {
+				if (geneMetaDataFile != "" && launchGeneAnalysis) {
 					HashMap<String, HashMap<String, String>> geneMetaData = this
 							.readMetaDataFile(geneMetaDataFile, false,
 									this.mdSep);
 					result.geneMetaData = geneMetaData;
 				}
 
-				if (reactionMetaDataFile != "") {
+				if (reactionMetaDataFile != "" && launchReactionAnalysis) {
 					HashMap<String, HashMap<String, String>> reactionMetaData = this
 							.readMetaDataFile(reactionMetaDataFile, true,
 									this.mdSep);

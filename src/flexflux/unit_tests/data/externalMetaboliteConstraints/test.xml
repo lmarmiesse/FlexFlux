@@ -42,29 +42,29 @@
     </listOfParameters>
     </kineticLaw>
   </reaction>
-  <reaction id="R_B_EX" name ="R_B_EX" reversible="false">
+  <reaction id="R_B_EX" name ="R_B_EX" reversible="true">
     <listOfReactants>
-      <speciesReference species="B" stoichiometry="1"/>
+      <speciesReference species="B_ex" stoichiometry="1"/>
     </listOfReactants>
     <listOfProducts>
-      <speciesReference species="B_ex" stoichiometry="1"/>
+      <speciesReference species="B" stoichiometry="1"/>
     </listOfProducts>
     <kineticLaw>
     <math xmlns="http://www.w3.org/1998/Math/MathML">
       <ci> FLUX_VALUE </ci>
     </math>
     <listOfParameters>
-      <parameter id="LOWER_BOUND" value="0" units="mmol_per_gDW_per_hr"/>
+      <parameter id="LOWER_BOUND" value="-1000" units="mmol_per_gDW_per_hr"/>
       <parameter id="UPPER_BOUND" value="1000" units="mmol_per_gDW_per_hr"/>
     </listOfParameters>
     </kineticLaw>
   </reaction>
-  <reaction id="R_C_EX" name ="R_C_EX" reversible="false">
+  <reaction id="R_C_EX" name ="R_C_EX" reversible="true">
     <listOfReactants>
-      <speciesReference species="C_ex" stoichiometry="1"/>
+      <speciesReference species="C" stoichiometry="1"/>
     </listOfReactants>
     <listOfProducts>
-      <speciesReference species="C" stoichiometry="1"/>
+      <speciesReference species="C_ex" stoichiometry="1"/>
     </listOfProducts>
     <kineticLaw>
     <math xmlns="http://www.w3.org/1998/Math/MathML">
@@ -76,12 +76,12 @@
     </listOfParameters>
     </kineticLaw>
   </reaction>
-  <reaction id="R_D_EX" name ="R_D_EX" reversible="true">
+  <reaction id="R_D_EX" name ="R_D_EX" reversible="false">
     <listOfReactants>
-      <speciesReference species="D_ex" stoichiometry="1"/>
+      <speciesReference species="D" stoichiometry="1"/>
     </listOfReactants>
     <listOfProducts>
-      <speciesReference species="D" stoichiometry="1"/>
+      <speciesReference species="D_ex" stoichiometry="1"/>
     </listOfProducts>
     <kineticLaw>
     <math xmlns="http://www.w3.org/1998/Math/MathML">

@@ -172,7 +172,7 @@ public class TestConditionComparison {
 
 		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
 				f.sbmlFile, f.intFile, f.conditionFile, f.constraintFile, f.objectiveFile,
-				ConstraintType.DOUBLE, false, solver, "","", ",", "", true);
+				ConstraintType.DOUBLE, false, solver, "","", ",", "", true, false, false);
 
 		
 		AnalysisResult r = a.runAnalysis();
@@ -191,7 +191,7 @@ public class TestConditionComparison {
 		
 		r.writeToFile(basePath);
 
-		String pathFileTest = basePath + "/fba_results";
+		String pathFileTest = basePath + "/fba_results.csv";
 		File fileTest = new File(pathFileTest);
 		File fileRef = new File(referenceFbaFile);
 
@@ -199,8 +199,6 @@ public class TestConditionComparison {
 		FileAssert.assertEquals("Fba results are different from the reference",
 				fileRef, fileTest);
 		
-		
-
 		pathFileTest = basePath + "/essential_reactions";
 		fileTest = new File(pathFileTest);
 		fileRef = new File(referenceEssentialFile);
