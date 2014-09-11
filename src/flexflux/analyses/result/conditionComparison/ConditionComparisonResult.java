@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -31,6 +32,10 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import org.jfree.ui.RefineryUtilities;
+
+import Jama.util.Maths;
+
+import com.sun.org.apache.bcel.internal.generic.ATHROW;
 
 import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
@@ -79,12 +84,17 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 	private String directoryPath = ".";
 	private String webPath;
+	private String summaryPath;
 	private String cssPath;
 	private String reactionPath;
 	private String jsPath;
 	private String genePath;
+	private String pathwayPath;
 
 	private String inchlibPath;
+
+	public Boolean launchReactionAnalysis;
+	public Boolean launchGeneAnalysis;
 
 	/**
 	 * Constructor
@@ -96,7 +106,8 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 */
 	public ConditionComparisonResult(ArrayList<Condition> conditions,
 			HashMap<String, String> objectives, BioNetwork network,
-			String inchlibPath) {
+			String inchlibPath, Boolean launchReactionAnalysis,
+			Boolean launchGeneAnalysis) {
 		fbaResults = new ConditionComparisonFbaResultSet();
 		fvaResults = new ConditionComparisonFvaResultSet();
 		koResults = new ConditionComparisonKoResultSet();
@@ -111,6 +122,9 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 		// Sets the interaction targets
 		this.interactionTargets = new HashSet<String>();
+
+		this.launchGeneAnalysis = launchGeneAnalysis;
+		this.launchReactionAnalysis = launchReactionAnalysis;
 
 	}
 
@@ -203,95 +217,95 @@ public class ConditionComparisonResult extends AnalysisResult {
 			}
 		}
 
-		// Create web directories
-		// Create directories
-		this.webPath = directoryPath + "/" + "web";
-		File webFile = new File(webPath);
+		this.createWebDirectories(path);
 
-		if (!webFile.exists()) {
-			try {
-				webFile.mkdir();
-			} catch (SecurityException se) {
-				se.printStackTrace();
-				System.err.println("Security Exception during creation of "
-						+ webPath);
-			}
-		}
-		this.reactionPath = webPath + "/" + "reactions";
-		File reactionFile = new File(reactionPath);
+		if (launchGeneAnalysis || launchReactionAnalysis) {
 
-		if (!reactionFile.exists()) {
+			// Copy nvd3 required files
+			// Copy required files
 			try {
-				reactionFile.mkdir();
-			} catch (SecurityException se) {
-				se.printStackTrace();
-				System.err.println("Security Exception during creation of "
-						+ reactionPath);
-			}
-		}
-		this.genePath = webPath + "/" + "genes";
-		File geneFile = new File(genePath);
-
-		if (!geneFile.exists()) {
-			try {
-				geneFile.mkdir();
-			} catch (SecurityException se) {
-				se.printStackTrace();
-				System.err.println("Security Exception during creation of "
-						+ genePath);
-			}
-		}
-		this.jsPath = webPath + "/" + "js";
-		File jsFile = new File(jsPath);
-
-		if (!jsFile.exists()) {
-			try {
-				jsFile.mkdir();
-			} catch (SecurityException se) {
-				se.printStackTrace();
-				System.err.println("Security Exception during creation of "
-						+ jsPath);
+				Utils.copyProjectResource("flexflux/data/web/js/d3.v3.js",
+						jsPath, "d3.v3.js");
+				Utils.copyProjectResource("flexflux/data/web/js/nv.d3.js",
+						jsPath, "nv.d3.js");
+				Utils.copyProjectResource("flexflux/data/web/css/nv.d3.css",
+						cssPath, "nv.d3.css");
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.err.println("Error while copying web files");
+				return;
 			}
 		}
 
-		this.cssPath = webPath + "/" + "css";
-		File cssFile = new File(cssPath);
+		if (launchReactionAnalysis) {
+			this.reactionPath = webPath + "/" + "reactions";
+			File reactionFile = new File(reactionPath);
 
-		if (!cssFile.exists()) {
-			try {
-				cssFile.mkdir();
-			} catch (SecurityException se) {
-				se.printStackTrace();
-				System.err.println("Security Exception during creation of "
-						+ cssPath);
+			if (!reactionFile.exists()) {
+				try {
+					reactionFile.mkdir();
+				} catch (SecurityException se) {
+					se.printStackTrace();
+					System.err.println("Security Exception during creation of "
+							+ reactionPath);
+				}
 			}
+
+			this.pathwayPath = webPath + "/" + "pathways";
+			File pathwayfile = new File(pathwayPath);
+
+			if (!pathwayfile.exists()) {
+				try {
+					pathwayfile.mkdir();
+				} catch (SecurityException se) {
+					se.printStackTrace();
+					System.err.println("Security Exception during creation of "
+							+ pathwayPath);
+				}
+			}
+
 		}
 
-		// copy summary.html in index.html
-		try {
-			Utils.copyProjectResource(
-					"flexflux/data/web/templates/summary.html", webPath,
-					"index.html");
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println("Error while copying web files");
-			return;
+		if (launchGeneAnalysis) {
+
+			this.genePath = webPath + "/" + "genes";
+			File geneFile = new File(genePath);
+
+			if (!geneFile.exists()) {
+				try {
+					geneFile.mkdir();
+				} catch (SecurityException se) {
+					se.printStackTrace();
+					System.err.println("Security Exception during creation of "
+							+ genePath);
+				}
+			}
+
 		}
 
 		writeFbaResultsToFile();
+		writeFbaResultHeatMap();
 
-		writeFvaResultsToFiles();
+		if (launchReactionAnalysis || launchGeneAnalysis) {
+			writeFvaResultsToFiles();
+		}
 
-		writeGeneResultsToFiles();
+		if (launchGeneAnalysis) {
+			writeGeneResultsToFiles();
+			createBarplot(false);
+			writeFilesForHeatMap(false);
+		}
 
-		writeSummaryReactionFile();
+		if (launchReactionAnalysis) {
+			System.err.println("Launch reaction analysis");
+			writeSummaryReactionFile();
+			createBarplot(true);
+			writeFilesForHeatMap(true);
+			writePathwayHeatMap();
+		}
 
-		writeD3Files(true);
-		writeD3Files(false);
+		this.writeFbaResultHeatMap();
 
-		writeFilesForHeatMap(true);
-		writeFilesForHeatMap(false);
-		
 	}
 
 	/**
@@ -308,13 +322,13 @@ public class ConditionComparisonResult extends AnalysisResult {
 				objectives.keySet());
 
 		try {
-			out = new PrintWriter(new File(path + "/fba_results"));
+			out = new PrintWriter(new File(path + "/fba_results.csv"));
 
 			// Prints the header
 			out.print("ConditionCode");
 
 			for (String objName : objectiveNames) {
-				out.print("\t" + objName);
+				out.print("," + objName);
 			}
 			out.print("\n");
 
@@ -329,7 +343,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 				for (String objName : objectiveNames) {
 					ConditionComparisonFbaResult result = results.get(objName);
-					out.print("\t" + result.value);
+					out.print("," + result.value);
 				}
 
 				out.print("\n");
@@ -578,6 +592,57 @@ public class ConditionComparisonResult extends AnalysisResult {
 	/**
 	 * Write a tabulated file with the number of reactions by type
 	 */
+	public void writeFbaResultHeatMap() {
+
+		try {
+			Utils.copyProjectResource(
+					"flexflux/data/web/templates/heatmap/heatmap_independentColumns.html",
+					summaryPath, "fba_results.html");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Error while copying fba_results.html");
+			return;
+		}
+
+		// copy html template
+		// Build inchlib cmd
+		if (inchlibPath != "") {
+			if (inchlibPath.contains(" ") || !inchlibPath.contains("inchlib")
+					|| !inchlibPath.endsWith(".py")) {
+				System.err.println("Inchlib command not valid");
+				return;
+			}
+			File f = new File(inchlibPath);
+			if (!f.exists() || f.isDirectory()) {
+				System.err.println("The python file " + inchlibPath
+						+ " does not exist");
+				return;
+			}
+
+			String jsonFile = this.summaryPath + "/fba_results.json";
+			String jsFile = this.summaryPath + "/data.js";
+
+			String cmd = "python " + inchlibPath + " " + this.directoryPath
+					+ "/fba_results.csv" + " -dh -mh -a both -o " + jsonFile;
+
+			System.err.println(cmd);
+
+			try {
+				this.runInchlib(cmd);
+				this.jsonToJs(jsonFile, jsFile);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.err.println("Problem while running inchlib");
+			}
+
+		}
+
+	}
+
+	/**
+	 * Write a tabulated file with the number of reactions by type
+	 */
 	public void writeSummaryReactionFile() {
 
 		String path = this.directoryPath;
@@ -629,7 +694,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 * 
 	 * @throws IOException
 	 */
-	public void writeD3Files(Boolean isReaction) {
+	public void createBarplot(Boolean isReaction) {
 
 		String outPath = genePath;
 		if (isReaction) {
@@ -644,12 +709,6 @@ public class ConditionComparisonResult extends AnalysisResult {
 			Utils.copyProjectResource(
 					"flexflux/data/web/templates/multiBar/multiBar.js",
 					outPath, "multiBar.js");
-			Utils.copyProjectResource("flexflux/data/web/js/d3.v3.js", jsPath,
-					"d3.v3.js");
-			Utils.copyProjectResource("flexflux/data/web/js/nv.d3.js", jsPath,
-					"nv.d3.js");
-			Utils.copyProjectResource("flexflux/data/web/css/nv.d3.css",
-					cssPath, "nv.d3.css");
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println("Error while copying web files");
@@ -751,6 +810,16 @@ public class ConditionComparisonResult extends AnalysisResult {
 			metaData = reactionMetaData;
 			ids = network.getBiochemicalReactionList().keySet();
 			chokes = network.getChokeReactions();
+		}
+
+		try {
+			Utils.copyProjectResource(
+					"flexflux/data/web/templates/heatmap/heatmap.html",
+					outPath, "heatmap.html");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Error while copying heatmap.html");
+			return;
 		}
 
 		// Create the data and metadata files
@@ -928,35 +997,37 @@ public class ConditionComparisonResult extends AnalysisResult {
 				outMetaData.close();
 			}
 		}
-		
+
 		// Build inchlib cmd
-		if(inchlibPath != "")
-		{
-			if(inchlibPath.contains(" ") || ! inchlibPath.contains("inchlib") || ! inchlibPath.endsWith(".py")) {
+		if (inchlibPath != "") {
+			if (inchlibPath.contains(" ") || !inchlibPath.contains("inchlib")
+					|| !inchlibPath.endsWith(".py")) {
 				System.err.println("Inchlib command not valid");
 				return;
 			}
 			File f = new File(inchlibPath);
-			if(! f.exists() || f.isDirectory()) {
-				System.err.println("The python file "+inchlibPath+" does not exist");
+			if (!f.exists() || f.isDirectory()) {
+				System.err.println("The python file " + inchlibPath
+						+ " does not exist");
 				return;
 			}
-			
-			String cmd = "python "+inchlibPath+" "+outPath + "/heatMapData.csv"+" -m "+outPath + "/heatMapMetaData.csv"+" -dh -mh -a both -html "+outPath;
-			
+
+			String jsonFile = outPath + "/data.json";
+			String jsFile = outPath + "/data.js";
+
+			String cmd = "python " + inchlibPath + " " + outPath + "/heatMapData.csv -m "
+					+ outPath+"/heatMapMetaData.csv" + " -dh -mh -a both -o " + jsonFile;
+
 			try {
 				this.runInchlib(cmd);
+				this.jsonToJs(jsonFile, jsFile);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				System.err.println("Problem while running inchlib");
 			}
-			
-			
+
 		}
-		
-		
-		
 
 	}
 
@@ -1090,6 +1161,9 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 */
 	public Boolean runInchlib(String inchlibCmd) throws IOException {
 
+		
+		System.err.println(inchlibCmd);
+		
 		Process p = null;
 		try {
 			p = Runtime.getRuntime().exec(inchlibCmd);
@@ -1101,13 +1175,11 @@ public class ConditionComparisonResult extends AnalysisResult {
 			}
 			p.waitFor();
 		} catch (IOException e) {
-			System.err.println("Error in launching the command "
-					+ inchlibCmd);
+			System.err.println("Error in launching the command " + inchlibCmd);
 			e.printStackTrace();
 			return false;
 		} catch (InterruptedException e) {
-			System.err
-					.println("Interruption of the command " + inchlibCmd);
+			System.err.println("Interruption of the command " + inchlibCmd);
 			e.printStackTrace();
 			return false;
 		} finally {
@@ -1122,6 +1194,286 @@ public class ConditionComparisonResult extends AnalysisResult {
 		}
 
 		return true;
+
+	}
+
+	/**
+	 * Create required web directories and Files
+	 * 
+	 * @param path
+	 */
+	private void createWebDirectories(String path) {
+
+		// Create web directories
+		this.webPath = directoryPath + "/" + "web";
+		File webFile = new File(webPath);
+
+		if (!webFile.exists()) {
+			try {
+				webFile.mkdir();
+			} catch (SecurityException se) {
+				se.printStackTrace();
+				System.err.println("Security Exception during creation of "
+						+ webPath);
+			}
+		}
+
+		this.summaryPath = this.webPath + "/summary";
+
+		File summaryDir = new File(this.summaryPath);
+
+		if (!summaryDir.exists()) {
+			try {
+				summaryDir.mkdir();
+			} catch (SecurityException se) {
+				se.printStackTrace();
+				System.err.println("Security Exception during creation of "
+						+ this.summaryPath);
+			}
+		}
+
+		this.jsPath = webPath + "/" + "js";
+		File jsFile = new File(jsPath);
+
+		if (!jsFile.exists()) {
+			try {
+				jsFile.mkdir();
+			} catch (SecurityException se) {
+				se.printStackTrace();
+				System.err.println("Security Exception during creation of "
+						+ jsPath);
+			}
+		}
+
+		this.cssPath = webPath + "/" + "css";
+		File cssFile = new File(cssPath);
+
+		if (!cssFile.exists()) {
+			try {
+				cssFile.mkdir();
+			} catch (SecurityException se) {
+				se.printStackTrace();
+				System.err.println("Security Exception during creation of "
+						+ cssPath);
+			}
+		}
+
+		// copy summary.html in index.html
+		try {
+			Utils.copyProjectResource(
+					"flexflux/data/web/templates/summary.html", webPath,
+					"index.html");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Error while copying web files");
+			return;
+		}
+
+		// copy heatmap javascript files.
+		try {
+			Utils.copyProjectResource(
+					"flexflux/data/web/js/inchlib-1.0.1.min.js", jsPath,
+					"inchlib-1.0.1.min.js");
+			Utils.copyProjectResource(
+					"flexflux/data/web/js/jquery-2.0.3.min.js", jsPath,
+					"jquery-2.0.3.min.js");
+			Utils.copyProjectResource(
+					"flexflux/data/web/js/kinetic-v5.0.0.min.js", jsPath,
+					"kinetic-v5.0.0.min.js");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Error while copying heatmap js files");
+			return;
+		}
+
+	}
+
+	/**
+	 * Transform a json file to a js file to enable direct loadin of data
+	 * 
+	 * @param jsonFile
+	 * @param jsFile
+	 * @return
+	 */
+	private Boolean jsonToJs(String jsonFile, String jsFile) {
+
+		Boolean flag = true;
+
+		BufferedReader in = null;
+		PrintWriter out = null;
+
+		try {
+			in = new BufferedReader(new FileReader(jsonFile));
+			out = new PrintWriter(new File(jsFile));
+
+			out.write("var data = ");
+
+			String line = "";
+
+			while ((line = in.readLine()) != null) {
+
+				line = line.replaceAll("\"", "'");
+
+				out.write(line);
+				out.write("\n");
+			}
+
+			out.write(";");
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			System.err.println("Json file " + jsonFile + " not found");
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.err.println("Error reading Json file " + jsonFile);
+		}
+
+		finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+					System.err.println("Error while closing " + jsonFile);
+				}
+			}
+			if (out != null) {
+				out.close();
+			}
+		}
+
+		return flag;
+
+	}
+
+	/**
+	 * Counts the proportion of dead, dispensable and essential reactions in the
+	 * pathways
+	 */
+	public void writePathwayHeatMap() {
+		PrintWriter outData = null;
+		PrintWriter outMetaData = null;
+		ArrayList<String> objectiveNames = new ArrayList<String>(
+				objectives.keySet());
+
+		String outPath = pathwayPath;
+		Set<String> ids = network.getPathwayList().keySet();
+
+		try {
+			Utils.copyProjectResource(
+					"flexflux/data/web/templates/heatmap/heatmap.html",
+					outPath, "heatmap.html");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Error while copying heatmap.html");
+			return;
+		}
+
+		// Create the data and metadata files
+		try {
+			outData = new PrintWriter(new File(outPath + "/heatMapData.csv"));
+			outMetaData = new PrintWriter(new File(outPath
+					+ "/heatMapMetaData.csv"));
+
+			// Prints the header
+			outData.write("id");
+
+			for (Condition c : conditions) {
+				for (String objName : objectiveNames) {
+					outData.write("," + c.code + "__" + objName);
+				}
+			}
+			outData.write("\n");
+
+			/**
+			 * Header for metadata file
+			 */
+			outMetaData.write("id,nbReactions\n");
+
+			HashMap<String, Double> scoreEssential = new HashMap<String, Double>();
+
+			for (String id : ids) {
+
+				BioPathway pathway = network.getPathwayList().get(id);
+
+				HashMap<String, BioChemicalReaction> reactions = pathway
+						.getReactions();
+
+				outMetaData.write(id + "," + reactions.size() + "\n");
+
+				outData.write(id);
+
+				for (Condition c : conditions) {
+
+					HashMap<String, ConditionComparisonFvaResult> results = fvaResults
+							.get(c.code);
+					for (String objName : objectiveNames) {
+						ConditionComparisonFvaResult result = results
+								.get(objName);
+
+						int nbEssential = 0;
+
+						for (String idReaction : reactions.keySet()) {
+							if (result.essentialReactions
+									.containsKey(idReaction)) {
+								nbEssential++;
+							}
+						}
+
+						double prop = nbEssential / reactions.size();
+						prop = (Math.round(prop * 100)) / 100;
+
+						outData.write("," + prop);
+
+					}
+				}
+
+				outData.write("\n");
+
+			}
+		} catch (FileNotFoundException e) {
+			System.err
+					.println("Error while writing pathway heatmap data files");
+		}
+
+		finally {
+			if (outData != null) {
+				outData.close();
+			}
+			if (outMetaData != null) {
+				outMetaData.close();
+			}
+		}
+
+		// Build inchlib cmd
+		if (inchlibPath != "") {
+			if (inchlibPath.contains(" ") || !inchlibPath.contains("inchlib")
+					|| !inchlibPath.endsWith(".py")) {
+				System.err.println("Inchlib command not valid");
+				return;
+			}
+			File f = new File(inchlibPath);
+			if (!f.exists() || f.isDirectory()) {
+				System.err.println("The python file " + inchlibPath
+						+ " does not exist");
+				return;
+			}
+
+			String jsonFile = outPath + "/data.json";
+			String jsFile = outPath + "/data.js";
+
+			String cmd = "python " + inchlibPath + " " + outPath + "/heatMapData.csv -m "
+					+ outPath+"/heatMapMetaData.csv" + " -dh -mh -a both -o " + jsonFile;
+
+			try {
+				this.runInchlib(cmd);
+				this.jsonToJs(jsonFile, jsFile);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.err.println("Problem while running inchlib");
+			}
+		}
 
 	}
 

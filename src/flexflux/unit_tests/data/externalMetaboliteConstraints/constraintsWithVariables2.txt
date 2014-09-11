@@ -2,3 +2,4 @@ obj : MAX(R_A_EX)
 
 T1	0	1
 T2	0	1
+A_ex	0

@@ -29,20 +29,19 @@ public class FlexfluxConditionComparison {
 
 	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
 	public String sbmlFile = "";
-	
-	
+
 	@Option(name = "-mdr", usage = "[OPTIONAL] Reaction metadata file used for heatmap analysis", metaVar = "File", required = false)
 	public String metaReactionDataFile = "";
-	
+
 	@Option(name = "-mdg", usage = "[OPTIONAL] Gene metadata file used for heatmap analysis", metaVar = "File", required = false)
 	public String metaGeneDataFile = "";
-	
+
 	@Option(name = "-mdSep", usage = "[Default=,] Separator for the columns in the metaData file", metaVar = "String", required = false)
 	public String mdSep = ",";
 
 	@Option(name = "-cond", usage = "File containing several conditions", metaVar = "File", required = true)
 	public String conditionFile = "";
-	
+
 	@Option(name = "-cons", usage = "[OPTIONAL] File containing the constraints applied on the metabolic network", metaVar = "File", required = false)
 	public String constraintFile = "";
 
@@ -72,16 +71,21 @@ public class FlexfluxConditionComparison {
 
 	@Option(name = "-ext", usage = "[OPTIONAL, default = false] Uses the extended SBML format")
 	public Boolean extended = false;
-	
+
 	@Option(name = "-minFlux", usage = "[OPTIONAL, default = false] Minimize the flux when performing the fva")
 	public Boolean minFlux = false;
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
 	public String solver = "GLPK";
-	
-	@Option(name = "-inchlibPath", usage ="[default=/usr/local/inchlib_clust/inchlib_clust.py]", metaVar = "String")
+
+	@Option(name = "-inchlibPath", usage = "[default=/usr/local/inchlib_clust/inchlib_clust.py]", metaVar = "String")
 	public String inchlibPath = "/usr/local/inchlib_clust/inchlib_clust.py";
-	
+
+	@Option(name = "-noReactionAnalysis", usage = "Don't perform reaction essentiality analysis")
+	public Boolean noReactionAnalysis = false;
+
+	@Option(name = "-noGeneAnalysis", usage = "Don't perform gene essentiality analysis")
+	public Boolean noGeneAnalysis = false;
 
 	@Option(name = "-h", usage = "Prints this help")
 	public Boolean h = false;
@@ -156,7 +160,7 @@ public class FlexfluxConditionComparison {
 							+ f.solver + ".");
 			System.exit(0);
 		}
-		
+
 		bind.setLoadObjective(false);
 		if (f.constraintFile != "") {
 			bind.loadConditionsFile(f.constraintFile);
@@ -172,9 +176,12 @@ public class FlexfluxConditionComparison {
 		}
 
 		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
-				f.sbmlFile, f.intFile, f.conditionFile, f.constraintFile, f.objectiveFile, c, f.extended, 
-				f.solver, f.metaReactionDataFile, f.metaGeneDataFile, f.mdSep, f.inchlibPath, f.minFlux);
-		
+				f.sbmlFile, f.intFile, f.conditionFile, f.constraintFile,
+				f.objectiveFile, c, f.extended, f.solver,
+				f.metaReactionDataFile, f.metaGeneDataFile, f.mdSep,
+				f.inchlibPath, f.minFlux, f.noReactionAnalysis,
+				f.noGeneAnalysis);
+
 		AnalysisResult r = a.runAnalysis();
 
 		if (f.plot) {
