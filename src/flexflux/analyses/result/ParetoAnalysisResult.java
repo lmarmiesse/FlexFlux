@@ -33,12 +33,12 @@
  */
 package flexflux.analyses.result;
 
-import flexflux.general.Objective;
-
 import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +55,8 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RefineryUtilities;
+
+import flexflux.general.Objective;
 
 
 
@@ -93,9 +95,14 @@ public class ParetoAnalysisResult extends AnalysisResult {
 	}
 
 	public void writeToFile(String path) {
-
+		
 		File dir = new File(path);
-		dir.mkdir();
+		if (!dir.mkdirs()){
+			System.err.println("Error : result directory was not created");
+			if (!dir.canWrite()){
+				System.err.println("FlexFlux cannot write in directory "+dir);
+			}
+		}
 
 		// 1D results
 		PrintWriter out;
@@ -192,7 +199,7 @@ public class ParetoAnalysisResult extends AnalysisResult {
 		frame.pack();
 
 		RefineryUtilities.centerFrameOnScreen(frame);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setVisible(true);
 
 		for (ReacAnalysisResult r : twoDResults.keySet()) {

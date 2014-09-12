@@ -66,7 +66,6 @@ import org.jfree.ui.RefineryUtilities;
 
 import parsebionet.biodata.BioEntity;
 
-
 /**
  * 
  * Class representing the result of an analysis with a varying flux.
@@ -160,8 +159,6 @@ public class ReacAnalysisResult extends AnalysisResult {
 
 		for (double x = init; x <= end; x += deltaF) {
 			for (double group : this.shadowPriceGroups.keySet()) {
-				
-			
 
 				if (notYetAddedGroup.contains(group)) {
 
@@ -350,15 +347,23 @@ public class ReacAnalysisResult extends AnalysisResult {
 
 		JFrame frame = new JFrame("Results");
 
-		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, panel,
-				fvaScrollPane);
+		if (groupIndex.size() > 0) {
 
-		frame.setContentPane(splitPane);
+			JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+					panel, fvaScrollPane);
+			frame.setContentPane(splitPane);
+			frame.setSize(600, 1000);
+
+		}
+		else{
+			frame.setContentPane(panel);
+			frame.setSize(600, 600);
+		}
 
 		panel.setPreferredSize(new Dimension(600, 600));
 		panel.setMinimumSize(new Dimension(600, 600));
 
-		frame.setSize(600, 1000);
+		
 		RefineryUtilities.centerFrameOnScreen(frame);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);

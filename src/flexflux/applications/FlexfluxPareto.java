@@ -204,9 +204,10 @@ public class FlexfluxPareto {
 		if (f.intFile != "") {
 			bind.loadInteractionsFile(f.intFile);
 		}
-		bind.prepareSolver();
-
+		
 		Analysis analysis = new ParetoAnalysis(bind, f.expFile, f.plotAll);
+		
+		bind.prepareSolver();
 
 		AnalysisResult result = analysis.runAnalysis();
 

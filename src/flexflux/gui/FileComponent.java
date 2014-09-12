@@ -34,7 +34,7 @@ public class FileComponent extends ArgumentComponent {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				fc = new JFileChooser(lastUsedDirectory);
-				
+				fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				int returnVal = fc.showOpenDialog(FileComponent.this);
 				
 		        if (returnVal == JFileChooser.APPROVE_OPTION) {
