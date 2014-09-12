@@ -93,6 +93,8 @@ public class ParetoAnalysis extends Analysis {
 		super(b);
 		this.filePath = filePath;
 		this.plotAll = plotAll;
+
+		parseFile();
 	}
 
 	public ParetoAnalysisResult runAnalysis() {
@@ -101,7 +103,6 @@ public class ParetoAnalysis extends Analysis {
 		Map<ReacAnalysisResult, Double> twoDResults = new HashMap<ReacAnalysisResult, Double>();
 		Map<TwoReacsAnalysisResult, Double> threeDResults = new HashMap<TwoReacsAnalysisResult, Double>();
 
-		parseFile();
 		//
 
 		// 1D
@@ -132,7 +133,6 @@ public class ParetoAnalysis extends Analysis {
 			} else {
 				objectivesBounds.get(obj)[0] = result.getObjValue();
 			}
-			
 
 			b.setObjSense(!obj.getMaximize());
 
@@ -145,8 +145,10 @@ public class ParetoAnalysis extends Analysis {
 			} else {
 				objectivesBounds.get(obj)[0] = result2.getObjValue();
 			}
-			
-			System.err.println(obj.getName()+" min : "+objectivesBounds.get(obj)[0]+" max : "+objectivesBounds.get(obj)[1]);
+
+			System.err.println(obj.getName() + " min : "
+					+ objectivesBounds.get(obj)[0] + " max : "
+					+ objectivesBounds.get(obj)[1]);
 
 			// we normalize the values
 			List<Double> normalizedResults = new ArrayList<Double>();
@@ -180,10 +182,10 @@ public class ParetoAnalysis extends Analysis {
 		Entry<ReacAnalysisResult, Double> bestResult2D = new SimpleEntry<ReacAnalysisResult, Double>(
 				null, 0.0);
 
-		int nb=0;
+		int nb = 0;
 		for (Objective[] toTest : pairsToTest) {
 			nb++;
-			System.err.println("2D analysis "+nb+"/"+pairsToTest.size());
+			System.err.println("2D analysis " + nb + "/" + pairsToTest.size());
 			b.setObjective(toTest[0]);
 
 			double lb = objectivesBounds.get(toTest[1])[0];
@@ -214,14 +216,12 @@ public class ParetoAnalysis extends Analysis {
 				result.addExpValue(val2, val1);
 
 			}
-			
-			
+
 			result.normalizeValues(lb, ub, !toTest[1].getMaximize(),
 					objectivesBounds.get(toTest[0])[0],
 					objectivesBounds.get(toTest[0])[1],
 					!toTest[0].getMaximize());
 
-			
 			result.calculateScore();
 
 			twoDResults.put(result, result.getScore());
@@ -237,7 +237,6 @@ public class ParetoAnalysis extends Analysis {
 						result, result.getScore());
 			}
 
-			
 		}
 
 		//
@@ -252,10 +251,11 @@ public class ParetoAnalysis extends Analysis {
 		Entry<TwoReacsAnalysisResult, Double> bestResult3D = new SimpleEntry<TwoReacsAnalysisResult, Double>(
 				null, 0.0);
 
-		nb=0;
+		nb = 0;
 		for (Objective[] toTest : tripletsToTest) {
 			nb++;
-			System.err.println("3D analysis "+nb+"/"+tripletsToTest.size());
+			System.err.println("3D analysis " + nb + "/"
+					+ tripletsToTest.size());
 
 			b.setObjective(toTest[0]);
 
@@ -308,9 +308,9 @@ public class ParetoAnalysis extends Analysis {
 					objectivesBounds.get(toTest[0])[0],
 					objectivesBounds.get(toTest[0])[1],
 					!toTest[0].getMaximize());
-			
+
 			result.calculateScore();
-			
+
 			threeDResults.put(result, result.getScore());
 
 			if (bestResult3D.getKey() == null) {
@@ -329,17 +329,19 @@ public class ParetoAnalysis extends Analysis {
 
 			return new ParetoAnalysisResult(oneDResults, twoDResults,
 					threeDResults);
-		}
-		else {
-			
-			Map<ReacAnalysisResult,Double> best2D = new HashMap<ReacAnalysisResult,Double>();
-			best2D.put(bestResult2D.getKey(),bestResult2D.getValue());
-			
-			Map<TwoReacsAnalysisResult,Double> best3D = new HashMap<TwoReacsAnalysisResult,Double>();
-			best3D.put(bestResult3D.getKey(),bestResult3D.getValue());
-			
-			return new ParetoAnalysisResult(oneDResults, best2D,
-					best3D);
+		} else {
+
+			Map<ReacAnalysisResult, Double> best2D = new HashMap<ReacAnalysisResult, Double>();
+			if (bestResult2D.getKey() != null) {
+				best2D.put(bestResult2D.getKey(), bestResult2D.getValue());
+			}
+
+			Map<TwoReacsAnalysisResult, Double> best3D = new HashMap<TwoReacsAnalysisResult, Double>();
+
+			if (bestResult3D.getKey() != null) {
+				best3D.put(bestResult3D.getKey(), bestResult3D.getValue());
+			}
+			return new ParetoAnalysisResult(oneDResults, best2D, best3D);
 		}
 	}
 

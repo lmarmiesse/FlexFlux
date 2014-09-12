@@ -508,19 +508,25 @@ public class TwoReacsAnalysisResult extends AnalysisResult {
 
 		}
 
-		JScrollPane fvaScrollPane = new JScrollPane(fvaPanel);
-
-		fvaScrollPane.setPreferredSize(new Dimension(600, 300));
-
 		plot.setPreferredSize(new Dimension(600, 600));
+		
+		if (groupIndex.size() > 0) {
+			JScrollPane fvaScrollPane = new JScrollPane(fvaPanel);
 
-		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-				mainPanel, fvaScrollPane);
+			fvaScrollPane.setPreferredSize(new Dimension(600, 300));
 
-		splitPane.setDividerLocation(600);
+			JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+					mainPanel, fvaScrollPane);
+			splitPane.setDividerLocation(600);
 
-		frame.setContentPane(splitPane);
-		frame.setSize(600, 900);
+			frame.setContentPane(splitPane);
+			frame.setSize(600, 900);
+
+		}
+		else{
+			frame.setContentPane(plot);
+			frame.setSize(600, 600);
+		}
 
 		RefineryUtilities.centerFrameOnScreen(frame);
 		frame.setVisible(true);
