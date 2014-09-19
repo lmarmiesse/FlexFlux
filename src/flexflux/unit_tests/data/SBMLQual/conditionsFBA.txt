@@ -1,0 +1,12 @@
+#maximize biomass production
+obj : MAX(R_Biomass_Ecoli_core_w_GAM)
+
+
+
+
+
+
+s_MYB30	0
+s_MYB96	0
+s_Bacteria	0
+s_VLCFA	0

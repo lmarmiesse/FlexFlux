@@ -102,6 +102,10 @@ public class Unique extends Relation {
 	public BioEntity getEntity() {
 		return entity;
 	}
+	
+	public double getValue(){
+		return value;
+	}
 
 	public String toString() {
 		String s = "";

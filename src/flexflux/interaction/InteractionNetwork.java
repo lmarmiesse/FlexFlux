@@ -130,6 +130,7 @@ public class InteractionNetwork {
 	}
 
 	public void addNumEntity(BioEntity e) {
+		
 		if (numEntities.containsKey(e.getId())
 				|| intEntities.containsKey(e.getId())
 				|| binaryEntities.containsKey(e.getId())) {

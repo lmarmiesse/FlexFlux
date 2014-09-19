@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" qual:required="true" level="3" xmlns:qual="http://www.sbml.org/sbml/level3/version1/qual/version1" version="1">
+  <model id="s_Test_myb30" name="Test myb30" metaid="c912264e_b007_499e_b907_5af1b7aa75a5">
+    <notes>
+      <body xmlns="http://www.w3.org/1999/xhtml">
+        <br/>
+            <h1>Description</h1>
+            <br/>
+            <p/>
+            <br/>
+            <h1>Tags</h1>
+            <br/>
+            <p/>
+            </body>
+      
+    </notes>
+    <annotation>
+      <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/">
+        <rdf:Description rdf:about="#c912264e_b007_499e_b907_5af1b7aa75a5">
+          <dcterms:created rdf:parseType="Resource">
+            <dcterms:W3CDTF>2014-09-18T09:00:40Z</dcterms:W3CDTF>
+          </dcterms:created>
+          <dcterms:modified rdf:parseType="Resource">
+            <dcterms:W3CDTF>2014-09-18T09:00:40Z</dcterms:W3CDTF>
+          </dcterms:modified>
+          <dcterms:modified rdf:parseType="Resource">
+            <dcterms:W3CDTF>2014-09-18T09:00:40Z</dcterms:W3CDTF>
+          </dcterms:modified>
+        </rdf:Description>
+      </rdf:RDF>
+    </annotation>
+      <listOfCompartments>
+      <compartment id="extracellular" constant="true" name="extracellular"/>
+      <compartment id="cytosol" constant="true" name="cytosol"/>
+    </listOfCompartments>
+      <qual:listOfQualitativeSpecies xmlns:qual="http://www.sbml.org/sbml/level3/version1/qual/version1">
+      <qual:qualitativeSpecies qual:constant="true" qual:compartment="extracellular" qual:name="Bacteria" qual:id="s_Bacteria"/>
+      <qual:qualitativeSpecies qual:constant="false" qual:compartment="cytosol" qual:maxLevel="3.2" qual:name="MYB30" qual:initialLevel="3.5" qual:id="s_MYB30"/>
+      <qual:qualitativeSpecies qual:constant="false" qual:compartment="cytosol" qual:maxLevel="1" qual:name="MYB96" qual:initialLevel="0" qual:id="s_MYB96"/>
+      <qual:qualitativeSpecies qual:constant="false" qual:compartment="cytosol" qual:maxLevel="1" qual:name="VLCFA" qual:initialLevel="0.2" qual:id="s_VLCFA"/>
+    </qual:listOfQualitativeSpecies>
+    <qual:listOfTransitions xmlns:qual="http://www.sbml.org/sbml/level3/version1/qual/version1">
+      <qual:transition qual:id="tr_MYB30">
+        <qual:listOfInputs>
+          <qual:input qual:thresholdLevel="1" qual:transitionEffect="none" qual:qualitativeSpecies="s_Bacteria" qual:id="tr_MYB30_in_0"/>
+        </qual:listOfInputs>
+        <qual:listOfOutputs>
+          <qual:output qual:transitionEffect="assignmentLevel" qual:qualitativeSpecies="s_MYB30"/>
+        </qual:listOfOutputs>
+        <qual:listOfFunctionTerms>
+          <qual:defaultTerm qual:resultLevel="0">
+          </qual:defaultTerm>
+          <qual:functionTerm qual:resultLevel="1.8">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">            
+              <apply>
+                <eq/>
+                <ci> s_Bacteria </ci>
+                <cn > 6.3 </cn>
+              </apply>
+            </math>
+            
+                                </qual:functionTerm>
+        </qual:listOfFunctionTerms>
+      </qual:transition>
+      <qual:transition qual:id="tr_MYB96">
+        <qual:listOfInputs>
+          <qual:input qual:thresholdLevel="1" qual:transitionEffect="none" qual:qualitativeSpecies="s_Bacteria" qual:id="tr_MYB96_in_0"/>
+          <qual:input qual:thresholdLevel="1" qual:transitionEffect="none" qual:qualitativeSpecies="s_MYB30" qual:id="tr_MYB96_in_1"/>
+        </qual:listOfInputs>
+        <qual:listOfOutputs>
+          <qual:output qual:transitionEffect="assignmentLevel" qual:qualitativeSpecies="s_MYB96"/>
+        </qual:listOfOutputs>
+        <qual:listOfFunctionTerms>
+          <qual:defaultTerm qual:resultLevel="0">
+			  <notes> 0.2 </notes>
+          </qual:defaultTerm>
+          <qual:functionTerm qual:resultLevel="1">
+			  			<notes> 3.5 </notes>
+            <math xmlns="http://www.w3.org/1998/Math/MathML">            
+              <apply>
+                <and/>
+                <apply>
+                  <eq/>
+                  <ci> s_Bacteria </ci>
+                  <cn type="integer"> 1 </cn>
+                </apply>
+                <apply>
+                  <not/>
+                  <apply>
+                    <eq/>
+                    <ci> s_MYB30 </ci>
+                   <cn type="integer"> 2 </cn>
+                  </apply>
+                </apply>
+              </apply>
+            </math>
+                                </qual:functionTerm>
+        </qual:listOfFunctionTerms>
+      </qual:transition>
+      <qual:transition qual:id="tr_VLCFA">
+        <qual:listOfInputs>
+          <qual:input qual:thresholdLevel="1" qual:transitionEffect="none" qual:qualitativeSpecies="s_MYB30" qual:id="tr_VLCFA_in_1"/>
+        </qual:listOfInputs>
+        <qual:listOfOutputs>
+          <qual:output qual:transitionEffect="assignmentLevel" qual:qualitativeSpecies="s_VLCFA"/>
+        </qual:listOfOutputs>
+        <qual:listOfFunctionTerms>
+          <qual:defaultTerm qual:resultLevel="0">
+          </qual:defaultTerm>
+          <qual:functionTerm qual:resultLevel="1">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">            
+              <apply>
+                <eq/>
+                <ci> s_MYB30 </ci>
+                <cn type="integer"> 1 </cn>
+              </apply>
+            </math>
+                                </qual:functionTerm>
+        </qual:listOfFunctionTerms>
+      </qual:transition>
+    </qual:listOfTransitions>
+  </model>
+</sbml>
