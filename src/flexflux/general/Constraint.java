@@ -97,6 +97,23 @@ public class Constraint {
 		}
 
 	}
+	
+	public Constraint(BioEntity ent, Double lb, Double ub) {
+
+		Map<BioEntity, Double> entitiesMap  = new HashMap<BioEntity, Double>();
+		entitiesMap.put(ent, 1.0);
+		
+		if (lb <= ub) {
+			this.entities = entitiesMap;
+			this.lb = lb;
+			this.ub = ub;
+		} else {
+			this.entities = entitiesMap;
+			this.lb = lb;
+			this.ub = lb;
+		}
+
+	}
 
 	public boolean getNot() {
 		return not;

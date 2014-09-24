@@ -126,6 +126,7 @@ public abstract class Bind {
 	 * The interaction network of the problem.
 	 */
 	protected InteractionNetwork intNet = new InteractionNetwork();
+	
 	/**
 	 * The metabolic network of the problem.
 	 */
@@ -137,8 +138,7 @@ public abstract class Bind {
 	protected List<Constraint> constraints = new ArrayList<Constraint>();
 
 	/**
-	 * Links an interactions to a list of constraints to check if the
-	 * interaction is true.
+	 * Links an interactions to a list of constraints 
 	 */
 	protected Map<Interaction, List<Constraint>> intToConstraint = new HashMap<Interaction, List<Constraint>>();
 

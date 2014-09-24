@@ -130,6 +130,8 @@ public class ThreadKO extends ResolveThread {
 				bind.getInteractionNetwork().getAddedInteractions()
 						.remove(interactions[1]);
 			}
+			
+			
 
 			DoubleResult value = bind.FBA(constraintsToAdd, false, true);
 
