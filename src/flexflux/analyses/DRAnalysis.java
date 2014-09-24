@@ -78,7 +78,7 @@ public class DRAnalysis extends Analysis {
 		List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 		// we add the constraints corresponding to the interactions
 
-		for (Constraint c : b.findInteractionNetworkSteadyState()) {
+		for (Constraint c : b.getInteractionNetwork().findSteadyState(b.getSimpleConstraints())) {
 			constraintsToAdd.add(c);
 		}
 

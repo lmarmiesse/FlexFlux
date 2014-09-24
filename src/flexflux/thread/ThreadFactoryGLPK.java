@@ -62,10 +62,8 @@ public class ThreadFactoryGLPK extends ThreadFactory {
 
 	public ThreadFactoryGLPK(List<Constraint> constraints,
 			Map<BioEntity, Constraint> simpleConstraints,
-			InteractionNetwork intNet,
-			Map<BioEntity, Constraint> interactionNetworkSimpleConstraints) {
-		super(constraints, simpleConstraints, intNet,
-				interactionNetworkSimpleConstraints);
+			InteractionNetwork intNet) {
+		super(constraints, simpleConstraints, intNet);
 
 	}
 
@@ -73,7 +71,7 @@ public class ThreadFactoryGLPK extends ThreadFactory {
 			Queue<BioEntity> entsCopy, FVAResult result) {
 
 		Bind bind = new GLPKBind(constraints, simpleConstraints, intNet,
-				bioNet, interactionNetworkSimpleConstraints);
+				bioNet);
 
 		return new ThreadFVA(bind, ents, entsCopy, result);
 	}
@@ -83,7 +81,7 @@ public class ThreadFactoryGLPK extends ThreadFactory {
 			List<Constraint> interactionNetwotkConstraints) {
 
 		Bind bind = new GLPKBind(constraints, simpleConstraints, intNet,
-				bioNet, interactionNetworkSimpleConstraints);
+				bioNet);
 
 		return new ThreadKO(bind, entities, result, obj,
 				entitiesInInteractionNetwork, interactionNetwotkConstraints);
@@ -93,7 +91,7 @@ public class ThreadFactoryGLPK extends ThreadFactory {
 			Map<BioEntity, Double> entities, ReacAnalysisResult result,
 			Objective obj) {
 		Bind bind = new GLPKBind(constraints, simpleConstraints, intNet,
-				bioNet, interactionNetworkSimpleConstraints);
+				bioNet);
 
 		return new ThreadReac(bind, fluxesQueue, entities, result, obj);
 	}
@@ -102,7 +100,7 @@ public class ThreadFactoryGLPK extends ThreadFactory {
 			TwoReacsAnalysisResult result, Map<BioEntity, Double> entities1,
 			Map<BioEntity, Double> entities2, Objective obj) {
 		Bind bind = new GLPKBind(constraints, simpleConstraints, intNet,
-				bioNet, interactionNetworkSimpleConstraints);
+				bioNet);
 
 		return new ThreadTwoReacs(bind, fluxesQueue, result, entities1,
 				entities2, obj);

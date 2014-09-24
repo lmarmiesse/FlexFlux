@@ -34,6 +34,7 @@
 package flexflux.unit_tests;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
@@ -86,59 +87,90 @@ public class TestInteraction {
 	@Test
 	public void test() {
 
-		And rel1= new And();
+		And rel1 = new And();
 		Or rel2 = new Or();
 		Unique rel3 = new Unique(c);
-		
-		
+
 		rel2.addRelation(new Unique(b));
 		rel2.addRelation(rel3);
-		
+
 		rel1.addRelation(new Unique(a));
 		rel1.addRelation(rel2);
-		
-		assertTrue(rel1.toString().equals("(a >= 0.0 AND (b >= 0.0 OR c >= 0.0))"));
-		
-		Unique intUnique = new Unique(f,new OperationLe(),5.0);
-		
-		Interaction i1 = new IfThenInteraction(intUnique,rel1);
+
+		assertTrue(rel1.toString().equals(
+				"(a >= 0.0 AND (b >= 0.0 OR c >= 0.0))"));
+
+		Unique intUnique = new Unique(f, new OperationLe(), 5.0);
+
+		Interaction i1 = new IfThenInteraction(intUnique, rel1);
 		System.err.println(i1);
-		
-		assertTrue(i1.toString().equals("IF : (a >= 0.0 AND (b >= 0.0 OR c >= 0.0)) THEN : f <= 5.0 Begins after 0.0h, lasts 0.0h."));
-		
-		
+
+		assertTrue(i1
+				.toString()
+				.equals("IF : (a >= 0.0 AND (b >= 0.0 OR c >= 0.0)) THEN : f <= 5.0 Begins after 0.0h, lasts 0.0h."));
+
 		Unique u1 = new Unique(b);
 		Unique u2 = new Unique(f);
-//		Interaction i2 = new EqInteraction(u1,u2);
-		
-//		System.out.println(i2);
-		
-		
-		fbaTest(new GLPKBind());
-		fbaTest(new CplexBind());
-		
-		extMetabTest(new GLPKBind());
-		extMetabTest(new CplexBind());
-		
+		// Interaction i2 = new EqInteraction(u1,u2);
+
+		// System.out.println(i2);
+
+		Bind bind = null;
+
+		String solver = "GLPK";
+		if (System.getProperties().containsKey("solver")) {
+			solver = System.getProperty("solver");
+		}
+
+		try {
+			if (solver.equals("CPLEX")) {
+				bind = new CplexBind();
+			} else {
+				bind = new GLPKBind();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			fail("Solver error");
+		}
+
+		fbaTest(bind);
+
+		bind = null;
+
+
+		try {
+			if (solver.equals("CPLEX")) {
+				bind = new CplexBind();
+			} else {
+				bind = new GLPKBind();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			fail("Solver error");
+		}
+
+		extMetabTest(bind);
+
 	}
 
 	private void fbaTest(Bind bind) {
 
 		bind.loadSbmlNetwork("Data/test.xml", false);
-		
+
 		bind.loadConditionsFile("Data/condElseTest.txt");
 		bind.loadInteractionsFile("Data/intElseTest.txt");
-		
-		bind.prepareSolver();
-		
-//		double res = bind.FBA(new ArrayList<Constraint>(), true, true).result;
 
-//		bind.end();
-		
+		bind.prepareSolver();
+
+		// double res = bind.FBA(new ArrayList<Constraint>(), true,
+		// true).result;
+
+		// bind.end();
+
 		FBAResult result = new FBAResult(bind);
 
-
-		DoubleResult objValue = bind.FBA(new ArrayList<Constraint>(), true, true);
+		DoubleResult objValue = bind.FBA(new ArrayList<Constraint>(), true,
+				true);
 
 		if (objValue.flag != 0) {
 
@@ -153,32 +185,32 @@ public class TestInteraction {
 
 		}
 		result.formatResult();
-		
+
 		result.plot();
-		
+
 		Assert.assertTrue(result.getObjValue() == 9.0);
-		Assert.assertTrue(bind.getSolvedValue(bind.getInteractionNetwork().getEntity("c"))>1.6);
-		Assert.assertTrue(bind.getSolvedValue(bind.getInteractionNetwork().getEntity("c"))<1.7);
-		
-		
+		Assert.assertTrue(bind.getSolvedValue(bind.getInteractionNetwork()
+				.getEntity("c")) > 1.6);
+		Assert.assertTrue(bind.getSolvedValue(bind.getInteractionNetwork()
+				.getEntity("c")) < 1.7);
+
 	}
-	
-	/// TEST THAT A EXTERNAL METAB AT 0 MAKES R_EX = 0
-	
-	
+
+	// / TEST THAT A EXTERNAL METAB AT 0 MAKES R_EX = 0
+
 	private void extMetabTest(Bind bind) {
-		
+
 		bind.loadSbmlNetwork("Data/test.xml", false);
 		bind.loadConditionsFile("Data/condExtMetab.txt");
-		
+
 		bind.loadInteractionsFile("Data/intExtMetab.txt");
-		
+
 		bind.prepareSolver();
-		
+
 		FBAResult result = new FBAResult(bind);
 
-
-		DoubleResult objValue = bind.FBA(new ArrayList<Constraint>(), true, true);
+		DoubleResult objValue = bind.FBA(new ArrayList<Constraint>(), true,
+				true);
 
 		if (objValue.flag != 0) {
 
@@ -193,18 +225,13 @@ public class TestInteraction {
 
 		}
 		result.formatResult();
-		
+
 		result.plot();
 
 		System.out.println(result.getObjValue());
-		
+
 		Assert.assertTrue(result.getObjValue() == 6.0);
 
 	}
-	
-	
-	
-	
-	
-	
+
 }

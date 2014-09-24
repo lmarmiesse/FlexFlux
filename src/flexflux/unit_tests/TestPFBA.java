@@ -35,7 +35,7 @@ public class TestPFBA {
 			solver = System.getProperty("solver");
 		}
 		
-		if(solver=="CPLEX")
+		if(solver.equals("CPLEX"))
 		{
 			b = new CplexBind();
 		}

@@ -1,3 +1,4 @@
+package flexflux.thread;
 /*******************************************************************************
  * Copyright INRA
  * 
@@ -31,7 +32,7 @@
 /**
  * 8 mars 2013 
  */
-package flexflux.thread;
+
 
 import java.util.List;
 import java.util.Map;
@@ -60,17 +61,16 @@ public class ThreadFactoryCPLEX extends ThreadFactory {
 
 	public ThreadFactoryCPLEX(List<Constraint> constraints,
 			Map<BioEntity, Constraint> simpleConstraints,
-			InteractionNetwork intNet,
-			Map<BioEntity, Constraint> interactionNetworkSimpleConstraints) {
-		super(constraints, simpleConstraints, intNet,
-				interactionNetworkSimpleConstraints);
+			InteractionNetwork intNet) {
+		super(constraints, simpleConstraints, intNet
+				);
 	}
 
 	public ThreadFVA makeFVAThread(Queue<BioEntity> ents,
 			Queue<BioEntity> entsCopy, FVAResult result) {
 
 		Bind bind = new CplexBind(constraints, simpleConstraints, intNet,
-				bioNet, interactionNetworkSimpleConstraints);
+				bioNet);
 
 		return new ThreadFVA(bind, ents, entsCopy, result);
 	}
@@ -80,7 +80,7 @@ public class ThreadFactoryCPLEX extends ThreadFactory {
 			List<Constraint> interactionNetwotkConstraints) {
 
 		Bind bind = new CplexBind(constraints, simpleConstraints, intNet,
-				bioNet, interactionNetworkSimpleConstraints);
+				bioNet);
 
 		return new ThreadKO(bind, entities, result, obj,
 				entitiesInInteractionNetwork, interactionNetwotkConstraints);
@@ -90,7 +90,7 @@ public class ThreadFactoryCPLEX extends ThreadFactory {
 			Map<BioEntity, Double> entities, ReacAnalysisResult result,
 			Objective obj) {
 		Bind bind = new CplexBind(constraints, simpleConstraints, intNet,
-				bioNet, interactionNetworkSimpleConstraints);
+				bioNet);
 
 		return new ThreadReac(bind, fluxesQueue, entities, result, obj);
 	}
@@ -99,7 +99,7 @@ public class ThreadFactoryCPLEX extends ThreadFactory {
 			TwoReacsAnalysisResult result, Map<BioEntity, Double> entities1,
 			Map<BioEntity, Double> entities2, Objective obj) {
 		Bind bind = new CplexBind(constraints, simpleConstraints, intNet,
-				bioNet, interactionNetworkSimpleConstraints);
+				bioNet);
 
 		return new ThreadTwoReacs(bind, fluxesQueue, result, entities1,
 				entities2, obj);

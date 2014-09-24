@@ -261,7 +261,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 
 			constraints.add(constraint);
 
-			b.addInteractionNetworkSimpleConstraint(e, constraint);
+			b.getInteractionNetwork().addInitialConstraint(e, constraint);
 			// b.getConstraints().add(constraint);
 
 		}

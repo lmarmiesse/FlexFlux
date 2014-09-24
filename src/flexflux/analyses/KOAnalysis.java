@@ -131,21 +131,29 @@ public class KOAnalysis extends Analysis {
 		// steady states of
 		// the interaction network when the entity is not in it
 
-		for (Interaction i : b.getInteractionNetwork().getAddedInteractions()) {
-			for (BioEntity ent : i.getCondition().getInvolvedEntities()) {
-				if (entitiesMap.containsKey(ent.getId())) {
-					entitiesInInteractionNetwork.add(ent);
+		for (BioEntity targetEnt : b.getInteractionNetwork()
+				.getTargetToInteractions().keySet()) {
+
+			for (Interaction i : b.getInteractionNetwork()
+					.getTargetToInteractions().get(targetEnt)
+					.getConditionalInteractions()) {
+
+				for (BioEntity ent : i.getCondition().getInvolvedEntities()) {
+					if (entitiesMap.containsKey(ent.getId())) {
+						entitiesInInteractionNetwork.add(ent);
+					}
 				}
-			}
-			for (BioEntity ent : i.getConsequence().getInvolvedEntities()) {
-				if (entitiesMap.containsKey(ent.getId())) {
-					entitiesInInteractionNetwork.add(ent);
+				for (BioEntity ent : i.getConsequence().getInvolvedEntities()) {
+					if (entitiesMap.containsKey(ent.getId())) {
+						entitiesInInteractionNetwork.add(ent);
+					}
 				}
 			}
 		}
 
 		List<Constraint> interactionNetwotkConstraints = b
-				.findInteractionNetworkSteadyState();
+				.getInteractionNetwork().findSteadyState(
+						b.getSimpleConstraints());
 		// ////////////////
 
 		Queue<BioEntity> tasks = new LinkedBlockingQueue<BioEntity>();
@@ -185,7 +193,7 @@ public class KOAnalysis extends Analysis {
 			}
 
 		}
-		if(verbose) {
+		if (verbose) {
 			System.err.print("]\n");
 		}
 
@@ -200,5 +208,4 @@ public class KOAnalysis extends Analysis {
 		}
 		return koResult;
 	}
-
 }

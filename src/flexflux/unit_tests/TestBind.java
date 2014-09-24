@@ -33,6 +33,7 @@
  */
 package flexflux.unit_tests;
 
+import static org.junit.Assert.fail;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.CplexBind;
@@ -62,13 +63,29 @@ import parsebionet.io.Sbml2Bionetwork;
  */
 public class TestBind {
 
-	static Bind bind = new CplexBind();
-//	static Bind bind = new GLPKBind();
+	static Bind bind;
 	static BioNetwork n;
 	static InteractionNetwork i;
 
 	@BeforeClass
 	public static void init() {
+		
+		
+		String solver = "GLPK";
+		if (System.getProperties().containsKey("solver")) {
+			solver = System.getProperty("solver");
+		}
+		
+		try {
+			if (solver.equals("CPLEX")) {
+				bind = new CplexBind();
+			} else {
+				bind = new GLPKBind();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			fail("Solver error");
+		}
 
 		bind.loadSbmlNetwork("Data/coli.xml", false);
 		n = bind.getBioNetwork();
@@ -78,12 +95,6 @@ public class TestBind {
 	@Test
 	public void GeneralTest() {
 
-		go();
-		bind = new GLPKBind();
-
-		bind.loadSbmlNetwork("Data/coli.xml", false);
-		n = bind.getBioNetwork();
-		i = bind.getInteractionNetwork();
 		go();
 
 	}

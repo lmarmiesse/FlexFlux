@@ -7,21 +7,22 @@ import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.sbml.jsbml.ASTNode;
+import org.sbml.jsbml.ASTNode.Type;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLReader;
-import org.sbml.jsbml.ext.qual.QualitativeModel;
-import org.sbml.jsbml.ext.qual.QualitativeSpecies;
-
-import org.sbml.jsbml.ASTNode;
-import org.sbml.jsbml.ASTNode.Type;
+import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.qual.FunctionTerm;
 import org.sbml.jsbml.ext.qual.Output;
+import org.sbml.jsbml.ext.qual.QualitativeModel;
+import org.sbml.jsbml.ext.qual.QualitativeSpecies;
 import org.sbml.jsbml.ext.qual.Transition;
 
 import parsebionet.biodata.BioEntity;
 import flexflux.interaction.And;
 import flexflux.interaction.Interaction;
+import flexflux.interaction.InteractionNetwork;
 import flexflux.interaction.InversedRelation;
 import flexflux.interaction.Or;
 import flexflux.interaction.Relation;
@@ -36,12 +37,12 @@ import flexflux.operation.OperationLt;
 
 public class SBMLQualReader {
 
-	private static Bind bind;
+	private static InteractionNetwork intNet;
 
-	public static void loadSbmlQual(String path, Bind bind,
-			RelationFactory relationFactory) {
+	public static InteractionNetwork loadSbmlQual(String path,
+			InteractionNetwork intNet, RelationFactory relationFactory) {
 
-		SBMLQualReader.bind = bind;
+		SBMLQualReader.intNet = intNet;
 
 		SBMLDocument document = null;
 
@@ -62,27 +63,45 @@ public class SBMLQualReader {
 		for (QualitativeSpecies species : qualPlugin
 				.getListOfQualitativeSpecies()) {
 
-			if (bind.getInteractionNetwork().getEntity(species.getId()) == null) {
+			if (intNet.getEntity(species.getId()) == null) {
 
-				System.err.println("Error : unknown entity " + species.getId());
-				System.exit(0);
+				
+				intNet.addNumEntity(new BioEntity(species.getId()));
+				
+//				System.err.println("Error : unknown entity " + species.getId());
+//				System.exit(0);
 
 			}
 
 			if (species.isSetInitialLevel()) {
 
-				BioEntity ent = bind.getInteractionNetwork().getEntity(
-						species.getId());
+				BioEntity ent = intNet.getEntity(species.getId());
 
 				Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
 				constMap.put(ent, 1.0);
-				bind.getInteractionNetworkSimpleConstraints().put(
-						ent,
-						new Constraint(constMap, species.getInitialLevel(),
-								species.getInitialLevel()));
+				intNet.addInitialConstraint(ent, new Constraint(constMap,
+						species.getInitialLevel(), species.getInitialLevel()));
 
 			}
 
+		}
+		
+		
+		for (Species sp : model.getListOfSpecies()){
+			
+			if (intNet.getEntity(sp.getId()) == null) {
+				
+				intNet.addNumEntity(new BioEntity(sp.getId()));
+				
+			}
+			
+			BioEntity ent = intNet.getEntity(sp.getId());
+
+			Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
+			constMap.put(ent, 1.0);
+			intNet.addInitialConstraint(ent, new Constraint(constMap,
+					sp.getInitialConcentration(), sp.getInitialConcentration()));
+			
 		}
 
 		// ////////////////:interactions
@@ -92,7 +111,10 @@ public class SBMLQualReader {
 			Output out = tr.getListOfOutputs().get(0);
 
 			String outEntityName = out.getQualitativeSpecies();
+			
+			BioEntity outEntity = intNet.getEntity(outEntityName);
 
+			
 			Relation ifRelation = null;
 			Unique thenRelation = null;
 			Unique elseRelation = null;
@@ -109,8 +131,7 @@ public class SBMLQualReader {
 						result = String.valueOf(ft.getResultLevel());
 					}
 
-					elseRelation = new Unique(bind.getInteractionNetwork()
-							.getEntity(outEntityName), new OperationEq(),
+					elseRelation = new Unique(outEntity, new OperationEq(),
 							Double.parseDouble(result));
 
 				} else {
@@ -127,32 +148,29 @@ public class SBMLQualReader {
 
 					ifRelation = createRealtion(ast);
 
-					thenRelation = new Unique(bind.getInteractionNetwork()
-							.getEntity(outEntityName), new OperationEq(),
+					thenRelation = new Unique(outEntity, new OperationEq(),
 							Double.parseDouble(result));
+					
+					 Interaction inter = relationFactory
+						.makeIfThenInteraction(thenRelation, ifRelation);
+					
+					 inter.setTimeInfos(new double[]{2.0,0.0});
+					 
+					intNet.addTargetConditionalInteraction(outEntity,inter);
 
 				}
 			}
+			
+			 Interaction defaultInter = relationFactory
+			.makeIfThenInteraction(elseRelation, null);
+			 
+			 defaultInter.setTimeInfos(new double[]{2.0,0.0});
 
-			// /////////// we create and add the interactions
-			Interaction thenInteraction = relationFactory
-					.makeIfThenInteraction(thenRelation, ifRelation);
-
-			bind.getInteractionNetwork().addAddedIntercation(thenInteraction);
-
-			Relation ifInversedRelation = new InversedRelation(ifRelation);
-
-			// the else interaction
-			Interaction elseInteraction = relationFactory
-					.makeIfThenInteraction(elseRelation, ifInversedRelation);
-
-			bind.getInteractionNetwork().addAddedIntercation(elseInteraction);
-
-			bind.getInteractionNetwork().addTargetInteractions(
-					elseRelation.getEntity(), thenInteraction, elseInteraction);
-			// /////////
+			intNet.setTargetDefaultInteraction(outEntity, defaultInter);
 
 		}
+		
+		return intNet;
 
 	}
 
@@ -189,7 +207,7 @@ public class SBMLQualReader {
 			return new Or();
 		} else if (type.toString().equals("RELATIONAL_EQ")) {
 
-			Unique unique = new Unique(bind.getInteractionNetwork().getEntity(
+			Unique unique = new Unique(intNet.getEntity(
 					ast.getChild(0).toString()), new OperationEq(),
 					Double.parseDouble(ast.getChild(1).toString()));
 
@@ -197,7 +215,7 @@ public class SBMLQualReader {
 
 		} else if (type.toString().equals("RELATIONAL_LEQ")) {
 
-			Unique unique = new Unique(bind.getInteractionNetwork().getEntity(
+			Unique unique = new Unique(intNet.getEntity(
 					ast.getChild(0).toString()), new OperationLe(),
 					Double.parseDouble(ast.getChild(1).toString()));
 
@@ -205,7 +223,7 @@ public class SBMLQualReader {
 
 		} else if (type.toString().equals("RELATIONAL_GEQ")) {
 
-			Unique unique = new Unique(bind.getInteractionNetwork().getEntity(
+			Unique unique = new Unique(intNet.getEntity(
 					ast.getChild(0).toString()), new OperationGe(),
 					Double.parseDouble(ast.getChild(1).toString()));
 
@@ -213,7 +231,7 @@ public class SBMLQualReader {
 
 		} else if (type.toString().equals("RELATIONAL_LT")) {
 
-			Unique unique = new Unique(bind.getInteractionNetwork().getEntity(
+			Unique unique = new Unique(intNet.getEntity(
 					ast.getChild(0).toString()), new OperationLt(),
 					Double.parseDouble(ast.getChild(1).toString()));
 
@@ -221,7 +239,7 @@ public class SBMLQualReader {
 
 		} else if (type.toString().equals("RELATIONAL_GT")) {
 
-			Unique unique = new Unique(bind.getInteractionNetwork().getEntity(
+			Unique unique = new Unique(intNet.getEntity(
 					ast.getChild(0).toString()), new OperationGt(),
 					Double.parseDouble(ast.getChild(1).toString()));
 

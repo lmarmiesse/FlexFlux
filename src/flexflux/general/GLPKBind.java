@@ -33,7 +33,6 @@
  */
 package flexflux.general;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,7 +99,7 @@ public class GLPKBind extends Bind {
 		this.operationFactory = new OperationFactory();
 		this.relationFactory = new RelationFactory();
 		this.threadFactory = new ThreadFactoryGLPK(constraints,
-				simpleConstraints, intNet, interactionNetworkSimpleConstraints);
+				simpleConstraints, intNet);
 	}
 
 	public GLPKBind() {
@@ -110,10 +109,8 @@ public class GLPKBind extends Bind {
 
 	public GLPKBind(List<Constraint> constraints,
 			Map<BioEntity, Constraint> simpleConstraints,
-			InteractionNetwork intNet, BioNetwork bioNet,
-			Map<BioEntity, Constraint> interactionNetworkSimpleConstraints) {
-		super(constraints, simpleConstraints, intNet, bioNet,
-				interactionNetworkSimpleConstraints);
+			InteractionNetwork intNet, BioNetwork bioNet) {
+		super(constraints, simpleConstraints, intNet, bioNet);
 		init();
 	}
 
