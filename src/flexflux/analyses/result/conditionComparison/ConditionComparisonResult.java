@@ -33,30 +33,21 @@ import javax.swing.table.TableRowSorter;
 
 import org.jfree.ui.RefineryUtilities;
 
-import Jama.util.Maths;
-
-import com.sun.org.apache.bcel.internal.generic.ATHROW;
-
 import parsebionet.biodata.BioChemicalReaction;
-import parsebionet.biodata.BioEntity;
-import parsebionet.biodata.BioGene;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.biodata.BioPathway;
 import flexflux.analyses.result.AnalysisResult;
-import flexflux.analyses.result.FVAResult;
-import flexflux.analyses.result.KOResult;
 import flexflux.analyses.result.MyTableModel;
+import flexflux.analyses.result.PFBAResult;
 import flexflux.condition.Condition;
-import flexflux.general.Bind;
 import flexflux.general.Objective;
 import flexflux.io.Utils;
 
 public class ConditionComparisonResult extends AnalysisResult {
 
+	HashMap<String, HashMap<String, PFBAResult>> results = null;
+
 	public ConditionComparisonFbaResultSet fbaResults = null;
-	public ConditionComparisonFvaResultSet fvaResults = null;
-	public ConditionComparisonKoResultSet koResults = null;
-	public ConditionComparisonGeneResultSet geneResults = null;
 
 	ArrayList<Condition> conditions = null;
 	HashMap<String, String> objectives = null;
@@ -108,10 +99,10 @@ public class ConditionComparisonResult extends AnalysisResult {
 			HashMap<String, String> objectives, BioNetwork network,
 			String inchlibPath, Boolean launchReactionAnalysis,
 			Boolean launchGeneAnalysis) {
+
+		results = new HashMap<String, HashMap<String, PFBAResult>>();
+
 		fbaResults = new ConditionComparisonFbaResultSet();
-		fvaResults = new ConditionComparisonFvaResultSet();
-		koResults = new ConditionComparisonKoResultSet();
-		geneResults = new ConditionComparisonGeneResultSet();
 
 		this.inchlibPath = inchlibPath;
 
@@ -129,6 +120,26 @@ public class ConditionComparisonResult extends AnalysisResult {
 	}
 
 	/**
+	 * Add a result
+	 * 
+	 * @param o
+	 *            objective
+	 * @param condition
+	 * @param res
+	 *            a pfba result
+	 */
+	public void addPFBAResult(Objective o, Condition condition, PFBAResult res) {
+		String conditionId = condition.code;
+		String objId = o.getName();
+
+		if (!results.containsKey(conditionId)) {
+			results.put(conditionId, new HashMap<String, PFBAResult>());
+		}
+
+		results.get(conditionId).put(objId, res);
+	}
+
+	/**
 	 * Adds a FBA result for a pair obj/condition
 	 * 
 	 * @param obj
@@ -143,58 +154,6 @@ public class ConditionComparisonResult extends AnalysisResult {
 		fbaResults.add(result);
 
 		return;
-	}
-
-	/**
-	 * 
-	 * @param obj
-	 * @param condition
-	 * @param fvaResult
-	 */
-	public void addFvaResult(Objective obj, Condition condition,
-			FVAResult fvaResult) {
-
-		ConditionComparisonFvaResult result = new ConditionComparisonFvaResult(
-				obj, condition, fvaResult);
-
-		fvaResults.add(result);
-
-		return;
-	}
-
-	/**
-	 * 
-	 * @param obj
-	 * @param condition
-	 * @param fvaResult
-	 */
-	public void addKoResult(Objective obj, Condition condition,
-			KOResult koResult) {
-
-		ConditionComparisonKoResult result = new ConditionComparisonKoResult(
-				obj, condition, koResult);
-		koResults.add(result);
-
-		return;
-	}
-
-	/**
-	 * 
-	 * @param obj
-	 * @param condition
-	 * @param koResult
-	 * @param fvaResult
-	 */
-	public void addGeneResult(Objective obj, Condition condition,
-			ConditionComparisonKoResult koResult,
-			ConditionComparisonFvaResult fvaResult) {
-
-		ConditionComparisonGeneResult result = new ConditionComparisonGeneResult(
-				obj, condition, koResult, fvaResult, network);
-		geneResults.add(result);
-
-		return;
-
 	}
 
 	@Override
@@ -284,19 +243,16 @@ public class ConditionComparisonResult extends AnalysisResult {
 		writeFbaResultsToFile();
 		writeFbaResultHeatMap();
 
-		if (launchReactionAnalysis || launchGeneAnalysis) {
-			writeFvaResultsToFiles();
-		}
-
 		if (launchGeneAnalysis) {
-			writeSummaryGeneFile();
-			writeGeneResultsToFiles();
+			writeSummaryFile(false);
+			writeClassificationToFiles(false);
 			writeBarplot(false);
 			writeFilesForHeatMap(false);
 		}
 
 		if (launchReactionAnalysis) {
-			writeSummaryReactionFile();
+			writeClassificationToFiles(true);
+			writeSummaryFile(true);
 			writeBarplot(true);
 			writeFilesForHeatMap(true);
 			writePathwayHeatMap();
@@ -360,236 +316,149 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 	/**
 	 * 
-	 * @param path
+	 * @param isReaction
+	 *            : if true print the reaction classification, if false prints
+	 *            the gene classification
 	 */
-	public void writeFvaResultsToFiles() {
+	public void writeClassificationToFiles(Boolean isReaction) {
+
+		String objectName = "Reactions";
+		if (isReaction == false) {
+			objectName = "Genes";
+		}
 
 		String path = this.directoryPath;
 
 		PrintWriter outEssential = null;
-		PrintWriter outDispensable = null;
-		PrintWriter outDead = null;
+		PrintWriter outZeroFlux = null;
+		PrintWriter outMle = null;
+		PrintWriter outEle = null;
+		PrintWriter outConcurrent = null;
+		PrintWriter outIndependent = null;
+		PrintWriter outOptima = null;
+
+		HashMap<String, PrintWriter> writers = new HashMap<String, PrintWriter>();
+
+		HashMap<String, ArrayList<String>> classification = new HashMap<String, ArrayList<String>>();
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
 				objectives.keySet());
 
 		try {
-			outEssential = new PrintWriter(new File(path
-					+ "/essential_reactions.tsv"));
-			outDispensable = new PrintWriter(new File(path
-					+ "/dispensable_reactions.tsv"));
-			outDead = new PrintWriter(new File(path + "/dead_reactions.tsv"));
+			outEssential = new PrintWriter(new File(path + "/essential"
+					+ objectName + ".tsv"));
+			outZeroFlux = new PrintWriter(new File(path + "/zeroFlux"
+					+ objectName + ".tsv"));
+			outMle = new PrintWriter(new File(path + "/mle" + objectName
+					+ ".tsv"));
+			outEle = new PrintWriter(new File(path + "/ele" + objectName
+					+ ".tsv"));
+			outConcurrent = new PrintWriter(new File(path + "/concurrent"
+					+ objectName + ".tsv"));
+			outIndependent = new PrintWriter(new File(path + "/independent"
+					+ objectName + ".tsv"));
+			outOptima = new PrintWriter(new File(path + "/optima" + objectName
+					+ ".tsv"));
 
-			// Prints the header
-			outEssential.print("ConditionCode");
-			outDispensable.print("ConditionCode");
-			outDead.print("ConditionCode");
+			writers.put("ess", outEssential);
+			writers.put("zf", outZeroFlux);
+			writers.put("mle", outMle);
+			writers.put("ele", outEle);
+			writers.put("conc", outConcurrent);
+			writers.put("ind", outIndependent);
+			writers.put("opt", outOptima);
 
-			for (String objName : objectiveNames) {
-				outEssential.print("\t" + objName);
-				outDispensable.print("\t" + objName);
-				outDead.print("\t" + objName);
+			// Prints the headers
+			for (PrintWriter out : writers.values()) {
+				out.print("ConditionCode");
+				for (String objName : objectiveNames) {
+					out.print("\t" + objName);
+				}
+				out.print("\n");
 			}
-			outEssential.print("\n");
-			outDispensable.print("\n");
-			outDead.print("\n");
 
 			// prints the lines corresponding to the conditions. Each cell
 			// corresponds to a fba result given a condition
 			// and an objective
 
 			for (Condition c : conditions) {
-				outEssential.print(c.code);
-				outDispensable.print(c.code);
-				outDead.print(c.code);
-				HashMap<String, ConditionComparisonFvaResult> results = fvaResults
-						.get(c.code);
+				for (PrintWriter out : writers.values()) {
+					out.print(c.code);
+				}
+
+				HashMap<String, PFBAResult> pfbaResults = results.get(c.code);
 
 				for (String objName : objectiveNames) {
 
-					outEssential.write("\t");
-					outDispensable.write("\t");
-					outDead.write("\t");
+					for (PrintWriter out : writers.values()) {
+						out.print("\t");
+					}
 
-					ConditionComparisonFvaResult result = results.get(objName);
+					PFBAResult result = pfbaResults.get(objName);
 
-					if (result != null) {
+					ArrayList<String> essentialIds = new ArrayList<String>(
+							result.get("essential" + objectName).keySet());
+					Collections.sort(essentialIds);
+					classification.put("ess", essentialIds);
 
-						ArrayList<String> essentialReactionIds = new ArrayList<String>(
-								result.essentialReactions.keySet());
-						Collections.sort(essentialReactionIds);
+					ArrayList<String> zeroFluxIds = new ArrayList<String>(
+							result.get("zeroFlux" + objectName).keySet());
+					Collections.sort(zeroFluxIds);
+					classification.put("zf", zeroFluxIds);
 
-						ArrayList<String> usedReactionIds = new ArrayList<String>(
-								result.dispensableReactions.keySet());
-						Collections.sort(usedReactionIds);
+					ArrayList<String> mleIds = new ArrayList<String>(result
+							.get("mle" + objectName).keySet());
+					Collections.sort(mleIds);
+					classification.put("mle", mleIds);
 
-						ArrayList<String> deadReactionIds = new ArrayList<String>(
-								result.deadReactions.keySet());
-						Collections.sort(deadReactionIds);
+					ArrayList<String> concurrentIds = new ArrayList<String>(
+							result.get("concurrent" + objectName).keySet());
+					Collections.sort(concurrentIds);
+					classification.put("conc", concurrentIds);
 
-						for (int i = 0; i < essentialReactionIds.size(); i++) {
+					ArrayList<String> eleIds = new ArrayList<String>(result
+							.get("ele" + objectName).keySet());
+					Collections.sort(eleIds);
+					classification.put("ele", eleIds);
+
+					ArrayList<String> objectiveIndependentIds = new ArrayList<String>(
+							result.get("objectiveIndependent" + objectName)
+									.keySet());
+					Collections.sort(objectiveIndependentIds);
+					classification.put("ind", objectiveIndependentIds);
+
+					ArrayList<String> optimaIds = new ArrayList<String>(result
+							.get("optima" + objectName).keySet());
+					Collections.sort(optimaIds);
+					classification.put("opt", optimaIds);
+
+					for (String key : writers.keySet()) {
+						PrintWriter out = writers.get(key);
+						ArrayList<String> ids = classification.get(key);
+						for (int i = 0; i < ids.size(); i++) {
 							if (i > 0) {
-								outEssential.write(",");
+								out.write(",");
 							}
-
-							outEssential.write(essentialReactionIds.get(i));
+							out.write(ids.get(i));
 						}
-
-						for (int i = 0; i < usedReactionIds.size(); i++) {
-							if (i > 0) {
-								outDispensable.write(",");
-							}
-
-							outDispensable.write(usedReactionIds.get(i));
-						}
-
-						for (int i = 0; i < deadReactionIds.size(); i++) {
-							if (i > 0) {
-								outDead.write(",");
-							}
-
-							outDead.write(deadReactionIds.get(i));
-						}
-
 					}
 				}
 
-				outEssential.print("\n");
-				outDispensable.print("\n");
-				outDead.print("\n");
+				for (PrintWriter out : writers.values()) {
+					out.print("\n");
+				}
 			}
 		} catch (IOException e) {
-			System.err.println("Error while writing the fva results");
+			System.err
+					.println("Error while writing the classification results");
 			e.printStackTrace();
 		}
 
 		finally {
-			if (outEssential != null) {
-				outEssential.close();
-			}
-			if (outDispensable != null) {
-				outDispensable.close();
-			}
-			if (outDead != null) {
-				outDead.close();
-			}
-		}
-	}
-
-	/**
-	 * 
-	 * @param path
-	 */
-	public void writeGeneResultsToFiles() {
-
-		String path = this.directoryPath;
-
-		PrintWriter outEssential = null;
-		PrintWriter outDispensable = null;
-		PrintWriter outDead = null;
-
-		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
-
-		try {
-			outEssential = new PrintWriter(new File(path
-					+ "/essential_genes.tsv"));
-			outDispensable = new PrintWriter(new File(path
-					+ "/dispensable_genes.tsv"));
-			outDead = new PrintWriter(new File(path + "/dead_genes.tsv"));
-
-			// Prints the header
-			outEssential.print("ConditionCode");
-			outDispensable.print("ConditionCode");
-			outDead.print("ConditionCode");
-
-			for (String objName : objectiveNames) {
-				outEssential.print("\t" + objName);
-				outDispensable.print("\t" + objName);
-				outDead.print("\t" + objName);
-			}
-			outEssential.print("\n");
-			outDispensable.print("\n");
-			outDead.print("\n");
-
-			// prints the lines corresponding to the conditions. Each cell
-			// corresponds to a fba result given a condition
-			// and an objective
-
-			for (Condition c : conditions) {
-				outEssential.print(c.code);
-				outDispensable.print(c.code);
-				outDead.print(c.code);
-				HashMap<String, ConditionComparisonGeneResult> results = geneResults
-						.get(c.code);
-
-				for (String objName : objectiveNames) {
-
-					outEssential.write("\t");
-					outDispensable.write("\t");
-					outDead.write("\t");
-
-					ConditionComparisonGeneResult result = results.get(objName);
-
-					if (result != null) {
-
-						ArrayList<String> essentialGeneIds = new ArrayList<String>(
-								result.essentialGenes.keySet());
-						Collections.sort(essentialGeneIds);
-
-						ArrayList<String> dispensableGeneIds = new ArrayList<String>(
-								result.dispensableGenes.keySet());
-						Collections.sort(dispensableGeneIds);
-
-						ArrayList<String> deadGeneIds = new ArrayList<String>(
-								result.deadGenes.keySet());
-						Collections.sort(deadGeneIds);
-
-						for (int i = 0; i < essentialGeneIds.size(); i++) {
-							if (i > 0) {
-								outEssential.write(",");
-							}
-
-							outEssential.write(essentialGeneIds.get(i));
-						}
-
-						for (int i = 0; i < dispensableGeneIds.size(); i++) {
-							if (i > 0) {
-								outDispensable.write(",");
-							}
-
-							outDispensable.write(dispensableGeneIds.get(i));
-						}
-
-						for (int i = 0; i < deadGeneIds.size(); i++) {
-							if (i > 0) {
-								outDead.write(",");
-							}
-
-							outDead.write(deadGeneIds.get(i));
-						}
-
-					}
+			for (PrintWriter out : writers.values()) {
+				if (out != null) {
+					out.close();
 				}
-
-				outEssential.print("\n");
-				outDispensable.print("\n");
-				outDead.print("\n");
-			}
-		} catch (IOException e) {
-			System.err.println("Error while writing the gene results");
-			e.printStackTrace();
-		}
-
-		finally {
-			if (outEssential != null) {
-				outEssential.close();
-			}
-			if (outDispensable != null) {
-				outDispensable.close();
-			}
-			if (outDead != null) {
-				outDead.close();
 			}
 		}
 	}
@@ -644,58 +513,14 @@ public class ConditionComparisonResult extends AnalysisResult {
 	}
 
 	/**
-	 * Write a tabulated file with the number of reactions by type
-	 */
-	public void writeSummaryReactionFile() {
-
-		String path = this.directoryPath;
-
-		PrintWriter out = null;
-
-		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
-
-		try {
-			out = new PrintWriter(new File(path + "/summary_reactions"));
-
-			out.write("name,essential,dispensable,dead\n");
-
-			for (Condition c : conditions) {
-				HashMap<String, ConditionComparisonFvaResult> results = fvaResults
-						.get(c.code);
-				for (String objName : objectiveNames) {
-
-					ConditionComparisonFvaResult result = results.get(objName);
-
-					int nbEssential = result.essentialReactions.size();
-					int nbDispensable = result.dispensableReactions.size();
-					int nbDead = result.deadReactions.size();
-
-					out.write(c.code + "__" + objName + "," + nbEssential + ","
-							+ nbDispensable + "," + nbDead + "\n");
-
-				}
-
-			}
-
-		} catch (IOException e) {
-			System.err
-					.println("Error while writing the reaction summary results");
-			e.printStackTrace();
-		}
-
-		finally {
-			if (out != null) {
-				out.close();
-			}
-		}
-
-	}
-
-	/**
 	 * Write a tabulated file with the number of genes by type
 	 */
-	public void writeSummaryGeneFile() {
+
+	public void writeSummaryFile(Boolean isReaction) {
+		String objectName = "Reactions";
+		if (isReaction == false) {
+			objectName = "Genes";
+		}
 
 		String path = this.directoryPath;
 
@@ -705,36 +530,37 @@ public class ConditionComparisonResult extends AnalysisResult {
 				objectives.keySet());
 
 		try {
-			out = new PrintWriter(new File(path + "/summary_genes"));
+			out = new PrintWriter(new File(path + "/summary" + objectName));
 
-			out.write("name,essential,dispensable,dead\n");
+			out.write("name,essential,zeroFlux,mle,ele,conc,ind,opt\n");
 
 			for (Condition c : conditions) {
-				HashMap<String, ConditionComparisonGeneResult> results = geneResults
-						.get(c.code);
+				HashMap<String, PFBAResult> pfbaResults = results.get(c.code);
+
 				for (String objName : objectiveNames) {
 
-					ConditionComparisonGeneResult result = results.get(objName);
+					PFBAResult result = pfbaResults.get(objName);
 
-					int nbEssential = 0;
-					int nbDispensable = 0;
-					int nbDead = 0;
-
-					if (result != null) {
-						nbEssential = result.essentialGenes.size();
-						nbDispensable = result.dispensableGenes.size();
-						nbDead = result.deadGenes.size();
-					}
+					int nbEssential = result.get("essential" + objectName)
+							.size();
+					int nbZeroFlux = result.get("zeroFlux" + objectName).size();
+					int nbMle = result.get("mle" + objectName).size();
+					int nbEle = result.get("ele" + objectName).size();
+					int nbConc = result.get("concurrent" + objectName).size();
+					int nbInd = result.get("objectiveIndependent" + objectName)
+							.size();
+					int nbOpt = result.get("optima" + objectName).size();
 
 					out.write(c.code + "__" + objName + "," + nbEssential + ","
-							+ nbDispensable + "," + nbDead + "\n");
+							+ nbZeroFlux + "," + nbMle + "," + nbEle + ","
+							+ nbConc + "," + nbInd + "," + nbOpt + "\n");
 
 				}
 
 			}
 
 		} catch (IOException e) {
-			System.err.println("Error while writing the gene summary results");
+			System.err.println("Error while writing the summary results");
 			e.printStackTrace();
 		}
 
@@ -754,8 +580,12 @@ public class ConditionComparisonResult extends AnalysisResult {
 	public void writeBarplot(Boolean isReaction) {
 
 		String outPath = genePath;
+
+		String objectName = "Genes";
+
 		if (isReaction) {
 			outPath = reactionPath;
+			objectName = "Reactions";
 		}
 
 		// Copy required files
@@ -778,45 +608,29 @@ public class ConditionComparisonResult extends AnalysisResult {
 		PrintWriter out = null;
 		try {
 			out = new PrintWriter(new File(outPath + "/multiBar_data.js"));
-			out.write("var str = \"name,essential,dispensable,dead\\n");
+			out.write("var str = \"name,essential,zeroFlux,mle,ele,conc,ind,opt\\n");
 
 			for (Condition c : conditions) {
 
+				HashMap<String, PFBAResult> pfbaResults = results.get(c.code);
+
 				for (String objName : objectiveNames) {
 
-					int nbEssential = 0;
-					int nbDispensable = 0;
-					int nbDead = 0;
+					PFBAResult result = pfbaResults.get(objName);
 
-					if (isReaction) {
-
-						HashMap<String, ConditionComparisonFvaResult> results = fvaResults
-								.get(c.code);
-
-						ConditionComparisonFvaResult result = results
-								.get(objName);
-
-						if (result != null) {
-							nbEssential = result.essentialReactions.size();
-							nbDispensable = result.dispensableReactions.size();
-							nbDead = result.deadReactions.size();
-						}
-					} else {
-						HashMap<String, ConditionComparisonGeneResult> results = geneResults
-								.get(c.code);
-
-						ConditionComparisonGeneResult result = results
-								.get(objName);
-
-						if (result != null) {
-							nbEssential = result.essentialGenes.size();
-							nbDispensable = result.dispensableGenes.size();
-							nbDead = result.deadGenes.size();
-						}
-					}
+					int nbEssential = result.get("essential" + objectName)
+							.size();
+					int nbZeroFlux = result.get("zeroFlux" + objectName).size();
+					int nbMle = result.get("mle" + objectName).size();
+					int nbEle = result.get("ele" + objectName).size();
+					int nbConc = result.get("concurrent" + objectName).size();
+					int nbInd = result.get("objectiveIndependent" + objectName)
+							.size();
+					int nbOpt = result.get("optima" + objectName).size();
 
 					out.write(c.code + "__" + objName + "," + nbEssential + ","
-							+ nbDispensable + "," + nbDead + "\\n");
+							+ nbZeroFlux + "," + nbMle + "," + nbEle + ","
+							+ nbConc + "," + nbInd + "," + nbOpt + "\\n");
 				}
 
 			}
@@ -854,6 +668,12 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 *            : if true, builds heatmap for reactions, otherwise for genes
 	 */
 	public void writeFilesForHeatMap(Boolean isReaction) {
+
+		String objectName = "Reactions";
+
+		if (!isReaction) {
+			objectName = "Genes";
+		}
 
 		PrintWriter outData = null;
 		PrintWriter outMetaData = null;
@@ -1000,45 +820,38 @@ public class ConditionComparisonResult extends AnalysisResult {
 				outData.write(id);
 				for (Condition c : conditions) {
 
-					if (isReaction) {
-						HashMap<String, ConditionComparisonFvaResult> results = fvaResults
-								.get(c.code);
-						for (String objName : objectiveNames) {
-							ConditionComparisonFvaResult result = results
-									.get(objName);
+					HashMap<String, PFBAResult> pfbaResults = results
+							.get(c.code);
 
-							int value = 0;
+					for (String objName : objectiveNames) {
+						PFBAResult result = pfbaResults.get(objName);
 
-							if (result != null) {
-								if (result.essentialReactions.containsKey(id)) {
-									value = 3;
-								} else if (result.dispensableReactions
-										.containsKey(id)) {
-									value = 2;
-								} else if (result.deadReactions.containsKey(id)) {
-									value = 1;
-								}
-							}
-							outData.write("," + value);
+						int value = 0;
+
+						if (result.get("essential" + objectName)
+								.containsKey(id)) {
+							value = 7;
+						} else if (result.get("optima" + objectName)
+								.containsKey(id)) {
+							value = 6;
+						} else if (result.get("ele" + objectName).containsKey(
+								id)) {
+							value = 5;
+						} else if (result.get("mle" + objectName).containsKey(
+								id)) {
+							value = 4;
+						} else if (result.get("concurrent" + objectName)
+								.containsKey(id)) {
+							value = 3;
+						} else if (result.get(
+								"objectiveIndependent" + objectName)
+								.containsKey(id)) {
+							value = 2;
+						} else if (result.get("zeroFlux" + objectName)
+								.containsKey(id)) {
+							value = 1;
 						}
-					} else {
-						HashMap<String, ConditionComparisonGeneResult> results = geneResults
-								.get(c.code);
-						for (String objName : objectiveNames) {
-							ConditionComparisonGeneResult result = results
-									.get(objName);
-
-							int value = 0;
-
-							if (result.essentialGenes.containsKey(id)) {
-								value = 3;
-							} else if (result.dispensableGenes.containsKey(id)) {
-								value = 2;
-							} else if (result.deadGenes.containsKey(id)) {
-								value = 1;
-							}
-							outData.write("," + value);
-						}
+						outData.write("," + value);
 					}
 				}
 				outData.write("\n");
@@ -1464,10 +1277,10 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 				for (Condition c : conditions) {
 
-					HashMap<String, ConditionComparisonFvaResult> results = fvaResults
+					HashMap<String, PFBAResult> pfbaResults = results
 							.get(c.code);
 					for (String objName : objectiveNames) {
-						ConditionComparisonFvaResult result = results
+						PFBAResult result = pfbaResults
 								.get(objName);
 
 						int nbEssential = 0;

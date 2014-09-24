@@ -1,2 +1,2 @@
-maxR_B	MAX(R_B_EX)
-maxR_D	MAX(R_D_EX)
+maxR_OBJ	MAX(R_OBJ_EX)
+minR_OBJ2	MIN(R_OBJ2_EX)

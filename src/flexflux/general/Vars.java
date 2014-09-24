@@ -43,6 +43,13 @@ package flexflux.general;
 public class Vars {
 
 	/**
+	 * Maximum lower bound and upper bounds
+	 */
+	
+	public static double minLowerBound = -999999;
+	public static double maxUpperBound = +999999;
+	
+	/**
 	 * Maximum number of threads created.
 	 */
 	public static int maxThread = Runtime.getRuntime().availableProcessors()/2;

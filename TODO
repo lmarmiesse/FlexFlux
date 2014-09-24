@@ -1,0 +1,15 @@
+- Généraliser les HashMap<String, value> plus pratiques à utiliser et classiques dans parseBioNet
+- simplifier la création de la fonction objective et des fonctions objectives imbriquées
+- Généraliser l'emploi de Vars pour les min lb et les max lb
+- Faciliter la création de l'objectif minFluxSum
+- Arrondis : comment ça se passe ?
+- lancer navigateur "java" pour voir les plots web
+- Changer la façon d'accéder aux résultats de la FVA. ex : getMap().get(e)[1] pour avoir le max...
+- Clarifier, simplifier les tableaux de contraintes !!!!
+- Utilisation de Bind plusieurs fois de suite : on utilise la fonction clearModel au debut de prepareSolver mais est ce que ca ne gene pas
+l'algo de fastFVA ?
+- SBMLQual en input
+- On est obligé d'initialiser toutes les variables dans le fichier interactions sinon ça buggue (sans explications, tres dangereux): 
+trouver une solution pour simplifier tout ça !
+- BIND.FBA() : à revoir : on peut effacer des simpleConstraints non désirées.
+- ne pas accéder aux attributs avec des tableaux

@@ -117,7 +117,7 @@ public class CplexBind extends Bind {
 		this.operationFactory = new OperationFactory();
 		this.relationFactory = new RelationFactory();
 		this.threadFactory = new ThreadFactoryCPLEX(constraints,
-				simpleConstraints, intNet,interactionNetworkSimpleConstraints);
+				simpleConstraints, intNet, interactionNetworkSimpleConstraints);
 	}
 
 	public CplexBind() {
@@ -131,7 +131,8 @@ public class CplexBind extends Bind {
 			Map<BioEntity, Constraint> simpleConstraints,
 			InteractionNetwork intNet, BioNetwork bioNet,
 			Map<BioEntity, Constraint> interactionNetworkSimpleConstraints) {
-		super(constraints, simpleConstraints, intNet, bioNet,interactionNetworkSimpleConstraints);
+		super(constraints, simpleConstraints, intNet, bioNet,
+				interactionNetworkSimpleConstraints);
 		init();
 	}
 
@@ -386,7 +387,10 @@ public class CplexBind extends Bind {
 
 					// find the number of SOSs in the model
 					int numSOS = cplex.getNSOSs();
-					System.err.println("Number of SOSs=" + numSOS);
+
+					if (verbose) {
+						System.err.println("Number of SOSs=" + numSOS);
+					}
 
 					// cols : number of variables
 					// rows : nb of ranges
@@ -424,8 +428,6 @@ public class CplexBind extends Bind {
 							numVarCounter++;
 						}
 					}
-
-					System.err.println(constraints.length);
 
 					double[] prefs = new double[constraints.length];
 					for (int c1 = 0; c1 < constraints.length; c1++) {

@@ -53,6 +53,8 @@ import parsebionet.biodata.BioEntity;
  */
 public class ThreadFVA extends ResolveThread {
 
+	public Boolean verbose = false;
+	
 	/**
 	 * Number of entities to treat.
 	 */
@@ -109,7 +111,7 @@ public class ThreadFVA extends ResolveThread {
 			if (percent > percentage) {
 
 				percentage = percent;
-				if (percent % 2 == 0) {
+				if (verbose && percent % 2 == 0) {
 					System.err.print("*");
 				}
 			}
@@ -127,7 +129,7 @@ public class ThreadFVA extends ResolveThread {
 			int percent = (int) Math.round((todo - size) / todo * 50) + 50;
 			if (percent > percentage) {
 				percentage = percent;
-				if (percent % 2 == 0 && percentage != 0) {
+				if (verbose && percent % 2 == 0 && percentage != 0) {
 					System.err.print("*");
 				}
 			}

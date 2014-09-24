@@ -8,6 +8,7 @@ import junitx.framework.FileAssert;
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -29,20 +30,49 @@ public class TestConditionComparison {
 	private static File tempConstraintFile = null;
 	private static File tempResultFbaFile = null;
 	private static File tempResultEssentialFile = null;
-	private static File tempResultUsedFile = null;
-	private static File tempResultDeadFile = null;
+	private static File tempResultZeroFluxFile = null;
+	private static File tempResultMleFile = null;
+	private static File tempResultEleFile = null;
+	private static File tempResultConcurrentFile = null;
+	private static File tempResultIndependentFile = null;
+	private static File tempResultOptimaFile = null;
+	
 	private static File tempResultEssentialGeneFile = null;
-	private static File tempResultUsedGeneFile = null;
-	private static File tempResultDeadGeneFile = null;
-
+	private static File tempResultZeroFluxGeneFile = null;
+	private static File tempResultMleGeneFile = null;
+	private static File tempResultConcurrentGeneFile = null;
+	private static File tempResultEleGeneFile = null;
+	private static File tempResultIndependentGeneFile = null;
+	private static File tempResultOptimaGeneFile = null;
+	
+	private static String referenceFbaFile = "";
+	private static String referenceEssentialFile = "";
+	private static String referenceZeroFluxFile = "";
+	private static String referenceMleFile = "";
+	private static String referenceEleFile = "";
+	private static String referenceConcurrentFile = "";
+	private static String referenceIndependentFile = "";
+	private static String referenceOptimaFile = "";
+	
+	
+	private static String referenceEssentialGeneFile = "";
+	private static String referenceZeroFluxGeneFile = "";
+	private static String referenceMleGeneFile = "";
+	private static String referenceConcurrentGeneFile = "";
+	private static String referenceEleGeneFile = "";
+	private static String referenceIndependentGeneFile = "";
+	private static String referenceOptimaGeneFile = "";
+	
+	
 	private static String basePath = "";
 
-	// The temporary folder will be removed at the end of the test
-	@Rule
-	public TemporaryFolder temp = new TemporaryFolder();
+	private static String tmpPath = "/tmp/testConditionComparison";
 
-	@Test
-	public void testMain() throws IOException {
+	// The temporary folder will be removed at the end of the test
+	private static File tempDir;
+
+	@BeforeClass
+	public static void init() throws IOException {
 
 		String solver = "GLPK";
 		if (System.getProperties().containsKey("solver")) {
@@ -58,57 +88,86 @@ public class TestConditionComparison {
 		java.nio.file.Path tmpConstraint = null;
 		java.nio.file.Path tmpResultFba = null;
 		java.nio.file.Path tmpResultEssential = null;
-		java.nio.file.Path tmpResultUsed = null;
-		java.nio.file.Path tmpResultDead = null;
+		java.nio.file.Path tmpResultZeroFlux = null;
+		java.nio.file.Path tmpResultMle = null;
+		java.nio.file.Path tmpResultEle = null;
+		java.nio.file.Path tmpResultConcurrent = null;
+		java.nio.file.Path tmpResultIndependent = null;
+		java.nio.file.Path tmpResultOptima = null;
+		
 		java.nio.file.Path tmpResultEssentialGenes = null;
-		java.nio.file.Path tmpResultUsedGenes = null;
-		java.nio.file.Path tmpResultDeadGenes = null;
-
-//		Vars.writeInteractionNetworkStates = true;
+		java.nio.file.Path tmpResultZeroFluxGenes = null;
+		java.nio.file.Path tmpResultMleGenes = null;
+		java.nio.file.Path tmpResultConcurrentGenes = null;
+		java.nio.file.Path tmpResultEleGenes = null;
+		java.nio.file.Path tmpResultIndependentGenes = null;
+		java.nio.file.Path tmpResultOptimaGenes = null;
 
 		try {
 			tmpSbml = java.nio.file.Files.createTempFile("test", ".xml");
 			tmpCondition = java.nio.file.Files.createTempFile("test", ".tab");
 			tmpInteraction = java.nio.file.Files.createTempFile("test", ".txt");
 			tmpObjective = java.nio.file.Files.createTempFile("test", ".tab");
+			tmpConstraint = java.nio.file.Files.createTempFile("test", ".tab");
 			tmpResultFba = java.nio.file.Files.createTempFile("test", ".tab");
 			tmpResultEssential = java.nio.file.Files.createTempFile("test",
 					".tab");
-			tmpResultUsed = java.nio.file.Files.createTempFile("test", ".tab");
-			tmpResultDead = java.nio.file.Files.createTempFile("test", ".tab");
-			tmpConstraint = java.nio.file.Files.createTempFile("test", ".tab");
+			tmpResultZeroFlux = java.nio.file.Files.createTempFile("test",
+					".tab");
+			tmpResultMle = java.nio.file.Files.createTempFile("test",
+					".tab");
+			tmpResultEle = java.nio.file.Files.createTempFile("test",
+					".tab");
+			tmpResultConcurrent = java.nio.file.Files.createTempFile("test",
+					".tab");
+			tmpResultIndependent = java.nio.file.Files.createTempFile("test",
+					".tab");
+			tmpResultOptima = java.nio.file.Files.createTempFile("test",
+					".tab");
 			
 			tmpResultEssentialGenes = java.nio.file.Files.createTempFile("test",
 					".tab");
-			tmpResultUsedGenes = java.nio.file.Files.createTempFile("test", ".tab");
-			tmpResultDeadGenes = java.nio.file.Files.createTempFile("test", ".tab");
-
+			tmpResultZeroFluxGenes = java.nio.file.Files.createTempFile("test",
+					".tab");
+			tmpResultMleGenes = java.nio.file.Files.createTempFile("test",
+					".tab");
+			tmpResultConcurrentGenes = java.nio.file.Files.createTempFile("test",
+					".tab");
+			tmpResultEleGenes = java.nio.file.Files.createTempFile("test",
+					".tab");
+			tmpResultIndependentGenes = java.nio.file.Files.createTempFile("test",
+					".tab");
+			tmpResultOptimaGenes = java.nio.file.Files.createTempFile("test",
+					".tab");
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			Assert.fail("Creation of the temporary files");
 			e1.printStackTrace();
 		}
 
+		
 		tempSbmlFile = tmpSbml.toFile();
 		tempConditionFile = tmpCondition.toFile();
 		tempObjectiveFile = tmpObjective.toFile();
 		tempInteractionFile = tmpInteraction.toFile();
+		tempConstraintFile = tmpConstraint.toFile();
+		
 		tempResultFbaFile = tmpResultFba.toFile();
 		tempResultEssentialFile = tmpResultEssential.toFile();
-		tempResultUsedFile = tmpResultUsed.toFile();
-		tempResultDeadFile = tmpResultDead.toFile();
+		tempResultZeroFluxFile = tmpResultZeroFlux.toFile();
+		tempResultMleFile = tmpResultMle.toFile();
+		tempResultEleFile = tmpResultEle.toFile();
+		tempResultConcurrentFile = tmpResultConcurrent.toFile();
+		tempResultIndependentFile = tmpResultIndependent.toFile();
+		tempResultOptimaFile = tmpResultOptima.toFile();
+		
 		tempResultEssentialGeneFile = tmpResultEssentialGenes.toFile();
-		tempResultUsedGeneFile = tmpResultUsedGenes.toFile();
-		tempResultDeadGeneFile = tmpResultDeadGenes.toFile();
-		tempConstraintFile = tmpConstraint.toFile();
-
-		String referenceFbaFile = "";
-		String referenceEssentialFile = "";
-		String referenceUsedFile = "";
-		String referenceDeadFile = "";
-		String referenceEssentialGeneFile = "";
-		String referenceUsedGeneFile = "";
-		String referenceDeadGeneFile = "";
+		tempResultZeroFluxGeneFile = tmpResultZeroFluxGenes.toFile();
+		tempResultMleGeneFile = tmpResultMleGenes.toFile();
+		tempResultConcurrentGeneFile = tmpResultConcurrentGenes.toFile();
+		tempResultEleGeneFile = tmpResultEleGenes.toFile();
+		tempResultIndependentGeneFile = tmpResultIndependentGenes.toFile();
+		tempResultOptimaGeneFile = tmpResultOptimaGenes.toFile();
 
 		try {
 			f.sbmlFile = TestUtils
@@ -128,7 +187,7 @@ public class TestConditionComparison {
 					.copyProjectResource(
 							"flexflux/unit_tests/data/conditionComparisonTest/objectives.txt",
 							tempObjectiveFile);
-			
+
 			f.constraintFile = TestUtils
 					.copyProjectResource(
 							"flexflux/unit_tests/data/conditionComparisonTest/constraints.txt",
@@ -138,31 +197,74 @@ public class TestConditionComparison {
 					.copyProjectResource(
 							"flexflux/unit_tests/data/conditionComparisonTest/resultFBA.tab",
 							tempResultFbaFile);
-			referenceUsedFile = TestUtils
-					.copyProjectResource(
-							"flexflux/unit_tests/data/conditionComparisonTest/resultUsed.tab",
-							tempResultUsedFile);
 			referenceEssentialFile = TestUtils
 					.copyProjectResource(
 							"flexflux/unit_tests/data/conditionComparisonTest/resultEssential.tab",
 							tempResultEssentialFile);
-			referenceDeadFile = TestUtils
+			referenceZeroFluxFile = TestUtils
 					.copyProjectResource(
-							"flexflux/unit_tests/data/conditionComparisonTest/resultDead.tab",
-							tempResultDeadFile);
+							"flexflux/unit_tests/data/conditionComparisonTest/resultZeroFlux.tab",
+							tempResultZeroFluxFile);
 			
-			referenceUsedGeneFile = TestUtils
+			referenceMleFile = TestUtils
 					.copyProjectResource(
-							"flexflux/unit_tests/data/conditionComparisonTest/resultUsedGenes.tab",
-							tempResultUsedGeneFile);
+							"flexflux/unit_tests/data/conditionComparisonTest/resultMle.tab",
+							tempResultMleFile);
+			
+			referenceEleFile = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/conditionComparisonTest/resultEle.tab",
+							tempResultEleFile);
+			
+			referenceConcurrentFile = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/conditionComparisonTest/resultConcurrent.tab",
+							tempResultConcurrentFile);
+			
+			referenceIndependentFile = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/conditionComparisonTest/resultIndependent.tab",
+							tempResultIndependentFile);
+			
+			referenceOptimaFile = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/conditionComparisonTest/resultOptima.tab",
+							tempResultOptimaFile);
+			
 			referenceEssentialGeneFile = TestUtils
 					.copyProjectResource(
 							"flexflux/unit_tests/data/conditionComparisonTest/resultEssentialGenes.tab",
 							tempResultEssentialGeneFile);
-			referenceDeadGeneFile = TestUtils
+			
+			referenceZeroFluxGeneFile = TestUtils
 					.copyProjectResource(
-							"flexflux/unit_tests/data/conditionComparisonTest/resultDeadGenes.tab",
-							tempResultDeadGeneFile);
+							"flexflux/unit_tests/data/conditionComparisonTest/resultZeroFluxGenes.tab",
+							tempResultZeroFluxGeneFile);
+			
+			referenceMleGeneFile = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/conditionComparisonTest/resultMleGenes.tab",
+							tempResultMleGeneFile);
+			
+			referenceEleGeneFile = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/conditionComparisonTest/resultEleGenes.tab",
+							tempResultEleGeneFile);
+			
+			referenceConcurrentGeneFile = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/conditionComparisonTest/resultConcurrentGenes.tab",
+							tempResultConcurrentGeneFile);
+			
+			referenceIndependentGeneFile = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/conditionComparisonTest/resultIndependentGenes.tab",
+							tempResultIndependentGeneFile);
+			
+			referenceOptimaGeneFile = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/conditionComparisonTest/resultOptimaGenes.tab",
+							tempResultOptimaGeneFile);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -171,103 +273,265 @@ public class TestConditionComparison {
 		}
 
 		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
-				f.sbmlFile, f.intFile, f.conditionFile, f.constraintFile, f.objectiveFile,
- ConstraintType.DOUBLE, false, solver, "", "",
+				f.sbmlFile, f.intFile, f.conditionFile, f.constraintFile,
+				f.objectiveFile, ConstraintType.DOUBLE, false, solver, "", "",
 				",", "", true, false, false, 0.0, 6);
 
-		
 		AnalysisResult r = a.runAnalysis();
-		
 
-		File createdFolder;
-		String dir = "";
-		try {
-			createdFolder = temp.newFolder("results");
-			dir = createdFolder.getAbsolutePath();
-		} catch (IOException e) {
-			Assert.fail("Impossible to create new temporary folder");
+		tempDir = new File(tmpPath);
+		if (!tempDir.exists()) {
+			tempDir.mkdir();
 		}
 
-		basePath = dir + "/test_";
-		
+		basePath = tmpPath + "/test_";
+
 		r.writeToFile(basePath);
+
+	}
+
+	@Test
+	public void testFba() {
 
 		String pathFileTest = basePath + "/fba_results.csv";
 		File fileTest = new File(pathFileTest);
 		File fileRef = new File(referenceFbaFile);
 
-		
 		FileAssert.assertEquals("Fba results are different from the reference",
 				fileRef, fileTest);
-		
-		pathFileTest = basePath + "/essential_reactions.tsv";
-		fileTest = new File(pathFileTest);
-		fileRef = new File(referenceEssentialFile);
 
-		FileAssert.assertEquals(
-				"Essential reactions are different from the reference",
+	}
+	
+	@Test
+	public void testEssential() {
+
+		String pathFileTest = basePath + "/essentialReactions.tsv";
+		File fileTest = new File(pathFileTest);
+		File fileRef = new File(referenceEssentialFile);
+
+		FileAssert.assertEquals("Essential reactions are different from the reference",
 				fileRef, fileTest);
 
-		pathFileTest = basePath + "/dispensable_reactions.tsv";
-		fileTest = new File(pathFileTest);
-		fileRef = new File(referenceUsedFile);
+	}
+	
+	@Test
+	public void testZeroFlux() {
 
-		FileAssert.assertEquals(
-				"Used reactions are different from the reference", fileRef,
-				fileTest);
+		String pathFileTest = basePath + "/zeroFluxReactions.tsv";
+		File fileTest = new File(pathFileTest);
+		File fileRef = new File(referenceZeroFluxFile);
 
-		pathFileTest = basePath + "/dead_reactions.tsv";
-		fileTest = new File(pathFileTest);
-		fileRef = new File(referenceDeadFile);
+		FileAssert.assertEquals("Zero Flux reactions are different from the reference",
+				fileRef, fileTest);
 
-		FileAssert.assertEquals(
-				"Dead reactions are different from the reference", fileRef,
-				fileTest);
-		
-		pathFileTest = basePath + "/dead_genes.tsv";
-		fileTest = new File(pathFileTest);
-		fileRef = new File(referenceDeadGeneFile);
+	}
+	
+	@Test
+	public void testMle() {
 
-		System.err.println(FileUtils.readFileToString(fileTest));
-		
-		FileAssert.assertEquals(
-				"Dead genes are different from the reference", fileRef,
-				fileTest);
-		
-		pathFileTest = basePath + "/dispensable_genes.tsv";
-		fileTest = new File(pathFileTest);
-		fileRef = new File(referenceUsedGeneFile);
+		String pathFileTest = basePath + "/mleReactions.tsv";
+		File fileTest = new File(pathFileTest);
+		File fileRef = new File(referenceMleFile);
 
-		FileAssert.assertEquals(
-				"Dispensable genes are different from the reference", fileRef,
-				fileTest);
-		
-		
-		
-		pathFileTest = basePath + "/essential_genes.tsv";
-		fileTest = new File(pathFileTest);
-		fileRef = new File(referenceEssentialGeneFile);
-
-		FileAssert.assertEquals(
-				"Essential genes are different from the reference", fileRef,
-				fileTest);
-		
-		
+		FileAssert.assertEquals("Mle reactions are different from the reference",
+				fileRef, fileTest);
 
 	}
 
+	@Test
+	public void testConcurrent() {
+
+		String pathFileTest = basePath + "/concurrentReactions.tsv";
+		File fileTest = new File(pathFileTest);
+		File fileRef = new File(referenceConcurrentFile);
+
+		FileAssert.assertEquals("Concurrent reactions are different from the reference",
+				fileRef, fileTest);
+
+	}
+	
+	@Test
+	public void testEle() {
+
+		String pathFileTest = basePath + "/eleReactions.tsv";
+		File fileTest = new File(pathFileTest);
+		File fileRef = new File(referenceEleFile);
+
+		FileAssert.assertEquals("Ele reactions are different from the reference",
+				fileRef, fileTest);
+
+	}
+	
+	@Test
+	public void testIndependent() {
+
+		String pathFileTest = basePath + "/independentReactions.tsv";
+		File fileTest = new File(pathFileTest);
+		File fileRef = new File(referenceIndependentFile);
+
+		FileAssert.assertEquals("Objective independent reactions are different from the reference",
+				fileRef, fileTest);
+
+	}
+	
+	@Test
+	public void testOptima() {
+
+		String pathFileTest = basePath + "/optimaReactions.tsv";
+		File fileTest = new File(pathFileTest);
+		File fileRef = new File(referenceOptimaFile);
+
+		FileAssert.assertEquals("pFBA optimal reactions are different from the reference",
+				fileRef, fileTest);
+
+	}
+	
+	@Test
+	public void testEssentialGenes() {
+
+		String pathFileTest = basePath + "/essentialGenes.tsv";
+		File fileTest = new File(pathFileTest);
+		File fileRef = new File(referenceEssentialGeneFile);
+
+		FileAssert.assertEquals("Essential genes are different from the reference",
+				fileRef, fileTest);
+
+	}
+	
+	@Test
+	public void testZeroFluxGenes() {
+
+		String pathFileTest = basePath + "/zeroFluxGenes.tsv";
+		File fileTest = new File(pathFileTest);
+		File fileRef = new File(referenceZeroFluxGeneFile);
+
+		FileAssert.assertEquals("Zero Flux genes are different from the reference",
+				fileRef, fileTest);
+
+	}
+	
+	@Test
+	public void testMleGenes() {
+
+		String pathFileTest = basePath + "/mleGenes.tsv";
+		File fileTest = new File(pathFileTest);
+		File fileRef = new File(referenceMleGeneFile);
+
+		FileAssert.assertEquals("Mle genes are different from the reference",
+				fileRef, fileTest);
+
+	}
+	
+	@Test
+	public void testConcurrentGenes() {
+
+		String pathFileTest = basePath + "/concurrentGenes.tsv";
+		File fileTest = new File(pathFileTest);
+		File fileRef = new File(referenceConcurrentGeneFile);
+
+		FileAssert.assertEquals("Concurrent genes are different from the reference",
+				fileRef, fileTest);
+
+	}
+
+	
+	@Test
+	public void testEleGenes() {
+
+		String pathFileTest = basePath + "/eleGenes.tsv";
+		File fileTest = new File(pathFileTest);
+		File fileRef = new File(referenceEleGeneFile);
+
+		FileAssert.assertEquals("Ele genes are different from the reference",
+				fileRef, fileTest);
+
+	}
+
+	@Test
+	public void testIndependentGenes() {
+
+		String pathFileTest = basePath + "/independentGenes.tsv";
+		File fileTest = new File(pathFileTest);
+		File fileRef = new File(referenceIndependentGeneFile);
+
+		FileAssert.assertEquals("Independent genes are different from the reference",
+				fileRef, fileTest);
+
+	}
+	
+	@Test
+	public void testOptimaGenes() {
+
+		String pathFileTest = basePath + "/optimaGenes.tsv";
+		File fileTest = new File(pathFileTest);
+		File fileRef = new File(referenceOptimaGeneFile);
+
+		FileAssert.assertEquals("pFBA optimal genes are different from the reference",
+				fileRef, fileTest);
+
+	}
+
+	
+	// pathFileTest = basePath + "/essential_reactions.tsv";
+	// fileTest = new File(pathFileTest);
+	// fileRef = new File(referenceEssentialFile);
+	//
+	// FileAssert.assertEquals(
+	// "Essential reactions are different from the reference",
+	// fileRef, fileTest);
+	//
+	// pathFileTest = basePath + "/dispensable_reactions.tsv";
+	// fileTest = new File(pathFileTest);
+	// fileRef = new File(referenceUsedFile);
+	//
+	// FileAssert.assertEquals(
+	// "Used reactions are different from the reference", fileRef,
+	// fileTest);
+	//
+	// pathFileTest = basePath + "/dead_reactions.tsv";
+	// fileTest = new File(pathFileTest);
+	// fileRef = new File(referenceDeadFile);
+	//
+	// FileAssert.assertEquals(
+	// "Dead reactions are different from the reference", fileRef,
+	// fileTest);
+	//
+	// pathFileTest = basePath + "/dead_genes.tsv";
+	// fileTest = new File(pathFileTest);
+	// fileRef = new File(referenceDeadGeneFile);
+	//
+	// System.err.println(FileUtils.readFileToString(fileTest));
+	//
+	// FileAssert.assertEquals(
+	// "Dead genes are different from the reference", fileRef,
+	// fileTest);
+	//
+	// pathFileTest = basePath + "/dispensable_genes.tsv";
+	// fileTest = new File(pathFileTest);
+	// fileRef = new File(referenceUsedGeneFile);
+	//
+	// FileAssert.assertEquals(
+	// "Dispensable genes are different from the reference", fileRef,
+	// fileTest);
+	//
+	//
+	//
+	// pathFileTest = basePath + "/essential_genes.tsv";
+	// fileTest = new File(pathFileTest);
+	// fileRef = new File(referenceEssentialGeneFile);
+	//
+	// FileAssert.assertEquals(
+	// "Essential genes are different from the reference", fileRef,
+	// fileTest);
+	//
+	//
+	//
+	// }
+
 	@AfterClass
 	public static void afterTest() {
-		if (tempSbmlFile != null)
-			tempSbmlFile.delete();
-		if (tempConditionFile != null)
-			tempConditionFile.delete();
-		if (tempInteractionFile != null)
-			tempInteractionFile.delete();
-		if (tempObjectiveFile != null)
-			tempObjectiveFile.delete();
-		if (tempResultFbaFile != null)
-			tempResultFbaFile.delete();
+
+//		tempDir.delete();
 
 	}
 

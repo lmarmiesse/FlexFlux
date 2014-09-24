@@ -38,6 +38,8 @@ import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.DoubleResult;
 import flexflux.general.Objective;
+import flexflux.general.Vars;
+import flexflux.interaction.Interaction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,6 +58,8 @@ import parsebionet.biodata.BioEntity;
  * 
  */
 public class ThreadKO extends ResolveThread {
+
+	public Boolean verbose = false;
 
 	/**
 	 * Number of entities to treat.
@@ -81,7 +85,7 @@ public class ThreadKO extends ResolveThread {
 
 	protected Set<BioEntity> entitiesInInteractionNetwork = new HashSet<BioEntity>();
 
-	protected List<Constraint> interactionNetwotkConstraints = new ArrayList<Constraint>();
+	protected List<Constraint> interactionNetworkConstraints = new ArrayList<Constraint>();
 
 	public ThreadKO(Bind b, Queue<BioEntity> entities, KOResult result,
 			Objective obj, Set<BioEntity> entitiesInInteractionNetwork,
@@ -91,7 +95,7 @@ public class ThreadKO extends ResolveThread {
 		this.entities = entities;
 		this.result = result;
 		this.entitiesInInteractionNetwork = entitiesInInteractionNetwork;
-		this.interactionNetwotkConstraints = interactionNetwotkConstraints;
+		this.interactionNetworkConstraints = interactionNetwotkConstraints;
 		percentage = 0;
 	}
 
@@ -106,23 +110,47 @@ public class ThreadKO extends ResolveThread {
 
 			List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 
-			constraintsToAdd.add(new Constraint(entityMap, 0.0, 0.0));
-			
-			//if the entity is not in the interaction network
-			if (!entitiesInInteractionNetwork.contains(entity)){
-				constraintsToAdd.addAll(interactionNetwotkConstraints);
+			Constraint newConstraint = new Constraint(entityMap, 0.0, 0.0);
+
+			constraintsToAdd.add(newConstraint);
+
+			// if the entity is not in the interaction network, we
+			// don't recompute the attractors
+			if (!entitiesInInteractionNetwork.contains(entity)) {
+				constraintsToAdd.addAll(interactionNetworkConstraints);
 				bind.checkInteractionNetwork = false;
+			}
+
+			Interaction[] interactions = bind.getInteractionNetwork()
+					.getTargetToInteractions().get(entity);
+
+			if (interactions != null) {
+				bind.getInteractionNetwork().getAddedInteractions()
+						.remove(interactions[0]);
+				bind.getInteractionNetwork().getAddedInteractions()
+						.remove(interactions[1]);
 			}
 
 			DoubleResult value = bind.FBA(constraintsToAdd, false, true);
 
 			result.addLine(entity, value.result);
 
+			if (interactions != null) {
+				bind.getInteractionNetwork().getAddedInteractions()
+						.add(interactions[0]);
+				bind.getInteractionNetwork().getAddedInteractions()
+						.add(interactions[1]);
+			}
+
+			bind.checkInteractionNetwork = true;
+
 			int percent = (int) Math.round((todo - size) / todo * 100);
 			if (percent > percentage) {
 				percentage = percent;
 				if (percent % 2 == 0) {
-					System.err.print("*");
+					if (verbose) {
+						System.err.print("*");
+					}
 				}
 			}
 

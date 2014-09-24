@@ -100,7 +100,7 @@ public class GLPKBind extends Bind {
 		this.operationFactory = new OperationFactory();
 		this.relationFactory = new RelationFactory();
 		this.threadFactory = new ThreadFactoryGLPK(constraints,
-				simpleConstraints, intNet,interactionNetworkSimpleConstraints);
+				simpleConstraints, intNet, interactionNetworkSimpleConstraints);
 	}
 
 	public GLPKBind() {
@@ -218,47 +218,6 @@ public class GLPKBind extends Bind {
 		GLPK.delete_intArray(varsIndices);
 		GLPK.delete_doubleArray(varsCoeffs);
 
-		// if the constraint overwrites
-		if (entities.size() == 1 && !constraint.getNot() && false) {
-
-			// System.err.println(constraint);
-			for (BioEntity entity : entities.keySet()) {
-				// if it is a "simple" constraint
-				if (entities.get(entity) == 1.0) {
-
-					if (oldBounds != null) {
-						oldBounds.put(
-								entity.getId(),
-								new double[] {
-										GLPK.glp_get_col_lb(model,
-												vars.get(entity.getId())),
-										GLPK.glp_get_col_ub(model,
-												vars.get(entity.getId())) });
-					}
-
-					if (solverSimpleConstraints.containsKey(entity)
-							&& (Integer) solverSimpleConstraints.get(entity) != -1) {
-
-						List<Object> list = new ArrayList<Object>();
-						list.add(solverSimpleConstraints.get(entity));
-						deleteConstraints(list);
-						solverSimpleConstraints.put(entity, -1);
-
-					} else if (!solverSimpleConstraints.containsKey(entity)) {
-						solverSimpleConstraints.put(entity, index);
-					}
-
-					// we set the bounds of the variable
-					if (ub == lb) {
-						GLPK.glp_set_col_bnds(model, vars.get(entity.getId()),
-								GLPKConstants.GLP_FX, lb, ub);
-					} else {
-						GLPK.glp_set_col_bnds(model, vars.get(entity.getId()),
-								GLPKConstants.GLP_DB, lb, ub);
-					}
-				}
-			}
-		}
 	}
 
 	protected void deleteConstraints(List<Object> constraints) {
@@ -338,8 +297,6 @@ public class GLPKBind extends Bind {
 
 	protected DoubleResult go(boolean saveResults) {
 
-		// System.err.println(GLPK.glp_get_col_prim(model, 5430));
-
 		int ret = GLPK.glp_simplex(model, parm);
 
 		if (isMIP()) {
@@ -385,7 +342,9 @@ public class GLPKBind extends Bind {
 			}
 		} else {
 
-			// System.err.println("The problem could not be solved");
+			if (verbose) {
+				System.err.println("The problem could not be solved");
+			}
 
 		}
 		return new DoubleResult(0, 1);

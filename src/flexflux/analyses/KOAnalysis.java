@@ -74,8 +74,7 @@ public class KOAnalysis extends Analysis {
 	 * 
 	 */
 	protected Map<String, BioEntity> entities;
-	
-	
+
 	protected Set<BioEntity> entitiesInInteractionNetwork = new HashSet<BioEntity>();
 
 	/**
@@ -86,9 +85,13 @@ public class KOAnalysis extends Analysis {
 
 	/**
 	 * Constructor
-	 * @param b : Bind
-	 * @param mode O:reactions, 1:genes
-	 * @param entities: list of entities to take into account
+	 * 
+	 * @param b
+	 *            : Bind
+	 * @param mode
+	 *            O:reactions, 1:genes
+	 * @param entities
+	 *            : list of entities to take into account
 	 */
 	public KOAnalysis(Bind b, int mode, Map<String, BioEntity> entities) {
 		super(b);
@@ -97,16 +100,12 @@ public class KOAnalysis extends Analysis {
 	}
 
 	public KOResult runAnalysis() {
-		
-		
-		
-		// Objective obj =bind.get
 
 		double startTime = System.currentTimeMillis();
 
 		KOResult koResult = new KOResult();
 
-		Map<String, BioEntity> reactionsMap = new HashMap<String, BioEntity>();
+		Map<String, BioEntity> entitiesMap = new HashMap<String, BioEntity>();
 
 		if (entities == null) {
 
@@ -114,60 +113,63 @@ public class KOAnalysis extends Analysis {
 				Map<String, BioChemicalReaction> networkEntities = b
 						.getBioNetwork().getBiochemicalReactionList();
 				for (String name : networkEntities.keySet()) {
-					reactionsMap.put(name, networkEntities.get(name));
+					entitiesMap.put(name, networkEntities.get(name));
 				}
 			} else if (mode == 1) {
 				Map<String, BioGene> networkEntities = b.getBioNetwork()
 						.getGeneList();
 				for (String name : networkEntities.keySet()) {
-					reactionsMap.put(name, networkEntities.get(name));
+					entitiesMap.put(name, networkEntities.get(name));
 				}
 			}
 
 		} else {
-			reactionsMap = entities;
+			entitiesMap = entities;
 		}
-		
-		/////////this part is to optimize a ko analysis, not to look for the steady states of 
-		//the interaction network when the entity is not in it
-		
-		
-		for(Interaction i : b.getInteractionNetwork().getAddedInteractions()){
-			for (BioEntity ent : i.getCondition().getInvolvedEntities()){
-				if (reactionsMap.containsKey(ent.getId())){
+
+		// ///////this part is to optimize a ko analysis, not to look for the
+		// steady states of
+		// the interaction network when the entity is not in it
+
+		for (Interaction i : b.getInteractionNetwork().getAddedInteractions()) {
+			for (BioEntity ent : i.getCondition().getInvolvedEntities()) {
+				if (entitiesMap.containsKey(ent.getId())) {
 					entitiesInInteractionNetwork.add(ent);
 				}
 			}
-			for (BioEntity ent : i.getConsequence().getInvolvedEntities()){
-				if (reactionsMap.containsKey(ent.getId())){
+			for (BioEntity ent : i.getConsequence().getInvolvedEntities()) {
+				if (entitiesMap.containsKey(ent.getId())) {
 					entitiesInInteractionNetwork.add(ent);
 				}
 			}
 		}
-		
-		List<Constraint> interactionNetwotkConstraints = b.findInteractionNetworkSteadyState();
-		//////////////////
-		
+
+		List<Constraint> interactionNetwotkConstraints = b
+				.findInteractionNetworkSteadyState();
+		// ////////////////
 
 		Queue<BioEntity> tasks = new LinkedBlockingQueue<BioEntity>();
 
-		for (String entityName : reactionsMap.keySet()) {
-			tasks.add(reactionsMap.get(entityName));
+		for (String entityName : entitiesMap.keySet()) {
+			tasks.add(entitiesMap.get(entityName));
 		}
 
 		for (int j = 0; j < Vars.maxThread; j++) {
 			threads.add(b.getThreadFactory().makeKOThread(tasks, koResult,
-					b.getObjective(),entitiesInInteractionNetwork,interactionNetwotkConstraints));
+					b.getObjective(), entitiesInInteractionNetwork,
+					interactionNetwotkConstraints));
 		}
 
-		System.err.println("Progress : ");
+		if (verbose) {
+			System.err.println("Progress : ");
 
-		System.err.print("[");
-		for (int i = 0; i < 50; i++) {
-			System.err.print(" ");
+			System.err.print("[");
+			for (int i = 0; i < 50; i++) {
+				System.err.print(" ");
+			}
+			System.err.print("]\n");
+			System.err.print("[");
 		}
-		System.err.print("]\n");
-		System.err.print("[");
 
 		for (ResolveThread thread : threads) {
 			thread.start();
@@ -179,19 +181,23 @@ public class KOAnalysis extends Analysis {
 			try {
 				thread.join();
 			} catch (InterruptedException e) {
-//				e.printStackTrace();
+				// e.printStackTrace();
 			}
 
 		}
-		System.err.print("]\n");
+		if(verbose) {
+			System.err.print("]\n");
+		}
 
 		while (threads.size() > 0) {
 			threads.remove(0);
 		}
 
-		System.err.println("KO over "
-				+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
-				+ Vars.maxThread + " threads");
+		if (verbose) {
+			System.err.println("KO over "
+					+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
+					+ Vars.maxThread + " threads");
+		}
 		return koResult;
 	}
 

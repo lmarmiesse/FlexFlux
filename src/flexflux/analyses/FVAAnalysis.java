@@ -97,7 +97,9 @@ public class FVAAnalysis extends Analysis {
 
 		if (result.flag != 0) {
 
-			System.err.println("Unfeasible");
+			if (verbose) {
+				System.err.println("Unfeasible");
+			}
 			fvaResult = new FVAResult(Double.NaN);
 			return fvaResult;
 
@@ -105,7 +107,6 @@ public class FVAAnalysis extends Analysis {
 
 		List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 		constraintsToAdd.addAll(constraints);
-
 
 		b.getConstraints().addAll(constraintsToAdd);
 
@@ -126,8 +127,10 @@ public class FVAAnalysis extends Analysis {
 
 		Constraint c = new Constraint(constraintMap, lb - delta, ub + delta);
 
-		System.err.println(Vars.libertyPercentage + "% of non optimality");
-		System.err.println("FVA initial constraint : \n" + c);
+		if (verbose) {
+			System.err.println(Vars.libertyPercentage + "% of non optimality");
+			System.err.println("FVA initial constraint : \n" + c);
+		}
 
 		b.getConstraints().add(c);
 
@@ -157,14 +160,16 @@ public class FVAAnalysis extends Analysis {
 					entQueueCopy, fvaResult));
 		}
 
-		System.err.println("Progress : ");
+		if (verbose) {
+			System.err.println("Progress : ");
 
-		System.err.print("[");
-		for (int i = 0; i < 50; i++) {
-			System.err.print(" ");
+			System.err.print("[");
+			for (int i = 0; i < 50; i++) {
+				System.err.print(" ");
+			}
+			System.err.print("]\n");
+			System.err.print("[");
 		}
-		System.err.print("]\n");
-		System.err.print("[");
 
 		for (ResolveThread thread : threads) {
 			thread.start();
@@ -178,7 +183,10 @@ public class FVAAnalysis extends Analysis {
 				// e.printStackTrace();
 			}
 		}
-		System.err.print("]\n");
+
+		if (verbose) {
+			System.err.print("]\n");
+		}
 
 		// we remove the threads to permit another analysis
 		while (threads.size() > 0) {
@@ -190,9 +198,11 @@ public class FVAAnalysis extends Analysis {
 		b.getConstraints().remove(c);
 		b.getConstraints().removeAll(constraintsToAdd);
 
-		System.err.println("FVA over "
-				+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
-				+ Vars.maxThread + " threads");
+		if (verbose) {
+			System.err.println("FVA over "
+					+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
+					+ Vars.maxThread + " threads");
+		}
 		return fvaResult;
 
 	}

@@ -66,7 +66,6 @@ import org.jfree.ui.RefineryUtilities;
 import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
 
-
 /**
  * 
  * Class representing the result of an FVA analysis.
@@ -190,11 +189,11 @@ public class FVAResult extends AnalysisResult {
 		for (BioEntity entity : map.keySet()) {
 
 			if (map.get(entity)[0] < 0 && map.get(entity)[1] < 0
-					&& Math.abs(map.get(entity)[1] - 0) > 0.0000001) {
+					&& Math.abs(map.get(entity)[1] - 0) > Math.pow(10, -Vars.decimalPrecision)) {
 				essentials.add(entity);
 
 			} else if (map.get(entity)[0] > 0 && map.get(entity)[1] > 0
-					&& Math.abs(map.get(entity)[0] - 0) > 0.0000001) {
+					&& Math.abs(map.get(entity)[0] - 0) > Math.pow(10, -Vars.decimalPrecision)) {
 				essentials.add(entity);
 			}
 
@@ -203,6 +202,29 @@ public class FVAResult extends AnalysisResult {
 		return essentials;
 
 	}
+	
+	
+	/**
+	 * 
+	 * @return all reactions that have min and max equal to 0
+	 */
+	public HashMap<String, BioEntity> getZeroFluxReactions() {
+		
+		HashMap<String, BioEntity> zeroFluxReactions = new HashMap<String, BioEntity>();
+		
+		for (BioEntity entity : map.keySet()) {
+			
+			if (Math.abs(map.get(entity)[0]) <= Math.pow(10, -Vars.decimalPrecision) && Math.abs(map.get(entity)[1]) <= Math.pow(10, -Vars.decimalPrecision)) {
+				zeroFluxReactions.put(entity.getId(), entity);
+			}
+
+		}
+		
+		return zeroFluxReactions;
+		
+		
+	}
+	
 	
 	public void writeToFile(String path) {
 		try {
