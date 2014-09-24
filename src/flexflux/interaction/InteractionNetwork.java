@@ -1,4 +1,5 @@
 package flexflux.interaction;
+
 /*******************************************************************************
  * Copyright INRA
  * 
@@ -95,16 +96,15 @@ public class InteractionNetwork {
 	public Map<Interaction, List<Constraint>> getInteractionToConstraints() {
 		return interactionToConstraints;
 	}
-	
+
 	public void setTargetToInteractions(BioEntity ent, FFTransition transition) {
 		targetToInteractions.put(ent, transition);
 	}
-	
+
 	public void addInteractionToConstraints(Interaction inter) {
 		interactionToConstraints.put(inter, inter.getConsequence()
 				.createConstraints());
 	}
-	
 
 	public Constraint getInitialConstraint(BioEntity ent) {
 		return initialConstraints.get(ent);
@@ -315,7 +315,7 @@ public class InteractionNetwork {
 		List<Map<BioEntity, Constraint>> attractorSimpleConstraints = new ArrayList<Map<BioEntity, Constraint>>();
 
 		int attractorSize = 0;
-		
+
 		// ////////////////////////////////////////WRITE TO FILE
 
 		Map<BioEntity, List<String>> toWrite = new HashMap<BioEntity, List<String>>();
@@ -626,25 +626,26 @@ public class InteractionNetwork {
 
 		for (BioEntity entity : entitiesToCheck) {
 			if (!setEntities.contains(entity)) {
-				
+
 				Interaction defaultInt = targetToInteractions.get(entity)
 						.getdefaultInteraction();
 
 				// we go through all the consequences (there should be only
 				// one)
-					for (Constraint consequence : defaultInt.getConsequence().createConstraints()) {
+				for (Constraint consequence : defaultInt.getConsequence()
+						.createConstraints()) {
 
-						for (BioEntity ent : consequence.getEntities().keySet()) {
-							if (consequence.getEntities().get(ent) == 1.0) {
-								contToTimeInfos.put(consequence,
-										defaultInt.getTimeInfos());
-								nextStepState.put(ent, consequence);
+					for (BioEntity ent : consequence.getEntities().keySet()) {
+						if (consequence.getEntities().get(ent) == 1.0) {
+							contToTimeInfos.put(consequence,
+									defaultInt.getTimeInfos());
+							nextStepState.put(ent, consequence);
 
-								setEntities.add(ent);
-							}
+							setEntities.add(ent);
 						}
-
 					}
+
+				}
 
 			}
 		}
@@ -654,21 +655,10 @@ public class InteractionNetwork {
 		for (BioEntity ent : nextStepState.keySet()) {
 
 			if (targetToInteractions.containsKey(ent)) {
-				// System.out.println("oui "+ent.getId());
 				steadyStateConstraints.put(nextStepState.get(ent),
 						contToTimeInfos.get(nextStepState.get(ent)));
-				
-				
-			} else {
-				// System.out.println("non "+ent.getId());
 			}
-
 		}
-
-//		for (BioEntity ent : setEntities) {
-//			
-//			networkState.put(ent, nextStepState.get(ent));
-//		}
 
 		return steadyStateConstraints;
 	}

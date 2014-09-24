@@ -88,8 +88,6 @@ public abstract class Bind {
 
 	public boolean checkInteractionNetwork = true;
 
-	private Map<BioEntity, Double> defaultValues = new HashMap<BioEntity, Double>();
-
 	/**
 	 * Used for pareto analysis and conditionComparison, if set to false, the
 	 * objective in the condition file is ignored.
@@ -1655,7 +1653,7 @@ public abstract class Bind {
 				// interactions
 				else {
 
-					if (reac.isReversible()) {
+//					if (reac.isReversible()) {
 
 						if (!exchangeInteractions.containsKey(reac)) {
 
@@ -1675,7 +1673,7 @@ public abstract class Bind {
 											* -1);
 						}
 
-					}
+//					}
 				}
 
 			}

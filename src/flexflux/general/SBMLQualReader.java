@@ -154,8 +154,6 @@ public class SBMLQualReader {
 					 Interaction inter = relationFactory
 						.makeIfThenInteraction(thenRelation, ifRelation);
 					
-					 inter.setTimeInfos(new double[]{2.0,0.0});
-					 
 					intNet.addTargetConditionalInteraction(outEntity,inter);
 
 				}
@@ -164,8 +162,6 @@ public class SBMLQualReader {
 			 Interaction defaultInter = relationFactory
 			.makeIfThenInteraction(elseRelation, null);
 			 
-			 defaultInter.setTimeInfos(new double[]{2.0,0.0});
-
 			intNet.setTargetDefaultInteraction(outEntity, defaultInter);
 
 		}
