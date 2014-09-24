@@ -50,25 +50,25 @@ public class TestSBMLQual {
 
 		// /interactions
 
-//		assertTrue(bind.getInteractionNetwork().getTargetToInteractions()
-//				.get(entity1)[0].getCondition().getInvolvedEntities().get(0)
-//				.getId().equals("s_Bacteria"));
-//
-//		assertTrue(((Unique) bind.getInteractionNetwork()
-//				.getTargetToInteractions().get(entity1)[0].getCondition())
-//				.getValue() == 6.3);
-//
-//		assertTrue(bind.getInteractionNetwork().getTargetToInteractions()
-//				.get(entity1)[0].getConsequence().getEntity() == entity1);
-//
-//		assertTrue(bind.getInteractionNetwork().getTargetToInteractions()
-//				.get(entity1)[0].getConsequence().getValue() == 1.8);
-//
-//		assertTrue(bind.getInteractionNetwork().getTargetToInteractions()
-//				.get(entity1)[1].getConsequence().getValue() == 0);
+		assertTrue(bind.getInteractionNetwork().getTargetToInteractions()
+				.get(entity1).getConditionalInteractions().get(0).getCondition().getInvolvedEntities().get(0)
+				.getId().equals("s_Bacteria"));
 
-//		System.out.println(bind.getInteractionNetwork()
-//				.getTargetToInteractions().get(entity2)[0]);
+		assertTrue(((Unique) bind.getInteractionNetwork().getTargetToInteractions()
+				.get(entity1).getConditionalInteractions().get(0).getCondition())
+				.getValue() == 6.3);
+
+		assertTrue(bind.getInteractionNetwork().getTargetToInteractions()
+				.get(entity1).getConditionalInteractions().get(0).getConsequence().getEntity() == entity1);
+
+		assertTrue(bind.getInteractionNetwork().getTargetToInteractions()
+				.get(entity1).getConditionalInteractions().get(0).getConsequence().getValue() == 1.8);
+
+		assertTrue(bind.getInteractionNetwork().getTargetToInteractions()
+				.get(entity1).getdefaultInteraction().getConsequence().getValue() == 0);
+
+		System.out.println(bind.getInteractionNetwork().getTargetToInteractions()
+				.get(entity2).getConditionalInteractions().get(0));
 
 	}
 

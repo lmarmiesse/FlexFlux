@@ -135,7 +135,7 @@ public class RFBAResult extends AnalysisResult {
 
 			for (Double time : times) {
 
-				line = Vars.round(time) + "\t";
+				line = time + "\t";
 				for (String s : entities) {
 
 					line += Vars.round(resultMap.get(time).get(s)) + "\t";

@@ -1,4 +1,5 @@
 package flexflux.analyses;
+
 /*******************************************************************************
  * Copyright INRA
  * 
@@ -116,36 +117,43 @@ public class RFBAAnalysis extends Analysis {
 
 		RFBAResult rFBAResult = new RFBAResult();
 
-		// ////we set the initial values
-		
-		List<Constraint> initialConstraints = new ArrayList<Constraint>();
-		for (Constraint c : b.getInteractionNetwork().getInitialConstraints().values()){
-			initialConstraints.add(c);
-		}
+		// ////////////////////we set the initial values
 
-		b.FBA(initialConstraints, true, false);
-
-		Map<String, Double> valuesMap = new HashMap<String, Double>();
-		valuesMap.put("X", X);
-
-		lastSolve = b.getLastSolve();
-		
-		// we add the results for this iteration
-		for (String s : toPlot) {
-			valuesMap.put(
-					s,
-					lastSolve.get(s));
-		}
-
-		rFBAResult.addValues(0, valuesMap);
+		// List<Constraint> initialConstraints = new ArrayList<Constraint>();
+		// for (Constraint c : b.getInteractionNetwork().getInitialConstraints()
+		// .values()) {
+		// initialConstraints.add(c);
+		// }
+		//
+		// b.FBA(initialConstraints, true, false);
+		//
+		// Map<String, Double> valuesMap = new HashMap<String, Double>();
+		// valuesMap.put("X", X);
+		//
+		// lastSolve = b.getLastSolve();
+		//
+		// // we add the results for this iteration
+		// for (String s : toPlot) {
+		// valuesMap.put(s, lastSolve.get(s));
+		// }
+		// //we add the ext metabs to the results
+		// for (BioChemicalReaction reac : exchangeInteractions.keySet()) {
+		// for (BioEntity metab : exchangeInteractions.get(reac).keySet()) {
+		// if (simpleConstraints.containsKey(metab)) {
+		// valuesMap.put(metab.getId(), lastSolve.get(metab.getId()));
+		// }
+		// }
+		// }
+		// rFBAResult.addValues(0, valuesMap);
+		// ////////////////////
 
 		for (int i = 0; i < iterations; i++) {
 
 			// we save the results
-			valuesMap = new HashMap<String, Double>();
+			Map<String, Double> valuesMap = new HashMap<String, Double>();
 			valuesMap.put("X", X);
 
-			List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
+			Set<Constraint> constraintsToAdd = new HashSet<Constraint>();
 
 			System.err.println("-----");
 			System.err.println("it number " + i);
@@ -154,45 +162,49 @@ public class RFBAAnalysis extends Analysis {
 
 			networkState = simpleConstraints;
 
-			Map<Constraint, double[]> nextStepConsMap = b
-					.getInteractionNetwork().goToNextInteractionNetworkState(
-							networkState);
+			if (i != 0) {
+				Map<Constraint, double[]> nextStepConsMap = b
+						.getInteractionNetwork()
+						.goToNextInteractionNetworkState(networkState);
 
-			for (Constraint c : nextStepConsMap.keySet()) {
+				for (Constraint c : nextStepConsMap.keySet()) {
 
-				double begins = nextStepConsMap.get(c)[0];
+					double begins = nextStepConsMap.get(c)[0];
 
-				double lasts = nextStepConsMap.get(c)[1];
+					double lasts = nextStepConsMap.get(c)[1];
 
-				int iterBegin = (int) (i + begins / deltaT);
+					int iterBegin = (int) (i + begins / deltaT);
 
-				int iterEnd = iterBegin + (int) (lasts / deltaT);
+					int iterEnd = iterBegin + (int) (lasts / deltaT);
 
-				for (int iter = iterBegin; iter <= iterEnd; iter++) {
-					if (iter < iterations) {
+					for (int iter = iterBegin; iter <= iterEnd; iter++) {
+						if (iter < iterations) {
 
-						timeConstraintMap.get(iter).add(c);
+							timeConstraintMap.get(iter).add(c);
+						}
 					}
 				}
 			}
 
 			// we add the constraints for the current iteration
 			for (Constraint c : timeConstraintMap.get(i)) {
-				// c.setOverWritesBounds(false);
-				System.out.println(c);
-				if (c.getEntities().size()==1){
-					
+				if (c.getEntities().size() == 1) {
+
 					BioEntity ent = null;
-					
-					for (BioEntity e : c.getEntities().keySet()){
+
+					for (BioEntity e : c.getEntities().keySet()) {
 						ent = e;
 					}
-					
+
 					simpleConstraints.put(ent, c);
 				}
-				
-				constraintsToAdd.add(c);
-
+			}
+			for (BioEntity ent : b.getInteractionNetwork()
+					.getInitialConstraints().keySet()) {
+				if (simpleConstraints.containsKey(ent)) {
+					Constraint c = simpleConstraints.get(ent);
+					constraintsToAdd.add(c);
+				}
 			}
 
 			// we create the constraints
@@ -229,11 +241,13 @@ public class RFBAAnalysis extends Analysis {
 							metabConstraints.put(metab, c);
 
 						} else {
+
 							Map<BioEntity, Double> constraintMap = new HashMap<BioEntity, Double>();
 							constraintMap.put(reac, 1.0);
 							Constraint c = new Constraint(constraintMap,
 									availableSubstrate, simpleConstraints.get(
 											reac).getUb());
+
 							metabConstraints.put(metab, c);
 						}
 
@@ -245,7 +259,6 @@ public class RFBAAnalysis extends Analysis {
 			for (BioEntity metab : metabConstraints.keySet()) {
 
 				Constraint c = metabConstraints.get(metab);
-				// c.setOverWritesBounds(false);
 
 				constraintsToAdd.add(c);
 
@@ -262,10 +275,10 @@ public class RFBAAnalysis extends Analysis {
 			double fbaResult = 0;
 			double mu = 0;
 			DoubleResult result;
-			
-			
+
 			try {
-				result = b.FBA(constraintsToAdd, true, false);
+				result = b.FBA(new ArrayList<Constraint>(constraintsToAdd),
+						true, false);
 
 				fbaResult = result.result;
 
@@ -289,13 +302,10 @@ public class RFBAAnalysis extends Analysis {
 
 			// we add the results for this iteration
 			for (String s : toPlot) {
-				valuesMap.put(
-						s,
-						lastSolve.get(b.getInteractionNetwork().getEntity(s)
-								.getId()));
+				valuesMap.put(s, lastSolve.get(s));
 			}
 
-			rFBAResult.addValues(deltaT * (i + 1), valuesMap);
+			rFBAResult.addValues(deltaT * i, valuesMap);
 
 			if (mu == 0) {
 
