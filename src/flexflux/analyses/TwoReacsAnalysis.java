@@ -146,18 +146,20 @@ public class TwoReacsAnalysis extends Analysis {
 
 		for (int j = 0; j < Vars.maxThread; j++) {
 			threads.add((ThreadTwoReacs) b.getThreadFactory()
-					.makeTwoReacsThread(fluxesQueue,
-							result, entities1, entities2, b.getObjective()));
+					.makeTwoReacsThread(fluxesQueue, result, entities1,
+							entities2, b.getObjective()));
 
 		}
 
-		System.err.println("Progress : ");
-		System.err.print("[");
-		for (int i = 0; i < 50; i++) {
-			System.err.print(" ");
+		if (verbose) {
+			System.err.println("Progress : ");
+			System.err.print("[");
+			for (int i = 0; i < 50; i++) {
+				System.err.print(" ");
+			}
+			System.err.print("]\n");
+			System.err.print("[");
 		}
-		System.err.print("]\n");
-		System.err.print("[");
 
 		for (ResolveThread thread : threads) {
 			thread.start();
@@ -168,7 +170,7 @@ public class TwoReacsAnalysis extends Analysis {
 			try {
 				thread.join();
 			} catch (InterruptedException e) {
-//				e.printStackTrace();
+				// e.printStackTrace();
 			}
 		}
 
@@ -191,8 +193,10 @@ public class TwoReacsAnalysis extends Analysis {
 			// group index => fvaresult
 			Map<Integer, FVAResult> fvaResults = new HashMap<Integer, FVAResult>();
 
-			System.err.println("Starting an FVA analysis for each of the "
-					+ groupIndex.size() + " phenotypic phases found");
+			if (verbose) {
+				System.err.println("Starting an FVA analysis for each of the "
+						+ groupIndex.size() + " phenotypic phases found");
+			}
 
 			for (double group : groupIndex.keySet()) {
 
@@ -215,9 +219,11 @@ public class TwoReacsAnalysis extends Analysis {
 			result.setComparator(comparator);
 
 		}
-		System.err.println("Two reactions analysis over "
-				+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
-				+ Vars.maxThread + " threads");
+		if (verbose) {
+			System.err.println("Two reactions analysis over "
+					+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
+					+ Vars.maxThread + " threads");
+		}
 
 		return result;
 	}

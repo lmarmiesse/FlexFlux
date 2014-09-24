@@ -154,22 +154,19 @@ public class FBAResult extends AnalysisResult {
 		Object[][] data = new Object[entToResult.size()][columnNames.length];
 
 		
-		double fluxSum=0.0;
-		
 		int i = 0;
 		for (String entName : entToResult.keySet()) {
 
 			data[i] = new Object[] { entName, entToResult.get(entName) };
 			i++;
 			
-			double val=0.0;
-			if(entToResult.get(entName).equals("Not Constrained")){
-				val=0.0;
-			}
-			else{
-				val = Double.parseDouble(entToResult.get(entName));
-			}
-			fluxSum+=Math.abs(val);
+//			double val=0.0;
+//			if(entToResult.get(entName).equals("Not Constrained")){
+//				val=0.0;
+//			}
+//			else{
+//				val = Double.parseDouble(entToResult.get(entName));
+//			}
 		}
 		
 		DefaultTableModel model = new MyTableModel(data, columnNames);

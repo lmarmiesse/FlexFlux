@@ -58,14 +58,15 @@ public class FBAAnalysis extends Analysis {
 
 		FBAResult result = new FBAResult(b);
 
-
 		DoubleResult objValue = b.FBA(new ArrayList<Constraint>(), true, true);
 
 		if (objValue.flag != 0) {
 
-			System.err.println(objValue.result);
+			if (verbose) {
+				System.err.println(objValue.result);
 
-			System.err.println("Unfeasible");
+				System.err.println("Unfeasible");
+			}
 			result.setObjValue(Double.NaN);
 
 		} else {

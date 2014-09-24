@@ -124,47 +124,51 @@ public class RFBAAnalysis extends Analysis {
 
 			List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 
-			System.err.println("-----");
-			System.err.println("it number " + i);
+			if (verbose) {
+				System.err.println("-----");
+				System.err.println("it number " + i);
+			}
 
 			Map<BioEntity, Constraint> networkState = new HashMap<BioEntity, Constraint>();
-//			if (b.isLastSolveEmpty()) {
-				networkState = simpleConstraints;
-//			} else {
-//				for (BioEntity ent : b.getInteractionNetwork().getEntities()) {
-//
-//					Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
-//
-//					constMap.put(ent, 1.0);
-//					Constraint c = new Constraint(constMap,
-//							b.getSolvedValue(ent), b.getSolvedValue(ent));
-//
-//					networkState.put(ent, c);
-//				}
-//
-//				// for the external metabolites, we put the concentrations that
-//				// have been recalculated
-//				for (BioChemicalReaction reac : exchangeInteractions.keySet()) {
-//
-//					for (BioEntity metab : exchangeInteractions.get(reac)
-//							.keySet()) {
-//
-//						if (simpleConstraints.containsKey(metab)) {
-//
-//							Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
-//
-//							constMap.put(metab, 1.0);
-//							Constraint c = new Constraint(constMap,
-//									simpleConstraints.get(metab).getLb(),
-//									simpleConstraints.get(metab).getUb());
-//
-//							networkState.put(metab, c);
-//						}
-//					}
-//
-//				}
-//
-//			}
+			// if (b.isLastSolveEmpty()) {
+			networkState = simpleConstraints;
+			// } else {
+			// for (BioEntity ent : b.getInteractionNetwork().getEntities()) {
+			//
+			// Map<BioEntity, Double> constMap = new HashMap<BioEntity,
+			// Double>();
+			//
+			// constMap.put(ent, 1.0);
+			// Constraint c = new Constraint(constMap,
+			// b.getSolvedValue(ent), b.getSolvedValue(ent));
+			//
+			// networkState.put(ent, c);
+			// }
+			//
+			// // for the external metabolites, we put the concentrations that
+			// // have been recalculated
+			// for (BioChemicalReaction reac : exchangeInteractions.keySet()) {
+			//
+			// for (BioEntity metab : exchangeInteractions.get(reac)
+			// .keySet()) {
+			//
+			// if (simpleConstraints.containsKey(metab)) {
+			//
+			// Map<BioEntity, Double> constMap = new HashMap<BioEntity,
+			// Double>();
+			//
+			// constMap.put(metab, 1.0);
+			// Constraint c = new Constraint(constMap,
+			// simpleConstraints.get(metab).getLb(),
+			// simpleConstraints.get(metab).getUb());
+			//
+			// networkState.put(metab, c);
+			// }
+			// }
+			//
+			// }
+			//
+			// }
 
 			Map<Constraint, double[]> nextStepConsMap = b
 					.goToNextInteractionNetworkState(networkState);
@@ -189,7 +193,7 @@ public class RFBAAnalysis extends Analysis {
 
 			// we add the constraints for the current iteration
 			for (Constraint c : timeConstraintMap.get(i)) {
-//				c.setOverWritesBounds(false);
+				// c.setOverWritesBounds(false);
 				constraintsToAdd.add(c);
 
 			}
@@ -206,8 +210,7 @@ public class RFBAAnalysis extends Analysis {
 				for (BioEntity metab : exchangeInteractions.get(reac).keySet()) {
 
 					if (simpleConstraints.containsKey(metab)) {
-						
-						
+
 						valuesMap.put(metab.getId(),
 								simpleConstraints.get(metab).getUb());
 
@@ -225,7 +228,7 @@ public class RFBAAnalysis extends Analysis {
 							Constraint c = new Constraint(constraintMap,
 									simpleConstraints.get(reac).getLb(),
 									availableSubstrate);
-							
+
 							metabConstraints.put(metab, c);
 
 						} else {
@@ -245,7 +248,7 @@ public class RFBAAnalysis extends Analysis {
 			for (BioEntity metab : metabConstraints.keySet()) {
 
 				Constraint c = metabConstraints.get(metab);
-//				c.setOverWritesBounds(false);
+				// c.setOverWritesBounds(false);
 
 				constraintsToAdd.add(c);
 
@@ -299,21 +302,22 @@ public class RFBAAnalysis extends Analysis {
 			if (mu == 0) {
 
 				if (result.flag == 0) {
-					System.err.println(timeToString(i * deltaT) + " X = "
-							+ Vars.round(X) + " no growth");
+					if (verbose) {
+						System.err.println(timeToString(i * deltaT) + " X = "
+								+ Vars.round(X) + " no growth");
+					}
 				} else {
 					unfeasibleSteps.add(i);
-					System.err.println(timeToString(i * deltaT) + " X = "
-							+ Vars.round(X) + " no growth : unfeasible");
+					if (verbose) {
+						System.err.println(timeToString(i * deltaT) + " X = "
+								+ Vars.round(X) + " no growth : unfeasible");
+					}
 
 					b.resetLastSolve();
 					continue;
 				}
 
 			}
-
-			// System.err.println("mu = " + mu);
-			// System.err.println(i);
 
 			// we set the new concentrations for the metabolites according to
 			// the uptake
@@ -409,14 +413,18 @@ public class RFBAAnalysis extends Analysis {
 			X *= Math.exp(mu * deltaT);
 
 			if (mu != 0) {
-				System.err.println(timeToString(i * deltaT) + " X = "
-						+ Vars.round(X));
+				if (verbose) {
+					System.err.println(timeToString(i * deltaT) + " X = "
+							+ Vars.round(X));
+				}
 			}
 			// System.out.println("X = " + X);
 
 		}
-		System.err.println("RFBA over "
-				+ ((System.currentTimeMillis() - startTime) / 1000) + "s");
+		if (verbose) {
+			System.err.println("RFBA over "
+					+ ((System.currentTimeMillis() - startTime) / 1000) + "s");
+		}
 
 		if (!unfeasibleSteps.isEmpty()) {
 

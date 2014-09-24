@@ -50,7 +50,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import parsebionet.biodata.BioEntity;
 
-
 /**
  * 
  * Class to run an analysis with one varying flux value.
@@ -90,8 +89,7 @@ public class ReacAnalysis extends Analysis {
 	 * Minimal group size to consider it is a phenotype phase.
 	 */
 	int minGrpsSize = 10;
-	
-	
+
 	/**
 	 * Determines if FVA's must be performed on each phenotype phase.
 	 */
@@ -127,17 +125,20 @@ public class ReacAnalysis extends Analysis {
 				end, deltaF);
 
 		for (int j = 0; j < Vars.maxThread; j++) {
-			threads.add(b.getThreadFactory().makeReacThread(fluxesQueue, entities, result, b.getObjective()));
+			threads.add(b.getThreadFactory().makeReacThread(fluxesQueue,
+					entities, result, b.getObjective()));
 
 		}
 
-		System.err.println("Progress : ");
-		System.err.print("[");
-		for (int i = 0; i < 50; i++) {
-			System.err.print(" ");
+		if (verbose) {
+			System.err.println("Progress : ");
+			System.err.print("[");
+			for (int i = 0; i < 50; i++) {
+				System.err.print(" ");
+			}
+			System.err.print("]\n");
+			System.err.print("[");
 		}
-		System.err.print("]\n");
-		System.err.print("[");
 
 		for (ResolveThread thread : threads) {
 			thread.start();
@@ -148,11 +149,13 @@ public class ReacAnalysis extends Analysis {
 			try {
 				thread.join();
 			} catch (InterruptedException e) {
-//				e.printStackTrace();
+				// e.printStackTrace();
 			}
 		}
 
-		System.err.print("]\n");
+		if (verbose) {
+			System.err.print("]\n");
+		}
 
 		if (fva) {
 			threads.get(0).setShadowPriceGroups();
@@ -171,8 +174,10 @@ public class ReacAnalysis extends Analysis {
 			// group index => fvaresult
 			Map<Integer, FVAResult> fvaResults = new HashMap<Integer, FVAResult>();
 
-			System.err.println("Starting an FVA analysis for each of the "
-					+ groupIndex.size() + " phenotypic phases found");
+			if (verbose) {
+				System.err.println("Starting an FVA analysis for each of the "
+						+ groupIndex.size() + " phenotypic phases found");
+			}
 
 			for (double group : groupIndex.keySet()) {
 
@@ -194,9 +199,11 @@ public class ReacAnalysis extends Analysis {
 
 		}
 
-		System.err.println("Reac analysis over "
-				+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
-				+ Vars.maxThread + " threads");
+		if (verbose) {
+			System.err.println("Reac analysis over "
+					+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
+					+ Vars.maxThread + " threads");
+		}
 
 		return result;
 

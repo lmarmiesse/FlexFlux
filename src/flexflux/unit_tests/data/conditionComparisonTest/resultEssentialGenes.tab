@@ -1,5 +1,5 @@
-ConditionCode	maxR_B	maxR_D
-C1	G1	G2
-C2	G1	
-C3	G1	G2
-C4	G1	
+ConditionCode	maxR_OBJ	minR_OBJ2
+C1	G8	G7
+C2	G1,G8	G1,G7
+C3	G8	G7
+C4	G1,G8	G1,G7

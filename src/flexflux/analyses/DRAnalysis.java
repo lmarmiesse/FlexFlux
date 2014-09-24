@@ -77,12 +77,11 @@ public class DRAnalysis extends Analysis {
 
 		List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 		// we add the constraints corresponding to the interactions
-	
 
-		for (Constraint c :  b.findInteractionNetworkSteadyState()) {
+		for (Constraint c : b.findInteractionNetworkSteadyState()) {
 			constraintsToAdd.add(c);
 		}
-		
+
 		b.getConstraints().addAll(constraintsToAdd);
 
 		DRResult drResult = new DRResult(0.0, b);
@@ -105,19 +104,20 @@ public class DRAnalysis extends Analysis {
 		}
 
 		for (int j = 0; j < Vars.maxThread; j++) {
-			threads.add(b.getThreadFactory()
-					.makeFVAThread(entQueue,
-							entQueueCopy, drResult));
+			threads.add(b.getThreadFactory().makeFVAThread(entQueue,
+					entQueueCopy, drResult));
 		}
 
-		System.err.println("Progress : ");
+		if (verbose) {
+			System.err.println("Progress : ");
 
-		System.err.print("[");
-		for (int i = 0; i < 50; i++) {
-			System.err.print(" ");
+			System.err.print("[");
+			for (int i = 0; i < 50; i++) {
+				System.err.print(" ");
+			}
+			System.err.print("]\n");
+			System.err.print("[");
 		}
-		System.err.print("]\n");
-		System.err.print("[");
 
 		for (ResolveThread thread : threads) {
 			thread.start();
@@ -128,10 +128,13 @@ public class DRAnalysis extends Analysis {
 			try {
 				thread.join();
 			} catch (InterruptedException e) {
-//				e.printStackTrace();
+				// e.printStackTrace();
 			}
 		}
-		System.err.print("]\n");
+
+		if (verbose) {
+			System.err.print("]\n");
+		}
 
 		// we remove the threads to permit another analysis
 		while (threads.size() > 0) {
@@ -142,9 +145,11 @@ public class DRAnalysis extends Analysis {
 		// to permit other analysis
 		b.getConstraints().removeAll(constraintsToAdd);
 
-		System.err.println("DR over "
-				+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
-				+ Vars.maxThread + " threads");
+		if (verbose) {
+			System.err.println("DR over "
+					+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
+					+ Vars.maxThread + " threads");
+		}
 
 		drResult.clean(minValue);
 

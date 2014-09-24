@@ -1,0 +1,4 @@
+obj : MAX(R_OBJ_EX)
+
+T1	0	1
+T2	0	1

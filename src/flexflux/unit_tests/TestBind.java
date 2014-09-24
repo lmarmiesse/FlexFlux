@@ -163,8 +163,6 @@ public class TestBind {
 		boolean gpr = false;
 		for (Interaction interaction : i.getGPRInteractions()) {
 
-			// System.err.println(((Unique)
-			// interaction.getObject()).getEntity().getId());
 			if (((Unique) interaction.getConsequence()).getEntity().getId()
 					.equals("R_GLCptspp")) {
 				List<Relation> rels = ((And) interaction.getCondition())
@@ -180,7 +178,7 @@ public class TestBind {
 		Sbml2Bionetwork parser = new Sbml2Bionetwork("Data/test.xml", false);
 
 		BioNetwork network = parser.getBioNetwork();
-		bind.setNetwork(network, false);
+		bind.setNetwork(network);
 
 		Assert.assertTrue(bind.getConstraints().size() == 13);
 		Assert.assertTrue(bind.getInteractionNetwork().getNumEntities().size() == 17);
@@ -193,14 +191,8 @@ public class TestBind {
 		bind.prepareSolver();
 		Assert.assertTrue(bind.isMIP());
 
-		for (Constraint c : bind.getConstraints()) {
-			System.out.println(c);
-		}
-
 		double res = bind.FBA(new ArrayList<Constraint>(), true, true).result;
 
-		System.err.println(res);
-		
 		Assert.assertTrue(res == 14.0);
 
 		Assert.assertTrue(Math.abs(bind.getSolvedValue(new BioEntity("d")) - 40.0) < 0.001);
@@ -211,7 +203,7 @@ public class TestBind {
 		Assert.assertTrue(bind.getSolvedValue(new BioEntity("g")) == 58.0);
 
 		Bind bind2 = new CplexBind();
-		bind2.setNetwork(network, false);
+		bind2.setNetwork(network);
 
 		Assert.assertTrue(bind2.getConstraints().size() == 13);
 		Assert.assertTrue(bind2.getInteractionNetwork().getNumEntities().size() == 17);
@@ -222,8 +214,6 @@ public class TestBind {
 		bind2.prepareSolver();
 
 		Assert.assertTrue(bind2.isMIP());
-
-		System.err.println(bind2.FBA(new ArrayList<Constraint>(), true, true));
 
 		Assert.assertTrue(bind2.FBA(new ArrayList<Constraint>(), true, false).result == 14.0);
 

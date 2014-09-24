@@ -17,6 +17,7 @@ import parsebionet.io.Sbml2Bionetwork;
 import flexflux.analyses.result.AnalysisResult;
 import flexflux.analyses.result.FVAResult;
 import flexflux.analyses.result.KOResult;
+import flexflux.analyses.result.PFBAResult;
 import flexflux.analyses.result.conditionComparison.ConditionComparisonResult;
 import flexflux.condition.Condition;
 import flexflux.general.Bind;
@@ -89,10 +90,10 @@ public class ConditionComparisonAnalysis extends Analysis {
 		this.minFlux = minFlux;
 		this.launchGeneAnalysis = !noGeneAnalysis;
 		this.launchReactionAnalysis = !noReactionAnalysis;
-		
+
 		Vars.libertyPercentage = liberty;
 		Vars.decimalPrecision = precision;
-		
+
 		/**
 		 * Reads the conditionFile
 		 */
@@ -175,7 +176,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 		/**
 		 * Loads the metabolic network
 		 */
-		b.setNetwork(this.network, this.extended);
+		b.setNetwork(this.network);
 
 		/**
 		 * Loads the constraints applied on the metabolic network
@@ -203,6 +204,9 @@ public class ConditionComparisonAnalysis extends Analysis {
 			b.loadInteractionsFile(this.interactionFile);
 		}
 
+		/**
+		 * Build objective
+		 */
 		String expr = objectives.get(objName);
 
 		String objString = (String) expr.subSequence(expr.indexOf("(") + 1,
@@ -217,8 +221,6 @@ public class ConditionComparisonAnalysis extends Analysis {
 		}
 
 		obj = b.makeObjectiveFromString(objString, maximize, objName);
-
-		List<Constraint> constraints = new ArrayList<Constraint>();
 
 		if (minimizeFlux == true && this.minFlux == true) {
 			BioEntity fluxSumEnt = b.createFluxesSummation();
@@ -237,6 +239,11 @@ public class ConditionComparisonAnalysis extends Analysis {
 			b.setObjective(obj);
 		}
 
+		/**
+		 * Build list of constraints depending on the condition
+		 */
+
+		List<Constraint> constraints = new ArrayList<Constraint>();
 		for (SimpleConstraint c : condition.constraints) {
 			String id = c.entityId;
 			BioEntity e = null;
@@ -290,60 +297,21 @@ public class ConditionComparisonAnalysis extends Analysis {
 
 				Double res = objValue.result;
 
-				System.err.println(condition.code + "__" + obj.getName()
-						+ " : " + res);
+				if (verbose) {
+					System.err.println(condition.code + "__" + obj.getName()
+							+ " : " + res);
+				}
 
 				result.addFbaResult(obj, condition, objValue.result);
 
 				if (this.launchReactionAnalysis || this.launchGeneAnalysis) {
-					/**
-					 * Computes FVA (we minimize the fluxes)
-					 */
-					// We don't do the analysis if the result equals to 0
-					if (res != 0) {
-						// We reinit the bind
-						// It does not work if don't reinit
-						this.init(objName, condition, true);
-						FVAAnalysis fvaAnalysis = new FVAAnalysis(b, null,
-								new ArrayList<Constraint>());
-						FVAResult resultFva = fvaAnalysis.runAnalysis();
 
-						result.addFvaResult(obj, condition, resultFva);
-					} else {
-						result.addFvaResult(obj, condition, null);
-					}
+					this.init(objName, condition, false);
 
-				}
+					PFBAAnalysis a = new PFBAAnalysis(b, launchGeneAnalysis);
+					PFBAResult resPFBA = a.runAnalysis();
 
-				if (this.launchGeneAnalysis) {
-					/**
-					 * Computes gene KO (without minimizing the fluxes)
-					 */
-
-					if (res != 0) {
-						// We reinit the bind
-						this.init(objName, condition, false);
-						KOAnalysis koAnalysis = new KOAnalysis(b, 1, null);
-						KOResult resultKo = koAnalysis.runAnalysis();
-
-						result.addKoResult(obj, condition, resultKo);
-					} else {
-						result.addKoResult(obj, condition, null);
-					}
-
-					/**
-					 * Computes dead genes and dispensable genes from ko genes
-					 * and FVa
-					 */
-
-					result.addGeneResult(
-							obj,
-							condition,
-							result.koResults.get(condition.code).get(
-									obj.getName()),
-							result.fvaResults.get(condition.code).get(
-									obj.getName()));
-
+					result.addPFBAResult(obj, condition, resPFBA);
 				}
 
 				/**
@@ -434,7 +402,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 					ncol = tab.length;
 
 					/**
-					 * Fills the entity array and adds the entities in the model
+					 * Fills the entity array
 					 */
 					for (int i = 2; i < ncol; i++) {
 						entities.add(tab[i]);

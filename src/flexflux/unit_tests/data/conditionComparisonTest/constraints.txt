@@ -1,4 +1,3 @@
-obj : MAX(R_D_EX)
+obj : MAX(R_OBJ_EX)
 
-R1 0 10
-R2 0 10
+R_A_EX 0 10
