@@ -51,6 +51,8 @@ import parsebionet.biodata.BioEntity;
  */
 public class InteractionNetwork {
 
+	public Boolean verbose = false;
+
 	/**
 	 * List of entities with real values.
 	 */
@@ -95,30 +97,30 @@ public class InteractionNetwork {
 
 	public void addTargetInteractions(BioEntity target, Interaction thenInt,
 			Interaction elseInt) {
-		
-		if (targetToInteractions.containsKey(target)){
-			
-			System.err.println("Error : a variable has two different interactions :");
+
+		if (targetToInteractions.containsKey(target)) {
+
+			System.err
+					.println("Error : a variable has two different interactions :");
 			System.err.println(targetToInteractions.get(target)[0]);
 			System.err.println(thenInt);
-//			GPRInteractions.remove(targetToInteractions.get(target)[0]);
-			
-			
+			// GPRInteractions.remove(targetToInteractions.get(target)[0]);
+
 			System.exit(0);
 		}
-		
+
 		targetToInteractions
 				.put(target, new Interaction[] { thenInt, elseInt });
 	}
 
-	public  Map<BioEntity, Interaction[]> getTargetToInteractions(){
+	public Map<BioEntity, Interaction[]> getTargetToInteractions() {
 		return targetToInteractions;
 	}
-	
-	public void removeAddedInteraction(){
-		this.addedInteractions=new ArrayList<Interaction>();
+
+	public void removeAddedInteraction() {
+		this.addedInteractions = new ArrayList<Interaction>();
 	}
-	
+
 	public void addGPRIntercation(Interaction i) {
 		GPRInteractions.add(i);
 	}
@@ -131,9 +133,11 @@ public class InteractionNetwork {
 		if (numEntities.containsKey(e.getId())
 				|| intEntities.containsKey(e.getId())
 				|| binaryEntities.containsKey(e.getId())) {
-			
-//			System.err.println("Warning: two entites have the same name : "
-//					+ e.getId() + ", second one not added");
+
+			if (verbose) {
+				System.err.println("Warning: two entites have the same name : "
+						+ e.getId() + ", second one not added");
+			}
 
 			return;
 		}
@@ -153,8 +157,11 @@ public class InteractionNetwork {
 		if (numEntities.containsKey(e.getId())
 				|| intEntities.containsKey(e.getId())
 				|| binaryEntities.containsKey(e.getId())) {
-//			System.err.println("Warning: two entites have the same name : "
-//					+ e.getId() + ", second one not added");
+			
+			if(verbose) {
+				System.err.println("Warning: two entites have the same name : "
+						+ e.getId() + ", second one not added");
+			}
 			return;
 		}
 		intEntities.put(e.getId(), e);
@@ -173,8 +180,11 @@ public class InteractionNetwork {
 		if (numEntities.containsKey(e.getId())
 				|| intEntities.containsKey(e.getId())
 				|| binaryEntities.containsKey(e.getId())) {
-//			System.err.println("Warning: two entites have the same name : "
-//					+ e.getId() + ", second one not added");
+			
+			if(verbose) {
+				System.err.println("Warning: two entites have the same name : "
+						+ e.getId() + ", second one not added");
+			}
 			return;
 		}
 		binaryEntities.put(e.getId(), e);
