@@ -33,6 +33,7 @@
  */
 package flexflux.unit_tests;
 
+import static org.junit.Assert.fail;
 import flexflux.analyses.DRAnalysis;
 import flexflux.analyses.FVAAnalysis;
 import flexflux.analyses.KOAnalysis;
@@ -68,13 +69,29 @@ import parsebionet.biodata.BioNetwork;
  */
 public class TestFVA_KO_DR {
 
-	static Bind bind = new GLPKBind();
+	static Bind bind;
 
 	static BioNetwork n;
 	static InteractionNetwork i;
 
 	@BeforeClass
 	public static void init() {
+		
+		String solver = "GLPK";
+		if (System.getProperties().containsKey("solver")) {
+			solver = System.getProperty("solver");
+		}
+		
+		try {
+			if (solver.equals("CPLEX")) {
+				bind = new CplexBind();
+			} else {
+				bind = new GLPKBind();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			fail("Solver error");
+		}
 
 		Vars.maxThread = 1;
 
@@ -93,18 +110,6 @@ public class TestFVA_KO_DR {
 	@Test
 	public void test() {
 
-		go();
-		bind = new GLPKBind();
-
-		bind.loadSbmlNetwork("Data/coli_core.xml", false);
-		n = bind.getBioNetwork();
-		i = bind.getInteractionNetwork();
-
-		bind.loadConditionsFile("Data/condColiTest");
-
-//		 bind.loadInteractionsFile("Data/intColiTest");
-
-		bind.prepareSolver();
 		go();
 
 	}

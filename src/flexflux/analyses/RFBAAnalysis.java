@@ -1,3 +1,4 @@
+package flexflux.analyses;
 /*******************************************************************************
  * Copyright INRA
  * 
@@ -31,13 +32,6 @@
 /**
  * 5 avr. 2013 
  */
-package flexflux.analyses;
-
-import flexflux.analyses.result.RFBAResult;
-import flexflux.general.Bind;
-import flexflux.general.Constraint;
-import flexflux.general.DoubleResult;
-import flexflux.general.Vars;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +42,11 @@ import java.util.Set;
 
 import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
+import flexflux.analyses.result.RFBAResult;
+import flexflux.general.Bind;
+import flexflux.general.Constraint;
+import flexflux.general.DoubleResult;
+import flexflux.general.Vars;
 
 /**
  * 
@@ -104,7 +103,8 @@ public class RFBAAnalysis extends Analysis {
 		double startTime = System.currentTimeMillis();
 
 		Map<BioEntity, Constraint> simpleConstraints = b.getSimpleConstraints();
-		simpleConstraints.putAll(b.getInteractionNetworkSimpleConstraints());
+		simpleConstraints.putAll(b.getInteractionNetwork()
+				.getInitialConstraints());
 		Map<BioChemicalReaction, Map<BioEntity, Double>> exchangeInteractions = b
 				.getExchangeInteractions();
 
@@ -116,62 +116,47 @@ public class RFBAAnalysis extends Analysis {
 
 		RFBAResult rFBAResult = new RFBAResult();
 
+		// ////we set the initial values
+		
+		List<Constraint> initialConstraints = new ArrayList<Constraint>();
+		for (Constraint c : b.getInteractionNetwork().getInitialConstraints().values()){
+			initialConstraints.add(c);
+		}
+
+		b.FBA(initialConstraints, true, false);
+
+		Map<String, Double> valuesMap = new HashMap<String, Double>();
+		valuesMap.put("X", X);
+
+		lastSolve = b.getLastSolve();
+		
+		// we add the results for this iteration
+		for (String s : toPlot) {
+			valuesMap.put(
+					s,
+					lastSolve.get(s));
+		}
+
+		rFBAResult.addValues(0, valuesMap);
+
 		for (int i = 0; i < iterations; i++) {
 
 			// we save the results
-			Map<String, Double> valuesMap = new HashMap<String, Double>();
+			valuesMap = new HashMap<String, Double>();
 			valuesMap.put("X", X);
 
 			List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 
-			if (verbose) {
-				System.err.println("-----");
-				System.err.println("it number " + i);
-			}
+			System.err.println("-----");
+			System.err.println("it number " + i);
 
 			Map<BioEntity, Constraint> networkState = new HashMap<BioEntity, Constraint>();
-			// if (b.isLastSolveEmpty()) {
+
 			networkState = simpleConstraints;
-			// } else {
-			// for (BioEntity ent : b.getInteractionNetwork().getEntities()) {
-			//
-			// Map<BioEntity, Double> constMap = new HashMap<BioEntity,
-			// Double>();
-			//
-			// constMap.put(ent, 1.0);
-			// Constraint c = new Constraint(constMap,
-			// b.getSolvedValue(ent), b.getSolvedValue(ent));
-			//
-			// networkState.put(ent, c);
-			// }
-			//
-			// // for the external metabolites, we put the concentrations that
-			// // have been recalculated
-			// for (BioChemicalReaction reac : exchangeInteractions.keySet()) {
-			//
-			// for (BioEntity metab : exchangeInteractions.get(reac)
-			// .keySet()) {
-			//
-			// if (simpleConstraints.containsKey(metab)) {
-			//
-			// Map<BioEntity, Double> constMap = new HashMap<BioEntity,
-			// Double>();
-			//
-			// constMap.put(metab, 1.0);
-			// Constraint c = new Constraint(constMap,
-			// simpleConstraints.get(metab).getLb(),
-			// simpleConstraints.get(metab).getUb());
-			//
-			// networkState.put(metab, c);
-			// }
-			// }
-			//
-			// }
-			//
-			// }
 
 			Map<Constraint, double[]> nextStepConsMap = b
-					.goToNextInteractionNetworkState(networkState);
+					.getInteractionNetwork().goToNextInteractionNetworkState(
+							networkState);
 
 			for (Constraint c : nextStepConsMap.keySet()) {
 
@@ -194,6 +179,18 @@ public class RFBAAnalysis extends Analysis {
 			// we add the constraints for the current iteration
 			for (Constraint c : timeConstraintMap.get(i)) {
 				// c.setOverWritesBounds(false);
+				System.out.println(c);
+				if (c.getEntities().size()==1){
+					
+					BioEntity ent = null;
+					
+					for (BioEntity e : c.getEntities().keySet()){
+						ent = e;
+					}
+					
+					simpleConstraints.put(ent, c);
+				}
+				
 				constraintsToAdd.add(c);
 
 			}
@@ -265,7 +262,8 @@ public class RFBAAnalysis extends Analysis {
 			double fbaResult = 0;
 			double mu = 0;
 			DoubleResult result;
-
+			
+			
 			try {
 				result = b.FBA(constraintsToAdd, true, false);
 
@@ -297,27 +295,26 @@ public class RFBAAnalysis extends Analysis {
 								.getId()));
 			}
 
-			rFBAResult.addValues(deltaT * i, valuesMap);
+			rFBAResult.addValues(deltaT * (i + 1), valuesMap);
 
 			if (mu == 0) {
 
 				if (result.flag == 0) {
-					if (verbose) {
-						System.err.println(timeToString(i * deltaT) + " X = "
-								+ Vars.round(X) + " no growth");
-					}
+					System.err.println(timeToString(i * deltaT) + " X = "
+							+ Vars.round(X) + " no growth");
 				} else {
 					unfeasibleSteps.add(i);
-					if (verbose) {
-						System.err.println(timeToString(i * deltaT) + " X = "
-								+ Vars.round(X) + " no growth : unfeasible");
-					}
+					System.err.println(timeToString(i * deltaT) + " X = "
+							+ Vars.round(X) + " no growth : unfeasible");
 
 					b.resetLastSolve();
 					continue;
 				}
 
 			}
+
+			// System.err.println("mu = " + mu);
+			// System.err.println(i);
 
 			// we set the new concentrations for the metabolites according to
 			// the uptake
@@ -413,18 +410,14 @@ public class RFBAAnalysis extends Analysis {
 			X *= Math.exp(mu * deltaT);
 
 			if (mu != 0) {
-				if (verbose) {
-					System.err.println(timeToString(i * deltaT) + " X = "
-							+ Vars.round(X));
-				}
+				System.err.println(timeToString(i * deltaT) + " X = "
+						+ Vars.round(X));
 			}
 			// System.out.println("X = " + X);
 
 		}
-		if (verbose) {
-			System.err.println("RFBA over "
-					+ ((System.currentTimeMillis() - startTime) / 1000) + "s");
-		}
+		System.err.println("RFBA over "
+				+ ((System.currentTimeMillis() - startTime) / 1000) + "s");
 
 		if (!unfeasibleSteps.isEmpty()) {
 

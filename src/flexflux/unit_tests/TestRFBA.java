@@ -33,6 +33,7 @@
  */
 package flexflux.unit_tests;
 
+import static org.junit.Assert.fail;
 import flexflux.analyses.Analysis;
 import flexflux.analyses.FBAAnalysis;
 import flexflux.analyses.RFBAAnalysis;
@@ -64,13 +65,32 @@ import parsebionet.biodata.BioNetwork;
  * 
  */
 public class TestRFBA {
-	static Bind bind = new GLPKBind();
+	
+	
+	
+	static Bind bind;
 
 	static BioNetwork n;
 	static InteractionNetwork i;
 
 	@BeforeClass
 	public static void init() {
+		
+		String solver = "GLPK";
+		if (System.getProperties().containsKey("solver")) {
+			solver = System.getProperty("solver");
+		}
+		
+		try {
+			if (solver.equals("CPLEX")) {
+				bind = new CplexBind();
+			} else {
+				bind = new GLPKBind();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			fail("Solver error");
+		}
 
 		Vars.maxThread = 1;
 
@@ -89,22 +109,8 @@ public class TestRFBA {
 	@Test
 	public void test() {
 		
-
-		
 		go();
-		bind = new CplexBind();
-
-		bind.loadSbmlNetwork("Data/coli.xml", false);
-		n = bind.getBioNetwork();
-		i = bind.getInteractionNetwork();
-
-		bind.loadConditionsFile("Data/condTestRfba");
-
-		bind.loadInteractionsFile("Data/intTestRfba");
-
-		bind.prepareSolver();
-		go();
-
+	
 	}
 
 	public void go() {

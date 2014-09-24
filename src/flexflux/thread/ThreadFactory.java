@@ -1,3 +1,4 @@
+package flexflux.thread;
 /*******************************************************************************
  * Copyright INRA
  * 
@@ -31,15 +32,7 @@
 /**
  * 8 mars 2013 
  */
-package flexflux.thread;
 
-import flexflux.analyses.result.FVAResult;
-import flexflux.analyses.result.KOResult;
-import flexflux.analyses.result.ReacAnalysisResult;
-import flexflux.analyses.result.TwoReacsAnalysisResult;
-import flexflux.general.Constraint;
-import flexflux.general.Objective;
-import flexflux.interaction.InteractionNetwork;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +42,13 @@ import java.util.Set;
 
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
+import flexflux.analyses.result.FVAResult;
+import flexflux.analyses.result.KOResult;
+import flexflux.analyses.result.ReacAnalysisResult;
+import flexflux.analyses.result.TwoReacsAnalysisResult;
+import flexflux.general.Constraint;
+import flexflux.general.Objective;
+import flexflux.interaction.InteractionNetwork;
 
 /**
  * 
@@ -80,13 +80,10 @@ public abstract class ThreadFactory {
 	 */
 	protected BioNetwork bioNet;
 	
-	protected Map<BioEntity, Constraint> interactionNetworkSimpleConstraints = new HashMap<BioEntity, Constraint>();
 
 	public ThreadFactory(List<Constraint> constraints,
 			Map<BioEntity, Constraint> simpleConstraints,
-			InteractionNetwork intNet,
-			Map<BioEntity, Constraint> interactionNetworkSimpleConstraints) {
-		this.interactionNetworkSimpleConstraints=interactionNetworkSimpleConstraints;
+			InteractionNetwork intNet) {
 		this.constraints = constraints;
 		this.simpleConstraints = simpleConstraints;
 		this.intNet = intNet;

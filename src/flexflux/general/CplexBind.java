@@ -117,7 +117,7 @@ public class CplexBind extends Bind {
 		this.operationFactory = new OperationFactory();
 		this.relationFactory = new RelationFactory();
 		this.threadFactory = new ThreadFactoryCPLEX(constraints,
-				simpleConstraints, intNet, interactionNetworkSimpleConstraints);
+				simpleConstraints, intNet);
 	}
 
 	public CplexBind() {
@@ -129,10 +129,8 @@ public class CplexBind extends Bind {
 
 	public CplexBind(List<Constraint> constraints,
 			Map<BioEntity, Constraint> simpleConstraints,
-			InteractionNetwork intNet, BioNetwork bioNet,
-			Map<BioEntity, Constraint> interactionNetworkSimpleConstraints) {
-		super(constraints, simpleConstraints, intNet, bioNet,
-				interactionNetworkSimpleConstraints);
+			InteractionNetwork intNet, BioNetwork bioNet) {
+		super(constraints, simpleConstraints, intNet, bioNet);
 		init();
 	}
 
