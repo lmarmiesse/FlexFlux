@@ -6,3 +6,6 @@
 .classpath
 .project
 /bin
+/.fatjar
+/.gitignore
+/.Rhistory
