@@ -35,6 +35,9 @@ public class FlexfluxConditionComparison {
 
 	@Option(name = "-mdg", usage = "[OPTIONAL] Gene metadata file used for heatmap analysis", metaVar = "File", required = false)
 	public String metaGeneDataFile = "";
+	
+	@Option(name = "-mdreg", usage = "[OPTIONAL] Regulator metadata file used for heatmap analysis", metaVar = "File", required = false)
+	public String metaRegulatorDataFile = "";
 
 	@Option(name = "-mdSep", usage = "[Default=,] Separator for the columns in the metaData file", metaVar = "String", required = false)
 	public String mdSep = ",";
@@ -87,6 +90,10 @@ public class FlexfluxConditionComparison {
 	@Option(name = "-noGeneAnalysis", usage = "Don't perform gene essentiality analysis")
 	public Boolean noGeneAnalysis = false;
 
+	@Option(name = "-noRegulatorAnalysis", usage = "Don't perform regulator essentiality analysis")
+	public Boolean noRegulatorAnalysis = false;
+
+	
 	@Option(name = "-h", usage = "Prints this help")
 	public Boolean h = false;
 
@@ -178,9 +185,9 @@ public class FlexfluxConditionComparison {
 		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
 				f.sbmlFile, f.intFile, f.conditionFile, f.constraintFile,
 				f.objectiveFile, c, f.extended, f.solver,
-				f.metaReactionDataFile, f.metaGeneDataFile, f.mdSep,
+				f.metaReactionDataFile, f.metaGeneDataFile, f.metaRegulatorDataFile, f.mdSep,
 				f.inchlibPath, f.minFlux, f.noReactionAnalysis,
-				f.noGeneAnalysis, f.liberty, f.precision);
+				f.noGeneAnalysis, f.noRegulatorAnalysis, f.liberty, f.precision);
 
 		AnalysisResult r = a.runAnalysis();
 

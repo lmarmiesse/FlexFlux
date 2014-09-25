@@ -41,6 +41,9 @@ package flexflux.analyses.result;
  * 
  */
 public abstract class AnalysisResult {
+	
+	
+	public boolean verbose = false;
 
 	/**
 	 * Writes the results to a file.

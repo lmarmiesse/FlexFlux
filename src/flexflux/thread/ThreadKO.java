@@ -121,28 +121,10 @@ public class ThreadKO extends ResolveThread {
 				bind.checkInteractionNetwork = false;
 			}
 
-//			Interaction[] interactions = bind.getInteractionNetwork()
-//					.getTargetToInteractions().get(entity);
-//
-//			if (interactions != null) {
-//				bind.getInteractionNetwork().getAddedInteractions()
-//						.remove(interactions[0]);
-//				bind.getInteractionNetwork().getAddedInteractions()
-//						.remove(interactions[1]);
-//			}
-			
-			
 
 			DoubleResult value = bind.FBA(constraintsToAdd, false, true);
 
 			result.addLine(entity, value.result);
-
-//			if (interactions != null) {
-//				bind.getInteractionNetwork().getAddedInteractions()
-//						.add(interactions[0]);
-//				bind.getInteractionNetwork().getAddedInteractions()
-//						.add(interactions[1]);
-//			}
 
 			bind.checkInteractionNetwork = true;
 

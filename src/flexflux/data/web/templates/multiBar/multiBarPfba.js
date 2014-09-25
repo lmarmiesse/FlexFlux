@@ -4,9 +4,13 @@
 // var data = [{key:"essential", values:[{x:"c1", y:12}, {x:"c2", y:2}]}, {key:"dispensable", values:[{x:"c1", y:14}, {x:"c2", y:4}]}];
 
 
-var essential = [];
-var dispensable = [];
-var dead = [];
+var essential=[];
+var zeroFlux=[];
+var mle=[];
+var ele=[];
+var conc=[];
+var ind=[];
+var opt= [];
 
 data = d3.csv.parse(str);
 
@@ -20,18 +24,38 @@ data.forEach(function(d) {
   tabEssential['x'] = name
   tabEssential['y'] = +d.essential;
   
-  var tabDispensable = {};
-  tabDispensable['x'] = name
-  tabDispensable['y'] = +d.dispensable;
+  var tabZeroFlux = {};
+  tabZeroFlux['x'] = name
+  tabZeroFlux['y'] = +d.zeroFlux;
   
-  var tabDead = {};
-  tabDead['x'] = name
-  tabDead['y'] = +d.dead;
+  var tabMle = {};
+  tabMle['x'] = name
+  tabMle['y'] = +d.mle;
+  
+  var tabEle = {};
+  tabEle['x'] = name
+  tabEle['y'] = +d.ele;
+  
+  var tabConc = {};
+  tabConc['x'] = name
+  tabConc['y'] = +d.conc;
+  
+  var tabInd = {};
+  tabInd['x'] = name
+  tabInd['y'] = +d.ind;
+  
+  var tabOpt = {};
+  tabOpt['x'] = name
+  tabOpt['y'] = +d.opt;
   
   
   essential.push(tabEssential);
-  dispensable.push(tabDispensable);
-  dead.push(tabDead);
+  zeroFlux.push(tabZeroFlux);
+  mle.push(tabMle);
+  ele.push(tabEle);
+  conc.push(tabConc);
+  ind.push(tabInd);
+  opt.push(tabOpt);
   
 });
 
@@ -39,10 +63,15 @@ console.log("essential");
 console.log(essential);
 
 
-var geneTable = [{key:"essential", values:essential}, {key:"dispensable", values:dispensable}, {key:"dead", values:dead}];
+var geneTable = [{key:"essential", values:essential}, 
+                 {key:"zeroFlux", values:zeroFlux}, 
+                 {key:"mle", values:mle},
+                 {key:"ele", values:ele},
+                 {key:"conc", values:conc},
+                 {key:"ind", values:ind},
+                 {key:"opt", values:opt}
+                 ];
 
-
-console.log(geneTable);
 
 nv.addGraph(function() {
     var chart = nv.models.multiBarChart()

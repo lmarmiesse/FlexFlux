@@ -202,15 +202,67 @@ public class KOResult extends AnalysisResult {
 	 */
 	public HashMap<String, BioEntity> getEssentialEntities() {
 		
-		HashMap<String, BioEntity> essentialGenes = new HashMap<String, BioEntity>();
+		HashMap<String, BioEntity> essentialEntities = new HashMap<String, BioEntity>();
 		
 		for (BioEntity entity : map.keySet()) {
 			
 			Double value = Vars.round(map.get(entity));
-			if(value == 0.0)
-				essentialGenes.put(entity.getId(), entity);
+			if(value  == 0)
+				essentialEntities.put(entity.getId(), entity);
 		}
-		return essentialGenes;
+		return essentialEntities;
+		
+	}
+	
+	/**
+	 * 
+	 * @return a hashMap of the optima essential genes 
+	 * a gene is optima essential if its ko only decreases the objective optimal value
+	 */
+	public HashMap<String, BioEntity> getOptimaEntities(Double optimalValue) {
+		
+		HashMap<String, BioEntity> optimaEntities = new HashMap<String, BioEntity>();
+		
+		for (BioEntity entity : map.keySet()) {
+			
+			Double value = Vars.round(map.get(entity));
+			
+			optimalValue = Vars.round(optimalValue);
+			
+			Double diff = Math.abs(optimalValue) - Math.abs(value);
+			
+			if(diff > 0 && value != 0) {
+				optimaEntities.put(entity.getId(), entity);
+			}
+			
+				
+		}
+		return optimaEntities;
+		
+	}
+	
+	/**
+	 * 
+	 * @return a hashMap of the neutral genes 
+	 * a gene is neutral if its ko doesn't decrease the objective optimal value
+	 */
+	public HashMap<String, BioEntity> getNeutralEntities(Double optimalValue) {
+		
+		HashMap<String, BioEntity> neutralEntities = new HashMap<String, BioEntity>();
+		
+		for (BioEntity entity : map.keySet()) {
+			
+			Double value = Vars.round(map.get(entity));
+			
+			optimalValue = Vars.round(optimalValue);
+			
+			Double diff = Math.abs(optimalValue) - Math.abs(value);
+			
+			if(diff == 0) {
+				neutralEntities.put(entity.getId(), entity);
+			}
+		}
+		return neutralEntities;
 		
 	}
 	

@@ -288,10 +288,10 @@ public class InteractionNetwork {
 					.getUb()) {
 
 				if (targetToInteractions.containsKey(b)) {
-					for (Interaction i : targetToInteractions.get(b)
-							.getConditionalInteractions()) {
+//					for (Interaction i : targetToInteractions.get(b)
+//							.getConditionalInteractions()) {
 						entitiesToCheck.remove(b);
-					}
+//					}
 				}
 			}
 		}
@@ -478,7 +478,7 @@ public class InteractionNetwork {
 				}
 			}
 
-			// if it was not set, we put it's default value
+			// if it was not set, we put its default value
 			for (BioEntity ent : nextStepSimpleConstraints.keySet()) {
 
 				if (!setEntities.contains(ent)) {

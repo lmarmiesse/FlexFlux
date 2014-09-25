@@ -335,6 +335,9 @@ public abstract class Bind {
 					List<Constraint> intNetSteadyStateConstraints = new ArrayList<Constraint>();
 					for (Constraint c : intNet
 							.findSteadyState(simpleConstraints)) {
+						if(verbose) {
+						System.err.println(c);
+						}
 						// c.setOverWritesBounds(false);
 						intNetSteadyStateConstraints.add(c);
 					}
