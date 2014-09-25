@@ -34,9 +34,11 @@ import javax.swing.table.TableRowSorter;
 import org.jfree.ui.RefineryUtilities;
 
 import parsebionet.biodata.BioChemicalReaction;
+import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.biodata.BioPathway;
 import flexflux.analyses.result.AnalysisResult;
+import flexflux.analyses.result.KOResult;
 import flexflux.analyses.result.MyTableModel;
 import flexflux.analyses.result.PFBAResult;
 import flexflux.condition.Condition;
@@ -45,15 +47,17 @@ import flexflux.io.Utils;
 
 public class ConditionComparisonResult extends AnalysisResult {
 
-	HashMap<String, HashMap<String, PFBAResult>> results = null;
+	HashMap<String, HashMap<String, PFBAResult>> pfbaAllResults = null;
+	HashMap<String, HashMap<String, KOResult>> koAllResults = null;
 
-	public ConditionComparisonFbaResultSet fbaResults = null;
+	public ConditionComparisonFbaResultSet fbaAllResults = null;
 
 	ArrayList<Condition> conditions = null;
 	HashMap<String, String> objectives = null;
 
 	public HashMap<String, HashMap<String, String>> reactionMetaData = null;
 	public HashMap<String, HashMap<String, String>> geneMetaData = null;
+	public HashMap<String, HashMap<String, String>> regulatorMetaData = null;
 
 	public Set<String> interactionTargets;
 
@@ -80,12 +84,16 @@ public class ConditionComparisonResult extends AnalysisResult {
 	private String reactionPath;
 	private String jsPath;
 	private String genePath;
+	private String regulatorPath;
 	private String pathwayPath;
 
 	private String inchlibPath;
 
 	public Boolean launchReactionAnalysis;
 	public Boolean launchGeneAnalysis;
+	public Boolean launchRegulatorAnalysis;
+
+	public HashMap<String, BioEntity> regulators;
 
 	/**
 	 * Constructor
@@ -98,11 +106,12 @@ public class ConditionComparisonResult extends AnalysisResult {
 	public ConditionComparisonResult(ArrayList<Condition> conditions,
 			HashMap<String, String> objectives, BioNetwork network,
 			String inchlibPath, Boolean launchReactionAnalysis,
-			Boolean launchGeneAnalysis) {
+			Boolean launchGeneAnalysis, Boolean launchRegulatorAnalysis) {
 
-		results = new HashMap<String, HashMap<String, PFBAResult>>();
+		pfbaAllResults = new HashMap<String, HashMap<String, PFBAResult>>();
+		koAllResults = new HashMap<String, HashMap<String, KOResult>>();
 
-		fbaResults = new ConditionComparisonFbaResultSet();
+		fbaAllResults = new ConditionComparisonFbaResultSet();
 
 		this.inchlibPath = inchlibPath;
 
@@ -116,6 +125,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 		this.launchGeneAnalysis = launchGeneAnalysis;
 		this.launchReactionAnalysis = launchReactionAnalysis;
+		this.launchRegulatorAnalysis = launchRegulatorAnalysis;
 
 	}
 
@@ -132,11 +142,29 @@ public class ConditionComparisonResult extends AnalysisResult {
 		String conditionId = condition.code;
 		String objId = o.getName();
 
-		if (!results.containsKey(conditionId)) {
-			results.put(conditionId, new HashMap<String, PFBAResult>());
+		if (!pfbaAllResults.containsKey(conditionId)) {
+			pfbaAllResults.put(conditionId, new HashMap<String, PFBAResult>());
 		}
 
-		results.get(conditionId).put(objId, res);
+		pfbaAllResults.get(conditionId).put(objId, res);
+	}
+
+	/**
+	 * Adds a ko result
+	 * 
+	 * @param o
+	 * @param condition
+	 * @param res
+	 */
+	public void addKoResult(Objective o, Condition condition, KOResult res) {
+		String conditionId = condition.code;
+		String objId = o.getName();
+
+		if (!koAllResults.containsKey(conditionId)) {
+			koAllResults.put(conditionId, new HashMap<String, KOResult>());
+		}
+
+		koAllResults.get(conditionId).put(objId, res);
 	}
 
 	/**
@@ -151,7 +179,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		ConditionComparisonFbaResult result = new ConditionComparisonFbaResult(
 				obj, condition, value);
 
-		fbaResults.add(result);
+		fbaAllResults.add(result);
 
 		return;
 	}
@@ -176,7 +204,8 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 		this.createWebDirectories(path);
 
-		if (launchGeneAnalysis || launchReactionAnalysis) {
+		if (launchGeneAnalysis || launchReactionAnalysis
+				|| launchRegulatorAnalysis) {
 
 			// Copy nvd3 required files
 			// Copy required files
@@ -240,22 +269,46 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 		}
 
+		if (launchRegulatorAnalysis) {
+
+			this.regulatorPath = webPath + "/" + "regulators";
+			File file = new File(regulatorPath);
+
+			if (!file.exists()) {
+				try {
+					file.mkdir();
+				} catch (SecurityException se) {
+					se.printStackTrace();
+					System.err.println("Security Exception during creation of "
+							+ regulatorPath);
+				}
+			}
+
+		}
+
 		writeFbaResultsToFile();
 		writeFbaResultHeatMap();
 
 		if (launchGeneAnalysis) {
-			writeSummaryFile(false);
-			writeClassificationToFiles(false);
-			writeBarplot(false);
-			writeFilesForHeatMap(false);
+			writePfbaSummaryFile(false);
+			writePfbaClassificationToFiles(false);
+			writePfbaBarplot(false);
+			writeFilesForPfbaHeatMap(false);
 		}
 
 		if (launchReactionAnalysis) {
-			writeClassificationToFiles(true);
-			writeSummaryFile(true);
-			writeBarplot(true);
-			writeFilesForHeatMap(true);
+			writePfbaClassificationToFiles(true);
+			writePfbaSummaryFile(true);
+			writePfbaBarplot(true);
+			writeFilesForPfbaHeatMap(true);
 			writePathwayHeatMap();
+		}
+
+		if (launchRegulatorAnalysis) {
+			writeKoAnalysisToFiles();
+			writeKoSummaryFile();
+			writeKoAnalysisBarplot();
+			writeFilesForKoHeatMap();
 		}
 
 		this.writeFbaResultHeatMap();
@@ -292,7 +345,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 			for (Condition c : conditions) {
 				out.print(c.code);
-				HashMap<String, ConditionComparisonFbaResult> results = fbaResults
+				HashMap<String, ConditionComparisonFbaResult> results = fbaAllResults
 						.get(c.code);
 
 				for (String objName : objectiveNames) {
@@ -320,7 +373,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 *            : if true print the reaction classification, if false prints
 	 *            the gene classification
 	 */
-	public void writeClassificationToFiles(Boolean isReaction) {
+	public void writePfbaClassificationToFiles(Boolean isReaction) {
 
 		String objectName = "Reactions";
 		if (isReaction == false) {
@@ -386,7 +439,8 @@ public class ConditionComparisonResult extends AnalysisResult {
 					out.print(c.code);
 				}
 
-				HashMap<String, PFBAResult> pfbaResults = results.get(c.code);
+				HashMap<String, PFBAResult> pfbaResults = pfbaAllResults
+						.get(c.code);
 
 				for (String objName : objectiveNames) {
 
@@ -396,50 +450,53 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 					PFBAResult result = pfbaResults.get(objName);
 
-					ArrayList<String> essentialIds = new ArrayList<String>(
-							result.get("essential" + objectName).keySet());
-					Collections.sort(essentialIds);
-					classification.put("ess", essentialIds);
+					if (result != null) {
 
-					ArrayList<String> zeroFluxIds = new ArrayList<String>(
-							result.get("zeroFlux" + objectName).keySet());
-					Collections.sort(zeroFluxIds);
-					classification.put("zf", zeroFluxIds);
+						ArrayList<String> essentialIds = new ArrayList<String>(
+								result.get("essential" + objectName).keySet());
+						Collections.sort(essentialIds);
+						classification.put("ess", essentialIds);
 
-					ArrayList<String> mleIds = new ArrayList<String>(result
-							.get("mle" + objectName).keySet());
-					Collections.sort(mleIds);
-					classification.put("mle", mleIds);
+						ArrayList<String> zeroFluxIds = new ArrayList<String>(
+								result.get("zeroFlux" + objectName).keySet());
+						Collections.sort(zeroFluxIds);
+						classification.put("zf", zeroFluxIds);
 
-					ArrayList<String> concurrentIds = new ArrayList<String>(
-							result.get("concurrent" + objectName).keySet());
-					Collections.sort(concurrentIds);
-					classification.put("conc", concurrentIds);
+						ArrayList<String> mleIds = new ArrayList<String>(result
+								.get("mle" + objectName).keySet());
+						Collections.sort(mleIds);
+						classification.put("mle", mleIds);
 
-					ArrayList<String> eleIds = new ArrayList<String>(result
-							.get("ele" + objectName).keySet());
-					Collections.sort(eleIds);
-					classification.put("ele", eleIds);
+						ArrayList<String> concurrentIds = new ArrayList<String>(
+								result.get("concurrent" + objectName).keySet());
+						Collections.sort(concurrentIds);
+						classification.put("conc", concurrentIds);
 
-					ArrayList<String> objectiveIndependentIds = new ArrayList<String>(
-							result.get("objectiveIndependent" + objectName)
-									.keySet());
-					Collections.sort(objectiveIndependentIds);
-					classification.put("ind", objectiveIndependentIds);
+						ArrayList<String> eleIds = new ArrayList<String>(result
+								.get("ele" + objectName).keySet());
+						Collections.sort(eleIds);
+						classification.put("ele", eleIds);
 
-					ArrayList<String> optimaIds = new ArrayList<String>(result
-							.get("optima" + objectName).keySet());
-					Collections.sort(optimaIds);
-					classification.put("opt", optimaIds);
+						ArrayList<String> objectiveIndependentIds = new ArrayList<String>(
+								result.get("objectiveIndependent" + objectName)
+										.keySet());
+						Collections.sort(objectiveIndependentIds);
+						classification.put("ind", objectiveIndependentIds);
 
-					for (String key : writers.keySet()) {
-						PrintWriter out = writers.get(key);
-						ArrayList<String> ids = classification.get(key);
-						for (int i = 0; i < ids.size(); i++) {
-							if (i > 0) {
-								out.write(",");
+						ArrayList<String> optimaIds = new ArrayList<String>(
+								result.get("optima" + objectName).keySet());
+						Collections.sort(optimaIds);
+						classification.put("opt", optimaIds);
+
+						for (String key : writers.keySet()) {
+							PrintWriter out = writers.get(key);
+							ArrayList<String> ids = classification.get(key);
+							for (int i = 0; i < ids.size(); i++) {
+								if (i > 0) {
+									out.write(",");
+								}
+								out.write(ids.get(i));
 							}
-							out.write(ids.get(i));
 						}
 					}
 				}
@@ -464,23 +521,165 @@ public class ConditionComparisonResult extends AnalysisResult {
 	}
 
 	/**
+	 * 
+	 */
+	public void writeKoAnalysisToFiles() {
+
+		if (verbose) {
+			System.err
+					.println("\n***********\nwriteKoAnalysisToFiles\n************");
+		}
+
+		String path = this.directoryPath;
+
+		PrintWriter outEssential = null;
+		PrintWriter outOptimaEssential = null;
+		PrintWriter outNeutral = null;
+
+		HashMap<String, PrintWriter> writers = new HashMap<String, PrintWriter>();
+
+		HashMap<String, ArrayList<String>> classification = new HashMap<String, ArrayList<String>>();
+
+		ArrayList<String> objectiveNames = new ArrayList<String>(
+				objectives.keySet());
+
+		try {
+			outEssential = new PrintWriter(new File(path
+					+ "/essentialRegulators.tsv"));
+			outOptimaEssential = new PrintWriter(new File(path
+					+ "/optimaRegulators.tsv"));
+			outNeutral = new PrintWriter(new File(path
+					+ "/neutralRegulators.tsv"));
+
+			writers.put("ess", outEssential);
+			writers.put("opt", outOptimaEssential);
+			writers.put("neu", outNeutral);
+
+			// Prints the headers
+			for (PrintWriter out : writers.values()) {
+				out.print("ConditionCode");
+				for (String objName : objectiveNames) {
+					out.print("\t" + objName);
+				}
+				out.print("\n");
+			}
+
+			// prints the lines corresponding to the conditions. Each cell
+			// corresponds to a fba result given a condition
+			// and an objective
+
+			for (Condition c : conditions) {
+				for (PrintWriter out : writers.values()) {
+					out.print(c.code);
+				}
+
+				if (verbose) {
+					System.err.println("Condition : " + c.code);
+				}
+
+				HashMap<String, KOResult> koResults = koAllResults.get(c.code);
+				HashMap<String, ConditionComparisonFbaResult> fbaResults = fbaAllResults
+						.get(c.code);
+
+				for (String objName : objectiveNames) {
+
+					if (verbose) {
+						System.err.println("Obj : " + objName);
+					}
+
+					for (PrintWriter out : writers.values()) {
+						out.print("\t");
+					}
+
+					KOResult result = koResults.get(objName);
+
+					if (result != null) {
+
+						ConditionComparisonFbaResult fbaResult = fbaResults
+								.get(objName);
+						Double optValue = fbaResult.value;
+
+						if (verbose) {
+							System.err.println("Opt Value : " + optValue);
+						}
+
+						ArrayList<String> essentialIds = new ArrayList<String>(
+								result.getEssentialEntities().keySet());
+						Collections.sort(essentialIds);
+						classification.put("ess", essentialIds);
+
+						if (verbose) {
+							System.err.println("Essential :" + essentialIds);
+						}
+
+						ArrayList<String> optimaEssentialIds = new ArrayList<String>(
+								result.getOptimaEntities(optValue).keySet());
+						Collections.sort(optimaEssentialIds);
+						classification.put("opt", optimaEssentialIds);
+
+						if (verbose) {
+							System.err.println("Optima :" + optimaEssentialIds);
+						}
+
+						ArrayList<String> neutralIds = new ArrayList<String>(
+								result.getNeutralEntities(optValue).keySet());
+						Collections.sort(neutralIds);
+						classification.put("neu", neutralIds);
+
+						if (verbose) {
+							System.err.println("Neutral :" + neutralIds);
+						}
+
+						for (String key : writers.keySet()) {
+							PrintWriter out = writers.get(key);
+							ArrayList<String> ids = classification.get(key);
+							for (int i = 0; i < ids.size(); i++) {
+								if (i > 0) {
+									out.write(",");
+								}
+								out.write(ids.get(i));
+							}
+						}
+					}
+				}
+
+				for (PrintWriter out : writers.values()) {
+					out.print("\n");
+				}
+			}
+		} catch (IOException e) {
+			System.err
+					.println("Error while writing the regulation classification results");
+			e.printStackTrace();
+		}
+
+		finally {
+			for (PrintWriter out : writers.values()) {
+				if (out != null) {
+					out.close();
+				}
+			}
+		}
+	}
+
+	/**
 	 * Write a tabulated file with the number of reactions by type
 	 */
 	public void writeFbaResultHeatMap() {
 
-		try {
-			Utils.copyProjectResource(
-					"flexflux/data/web/templates/heatmap/heatmap_independentColumns.html",
-					summaryPath, "fba_results.html");
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println("Error while copying fba_results.html");
-			return;
-		}
-
-		// copy html template
-		// Build inchlib cmd
 		if (inchlibPath != "") {
+			try {
+				Utils.copyProjectResource(
+						"flexflux/data/web/templates/heatmap/heatmap_independentColumns.html",
+						summaryPath, "fba_results.html");
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.err.println("Error while copying fba_results.html");
+				return;
+			}
+
+			// copy html template
+			// Build inchlib cmd
 			if (inchlibPath.contains(" ") || !inchlibPath.contains("inchlib")
 					|| !inchlibPath.endsWith(".py")) {
 				System.err.println("Inchlib command not valid");
@@ -516,7 +715,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 * Write a tabulated file with the number of genes by type
 	 */
 
-	public void writeSummaryFile(Boolean isReaction) {
+	public void writePfbaSummaryFile(Boolean isReaction) {
 		String objectName = "Reactions";
 		if (isReaction == false) {
 			objectName = "Genes";
@@ -530,27 +729,40 @@ public class ConditionComparisonResult extends AnalysisResult {
 				objectives.keySet());
 
 		try {
-			out = new PrintWriter(new File(path + "/summary" + objectName));
+			out = new PrintWriter(new File(path + "/summary" + objectName
+					+ ".txt"));
 
 			out.write("name,essential,zeroFlux,mle,ele,conc,ind,opt\n");
 
 			for (Condition c : conditions) {
-				HashMap<String, PFBAResult> pfbaResults = results.get(c.code);
+				HashMap<String, PFBAResult> pfbaResults = pfbaAllResults
+						.get(c.code);
 
 				for (String objName : objectiveNames) {
 
 					PFBAResult result = pfbaResults.get(objName);
 
-					int nbEssential = result.get("essential" + objectName)
-							.size();
-					int nbZeroFlux = result.get("zeroFlux" + objectName).size();
-					int nbMle = result.get("mle" + objectName).size();
-					int nbEle = result.get("ele" + objectName).size();
-					int nbConc = result.get("concurrent" + objectName).size();
-					int nbInd = result.get("objectiveIndependent" + objectName)
-							.size();
-					int nbOpt = result.get("optima" + objectName).size();
+					int nbEssential = 0;
+					int nbZeroFlux = 0;
+					int nbMle = 0;
+					int nbEle = 0;
+					int nbConc = 0;
+					int nbInd = 0;
+					int nbOpt = 0;
 
+					if (result != null) {
+
+						nbEssential = result.get("essential" + objectName)
+								.size();
+						nbZeroFlux = result.get("zeroFlux" + objectName).size();
+						nbMle = result.get("mle" + objectName).size();
+						nbEle = result.get("ele" + objectName).size();
+						nbConc = result.get("concurrent" + objectName).size();
+						nbInd = result.get("objectiveIndependent" + objectName)
+								.size();
+						nbOpt = result.get("optima" + objectName).size();
+
+					}
 					out.write(c.code + "__" + objName + "," + nbEssential + ","
 							+ nbZeroFlux + "," + nbMle + "," + nbEle + ","
 							+ nbConc + "," + nbInd + "," + nbOpt + "\n");
@@ -573,11 +785,76 @@ public class ConditionComparisonResult extends AnalysisResult {
 	}
 
 	/**
+	 * Write a tabulated file with the number of regulators by type
+	 */
+
+	public void writeKoSummaryFile() {
+
+		String path = this.directoryPath;
+
+		PrintWriter out = null;
+
+		ArrayList<String> objectiveNames = new ArrayList<String>(
+				objectives.keySet());
+
+		try {
+			out = new PrintWriter(new File(path + "/summaryRegulators.txt"));
+
+			out.write("name,essential,opt,neu\n");
+
+			for (Condition c : conditions) {
+				HashMap<String, KOResult> koResults = koAllResults.get(c.code);
+				HashMap<String, ConditionComparisonFbaResult> fbaResults = fbaAllResults
+						.get(c.code);
+
+				for (String objName : objectiveNames) {
+
+					KOResult result = koResults.get(objName);
+
+					int nbEssential = 0;
+					int nbOptimal = 0;
+					int nbNeutral = 0;
+
+					if (result != null) {
+
+						ConditionComparisonFbaResult fbaResult = fbaResults
+								.get(objName);
+						Double optimalValue = fbaResult.value;
+
+						nbEssential = result.getEssentialEntities().size();
+						nbOptimal = result.getOptimaEntities(optimalValue)
+								.size();
+						nbNeutral = result.getNeutralEntities(optimalValue)
+								.size();
+					}
+
+					out.write(c.code + "__" + objName + "," + nbEssential + ","
+							+ nbOptimal + "," + nbNeutral + "\n");
+
+				}
+
+			}
+
+		} catch (IOException e) {
+			System.err
+					.println("Error while writing the regulator summary results");
+			e.printStackTrace();
+		}
+
+		finally {
+			if (out != null) {
+				out.close();
+			}
+		}
+
+	}
+
+	/**
 	 * Create web architecture to display barplots with the D3 library
 	 * 
 	 * @throws IOException
 	 */
-	public void writeBarplot(Boolean isReaction) {
+	public void writePfbaBarplot(Boolean isReaction) {
 
 		String outPath = genePath;
 
@@ -594,7 +871,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 					"flexflux/data/web/templates/multiBar/multiBar.html",
 					outPath, "summary.html");
 			Utils.copyProjectResource(
-					"flexflux/data/web/templates/multiBar/multiBar.js",
+					"flexflux/data/web/templates/multiBar/multiBarPfba.js",
 					outPath, "multiBar.js");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -612,21 +889,34 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 			for (Condition c : conditions) {
 
-				HashMap<String, PFBAResult> pfbaResults = results.get(c.code);
+				HashMap<String, PFBAResult> pfbaResults = pfbaAllResults
+						.get(c.code);
 
 				for (String objName : objectiveNames) {
 
 					PFBAResult result = pfbaResults.get(objName);
 
-					int nbEssential = result.get("essential" + objectName)
-							.size();
-					int nbZeroFlux = result.get("zeroFlux" + objectName).size();
-					int nbMle = result.get("mle" + objectName).size();
-					int nbEle = result.get("ele" + objectName).size();
-					int nbConc = result.get("concurrent" + objectName).size();
-					int nbInd = result.get("objectiveIndependent" + objectName)
-							.size();
-					int nbOpt = result.get("optima" + objectName).size();
+					int nbEssential = 0;
+					int nbZeroFlux = 0;
+					int nbMle = 0;
+					int nbEle = 0;
+					int nbConc = 0;
+					int nbInd = 0;
+					int nbOpt = 0;
+
+					if (result != null) {
+
+						nbEssential = result.get("essential" + objectName)
+								.size();
+						nbZeroFlux = result.get("zeroFlux" + objectName).size();
+						nbMle = result.get("mle" + objectName).size();
+						nbEle = result.get("ele" + objectName).size();
+						nbConc = result.get("concurrent" + objectName).size();
+						nbInd = result.get("objectiveIndependent" + objectName)
+								.size();
+						nbOpt = result.get("optima" + objectName).size();
+
+					}
 
 					out.write(c.code + "__" + objName + "," + nbEssential + ","
 							+ nbZeroFlux + "," + nbMle + "," + nbEle + ","
@@ -640,6 +930,85 @@ public class ConditionComparisonResult extends AnalysisResult {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			System.err.println("Error while creating web data");
+			return;
+		}
+
+		finally {
+			if (out != null) {
+				out.close();
+			}
+		}
+
+	}
+
+	/**
+	 * Create web architecture to display barplots with the D3 library
+	 * 
+	 * @throws IOException
+	 */
+	public void writeKoAnalysisBarplot() {
+
+		String outPath = regulatorPath;
+
+		// Copy required files
+		try {
+			Utils.copyProjectResource(
+					"flexflux/data/web/templates/multiBar/multiBar.html",
+					outPath, "summary.html");
+			Utils.copyProjectResource(
+					"flexflux/data/web/templates/multiBar/multiBarKo.js",
+					outPath, "multiBar.js");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Error while copying web files");
+			return;
+		}
+
+		// Create js files with data inside
+		ArrayList<String> objectiveNames = new ArrayList<String>(
+				objectives.keySet());
+		PrintWriter out = null;
+		try {
+			out = new PrintWriter(new File(outPath + "/multiBar_data.js"));
+			out.write("var str = \"name,essential,opt,neu\\n");
+
+			for (Condition c : conditions) {
+
+				HashMap<String, KOResult> koResults = koAllResults.get(c.code);
+				HashMap<String, ConditionComparisonFbaResult> fbaResults = fbaAllResults
+						.get(c.code);
+
+				for (String objName : objectiveNames) {
+
+					KOResult result = koResults.get(objName);
+					int nbEssential = 0;
+					int nbOptimal = 0;
+					int nbNeutral = 0;
+
+					if (result != null) {
+
+						ConditionComparisonFbaResult fbaResult = fbaResults
+								.get(objName);
+						Double optimalValue = fbaResult.value;
+
+						nbEssential = result.getEssentialEntities().size();
+						nbOptimal = result.getOptimaEntities(optimalValue)
+								.size();
+						nbNeutral = result.getNeutralEntities(optimalValue)
+								.size();
+					}
+
+					out.write(c.code + "__" + objName + "," + nbEssential + ","
+							+ nbOptimal + "," + nbNeutral + "\\n");
+				}
+
+			}
+
+			out.write("\"\n");
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			System.err.println("Error while creating regulator web data");
 			return;
 		}
 
@@ -667,7 +1036,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 * @param isReaction
 	 *            : if true, builds heatmap for reactions, otherwise for genes
 	 */
-	public void writeFilesForHeatMap(Boolean isReaction) {
+	public void writeFilesForPfbaHeatMap(Boolean isReaction) {
 
 		String objectName = "Reactions";
 
@@ -820,7 +1189,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 				outData.write(id);
 				for (Condition c : conditions) {
 
-					HashMap<String, PFBAResult> pfbaResults = results
+					HashMap<String, PFBAResult> pfbaResults = pfbaAllResults
 							.get(c.code);
 
 					for (String objName : objectiveNames) {
@@ -828,28 +1197,31 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 						int value = 0;
 
-						if (result.get("essential" + objectName)
-								.containsKey(id)) {
-							value = 7;
-						} else if (result.get("optima" + objectName)
-								.containsKey(id)) {
-							value = 6;
-						} else if (result.get("ele" + objectName).containsKey(
-								id)) {
-							value = 5;
-						} else if (result.get("mle" + objectName).containsKey(
-								id)) {
-							value = 4;
-						} else if (result.get("concurrent" + objectName)
-								.containsKey(id)) {
-							value = 3;
-						} else if (result.get(
-								"objectiveIndependent" + objectName)
-								.containsKey(id)) {
-							value = 2;
-						} else if (result.get("zeroFlux" + objectName)
-								.containsKey(id)) {
-							value = 1;
+						if (result != null) {
+
+							if (result.get("essential" + objectName)
+									.containsKey(id)) {
+								value = 7;
+							} else if (result.get("optima" + objectName)
+									.containsKey(id)) {
+								value = 6;
+							} else if (result.get("ele" + objectName)
+									.containsKey(id)) {
+								value = 5;
+							} else if (result.get("mle" + objectName)
+									.containsKey(id)) {
+								value = 4;
+							} else if (result.get("concurrent" + objectName)
+									.containsKey(id)) {
+								value = 3;
+							} else if (result.get(
+									"objectiveIndependent" + objectName)
+									.containsKey(id)) {
+								value = 2;
+							} else if (result.get("zeroFlux" + objectName)
+									.containsKey(id)) {
+								value = 1;
+							}
 						}
 						outData.write("," + value);
 					}
@@ -908,6 +1280,192 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 	}
 
+	/**
+	 * Write the files that will be used to generate heatmap with inCHlib
+	 * 
+	 * Launch this command to create the html page called inchlib.html that
+	 * contains the heatmap python inchlib_clust.py reactionsVsConditions.csv -m
+	 * reactionsMetaData.csv -dh -mh -a both -html htmlPath
+	 * 
+	 * Be careful, to have the same color code in the whole heatmap, the
+	 * inchlib_clust.py template has been transformed to integrate the parameter
+	 * independent_columns: false
+	 * 
+	 * @param directoryPath
+	 *            : global result path
+	 * @param isReaction
+	 *            : if true, builds heatmap for reactions, otherwise for genes
+	 */
+	public void writeFilesForKoHeatMap() {
+
+		PrintWriter outData = null;
+		PrintWriter outMetaData = null;
+		ArrayList<String> objectiveNames = new ArrayList<String>(
+				objectives.keySet());
+
+		String outPath = regulatorPath;
+		HashMap<String, HashMap<String, String>> metaData = regulatorMetaData;
+
+		Set<String> ids = regulators.keySet();
+
+		try {
+			Utils.copyProjectResource(
+					"flexflux/data/web/templates/heatmap/heatmap.html",
+					outPath, "heatmap.html");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Error while copying heatmap.html");
+			return;
+		}
+
+		// Create the data and metadata files
+		try {
+			outData = new PrintWriter(new File(outPath + "/heatMapData.csv"));
+
+			// Prints the header
+			outData.write("id");
+
+			for (Condition c : conditions) {
+				for (String objName : objectiveNames) {
+					outData.write("," + c.code + "__" + objName);
+				}
+			}
+			outData.write("\n");
+
+			ArrayList<String> additionalMetaDataColumns = new ArrayList<String>();
+
+			if (metaData != null && metaData.size() != 0) {
+
+				outMetaData = new PrintWriter(new File(outPath
+						+ "/heatMapMetaData.csv"));
+
+				/**
+				 * Header for metadata file
+				 */
+				outMetaData.write("id");
+
+				additionalMetaDataColumns = new ArrayList<String>(
+						metaData.keySet());
+
+				for (String col : additionalMetaDataColumns) {
+					outMetaData.write("," + col);
+				}
+
+				outMetaData.write("\n");
+
+			}
+
+			for (String id : ids) {
+
+				if (metaData != null && metaData.size() != 0) {
+					outMetaData.write(id);
+					for (String col : additionalMetaDataColumns) {
+						String value = "NA";
+						if (metaData.get(col).containsKey(id)) {
+							value = metaData.get(col).get(id);
+						}
+						outMetaData.write("," + value);
+					}
+					outMetaData.write("\n");
+				}
+
+				/**
+				 * Prints the values in the data file
+				 */
+				outData.write(id);
+				for (Condition c : conditions) {
+
+					HashMap<String, KOResult> koResults = koAllResults
+							.get(c.code);
+					HashMap<String, ConditionComparisonFbaResult> fbaResults = fbaAllResults
+							.get(c.code);
+
+					for (String objName : objectiveNames) {
+						KOResult result = koResults.get(objName);
+						ConditionComparisonFbaResult fbaResult = fbaResults
+								.get(objName);
+						Double optimalValue = fbaResult.value;
+
+						int value = 0;
+
+						if (result != null) {
+
+							if (result.getEssentialEntities().containsKey(id)) {
+								value = 3;
+							} else if (result.getOptimaEntities(optimalValue)
+									.containsKey(id)) {
+								value = 2;
+							} else if (result.getNeutralEntities(optimalValue)
+									.containsKey(id)) {
+								value = 1;
+							}
+
+						}
+						outData.write("," + value);
+					}
+				}
+				outData.write("\n");
+			}
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.err
+					.println("Error while creating the data files for regulator clustering");
+			return;
+		}
+
+		finally {
+			if (outData != null) {
+				outData.close();
+			}
+			if (outMetaData != null) {
+				outMetaData.close();
+			}
+		}
+
+		// Build inchlib cmd
+		if (inchlibPath != "") {
+			if (inchlibPath.contains(" ") || !inchlibPath.contains("inchlib")
+					|| !inchlibPath.endsWith(".py")) {
+				System.err.println("Inchlib command not valid");
+				return;
+			}
+			File f = new File(inchlibPath);
+			if (!f.exists() || f.isDirectory()) {
+				System.err.println("The python file " + inchlibPath
+						+ " does not exist");
+				return;
+			}
+
+			String jsonFile = outPath + "/heatmap_data.json";
+			String jsFile = outPath + "/heatmap_data.js";
+
+			
+			String cmd = "";
+			
+			if(metaData != null && metaData.size()>0) {
+			cmd = "python " + inchlibPath + " " + outPath
+					+ "/heatMapData.csv -m " + outPath + "/heatMapMetaData.csv"
+					+ " -dh -mh -a both -o " + jsonFile;
+			}
+			else {
+				cmd = "python " + inchlibPath + " " + outPath
+						+ "/heatMapData.csv -dh -a both -o " + jsonFile;
+			}
+			try {
+				this.runInchlib(cmd);
+				this.jsonToJs(jsonFile, jsFile);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.err.println("Problem while running inchlib");
+			}
+
+		}
+
+	}
+
 	@Override
 	public void plot() {
 
@@ -928,7 +1486,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 			ArrayList<String> line = new ArrayList<String>();
 			line.add(c.code);
 
-			HashMap<String, ConditionComparisonFbaResult> results = fbaResults
+			HashMap<String, ConditionComparisonFbaResult> results = fbaAllResults
 					.get(c.code);
 
 			for (String objName : objectiveNames) {
@@ -1038,6 +1596,13 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 */
 	public Boolean runInchlib(String inchlibCmd) throws IOException {
 
+		if(verbose)
+		{
+			System.err.println("\n********launch inchlib\n");
+			System.err.println(inchlibCmd);
+			
+		}
+		
 		Process p = null;
 		try {
 			p = Runtime.getRuntime().exec(inchlibCmd);
@@ -1277,11 +1842,10 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 				for (Condition c : conditions) {
 
-					HashMap<String, PFBAResult> pfbaResults = results
+					HashMap<String, PFBAResult> pfbaResults = pfbaAllResults
 							.get(c.code);
 					for (String objName : objectiveNames) {
-						PFBAResult result = pfbaResults
-								.get(objName);
+						PFBAResult result = pfbaResults.get(objName);
 
 						int nbEssential = 0;
 
@@ -1350,7 +1914,5 @@ public class ConditionComparisonResult extends AnalysisResult {
 				System.err.println("Problem while running inchlib");
 			}
 		}
-
 	}
-
 }

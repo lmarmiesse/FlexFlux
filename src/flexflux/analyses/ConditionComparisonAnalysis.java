@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.openscience.cdk.renderer.ReactionRenderer;
+
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.biodata.BioPhysicalEntity;
@@ -38,6 +40,8 @@ public class ConditionComparisonAnalysis extends Analysis {
 	String constraintFile = "";
 	String reactionMetaDataFile = "";
 	String geneMetaDataFile = "";
+	String regulatorMetaDataFile = "";
+
 	String sbmlFile = "";
 	String inchlibPath = "";
 
@@ -48,6 +52,8 @@ public class ConditionComparisonAnalysis extends Analysis {
 	BioNetwork network = null;
 
 	Boolean minFlux = false;
+
+	HashMap<String, BioEntity> regulators;
 
 	/**
 	 * Separator for columns in metadata file
@@ -64,14 +70,16 @@ public class ConditionComparisonAnalysis extends Analysis {
 
 	public Boolean launchReactionAnalysis;
 	public Boolean launchGeneAnalysis;
+	public Boolean launchRegulatorAnalysis;
 
 	public ConditionComparisonAnalysis(Bind bind, String sbmlFile,
 			String interactionFile, String conditionFile,
 			String constraintFile, String objectiveFile, ConstraintType type,
 			Boolean extended, String solver, String reactionMetaDataFile,
-			String geneMetaDataFile, String mdSep, String inchlibPath,
-			Boolean minFlux, Boolean noReactionAnalysis,
-			Boolean noGeneAnalysis, Double liberty, int precision) {
+			String geneMetaDataFile, String regulatorMetaDataFile,
+			String mdSep, String inchlibPath, Boolean minFlux,
+			Boolean noReactionAnalysis, Boolean noGeneAnalysis,
+			Boolean noRegulatorAnalysis, Double liberty, int precision) {
 
 		super(bind);
 
@@ -85,11 +93,13 @@ public class ConditionComparisonAnalysis extends Analysis {
 		this.constraintFile = constraintFile;
 		this.reactionMetaDataFile = reactionMetaDataFile;
 		this.geneMetaDataFile = geneMetaDataFile;
+		this.regulatorMetaDataFile = regulatorMetaDataFile;
 		this.mdSep = mdSep;
 		this.inchlibPath = inchlibPath;
 		this.minFlux = minFlux;
 		this.launchGeneAnalysis = !noGeneAnalysis;
 		this.launchReactionAnalysis = !noReactionAnalysis;
+		this.launchRegulatorAnalysis = !noRegulatorAnalysis;
 
 		Vars.libertyPercentage = liberty;
 		Vars.decimalPrecision = precision;
@@ -184,8 +194,10 @@ public class ConditionComparisonAnalysis extends Analysis {
 		if (this.constraintFile != "")
 			b.loadConditionsFile(this.constraintFile);
 
+		regulators = new HashMap<String, BioEntity>();
+
 		/**
-		 * Loads entities
+		 * Loads entities and fills up the regulator list
 		 */
 		for (String id : entities) {
 
@@ -194,6 +206,16 @@ public class ConditionComparisonAnalysis extends Analysis {
 				BioEntity bioEntity = new BioEntity(id, id);
 
 				b.addRightEntityType(bioEntity, integer, binary);
+
+				// If the entity is neither a gene "GPR" or a metabolite or a
+				// reaction , we put it in the regulator list
+				if (!b.getBioNetwork().getGeneList().containsKey(id)
+						&& !b.getBioNetwork().getBiochemicalReactionList()
+								.containsKey(id)
+						&& !b.getBioNetwork().getPhysicalEntityList()
+								.containsKey(id)) {
+					regulators.put(id, bioEntity);
+				}
 			}
 		}
 
@@ -277,7 +299,8 @@ public class ConditionComparisonAnalysis extends Analysis {
 
 		ConditionComparisonResult result = new ConditionComparisonResult(
 				conditions, objectives, network, inchlibPath,
-				launchReactionAnalysis, launchGeneAnalysis);
+				launchReactionAnalysis, launchGeneAnalysis,
+				launchRegulatorAnalysis);
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
 				objectives.keySet());
@@ -295,7 +318,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 				DoubleResult objValue = b.FBA(new ArrayList<Constraint>(),
 						true, true);
 
-				Double res = objValue.result;
+				Double res = Vars.round(objValue.result);
 
 				if (verbose) {
 					System.err.println(condition.code + "__" + obj.getName()
@@ -306,16 +329,34 @@ public class ConditionComparisonAnalysis extends Analysis {
 
 				if (this.launchReactionAnalysis || this.launchGeneAnalysis) {
 
-					this.init(objName, condition, false);
-
-					PFBAAnalysis a = new PFBAAnalysis(b, launchGeneAnalysis);
-					PFBAResult resPFBA = a.runAnalysis();
+					PFBAResult resPFBA = null;
+					if (res != 0) {
+						this.init(objName, condition, false);
+						PFBAAnalysis a = new PFBAAnalysis(b, launchGeneAnalysis);
+						resPFBA = a.runAnalysis();
+					}
 
 					result.addPFBAResult(obj, condition, resPFBA);
 				}
 
+				if (this.launchRegulatorAnalysis) {
+
+					result.regulators = regulators;
+
+					KOResult koResult = null;
+
+					if (res != 0) {
+						this.init(objName, condition, false);
+						KOAnalysis koAnalysis = new KOAnalysis(b, 1, regulators);
+						koResult = koAnalysis.runAnalysis();
+					}
+
+					result.addKoResult(obj, condition, koResult);
+
+				}
+
 				/**
-				 * Reads the metaDataFile
+				 * Reads the metaDataFiles
 				 */
 
 				if (geneMetaDataFile != "" && launchGeneAnalysis) {
@@ -332,13 +373,18 @@ public class ConditionComparisonAnalysis extends Analysis {
 					result.reactionMetaData = reactionMetaData;
 				}
 
+				if (regulatorMetaDataFile != "" && launchRegulatorAnalysis) {
+					HashMap<String, HashMap<String, String>> regulatorMetaData = this
+							.readMetaDataFile(regulatorMetaDataFile, true,
+									this.mdSep);
+					result.regulatorMetaData = regulatorMetaData;
+				}
+
 				for (BioEntity e : this.b.getInteractionNetwork()
 						.getTargetToInteractions().keySet()) {
 					result.interactionTargets.add(e.getId());
 				}
-
 			}
-
 		}
 		return result;
 	}
