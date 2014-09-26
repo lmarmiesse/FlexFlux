@@ -5,13 +5,10 @@ import java.io.IOException;
 
 import junitx.framework.FileAssert;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 import parsebionet.unit_tests.TestUtils;
 import flexflux.analyses.ConditionComparisonAnalysis;
@@ -352,6 +349,11 @@ public class TestConditionComparison {
 			e.printStackTrace();
 			Assert.fail("problem while copying the reference files");
 		}
+		
+		if(verbose)
+		{
+			Vars.verbose = true;
+		}
 
 		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
 				f.sbmlFile, f.intFile, f.conditionFile, f.constraintFile,
@@ -360,8 +362,6 @@ public class TestConditionComparison {
 				",", inchlibPath, true, false, false, false, 0.0, 6);
 
 		AnalysisResult r = a.runAnalysis();
-
-		r.verbose = verbose;
 
 		tempDir = new File(tmpPath);
 		if (!tempDir.exists()) {

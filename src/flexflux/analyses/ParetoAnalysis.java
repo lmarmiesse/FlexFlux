@@ -39,6 +39,7 @@ import flexflux.analyses.result.ReacAnalysisResult;
 import flexflux.analyses.result.TwoReacsAnalysisResult;
 import flexflux.general.Bind;
 import flexflux.general.Objective;
+import flexflux.general.Vars;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -146,7 +147,7 @@ public class ParetoAnalysis extends Analysis {
 				objectivesBounds.get(obj)[0] = result2.getObjValue();
 			}
 
-			if (verbose) {
+			if (Vars.verbose) {
 				System.err.println(obj.getName() + " min : "
 						+ objectivesBounds.get(obj)[0] + " max : "
 						+ objectivesBounds.get(obj)[1]);
@@ -186,7 +187,7 @@ public class ParetoAnalysis extends Analysis {
 		int nb = 0;
 		for (Objective[] toTest : pairsToTest) {
 			nb++;
-			if (verbose) {
+			if (Vars.verbose) {
 				System.err.println("2D analysis " + nb + "/"
 						+ pairsToTest.size());
 			}
@@ -259,7 +260,7 @@ public class ParetoAnalysis extends Analysis {
 		for (Objective[] toTest : tripletsToTest) {
 			nb++;
 
-			if (verbose) {
+			if (Vars.verbose) {
 				System.err.println("3D analysis " + nb + "/"
 						+ tripletsToTest.size());
 			}

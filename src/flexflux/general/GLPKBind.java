@@ -339,7 +339,7 @@ public class GLPKBind extends Bind {
 			}
 		} else {
 
-			if (verbose) {
+			if (Vars.verbose) {
 				System.err.println("The problem could not be solved");
 			}
 

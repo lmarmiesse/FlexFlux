@@ -37,6 +37,7 @@ import flexflux.analyses.result.FVAResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.Objective;
+import flexflux.general.Vars;
 
 import java.util.ArrayList;
 import java.util.Queue;
@@ -53,8 +54,6 @@ import parsebionet.biodata.BioEntity;
  */
 public class ThreadFVA extends ResolveThread {
 
-	public Boolean verbose = false;
-	
 	/**
 	 * Number of entities to treat.
 	 */
@@ -111,7 +110,7 @@ public class ThreadFVA extends ResolveThread {
 			if (percent > percentage) {
 
 				percentage = percent;
-				if (verbose && percent % 2 == 0) {
+				if (Vars.verbose && percent % 2 == 0) {
 					System.err.print("*");
 				}
 			}
@@ -129,7 +128,7 @@ public class ThreadFVA extends ResolveThread {
 			int percent = (int) Math.round((todo - size) / todo * 50) + 50;
 			if (percent > percentage) {
 				percentage = percent;
-				if (verbose && percent % 2 == 0 && percentage != 0) {
+				if (Vars.verbose && percent % 2 == 0 && percentage != 0) {
 					System.err.print("*");
 				}
 			}

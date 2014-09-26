@@ -42,6 +42,9 @@
 package flexflux.general;
 public class Vars {
 
+	
+	public static Boolean verbose=false;
+	
 	/**
 	 * Maximum lower bound and upper bounds
 	 */

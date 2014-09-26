@@ -45,8 +45,6 @@ import flexflux.general.Bind;
  */
 public abstract class Analysis {
 	
-	public Boolean verbose = false;
-	
 
 	/**
 	 * 

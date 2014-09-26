@@ -97,7 +97,7 @@ public class FVAAnalysis extends Analysis {
 
 		if (result.flag != 0) {
 
-			if (verbose) {
+			if (Vars.verbose) {
 				System.err.println("Unfeasible");
 			}
 			fvaResult = new FVAResult(Double.NaN);
@@ -127,7 +127,7 @@ public class FVAAnalysis extends Analysis {
 
 		Constraint c = new Constraint(constraintMap, lb - delta, ub + delta);
 
-		if (verbose) {
+		if (Vars.verbose) {
 			System.err.println(Vars.libertyPercentage + "% of non optimality");
 			System.err.println("FVA initial constraint : \n" + c);
 		}
@@ -160,7 +160,7 @@ public class FVAAnalysis extends Analysis {
 					entQueueCopy, fvaResult));
 		}
 
-		if (verbose) {
+		if (Vars.verbose) {
 			System.err.println("Progress : ");
 
 			System.err.print("[");
@@ -184,7 +184,7 @@ public class FVAAnalysis extends Analysis {
 			}
 		}
 
-		if (verbose) {
+		if (Vars.verbose) {
 			System.err.print("]\n");
 		}
 
@@ -198,7 +198,7 @@ public class FVAAnalysis extends Analysis {
 		b.getConstraints().remove(c);
 		b.getConstraints().removeAll(constraintsToAdd);
 
-		if (verbose) {
+		if (Vars.verbose) {
 			System.err.println("FVA over "
 					+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
 					+ Vars.maxThread + " threads");

@@ -62,7 +62,7 @@ public class FBAAnalysis extends Analysis {
 
 		if (objValue.flag != 0) {
 
-			if (verbose) {
+			if (Vars.verbose) {
 				System.err.println(objValue.result);
 
 				System.err.println("Unfeasible");
