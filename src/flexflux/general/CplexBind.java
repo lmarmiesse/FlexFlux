@@ -386,7 +386,7 @@ public class CplexBind extends Bind {
 					// find the number of SOSs in the model
 					int numSOS = cplex.getNSOSs();
 
-					if (verbose) {
+					if (Vars.verbose) {
 						System.err.println("Number of SOSs=" + numSOS);
 					}
 

@@ -39,6 +39,7 @@ import flexflux.general.Constraint;
 import flexflux.general.Vars;
 import flexflux.interaction.Interaction;
 import flexflux.thread.ResolveThread;
+import flexflux.thread.ThreadKO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -163,12 +164,15 @@ public class KOAnalysis extends Analysis {
 		}
 
 		for (int j = 0; j < Vars.maxThread; j++) {
-			threads.add(b.getThreadFactory().makeKOThread(tasks, koResult,
+			
+			ThreadKO threadKo = b.getThreadFactory().makeKOThread(tasks, koResult,
 					b.getObjective(), entitiesInInteractionNetwork,
-					interactionNetwotkConstraints));
+					interactionNetwotkConstraints);
+			
+			threads.add(threadKo);
 		}
 
-		if (verbose) {
+		if (Vars.verbose) {
 			System.err.println("Progress : ");
 
 			System.err.print("[");
@@ -193,7 +197,7 @@ public class KOAnalysis extends Analysis {
 			}
 
 		}
-		if (verbose) {
+		if (Vars.verbose) {
 			System.err.print("]\n");
 		}
 
@@ -201,7 +205,7 @@ public class KOAnalysis extends Analysis {
 			threads.remove(0);
 		}
 
-		if (verbose) {
+		if (Vars.verbose) {
 			System.err.println("KO over "
 					+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
 					+ Vars.maxThread + " threads");

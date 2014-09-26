@@ -44,12 +44,11 @@ public class PFBAAnalysis extends Analysis {
 
 	private FVAResult fvaWithNoConstraintResult;
 
-	Boolean performGeneAnalysis=true;
-	
+	Boolean performGeneAnalysis = true;
 
-	public PFBAAnalysis(Bind b, Boolean performGeneAnalysis)  {
+	public PFBAAnalysis(Bind b, Boolean performGeneAnalysis) {
 		super(b);
-		
+
 		this.performGeneAnalysis = performGeneAnalysis;
 
 		mainObjective = b.getObjective();
@@ -83,17 +82,28 @@ public class PFBAAnalysis extends Analysis {
 
 		// It's important to keep the order
 		double opt = this.fba();
+
+		if (Vars.verbose) {
+			System.err.println("[PFBA] Initial number of reactions : "
+					+ remainReactions.size());
+		}
+
 		if (opt != 0) {
-			if(performGeneAnalysis) {
+			if (performGeneAnalysis) {
 				this.geneKoAnalysis();
 			}
 			this.reactionDeletionAnalysis();
+
 			this.fvaWithNoConstraint();
+
 			this.fvaWithConstraint();
+
 			this.getConcurrentReactions();
+
 			this.fvaWithFluxSumConstraint();
+
 			this.scopeTest();
-			if(performGeneAnalysis) {
+			if (performGeneAnalysis) {
 				this.classifyGenes();
 			}
 		}
@@ -138,6 +148,10 @@ public class PFBAAnalysis extends Analysis {
 	 */
 	private void reactionDeletionAnalysis() {
 
+		if (Vars.verbose) {
+			System.err.println("[PFBA] Reaction Deletion Analysis");
+		}
+
 		KOAnalysis koAnalysis = new KOAnalysis(b, 0,
 				(HashMap<String, BioEntity>) remainReactions);
 
@@ -149,12 +163,23 @@ public class PFBAAnalysis extends Analysis {
 		for (String id : essentialReactions.keySet()) {
 			remainReactions.remove(id);
 		}
+
+		if (Vars.verbose) {
+
+			System.err.println("[PFBA] Number of essential reactions : "
+					+ essentialReactions.size());
+		}
+
 	}
 
 	/**
 	 * Get the zero flux reactions
 	 */
 	private void fvaWithNoConstraint() {
+
+		if (Vars.verbose) {
+			System.err.println("[PFBA] FVA with no constraint");
+		}
 
 		double oldLibertyPercentage = Vars.libertyPercentage;
 
@@ -172,6 +197,12 @@ public class PFBAAnalysis extends Analysis {
 			remainReactions.remove(id);
 		}
 
+		if (Vars.verbose) {
+
+			System.err.println("[PFBA] Number of zero flux reactions : "
+					+ zeroFluxReactions.size());
+		}
+
 		Vars.libertyPercentage = oldLibertyPercentage;
 
 	}
@@ -181,11 +212,20 @@ public class PFBAAnalysis extends Analysis {
 	 */
 	private void fvaWithConstraint() {
 
+		if (Vars.verbose) {
+			System.err.println("[PFBA] FVA with constraint");
+		}
+
 		FVAAnalysis fvaAnalysis = new FVAAnalysis(b, remainReactions, null);
 
 		FVAResult fvaResult = fvaAnalysis.runAnalysis();
 
 		optimaZeroFluxReactions = fvaResult.getZeroFluxReactions();
+
+		if (Vars.verbose) {
+			System.err.println("[PFBA] Number of optimaZeroFluxReactions : "
+					+ optimaZeroFluxReactions.size());
+		}
 
 		// We remove the zero flux reactions from the remain reactions
 		for (String id : optimaZeroFluxReactions.keySet()) {
@@ -199,7 +239,10 @@ public class PFBAAnalysis extends Analysis {
 	 */
 	private void fvaWithFluxSumConstraint() {
 
-		
+		if (Vars.verbose) {
+			System.err.println("[PFBA] FVA with flux sum constraints");
+		}
+
 		// Set minimum flux as objective
 		b.solverPrepared = false;
 		BioEntity fluxSumEnt = b.createFluxesSummation();
@@ -209,15 +252,13 @@ public class PFBAAnalysis extends Analysis {
 		Objective objMinFluxSum = new Objective(fluxSumEntArray, fluxSumCoeff,
 				"fluxSum", false);
 
-
 		b.setObjective(objMinFluxSum);
 
 		b.constraintObjectives.add(this.mainObjective);
 
 		b.prepareSolver();
 
-		FVAAnalysis fvaAnalysis = new FVAAnalysis(b,
-				remainReactions, null);
+		FVAAnalysis fvaAnalysis = new FVAAnalysis(b, remainReactions, null);
 
 		FVAResult fvaResult = fvaAnalysis.runAnalysis();
 
@@ -234,6 +275,11 @@ public class PFBAAnalysis extends Analysis {
 			remainReactions.remove(id);
 		}
 
+		if (Vars.verbose) {
+			System.err.println("[PFBA] Number of minFluxZeroFluxReactions : "
+					+ minFluxZeroFluxReactions.size());
+		}
+
 		optimaReactions = new HashMap<String, BioEntity>(remainReactions);
 
 	}
@@ -243,6 +289,10 @@ public class PFBAAnalysis extends Analysis {
 	 * reactions
 	 */
 	private void scopeTest() {
+
+		if (Vars.verbose) {
+			System.err.println("[PFBA] Scope test");
+		}
 
 		BioNetwork network = b.getBioNetwork();
 
@@ -288,6 +338,14 @@ public class PFBAAnalysis extends Analysis {
 				objectiveIndependantReactions.put(id,
 						minFluxZeroFluxReactions.get(id));
 			}
+
+			if (Vars.verbose) {
+				System.err.println("[PFBA] Number of ele reactions : "
+						+ eleReactions.size());
+				System.err.println("[PFBA] Number of independent reactions : "
+						+ objectiveIndependantReactions.size());
+			}
+
 		}
 	}
 
@@ -302,8 +360,18 @@ public class PFBAAnalysis extends Analysis {
 	 */
 	private void getConcurrentReactions() {
 
+		if (Vars.verbose) {
+			System.err.println("[PFBA] Get concurrent reactions");
+			System.err.println("[PFBA] Number of reactions to treat : "
+					+ optimaZeroFluxReactions.size());
+			System.err.print("[");
+		}
+		
+		int n=0;
+
 		// Change all the internal reaction bounds to extreme values
 		for (BioEntity e : b.getSimpleConstraints().keySet()) {
+			
 
 			String id = e.getId();
 
@@ -329,9 +397,12 @@ public class PFBAAnalysis extends Analysis {
 					}
 				}
 			}
+			
 		}
 
 		for (BioEntity e : optimaZeroFluxReactions.values()) {
+			
+			n++;
 
 			String id = e.getId();
 
@@ -346,18 +417,8 @@ public class PFBAAnalysis extends Analysis {
 			double oldLb = constraint.getLb();
 			double oldUb = constraint.getUb();
 
-			/**
-			 * The bioentities are not the same in the two analyses
-			 */
-			for (BioEntity iterEnt : fvaWithNoConstraintResult.getMap()
-					.keySet()) {
-				String idEnt = iterEnt.getId();
-				if (idEnt.compareTo(id) == 0) {
-					max = fvaWithNoConstraintResult.getMap().get(iterEnt)[1];
-					min = fvaWithNoConstraintResult.getMap().get(iterEnt)[0];
-					break;
-				}
-			}
+			max = fvaWithNoConstraintResult.getMap().get(e)[1];
+			min = fvaWithNoConstraintResult.getMap().get(e)[0];
 
 			constraint.setUb(max);
 			constraint.setLb(max);
@@ -383,8 +444,7 @@ public class PFBAAnalysis extends Analysis {
 
 					if (res.getObjValue() == 0) {
 						concurrentReactions.put(e.getId(), e);
-					}
-					else {
+					} else {
 						mleReactions.put(e.getId(), e);
 					}
 				} else {
@@ -394,7 +454,22 @@ public class PFBAAnalysis extends Analysis {
 
 			constraint.setUb(oldUb);
 			constraint.setLb(oldLb);
+			
+			if(Vars.verbose)
+			{
+				if(n%10==0) {
+					System.err.print("*");
+				}
+			}
 
+		}
+
+		if (Vars.verbose) {
+			System.err.println("]");
+			System.err.println("[PFBA] Number of mle reactions : "
+					+ mleReactions.size());
+			System.err.println("[PFBA] Number of concurrent reactions : "
+					+ concurrentReactions.size());
 		}
 
 	}
@@ -403,12 +478,17 @@ public class PFBAAnalysis extends Analysis {
 	 * Gene Ko analysis to identify essential genes
 	 */
 	private void geneKoAnalysis() {
+
+		if (Vars.verbose) {
+			System.err.println("[PFBA] Gene Ko Analysis");
+		}
+
 		KOAnalysis koAnalysis = new KOAnalysis(b, 1, null);
 
 		KOResult res = koAnalysis.runAnalysis();
 
 		essentialGenes = res.getEssentialEntities();
-		
+
 		return;
 
 	}
@@ -417,6 +497,10 @@ public class PFBAAnalysis extends Analysis {
 	 * Classify the genes from the reaction classification and the KO results
 	 */
 	private void classifyGenes() {
+
+		if (Vars.verbose) {
+			System.err.println("[PFBA] Classify genes");
+		}
 
 		BioNetwork network = b.getBioNetwork();
 

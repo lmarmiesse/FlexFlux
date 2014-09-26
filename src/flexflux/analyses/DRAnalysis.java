@@ -108,7 +108,7 @@ public class DRAnalysis extends Analysis {
 					entQueueCopy, drResult));
 		}
 
-		if (verbose) {
+		if (Vars.verbose) {
 			System.err.println("Progress : ");
 
 			System.err.print("[");
@@ -132,7 +132,7 @@ public class DRAnalysis extends Analysis {
 			}
 		}
 
-		if (verbose) {
+		if (Vars.verbose) {
 			System.err.print("]\n");
 		}
 
@@ -145,7 +145,7 @@ public class DRAnalysis extends Analysis {
 		// to permit other analysis
 		b.getConstraints().removeAll(constraintsToAdd);
 
-		if (verbose) {
+		if (Vars.verbose) {
 			System.err.println("DR over "
 					+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
 					+ Vars.maxThread + " threads");

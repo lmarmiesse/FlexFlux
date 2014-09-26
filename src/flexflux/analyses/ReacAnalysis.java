@@ -130,7 +130,7 @@ public class ReacAnalysis extends Analysis {
 
 		}
 
-		if (verbose) {
+		if (Vars.verbose) {
 			System.err.println("Progress : ");
 			System.err.print("[");
 			for (int i = 0; i < 50; i++) {
@@ -153,7 +153,7 @@ public class ReacAnalysis extends Analysis {
 			}
 		}
 
-		if (verbose) {
+		if (Vars.verbose) {
 			System.err.print("]\n");
 		}
 
@@ -174,7 +174,7 @@ public class ReacAnalysis extends Analysis {
 			// group index => fvaresult
 			Map<Integer, FVAResult> fvaResults = new HashMap<Integer, FVAResult>();
 
-			if (verbose) {
+			if (Vars.verbose) {
 				System.err.println("Starting an FVA analysis for each of the "
 						+ groupIndex.size() + " phenotypic phases found");
 			}
@@ -199,7 +199,7 @@ public class ReacAnalysis extends Analysis {
 
 		}
 
-		if (verbose) {
+		if (Vars.verbose) {
 			System.err.println("Reac analysis over "
 					+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
 					+ Vars.maxThread + " threads");

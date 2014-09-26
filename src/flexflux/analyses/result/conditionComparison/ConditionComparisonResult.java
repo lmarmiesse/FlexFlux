@@ -43,6 +43,7 @@ import flexflux.analyses.result.MyTableModel;
 import flexflux.analyses.result.PFBAResult;
 import flexflux.condition.Condition;
 import flexflux.general.Objective;
+import flexflux.general.Vars;
 import flexflux.io.Utils;
 
 public class ConditionComparisonResult extends AnalysisResult {
@@ -525,7 +526,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 */
 	public void writeKoAnalysisToFiles() {
 
-		if (verbose) {
+		if (Vars.verbose) {
 			System.err
 					.println("\n***********\nwriteKoAnalysisToFiles\n************");
 		}
@@ -573,7 +574,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 					out.print(c.code);
 				}
 
-				if (verbose) {
+				if (Vars.verbose) {
 					System.err.println("Condition : " + c.code);
 				}
 
@@ -583,7 +584,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 				for (String objName : objectiveNames) {
 
-					if (verbose) {
+					if (Vars.verbose) {
 						System.err.println("Obj : " + objName);
 					}
 
@@ -599,7 +600,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 								.get(objName);
 						Double optValue = fbaResult.value;
 
-						if (verbose) {
+						if (Vars.verbose) {
 							System.err.println("Opt Value : " + optValue);
 						}
 
@@ -608,7 +609,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 						Collections.sort(essentialIds);
 						classification.put("ess", essentialIds);
 
-						if (verbose) {
+						if (Vars.verbose) {
 							System.err.println("Essential :" + essentialIds);
 						}
 
@@ -617,7 +618,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 						Collections.sort(optimaEssentialIds);
 						classification.put("opt", optimaEssentialIds);
 
-						if (verbose) {
+						if (Vars.verbose) {
 							System.err.println("Optima :" + optimaEssentialIds);
 						}
 
@@ -626,7 +627,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 						Collections.sort(neutralIds);
 						classification.put("neu", neutralIds);
 
-						if (verbose) {
+						if (Vars.verbose) {
 							System.err.println("Neutral :" + neutralIds);
 						}
 
@@ -1596,7 +1597,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 */
 	public Boolean runInchlib(String inchlibCmd) throws IOException {
 
-		if(verbose)
+		if(Vars.verbose)
 		{
 			System.err.println("\n********launch inchlib\n");
 			System.err.println(inchlibCmd);

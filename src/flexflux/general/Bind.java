@@ -84,8 +84,6 @@ import flexflux.thread.ThreadFactory;
  */
 public abstract class Bind {
 
-	public Boolean verbose = false;
-
 	public boolean checkInteractionNetwork = true;
 
 	/**
@@ -335,9 +333,6 @@ public abstract class Bind {
 					List<Constraint> intNetSteadyStateConstraints = new ArrayList<Constraint>();
 					for (Constraint c : intNet
 							.findSteadyState(simpleConstraints)) {
-						if(verbose) {
-						System.err.println(c);
-						}
 						// c.setOverWritesBounds(false);
 						intNetSteadyStateConstraints.add(c);
 					}
@@ -1487,7 +1482,7 @@ public abstract class Bind {
 
 		// if there are constraint objective, we treat them
 		if (constraintObjectives.size() != 0) {
-			if (verbose) {
+			if (Vars.verbose) {
 				System.err.println(Vars.libertyPercentage
 						+ "% of non optimality");
 			}
@@ -1739,7 +1734,7 @@ public abstract class Bind {
 
 			if (reaction.isReversible() == false && lb < 0) {
 				lb = 0;
-				if (verbose) {
+				if (Vars.verbose) {
 					System.err
 							.println("Warning : irreversible reaction with < 0 lower bound");
 				}

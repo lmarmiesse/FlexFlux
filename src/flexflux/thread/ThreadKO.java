@@ -59,8 +59,6 @@ import parsebionet.biodata.BioEntity;
  */
 public class ThreadKO extends ResolveThread {
 
-	public Boolean verbose = false;
-
 	/**
 	 * Number of entities to treat.
 	 */
@@ -132,7 +130,7 @@ public class ThreadKO extends ResolveThread {
 			if (percent > percentage) {
 				percentage = percent;
 				if (percent % 2 == 0) {
-					if (verbose) {
+					if (Vars.verbose) {
 						System.err.print("*");
 					}
 				}

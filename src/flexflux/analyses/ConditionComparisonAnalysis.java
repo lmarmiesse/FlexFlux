@@ -10,14 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.openscience.cdk.renderer.ReactionRenderer;
 
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.biodata.BioPhysicalEntity;
 import parsebionet.io.Sbml2Bionetwork;
 import flexflux.analyses.result.AnalysisResult;
-import flexflux.analyses.result.FVAResult;
 import flexflux.analyses.result.KOResult;
 import flexflux.analyses.result.PFBAResult;
 import flexflux.analyses.result.conditionComparison.ConditionComparisonResult;
@@ -289,7 +287,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 		}
 
 		b.prepareSolver();
-
+		
 		return true;
 
 	}
@@ -309,6 +307,10 @@ public class ConditionComparisonAnalysis extends Analysis {
 
 			for (Condition condition : conditions) {
 
+				if (Vars.verbose) {
+					System.err.println("\n**************\n"+condition.code + "__" + objName);
+				}
+				
 				// We reinit the bind
 				this.init(objName, condition, false);
 
@@ -317,29 +319,42 @@ public class ConditionComparisonAnalysis extends Analysis {
 				 */
 				DoubleResult objValue = b.FBA(new ArrayList<Constraint>(),
 						true, true);
+				
+				b.end();
 
 				Double res = Vars.round(objValue.result);
 
-				if (verbose) {
-					System.err.println(condition.code + "__" + obj.getName()
-							+ " : " + res);
+				if (Vars.verbose) {
+					System.err.println("Objective value : " + res);
 				}
 
 				result.addFbaResult(obj, condition, objValue.result);
 
 				if (this.launchReactionAnalysis || this.launchGeneAnalysis) {
 
+					if(Vars.verbose)
+					{
+						System.err.println("************\nPFBA analysis\n************");
+					}
+					
 					PFBAResult resPFBA = null;
 					if (res != 0) {
 						this.init(objName, condition, false);
 						PFBAAnalysis a = new PFBAAnalysis(b, launchGeneAnalysis);
 						resPFBA = a.runAnalysis();
+						
+						b.end();
 					}
 
 					result.addPFBAResult(obj, condition, resPFBA);
 				}
 
 				if (this.launchRegulatorAnalysis) {
+					
+					if(Vars.verbose)
+					{
+						System.err.println("************\nRegulator KO analysis\n************");
+					}
 
 					result.regulators = regulators;
 
@@ -349,6 +364,8 @@ public class ConditionComparisonAnalysis extends Analysis {
 						this.init(objName, condition, false);
 						KOAnalysis koAnalysis = new KOAnalysis(b, 1, regulators);
 						koResult = koAnalysis.runAnalysis();
+						
+						b.end();
 					}
 
 					result.addKoResult(obj, condition, koResult);
@@ -359,6 +376,11 @@ public class ConditionComparisonAnalysis extends Analysis {
 				 * Reads the metaDataFiles
 				 */
 
+				if(Vars.verbose)
+				{
+					System.err.println("************\nMetaData reading\n************");
+				}
+				
 				if (geneMetaDataFile != "" && launchGeneAnalysis) {
 					HashMap<String, HashMap<String, String>> geneMetaData = this
 							.readMetaDataFile(geneMetaDataFile, false,

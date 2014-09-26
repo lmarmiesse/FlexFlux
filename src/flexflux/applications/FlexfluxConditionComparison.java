@@ -93,6 +93,9 @@ public class FlexfluxConditionComparison {
 	@Option(name = "-noRegulatorAnalysis", usage = "Don't perform regulator essentiality analysis")
 	public Boolean noRegulatorAnalysis = false;
 
+	@Option(name = "-verbose", usage = "[default=false] Activates the verbose mode")
+	public Boolean verbose = false;
+
 	
 	@Option(name = "-h", usage = "Prints this help")
 	public Boolean h = false;
@@ -140,39 +143,6 @@ public class FlexfluxConditionComparison {
 			System.exit(0);
 		}
 
-		Bind bind = null;
-
-		try {
-			if (f.solver.equals("CPLEX")) {
-				bind = new CplexBind();
-			} else if (f.solver.equals("GLPK")) {
-				Vars.maxThread = 1;
-				bind = new GLPKBind();
-			} else {
-				System.err.println("Unknown solver name");
-				parser.printUsage(System.err);
-				System.exit(0);
-			}
-		} catch (UnsatisfiedLinkError e) {
-			System.err
-					.println("Error, the solver "
-							+ f.solver
-							+ " cannot be found. Check your solver installation and the configuration file, or choose a different solver (-sol).");
-			System.exit(0);
-		} catch (NoClassDefFoundError e) {
-			System.err
-					.println("Error, the solver "
-							+ f.solver
-							+ " cannot be found. There seems to be a problem with the .jar file of "
-							+ f.solver + ".");
-			System.exit(0);
-		}
-
-		bind.setLoadObjective(false);
-		if (f.constraintFile != "") {
-			bind.loadConditionsFile(f.constraintFile);
-		}
-
 		ConstraintType c;
 		if (f.type == "BINARY") {
 			c = ConstraintType.BINARY;
@@ -189,6 +159,11 @@ public class FlexfluxConditionComparison {
 				f.inchlibPath, f.minFlux, f.noReactionAnalysis,
 				f.noGeneAnalysis, f.noRegulatorAnalysis, f.liberty, f.precision);
 
+		if(f.verbose) 
+		{
+			Vars.verbose = true;
+		}
+		
 		AnalysisResult r = a.runAnalysis();
 
 		if (f.plot) {
@@ -197,8 +172,6 @@ public class FlexfluxConditionComparison {
 		if (!f.outName.equals("")) {
 			r.writeToFile(f.outName);
 		}
-
-		bind.end();
 
 	}
 
