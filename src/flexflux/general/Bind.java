@@ -337,6 +337,9 @@ public abstract class Bind {
 					SteadyStateAnalysis ssa = new SteadyStateAnalysis(this,this.getInteractionNetwork(),simpleConstraints);
 					SteadyStateAnalysisResult res = ssa.runAnalysis();
 					
+					if(Vars.writeInteractionNetworkStates){
+						res.writeToFile(statesFileName);
+					}
 					
 					for (Constraint c : res.getSteadyStateConstraints()) {
 						intNetSteadyStateConstraints.add(c);
