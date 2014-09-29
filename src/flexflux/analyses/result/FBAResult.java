@@ -241,7 +241,7 @@ public class FBAResult extends AnalysisResult {
 		this.bind.sensitivityAnalysis(fileName);
 	}
 
-	public double getObjValue() {
+	public Double getObjValue() {
 		return objValue;
 	}
 
