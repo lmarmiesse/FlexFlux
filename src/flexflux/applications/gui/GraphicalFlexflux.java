@@ -123,7 +123,8 @@ public class GraphicalFlexflux {
 		for (File file : files) {
 
 			if (file.isDirectory()) {
-			} else if (file.getName().endsWith(".class")) {
+			} else if (file.getName().endsWith(".class") && file.getName().contains("Flexflux")) {
+				
 				classes.add(Class.forName(packageName
 						+ '.'
 						+ file.getName().substring(0,

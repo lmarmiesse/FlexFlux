@@ -107,7 +107,8 @@ public class MainFrame extends JFrame {
 		} else {
 			this.executableClasses = classes;
 		}
-
+		
+		
 		fillExecList();
 
 		JPanel northPanel = new JPanel();
