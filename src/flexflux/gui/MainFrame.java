@@ -140,7 +140,7 @@ public class MainFrame extends JFrame {
 
 	public void fillExecList() {
 		for (Class c : executableClasses) {
-			executableList.addItem(c.getSimpleName());
+			executableList.addItem(c.getSimpleName().replace("Flexflux", ""));
 		}
 	}
 

@@ -163,9 +163,14 @@ public class RFBAAnalysis extends Analysis {
 			networkState = simpleConstraints;
 
 			if (i != 0) {
-				Map<Constraint, double[]> nextStepConsMap = b
-						.getInteractionNetwork()
-						.goToNextInteractionNetworkState(networkState);
+				
+				
+				SteadyStateAnalysis ssa = new SteadyStateAnalysis(b,b.getInteractionNetwork(),new HashMap<BioEntity,Constraint>());
+				List<BioEntity> entitiesToCheck = new ArrayList<BioEntity>();
+				entitiesToCheck.addAll(b.getInteractionNetwork().getTargetToInteractions().keySet());
+				
+				
+				Map<Constraint, double[]> nextStepConsMap = ssa.goToNextInteractionNetworkState(networkState, entitiesToCheck);
 
 				for (Constraint c : nextStepConsMap.keySet()) {
 

@@ -189,6 +189,10 @@ public class TestInteraction {
 		result.plot();
 
 		Assert.assertTrue(result.getObjValue() == 9.0);
+		
+		System.out.println(bind.getSolvedValue(bind.getInteractionNetwork()
+				.getEntity("c")));
+		
 		Assert.assertTrue(bind.getSolvedValue(bind.getInteractionNetwork()
 				.getEntity("c")) > 1.6);
 		Assert.assertTrue(bind.getSolvedValue(bind.getInteractionNetwork()

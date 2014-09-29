@@ -34,6 +34,7 @@
 package flexflux.analyses;
 
 import flexflux.analyses.result.KOResult;
+import flexflux.analyses.result.SteadyStateAnalysisResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.Vars;
@@ -151,10 +152,11 @@ public class KOAnalysis extends Analysis {
 				}
 			}
 		}
+		
+		SteadyStateAnalysis ssa = new SteadyStateAnalysis(b,b.getInteractionNetwork(),b.getSimpleConstraints());
+		SteadyStateAnalysisResult res = ssa.runAnalysis();
 
-		List<Constraint> interactionNetwotkConstraints = b
-				.getInteractionNetwork().findSteadyState(
-						b.getSimpleConstraints());
+		List<Constraint> interactionNetwotkConstraints = res.getSteadyStateConstraints();
 		// ////////////////
 
 		Queue<BioEntity> tasks = new LinkedBlockingQueue<BioEntity>();
