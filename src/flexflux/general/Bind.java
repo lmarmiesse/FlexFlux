@@ -188,7 +188,7 @@ public abstract class Bind {
 	/**
 	 * List used for FBA to know which variables are constrained.
 	 */
-	public List<BioEntity> constrainedEntities = new ArrayList<BioEntity>();
+	public Set<BioEntity> constrainedEntities = new HashSet<BioEntity>();
 
 	/**
 	 * Creates a constraint for the solver.
@@ -1467,7 +1467,7 @@ public abstract class Bind {
 	public void prepareSolver() {
 
 		clearSolver();
-
+		
 		entitiesToSolverVars();
 
 		constraintsToSolverConstraints();
