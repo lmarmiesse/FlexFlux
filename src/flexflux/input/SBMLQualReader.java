@@ -1,4 +1,4 @@
-package flexflux.general;
+package flexflux.input;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +20,7 @@ import org.sbml.jsbml.ext.qual.QualitativeSpecies;
 import org.sbml.jsbml.ext.qual.Transition;
 
 import parsebionet.biodata.BioEntity;
+import flexflux.general.Constraint;
 import flexflux.interaction.And;
 import flexflux.interaction.Interaction;
 import flexflux.interaction.InteractionNetwork;
