@@ -41,6 +41,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.cytoscape.equations.builtins.Var;
+
 import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
 import flexflux.analyses.result.RFBAResult;
@@ -155,22 +157,27 @@ public class RFBAAnalysis extends Analysis {
 
 			Set<Constraint> constraintsToAdd = new HashSet<Constraint>();
 
-			System.err.println("-----");
-			System.err.println("it number " + i);
+			if (Vars.verbose) {
+				System.err.println("-----");
+				System.err.println("it number " + i);
+			}
 
 			Map<BioEntity, Constraint> networkState = new HashMap<BioEntity, Constraint>();
 
 			networkState = simpleConstraints;
 
 			if (i != 0) {
-				
-				
-				SteadyStateAnalysis ssa = new SteadyStateAnalysis(b,b.getInteractionNetwork(),new HashMap<BioEntity,Constraint>());
+
+				SteadyStateAnalysis ssa = new SteadyStateAnalysis(b,
+						b.getInteractionNetwork(),
+						new HashMap<BioEntity, Constraint>());
 				List<BioEntity> entitiesToCheck = new ArrayList<BioEntity>();
-				entitiesToCheck.addAll(b.getInteractionNetwork().getTargetToInteractions().keySet());
-				
-				
-				Map<Constraint, double[]> nextStepConsMap = ssa.goToNextInteractionNetworkState(networkState, entitiesToCheck);
+				entitiesToCheck.addAll(b.getInteractionNetwork()
+						.getTargetToInteractions().keySet());
+
+				Map<Constraint, double[]> nextStepConsMap = ssa
+						.goToNextInteractionNetworkState(networkState,
+								entitiesToCheck);
 
 				for (Constraint c : nextStepConsMap.keySet()) {
 
@@ -315,12 +322,16 @@ public class RFBAAnalysis extends Analysis {
 			if (mu == 0) {
 
 				if (result.flag == 0) {
-					System.err.println(timeToString(i * deltaT) + " X = "
-							+ Vars.round(X) + " no growth");
+					if (Vars.verbose) {
+						System.err.println(timeToString(i * deltaT) + " X = "
+								+ Vars.round(X) + " no growth");
+					}
 				} else {
 					unfeasibleSteps.add(i);
-					System.err.println(timeToString(i * deltaT) + " X = "
-							+ Vars.round(X) + " no growth : unfeasible");
+					if (Vars.verbose) {
+						System.err.println(timeToString(i * deltaT) + " X = "
+								+ Vars.round(X) + " no growth : unfeasible");
+					}
 
 					b.resetLastSolve();
 					continue;
@@ -425,8 +436,10 @@ public class RFBAAnalysis extends Analysis {
 			X *= Math.exp(mu * deltaT);
 
 			if (mu != 0) {
-				System.err.println(timeToString(i * deltaT) + " X = "
-						+ Vars.round(X));
+				if (Vars.verbose) {
+					System.err.println(timeToString(i * deltaT) + " X = "
+							+ Vars.round(X));
+				}
 			}
 			// System.out.println("X = " + X);
 
