@@ -7,7 +7,7 @@ import org.junit.Test;
 import parsebionet.biodata.BioEntity;
 import flexflux.general.Bind;
 import flexflux.general.CplexBind;
-import flexflux.general.SBMLQualReader;
+import flexflux.input.SBMLQualReader;
 import flexflux.interaction.RelationFactory;
 import flexflux.interaction.Unique;
 

@@ -11,8 +11,9 @@ import parsebionet.biodata.BioEntity;
 import flexflux.analyses.SteadyStateAnalysis;
 import flexflux.analyses.result.SteadyStateAnalysisResult;
 import flexflux.general.Constraint;
-import flexflux.general.SBMLQualReader;
 import flexflux.general.Vars;
+import flexflux.input.InteractionFileReader;
+import flexflux.input.SBMLQualReader;
 import flexflux.interaction.InteractionNetwork;
 import flexflux.interaction.RelationFactory;
 
@@ -76,21 +77,27 @@ public class FlexfluxSteadyState {
 			System.err.println("Error : file " + f.intFile + " not found");
 			System.exit(0);
 		}
-		
-		
-		InteractionNetwork intNet = SBMLQualReader.loadSbmlQual(f.intFile,new InteractionNetwork(),new RelationFactory());
-		
-		SteadyStateAnalysis analysis = new SteadyStateAnalysis(null, intNet, new HashMap<BioEntity,Constraint>());
-		
+
+		InteractionNetwork intNet = null;
+		if (f.intFile.endsWith(".xml") || f.intFile.endsWith(".sbml")) {
+			intNet = SBMLQualReader.loadSbmlQual(f.intFile,
+					new InteractionNetwork(), new RelationFactory());
+		} else {
+			intNet = InteractionFileReader.readInteractionFile(f.intFile,
+					new InteractionNetwork(), new RelationFactory());
+		}
+		SteadyStateAnalysis analysis = new SteadyStateAnalysis(null, intNet,
+				new HashMap<BioEntity, Constraint>());
+
 		SteadyStateAnalysisResult res = analysis.runAnalysis();
-		
-		res.plot();
-		
+
+		if (f.plot) {
+			res.plot();
+		}
+
 		if (!f.outName.equals("")) {
 			res.writeToFile(f.outName);
 		}
-		
-		
-		
+
 	}
 }
