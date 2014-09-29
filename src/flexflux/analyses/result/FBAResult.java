@@ -224,7 +224,7 @@ public class FBAResult extends AnalysisResult {
 	 */
 	private void updateTable(TableRowSorter<TableModel> sorter) {
 		String text = searchField.getText();
-		if (sorter.getModelRowCount() != 0 && text.length() != 0) {
+		if (sorter.getModelRowCount() != 0) {
 			// case insensitive
 			sorter.setRowFilter(RowFilter.regexFilter(
 					"(?i)" + Pattern.quote(text), 0));
