@@ -12,6 +12,7 @@ import parsebionet.biodata.BioPhysicalEntity;
 import flexflux.analyses.result.SteadyStateAnalysisResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
+import flexflux.general.Vars;
 import flexflux.interaction.Interaction;
 import flexflux.interaction.InteractionNetwork;
 
@@ -150,9 +151,11 @@ public class SteadyStateAnalysis extends Analysis {
 			}
 
 			if (areTheSame) {
-				System.err.println("Steady state found in " + (it)
-						+ " iterations.");
-				System.err.println("Attractor size : " + attractorSize);
+				if (Vars.verbose) {
+					System.err.println("Steady state found in " + (it)
+							+ " iterations.");
+					System.err.println("Attractor size : " + attractorSize);
+				}
 				break;
 			}
 
@@ -207,11 +210,6 @@ public class SteadyStateAnalysis extends Analysis {
 		return res;
 
 	}
-	
-	
-	
-	
-	
 
 	public Map<Constraint, double[]> goToNextInteractionNetworkState(
 			Map<BioEntity, Constraint> networkState,
