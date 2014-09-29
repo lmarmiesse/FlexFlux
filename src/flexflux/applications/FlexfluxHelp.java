@@ -5,7 +5,9 @@ import java.lang.reflect.Field;
 
 import flexflux.applications.gui.GraphicalFlexflux;
 
-public class FlexfluxHelp {
+public class FlexfluxHelp extends FFApplication {
+	
+	public static boolean requiresSolver=false;
 	
 	public static String message = "Displays the details of Flexflux functions";
 	

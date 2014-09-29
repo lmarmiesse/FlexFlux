@@ -48,7 +48,7 @@ public class MainFrame extends JFrame {
 	Map<String, String[]> previousArguments = new HashMap<String, String[]>();
 
 	private List<String> solvers;
-	private List<Class> executableClasses;
+	private List<Class> executableClasses = new ArrayList<Class>();
 
 	private JComboBox executableList = new JComboBox();
 
@@ -65,17 +65,49 @@ public class MainFrame extends JFrame {
 
 	String[] columnNames = { "Agument name", "Value" };
 
+	private boolean hasSolver = true;
+
 	public MainFrame(List<String> solvers, List<Class> classes) {
 
 		if (solvers.size() == 0) {
-			String message = "You can't use FlexFlux, no solver is well configured. Check the configuration file.";
-			JOptionPane.showMessageDialog(new JFrame(), message,
-					"No solver found", JOptionPane.ERROR_MESSAGE);
-			System.exit(0);
+
+			hasSolver = false;
+			String message = "No solver is well configured. Check the configuration file.\nYou wont be able to use "
+					+ "all of Flexflux functions";
+			 JOptionPane.showMessageDialog(new JFrame(), message,
+			 "No solver found", JOptionPane.WARNING_MESSAGE);
+//			System.exit(0);
 		}
 
 		this.solvers = solvers;
-		this.executableClasses = classes;
+
+		if (hasSolver == false) {
+			
+			for (Class cl : classes){
+				try {
+					
+					if(!(boolean) cl.getField("requiresSolver").get(null)){
+						this.executableClasses.add(cl);
+					}
+					
+					
+				} catch (NoSuchFieldException | SecurityException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+
+		} else {
+			this.executableClasses = classes;
+		}
+
 		fillExecList();
 
 		JPanel northPanel = new JPanel();
@@ -258,15 +290,13 @@ public class MainFrame extends JFrame {
 			e.printStackTrace();
 		}
 
-		
-
 		if (requiredOptions.size() == 0) {
 			requiredArgsPanel.add(new JLabel("No arguments"));
 		}
 		if (optionalOptions.size() == 0) {
 			optionalArgsPanel.add(new JLabel("No arguments"));
 		}
-		
+
 		pack();
 
 	}

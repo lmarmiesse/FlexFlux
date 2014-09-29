@@ -72,7 +72,7 @@ import parsebionet.biodata.BioEntity;
  * @author lmarmiesse 6 mars 2013
  * 
  */
-public class FlexfluxRFBA {
+public class FlexfluxRFBA extends FFApplication{
 
 	public static String message = "FlexfluxRFBA\n"
 

@@ -81,7 +81,7 @@ import org.kohsuke.args4j.Option;
  * @author lmarmiesse 6 mars 2013
  * 
  */
-public class FlexfluxPareto {
+public class FlexfluxPareto extends FFApplication{
 
 	public static String message = "FlexfluxPareto\n"
 			+ "The goal of this analysis is to determine what objective (or set of objectives) an organism is optimizing.\n"

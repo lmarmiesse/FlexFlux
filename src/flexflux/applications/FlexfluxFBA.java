@@ -60,7 +60,7 @@ import flexflux.general.Vars;
  * @author lmarmiesse 6 mars 2013
  * 
  */
-public class FlexfluxFBA {
+public class FlexfluxFBA extends FFApplication{
 
 	public static String message = "FlexfluxFBA [options...]\n"
 			+ "Computes an FBA given a metabolic network, an objective function and constraints.";

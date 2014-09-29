@@ -61,7 +61,7 @@ import parsebionet.biodata.BioEntity;
  * @author lmarmiesse 6 mars 2013
  * 
  */
-public class FlexfluxTwoReacs {
+public class FlexfluxTwoReacs extends FFApplication{
 
 	public static String message = "FlexfluxTwoReacs\n"
 
