@@ -17,7 +17,7 @@ import java.util.List;
  * @author lmarmiesse 13 juin 2013
  * 
  */
-public class FlexfluxTest {
+public class FlexfluxTest extends FFApplication{
 
 	public static List<String> okSolvers = new ArrayList<String>();
 	
@@ -77,7 +77,8 @@ public class FlexfluxTest {
 		if (!GLPKok && !CPLEXok) {
 
 			System.err
-					.println("You can't use FlexFlux, no solver is well configured. Check the configuration file.");
+					.println( "No solver is well configured. Check the configuration file.\nYou wont be able to use "
+							+ "all of Flexflux functions");
 
 		}
 

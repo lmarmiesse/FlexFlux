@@ -27,7 +27,9 @@ import flexflux.interaction.RelationFactory;
  * 
  */
 
-public class FlexfluxSteadyState {
+public class FlexfluxSteadyState extends FFApplication{
+	
+	public static boolean requiresSolver=false;
 
 	public static String message = "FlexfluxSteadyState [options...]\n"
 			+ "Find an attractor or the steady state of a given interaction network with initial values.";

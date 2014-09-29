@@ -67,7 +67,7 @@ import parsebionet.biodata.BioEntity;
  * @author lmarmiesse 6 mars 2013
  * 
  */
-public class FlexfluxKO {
+public class FlexfluxKO extends FFApplication{
 
 	public static String message = "FlexfluxKO\n"
 

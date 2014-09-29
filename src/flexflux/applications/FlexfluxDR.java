@@ -64,7 +64,7 @@ import parsebionet.io.Sbml2Bionetwork;
  * @author lmarmiesse 6 mars 2013
  * 
  */
-public class FlexfluxDR {
+public class FlexfluxDR extends FFApplication{
 
 	public static String message = "FlexfluxDR\n"
 
