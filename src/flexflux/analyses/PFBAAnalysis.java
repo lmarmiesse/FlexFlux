@@ -2,7 +2,6 @@ package flexflux.analyses;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import parsebionet.biodata.BioChemicalReaction;
@@ -368,7 +367,7 @@ public class PFBAAnalysis extends Analysis {
 		}
 		
 		int n=0;
-
+		
 		// Change all the internal reaction bounds to extreme values
 		for (BioEntity e : b.getSimpleConstraints().keySet()) {
 			
@@ -399,8 +398,15 @@ public class PFBAAnalysis extends Analysis {
 			}
 			
 		}
+		
 
+		double sumFBA1 = 0.0;
+		double sumFBA2 = 0.0;
+		int n2=0;
+		
 		for (BioEntity e : optimaZeroFluxReactions.values()) {
+			
+			long startTime = System.currentTimeMillis();
 			
 			n++;
 
@@ -429,11 +435,23 @@ public class PFBAAnalysis extends Analysis {
 
 			FBAAnalysis fbaAnalysis = new FBAAnalysis(b);
 			FBAResult res = fbaAnalysis.runAnalysis();
+			
+			long stopTime = System.currentTimeMillis();
+		      long elapsedTime = stopTime - startTime;
+		      
+		      sumFBA1 += elapsedTime;
+		      
+//		      System.err.println("First FBA : "+elapsedTime);
 
 			if (res.getObjValue() == 0) {
 				concurrentReactions.put(e.getId(), e);
 			} else {
 				if (reaction.isReversible()) {
+					
+					n2++;
+					
+					startTime = System.currentTimeMillis();
+					
 					constraint.setUb(min);
 					constraint.setLb(min);
 
@@ -441,6 +459,13 @@ public class PFBAAnalysis extends Analysis {
 
 					fbaAnalysis = new FBAAnalysis(b);
 					res = fbaAnalysis.runAnalysis();
+					
+					stopTime = System.currentTimeMillis();
+				    elapsedTime = stopTime - startTime;
+				    
+				    sumFBA2 += elapsedTime;
+				    
+//				    System.err.println("Second FBA : "+elapsedTime);
 
 					if (res.getObjValue() == 0) {
 						concurrentReactions.put(e.getId(), e);
@@ -451,9 +476,10 @@ public class PFBAAnalysis extends Analysis {
 					mleReactions.put(e.getId(), e);
 				}
 			}
-
+			
 			constraint.setUb(oldUb);
 			constraint.setLb(oldLb);
+			
 			
 			if(Vars.verbose)
 			{
@@ -463,7 +489,12 @@ public class PFBAAnalysis extends Analysis {
 			}
 
 		}
-
+		if(Vars.verbose) {
+			System.err.println("First FBA mean time : "+sumFBA1/n);
+			System.err.println("First FBA 2 mean time : "+sumFBA2/n2);
+		}
+		
+		
 		if (Vars.verbose) {
 			System.err.println("]");
 			System.err.println("[PFBA] Number of mle reactions : "
