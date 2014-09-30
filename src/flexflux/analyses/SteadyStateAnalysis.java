@@ -156,11 +156,11 @@ public class SteadyStateAnalysis extends Analysis {
 			}
 
 			if (areTheSame) {
-				if (Vars.verbose) {
-					System.err.println("Steady state found in " + (it)
-							+ " iterations.");
-					System.err.println("Attractor size : " + attractorSize);
-				}
+//				if (Vars.verbose) {
+//					System.err.println("Steady state found in " + (it)
+//							+ " iterations.");
+//					System.err.println("Attractor size : " + attractorSize);
+//				}
 				break;
 			}
 
