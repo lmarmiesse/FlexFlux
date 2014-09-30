@@ -15,7 +15,7 @@ import flexflux.general.CplexBind;
 import flexflux.general.GLPKBind;
 import flexflux.general.Vars;
 
-public class FlexfluxConditionComparison {
+public class FlexfluxConditionComparison extends FFApplication{
 
 	public String applicationName = FlexfluxConditionComparison.class
 			.getSimpleName();
@@ -166,11 +166,13 @@ public class FlexfluxConditionComparison {
 		
 		AnalysisResult r = a.runAnalysis();
 
-		if (f.plot) {
-			r.plot();
-		}
+		
 		if (!f.outName.equals("")) {
 			r.writeToFile(f.outName);
+		}
+		
+		if (f.plot) {
+			r.plot();
 		}
 
 	}

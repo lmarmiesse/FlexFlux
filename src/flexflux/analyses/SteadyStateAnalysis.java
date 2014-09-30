@@ -54,6 +54,10 @@ public class SteadyStateAnalysis extends Analysis {
 
 		List<BioEntity> entitiesToCheck = new ArrayList<BioEntity>();
 		entitiesToCheck.addAll(intNet.getTargetToInteractions().keySet());
+		
+		for (BioEntity ent : entitiesToCheck){
+			res.addResultEntity(ent);
+		}
 
 		// we set the values for the variables in the first state
 		Map<BioEntity, Constraint> thisState = new HashMap<BioEntity, Constraint>();
@@ -151,11 +155,11 @@ public class SteadyStateAnalysis extends Analysis {
 			}
 
 			if (areTheSame) {
-				if (Vars.verbose) {
-					System.err.println("Steady state found in " + (it)
-							+ " iterations.");
-					System.err.println("Attractor size : " + attractorSize);
-				}
+//				if (Vars.verbose) {
+//					System.err.println("Steady state found in " + (it)
+//							+ " iterations.");
+//					System.err.println("Attractor size : " + attractorSize);
+//				}
 				break;
 			}
 
