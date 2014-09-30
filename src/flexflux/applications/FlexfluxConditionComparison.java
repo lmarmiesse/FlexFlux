@@ -166,11 +166,13 @@ public class FlexfluxConditionComparison extends FFApplication{
 		
 		AnalysisResult r = a.runAnalysis();
 
-		if (f.plot) {
-			r.plot();
-		}
+		
 		if (!f.outName.equals("")) {
 			r.writeToFile(f.outName);
+		}
+		
+		if (f.plot) {
+			r.plot();
 		}
 
 	}
