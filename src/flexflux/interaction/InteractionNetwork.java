@@ -151,6 +151,9 @@ public class InteractionNetwork {
 	public void setTargetDefaultInteraction(BioEntity target,
 			Interaction defaultInt) {
 
+		if (targetToInteractions.get(target) == null) {
+			targetToInteractions.put(target, new FFTransition());
+		}
 		targetToInteractions.get(target).setdefaultInteraction(defaultInt);
 	}
 

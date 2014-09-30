@@ -119,36 +119,6 @@ public class RFBAAnalysis extends Analysis {
 
 		RFBAResult rFBAResult = new RFBAResult();
 
-		// ////////////////////we set the initial values
-
-		// List<Constraint> initialConstraints = new ArrayList<Constraint>();
-		// for (Constraint c : b.getInteractionNetwork().getInitialConstraints()
-		// .values()) {
-		// initialConstraints.add(c);
-		// }
-		//
-		// b.FBA(initialConstraints, true, false);
-		//
-		// Map<String, Double> valuesMap = new HashMap<String, Double>();
-		// valuesMap.put("X", X);
-		//
-		// lastSolve = b.getLastSolve();
-		//
-		// // we add the results for this iteration
-		// for (String s : toPlot) {
-		// valuesMap.put(s, lastSolve.get(s));
-		// }
-		// //we add the ext metabs to the results
-		// for (BioChemicalReaction reac : exchangeInteractions.keySet()) {
-		// for (BioEntity metab : exchangeInteractions.get(reac).keySet()) {
-		// if (simpleConstraints.containsKey(metab)) {
-		// valuesMap.put(metab.getId(), lastSolve.get(metab.getId()));
-		// }
-		// }
-		// }
-		// rFBAResult.addValues(0, valuesMap);
-		// ////////////////////
-
 		for (int i = 0; i < iterations; i++) {
 
 			// we save the results
@@ -178,7 +148,7 @@ public class RFBAAnalysis extends Analysis {
 				Map<Constraint, double[]> nextStepConsMap = ssa
 						.goToNextInteractionNetworkState(networkState,
 								entitiesToCheck);
-
+				
 				for (Constraint c : nextStepConsMap.keySet()) {
 
 					double begins = nextStepConsMap.get(c)[0];

@@ -71,11 +71,9 @@
           <qual:output qual:transitionEffect="assignmentLevel" qual:qualitativeSpecies="s_MYB96"/>
         </qual:listOfOutputs>
         <qual:listOfFunctionTerms>
-          <qual:defaultTerm qual:resultLevel="0">
-			  <notes> 0.2 </notes>
+          <qual:defaultTerm qual:resultLevel="0.2">
           </qual:defaultTerm>
-          <qual:functionTerm qual:resultLevel="1">
-			  			<notes> 3.5 </notes>
+          <qual:functionTerm qual:resultLevel="3.5">
             <math xmlns="http://www.w3.org/1998/Math/MathML">            
               <apply>
                 <and/>
