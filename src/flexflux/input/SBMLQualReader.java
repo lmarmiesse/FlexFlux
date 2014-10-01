@@ -41,6 +41,8 @@ public class SBMLQualReader {
 
 	private static InteractionNetwork intNet;
 
+	private static Map<BioEntity, Map<Integer, Double>> integerValuesToRealValues = new HashMap<BioEntity, Map<Integer, Double>>();
+
 	public static InteractionNetwork loadSbmlQual(String path,
 			InteractionNetwork intNet, RelationFactory relationFactory) {
 
@@ -71,14 +73,54 @@ public class SBMLQualReader {
 
 			}
 
-			if (species.isSetInitialLevel()) {
+			BioEntity ent = intNet.getEntity(species.getId());
 
-				BioEntity ent = intNet.getEntity(species.getId());
+			// looks in the notes to look for real Values for the states
+			if (species.getNotes() != null) {
+				XMLNode htmlNode = species.getNotes().getChildAt(1);
+
+				for (int i = 0; i < htmlNode.getChildCount(); i++) {
+					XMLNode node = htmlNode.getChildAt(i);
+					if (node.getName().equals("p")) {
+						String text = node.getChildAt(0).getCharacters();
+						if (text.startsWith("STATE")) {
+
+							if (!integerValuesToRealValues.containsKey(ent)) {
+								integerValuesToRealValues.put(ent,
+										new HashMap<Integer, Double>());
+							}
+
+							int state = Integer.parseInt(text.split(":")[0]
+									.split(" ")[1]);
+
+							double realValue = Double.parseDouble(text
+									.split(":")[1]);
+
+							integerValuesToRealValues.get(ent).put(state,
+									realValue);
+						}
+
+					}
+				}
+
+			}
+
+			if (species.isSetInitialLevel()) {
 
 				Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
 				constMap.put(ent, 1.0);
+
+				double initValue = 0;
+
+				if (integerValuesToRealValues.containsKey(ent)) {
+					initValue = integerValuesToRealValues.get(ent).get(
+							(int) species.getInitialLevel());
+				} else {
+					initValue = species.getInitialLevel();
+				}
+
 				intNet.addInitialConstraint(ent, new Constraint(constMap,
-						species.getInitialLevel(), species.getInitialLevel()));
+						initValue, initValue));
 
 			}
 
@@ -122,14 +164,20 @@ public class SBMLQualReader {
 				double lasts = 0;
 
 				Interaction inter;
+
+				double resValue = 0;
+
+				if (integerValuesToRealValues.containsKey(outEntity)) {
+					resValue = integerValuesToRealValues.get(outEntity).get(
+							ft.getResultLevel().intValue());
+				} else {
+					resValue = ft.getResultLevel();
+				}
+
 				if (ft.isDefaultTerm()) {
 
-					String result = "";
-
-					result = String.valueOf(ft.getResultLevel());
-
 					elseRelation = new Unique(outEntity, new OperationEq(),
-							Double.parseDouble(result));
+							resValue);
 
 					inter = relationFactory.makeIfThenInteraction(elseRelation,
 							null);
@@ -138,16 +186,12 @@ public class SBMLQualReader {
 
 				} else {
 
-					String result = "";
-
-					result = String.valueOf(ft.getResultLevel());
-
 					ASTNode ast = ft.getMath();
 
 					ifRelation = createRealtion(ast);
 
 					thenRelation = new Unique(outEntity, new OperationEq(),
-							Double.parseDouble(result));
+							resValue);
 
 					inter = relationFactory.makeIfThenInteraction(thenRelation,
 							ifRelation);
@@ -156,6 +200,7 @@ public class SBMLQualReader {
 
 				}
 
+				// read time infos of the interaction in the notes
 				if (ft.getNotes() != null) {
 					XMLNode htmlNode = ft.getNotes().getChildAt(1);
 
@@ -179,7 +224,6 @@ public class SBMLQualReader {
 				}
 
 				inter.setTimeInfos(new double[] { starts, lasts });
-
 			}
 
 		}
@@ -217,53 +261,97 @@ public class SBMLQualReader {
 			return new And();
 		} else if (type.toString().equals("LOGICAL_OR")) {
 			return new Or();
+		} else if (type.toString().equals("LOGICAL_NOT")) {
+
+			return new InversedRelation(createRealtion(ast.getChild(0)));
+
 		} else if (type.toString().equals("RELATIONAL_EQ")) {
 
-			Unique unique = new Unique(intNet.getEntity(ast.getChild(0)
-					.toString()), new OperationEq(), Double.parseDouble(ast
-					.getChild(1).toString()));
+			double value = 0;
+
+			BioEntity ent = intNet.getEntity(ast.getChild(0).toString());
+
+			if (integerValuesToRealValues.containsKey(ent)) {
+				value = integerValuesToRealValues.get(ent).get(
+						Integer.parseInt(ast.getChild(1).toString()));
+			} else {
+				value = Double.parseDouble(ast.getChild(1).toString());
+			}
+
+			Unique unique = new Unique(ent, new OperationEq(), value);
 
 			return unique;
 
 		} else if (type.toString().equals("RELATIONAL_LEQ")) {
 
-			Unique unique = new Unique(intNet.getEntity(ast.getChild(0)
-					.toString()), new OperationLe(), Double.parseDouble(ast
-					.getChild(1).toString()));
+			double value = 0;
+
+			BioEntity ent = intNet.getEntity(ast.getChild(0).toString());
+
+			if (integerValuesToRealValues.containsKey(ent)) {
+				value = integerValuesToRealValues.get(ent).get(
+						Integer.parseInt(ast.getChild(1).toString()));
+			} else {
+				value = Double.parseDouble(ast.getChild(1).toString());
+			}
+
+			Unique unique = new Unique(ent, new OperationLe(), value);
 
 			return unique;
 
 		} else if (type.toString().equals("RELATIONAL_GEQ")) {
 
-			Unique unique = new Unique(intNet.getEntity(ast.getChild(0)
-					.toString()), new OperationGe(), Double.parseDouble(ast
-					.getChild(1).toString()));
+			double value = 0;
+
+			BioEntity ent = intNet.getEntity(ast.getChild(0).toString());
+
+			if (integerValuesToRealValues.containsKey(ent)) {
+				value = integerValuesToRealValues.get(ent).get(
+						Integer.parseInt(ast.getChild(1).toString()));
+			} else {
+				value = Double.parseDouble(ast.getChild(1).toString());
+			}
+
+			Unique unique = new Unique(ent, new OperationGe(), value);
 
 			return unique;
 
 		} else if (type.toString().equals("RELATIONAL_LT")) {
 
-			Unique unique = new Unique(intNet.getEntity(ast.getChild(0)
-					.toString()), new OperationLt(), Double.parseDouble(ast
-					.getChild(1).toString()));
+			double value = 0;
+
+			BioEntity ent = intNet.getEntity(ast.getChild(0).toString());
+
+			if (integerValuesToRealValues.containsKey(ent)) {
+				value = integerValuesToRealValues.get(ent).get(
+						Integer.parseInt(ast.getChild(1).toString()));
+			} else {
+				value = Double.parseDouble(ast.getChild(1).toString());
+			}
+
+			Unique unique = new Unique(ent, new OperationLt(), value);
 
 			return unique;
 
 		} else if (type.toString().equals("RELATIONAL_GT")) {
 
-			Unique unique = new Unique(intNet.getEntity(ast.getChild(0)
-					.toString()), new OperationGt(), Double.parseDouble(ast
-					.getChild(1).toString()));
+			double value = 0;
+
+			BioEntity ent = intNet.getEntity(ast.getChild(0).toString());
+
+			if (integerValuesToRealValues.containsKey(ent)) {
+				value = integerValuesToRealValues.get(ent).get(
+						Integer.parseInt(ast.getChild(1).toString()));
+			} else {
+				value = Double.parseDouble(ast.getChild(1).toString());
+			}
+
+			Unique unique = new Unique(ent, new OperationGt(), value);
 
 			return unique;
-
-		} else if (type.toString().equals("LOGICAL_NOT")) {
-
-			return new InversedRelation(createRealtion(ast.getChild(0)));
 
 		}
 
 		return null;
 	}
-
 }

@@ -734,7 +734,7 @@ public abstract class Bind {
 				else if (!line.equals("")) {
 					// when it's not the equations
 					if (!equations) {
-
+						
 						String expr[] = line.replaceAll("\t", " ").split(" ");
 
 						if (binary) {
@@ -785,7 +785,7 @@ public abstract class Bind {
 						}
 
 						BioEntity entity = intNet.getEntity(expr[0]);
-
+						
 						if (knownEntity) {
 							if (binary || integer) {
 								setRightEntityType(entity, integer, binary);
@@ -878,7 +878,7 @@ public abstract class Bind {
 
 						Constraint c = new Constraint(constraintMap, lb, ub);
 						constraints.add(c);
-
+						
 						simpleConstraints.put(entity, c);
 
 					}
