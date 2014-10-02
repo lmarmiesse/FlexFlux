@@ -30,14 +30,19 @@ public class PFBAAnalysis extends Analysis {
 	private HashMap<String, BioEntity> objectiveIndependantReactions;
 	private HashMap<String, BioEntity> optimaReactions;
 	private HashMap<String, BioEntity> minFluxZeroFluxReactions;
+	private HashMap<String, BioEntity> deadReactions;
 
 	private HashMap<String, BioEntity> essentialGenes;
+	private HashMap<String, BioEntity> redundantGenesForEssentialReactions;
 	private HashMap<String, BioEntity> zeroFluxGenes;
 	private HashMap<String, BioEntity> mleGenes;
 	private HashMap<String, BioEntity> concurrentGenes;
 	private HashMap<String, BioEntity> eleGenes;
 	private HashMap<String, BioEntity> objectiveIndependantGenes;
 	private HashMap<String, BioEntity> optimaGenes;
+	private HashMap<String, BioEntity> deadGenes;
+
+	private HashMap<String, BioEntity> genesInvolvedInDeadReactions;
 
 	private Objective mainObjective;
 
@@ -65,19 +70,34 @@ public class PFBAAnalysis extends Analysis {
 		objectiveIndependantReactions = new HashMap<String, BioEntity>();
 		optimaReactions = new HashMap<String, BioEntity>();
 		minFluxZeroFluxReactions = new HashMap<String, BioEntity>();
+		deadReactions = new HashMap<String, BioEntity>();
 
 		essentialGenes = new HashMap<String, BioEntity>();
+		redundantGenesForEssentialReactions = new HashMap<String, BioEntity>();
 		zeroFluxGenes = new HashMap<String, BioEntity>();
 		mleGenes = new HashMap<String, BioEntity>();
 		eleGenes = new HashMap<String, BioEntity>();
 		concurrentGenes = new HashMap<String, BioEntity>();
 		objectiveIndependantGenes = new HashMap<String, BioEntity>();
 		optimaGenes = new HashMap<String, BioEntity>();
+		deadGenes = new HashMap<String, BioEntity>();
+
+		genesInvolvedInDeadReactions = new HashMap<String, BioEntity>();
 
 	}
 
 	@Override
 	public PFBAResult runAnalysis() {
+
+		for (BioChemicalReaction reaction : b.getDeadReactions()) {
+			this.deadReactions.put(reaction.getId(), reaction);
+			for (BioGene gene : reaction.getListOfGenes().values()) {
+				this.genesInvolvedInDeadReactions.put(gene.getId(), gene);
+			}
+		}
+
+		System.err.println("Number of dead reactions : "
+				+ this.deadReactions.size());
 
 		// It's important to keep the order
 		double opt = this.fba();
@@ -88,6 +108,7 @@ public class PFBAAnalysis extends Analysis {
 		}
 
 		if (opt != 0) {
+
 			if (performGeneAnalysis) {
 				this.geneKoAnalysis();
 			}
@@ -102,6 +123,22 @@ public class PFBAAnalysis extends Analysis {
 			this.fvaWithFluxSumConstraint();
 
 			this.scopeTest();
+
+			for (String reactionId : b.getBioNetwork()
+					.getBiochemicalReactionList().keySet()) {
+				if (!essentialReactions.containsKey(reactionId)
+						&& !zeroFluxReactions.containsKey(reactionId)
+						&& !mleReactions.containsKey(reactionId)
+						&& !concurrentReactions.containsKey(reactionId)
+						&& !eleReactions.containsKey(reactionId)
+						&& !objectiveIndependantReactions
+								.containsKey(reactionId)
+						&& !optimaReactions.containsKey(reactionId)) {
+					System.err.println("[PFBA Error] Reaction " + reactionId
+							+ " is not classified");
+				}
+			}
+
 			if (performGeneAnalysis) {
 				this.classifyGenes();
 			}
@@ -116,6 +153,8 @@ public class PFBAAnalysis extends Analysis {
 		res.objectiveIndependentReactions = objectiveIndependantReactions;
 		res.optimaReactions = optimaReactions;
 		res.zeroFluxReactions = zeroFluxReactions;
+		res.deadReactions = deadReactions;
+
 		res.objectiveValue = opt;
 
 		res.concurrentGenes = concurrentGenes;
@@ -125,6 +164,8 @@ public class PFBAAnalysis extends Analysis {
 		res.objectiveIndependentGenes = objectiveIndependantGenes;
 		res.optimaGenes = optimaGenes;
 		res.zeroFluxGenes = zeroFluxGenes;
+		res.redundantGenesForEssentialReactions = redundantGenesForEssentialReactions;
+		res.deadGenes = deadGenes;
 
 		return res;
 
@@ -307,44 +348,57 @@ public class PFBAAnalysis extends Analysis {
 
 		for (String id : minFluxZeroFluxReactions.keySet()) {
 
-			BioChemicalReaction reaction = network.getBiochemicalReactionList()
-					.get(id);
+			if (!objectiveIndependantReactions.containsKey(id)) {
 
-			Set<String> substrates = reaction.getListOfSubstrates().keySet();
+				BioChemicalReaction reaction = network
+						.getBiochemicalReactionList().get(id);
 
-			// We do the scope from the substrates of the reaction
-			ScopeCompounds scope = new ScopeCompounds(b.getBioNetwork(),
-					substrates, new HashSet<String>(), new HashSet<String>(),
-					new HashSet<String>(), false, true);
+				Set<String> substrates = reaction.getListOfProducts().keySet();
 
-			scope.compute();
+				// We do the scope from the substrates of the reaction
+				ScopeCompounds scope = new ScopeCompounds(b.getBioNetwork(),
+						substrates, b.getBioNetwork().getPhysicalEntityList()
+								.keySet(), new HashSet<String>(),
+						new HashSet<String>(), false, true);
 
-			BioNetwork scopeNetwork = scope.getScopeNetwork();
+				scope.compute();
 
-			Boolean flag = false;
+				BioNetwork scopeNetwork = scope.getScopeNetwork();
 
-			for (String reactionInObj : reactionsInObj) {
-				if (scopeNetwork.getBiochemicalReactionList().containsKey(
-						reactionInObj)) {
-					flag = true;
-					break;
+				Boolean flag = false;
+
+				for (String reactionInObj : reactionsInObj) {
+					if (scopeNetwork.getBiochemicalReactionList().containsKey(
+							reactionInObj)) {
+						flag = true;
+						break;
+					}
+				}
+
+				if (flag) {
+					eleReactions.put(id, minFluxZeroFluxReactions.get(id));
+				} else {
+					// We put also all the reactions that are in the scope in
+					// the
+					// objective independent reactions
+					objectiveIndependantReactions.put(id,
+							minFluxZeroFluxReactions.get(id));
+					for (String idScope : scopeNetwork
+							.getBiochemicalReactionList().keySet()) {
+						if (minFluxZeroFluxReactions.containsKey(idScope)) {
+							objectiveIndependantReactions.put(idScope,
+									minFluxZeroFluxReactions.get(idScope));
+						}
+					}
 				}
 			}
+		}
 
-			if (flag) {
-				eleReactions.put(id, minFluxZeroFluxReactions.get(id));
-			} else {
-				objectiveIndependantReactions.put(id,
-						minFluxZeroFluxReactions.get(id));
-			}
-
-			if (Vars.verbose) {
-				System.err.println("[PFBA] Number of ele reactions : "
-						+ eleReactions.size());
-				System.err.println("[PFBA] Number of independent reactions : "
-						+ objectiveIndependantReactions.size());
-			}
-
+		if (Vars.verbose) {
+			System.err.println("[PFBA] Number of ele reactions : "
+					+ eleReactions.size());
+			System.err.println("[PFBA] Number of independent reactions : "
+					+ objectiveIndependantReactions.size());
 		}
 	}
 
@@ -365,12 +419,11 @@ public class PFBAAnalysis extends Analysis {
 					+ optimaZeroFluxReactions.size());
 			System.err.print("[");
 		}
-		
-		int n=0;
-		
+
+		int n = 0;
+
 		// Change all the internal reaction bounds to extreme values
 		for (BioEntity e : b.getSimpleConstraints().keySet()) {
-			
 
 			String id = e.getId();
 
@@ -379,12 +432,14 @@ public class PFBAAnalysis extends Analysis {
 				BioChemicalReaction reaction = b.getBioNetwork()
 						.getBiochemicalReactionList().get(id);
 
-				// We limit the exchange reaction identification to one to one
+				// We limit the exchange reaction identification to one to
+				// one
 				// reactions
 				if (!(reaction.isExchangeReaction()
 						&& reaction.getLeftParticipantList().size() == 1 && reaction
 						.getRightParticipantList().size() == 1)) {
-					// if the reaction is not an exchange reaction we change its
+					// if the reaction is not an exchange reaction we change
+					// its
 					// lower and upper bound to FVA max values.
 					Constraint constraint = b.getSimpleConstraints().get(e);
 					constraint.setUb(Vars.maxUpperBound);
@@ -396,18 +451,17 @@ public class PFBAAnalysis extends Analysis {
 					}
 				}
 			}
-			
+
 		}
-		
 
 		double sumFBA1 = 0.0;
 		double sumFBA2 = 0.0;
-		int n2=0;
-		
+		int n2 = 0;
+
 		for (BioEntity e : optimaZeroFluxReactions.values()) {
-			
+
 			long startTime = System.currentTimeMillis();
-			
+
 			n++;
 
 			String id = e.getId();
@@ -435,23 +489,23 @@ public class PFBAAnalysis extends Analysis {
 
 			FBAAnalysis fbaAnalysis = new FBAAnalysis(b);
 			FBAResult res = fbaAnalysis.runAnalysis();
-			
-			long stopTime = System.currentTimeMillis();
-		      long elapsedTime = stopTime - startTime;
-		      
-		      sumFBA1 += elapsedTime;
-		      
-//		      System.err.println("First FBA : "+elapsedTime);
 
-			if (res.getObjValue() == 0) {
+			long stopTime = System.currentTimeMillis();
+			long elapsedTime = stopTime - startTime;
+
+			sumFBA1 += elapsedTime;
+
+			// System.err.println("First FBA : "+elapsedTime);
+
+			if (res.getObjValue().isNaN() || res.getObjValue() == 0) {
 				concurrentReactions.put(e.getId(), e);
 			} else {
 				if (reaction.isReversible()) {
-					
+
 					n2++;
-					
+
 					startTime = System.currentTimeMillis();
-					
+
 					constraint.setUb(min);
 					constraint.setLb(min);
 
@@ -459,15 +513,15 @@ public class PFBAAnalysis extends Analysis {
 
 					fbaAnalysis = new FBAAnalysis(b);
 					res = fbaAnalysis.runAnalysis();
-					
-					stopTime = System.currentTimeMillis();
-				    elapsedTime = stopTime - startTime;
-				    
-				    sumFBA2 += elapsedTime;
-				    
-//				    System.err.println("Second FBA : "+elapsedTime);
 
-					if (res.getObjValue() == 0) {
+					stopTime = System.currentTimeMillis();
+					elapsedTime = stopTime - startTime;
+
+					sumFBA2 += elapsedTime;
+
+					// System.err.println("Second FBA : "+elapsedTime);
+
+					if (res.getObjValue().isNaN() || res.getObjValue() == 0) {
 						concurrentReactions.put(e.getId(), e);
 					} else {
 						mleReactions.put(e.getId(), e);
@@ -476,25 +530,22 @@ public class PFBAAnalysis extends Analysis {
 					mleReactions.put(e.getId(), e);
 				}
 			}
-			
+
 			constraint.setUb(oldUb);
 			constraint.setLb(oldLb);
-			
-			
-			if(Vars.verbose)
-			{
-				if(n%10==0) {
+
+			if (Vars.verbose) {
+				if (n % 10 == 0) {
 					System.err.print("*");
 				}
 			}
 
 		}
-		if(Vars.verbose) {
-			System.err.println("First FBA mean time : "+sumFBA1/n);
-			System.err.println("First FBA 2 mean time : "+sumFBA2/n2);
+		if (Vars.verbose) {
+			System.err.println("First FBA mean time : " + sumFBA1 / n);
+			System.err.println("First FBA 2 mean time : " + sumFBA2 / n2);
 		}
-		
-		
+
 		if (Vars.verbose) {
 			System.err.println("]");
 			System.err.println("[PFBA] Number of mle reactions : "
@@ -543,67 +594,95 @@ public class PFBAAnalysis extends Analysis {
 
 				Set<String> reactionIds = network.getReactionsFromGene(geneId);
 
-				Set<String> optimaReactionIds = optimaReactions.keySet();
+				Set<String> essentialReactionIds = essentialReactions.keySet();
 
 				Set<String> intersection = new HashSet<String>(reactionIds);
-				intersection.retainAll(optimaReactionIds);
+				intersection.retainAll(essentialReactionIds);
 
 				if (intersection.size() != 0) {
-					optimaGenes.put(geneId, gene);
+					redundantGenesForEssentialReactions.put(geneId, gene);
 				} else {
-					Set<String> concurrentReactionIds = concurrentReactions
-							.keySet();
+
+					Set<String> optimaReactionIds = optimaReactions.keySet();
+
 					intersection = new HashSet<String>(reactionIds);
-					intersection.retainAll(concurrentReactionIds);
+					intersection.retainAll(optimaReactionIds);
 
 					if (intersection.size() != 0) {
-						concurrentGenes.put(geneId, gene);
+						optimaGenes.put(geneId, gene);
 					} else {
-						Set<String> mleReactionIds = mleReactions.keySet();
+						Set<String> concurrentReactionIds = concurrentReactions
+								.keySet();
 						intersection = new HashSet<String>(reactionIds);
-						intersection.retainAll(mleReactionIds);
+						intersection.retainAll(concurrentReactionIds);
+
 						if (intersection.size() != 0) {
-							mleGenes.put(geneId, gene);
+							concurrentGenes.put(geneId, gene);
 						} else {
-							Set<String> eleReactionIds = eleReactions.keySet();
+							Set<String> mleReactionIds = mleReactions.keySet();
 							intersection = new HashSet<String>(reactionIds);
-							intersection.retainAll(eleReactionIds);
+							intersection.retainAll(mleReactionIds);
 							if (intersection.size() != 0) {
-								eleGenes.put(geneId, gene);
+								mleGenes.put(geneId, gene);
 							} else {
-								Set<String> oirReactionIds = objectiveIndependantReactions
+								Set<String> eleReactionIds = eleReactions
 										.keySet();
 								intersection = new HashSet<String>(reactionIds);
-								intersection.retainAll(oirReactionIds);
+								intersection.retainAll(eleReactionIds);
 								if (intersection.size() != 0) {
-									objectiveIndependantGenes.put(geneId, gene);
+									eleGenes.put(geneId, gene);
 								} else {
-									Set<String> zfReactionIds = zeroFluxReactions
+									Set<String> oirReactionIds = objectiveIndependantReactions
 											.keySet();
 									intersection = new HashSet<String>(
 											reactionIds);
-									intersection.retainAll(zfReactionIds);
+									intersection.retainAll(oirReactionIds);
 									if (intersection.size() != 0) {
-										zeroFluxGenes.put(geneId, gene);
+										objectiveIndependantGenes.put(geneId,
+												gene);
 									} else {
-										System.err
-												.println("[ERROR] PFBA: The gene "
-														+ geneId
-														+ " didn't find its category !!!");
+										Set<String> zfReactionIds = zeroFluxReactions
+												.keySet();
+										intersection = new HashSet<String>(
+												reactionIds);
+										intersection.retainAll(zfReactionIds);
+										if (intersection.size() != 0) {
+											zeroFluxGenes.put(geneId, gene);
+										} else if (genesInvolvedInDeadReactions
+												.containsKey(geneId)) {
+											deadGenes.put(geneId, gene);
+										} else {
+											System.err
+													.println("[ERROR] PFBA: The gene "
+															+ geneId
+															+ " didn't find its category !!!");
+										}
 									}
 								}
 							}
-
 						}
-
 					}
-
 				}
 
 			}
 
 		}
 
+	}
+
+	/**
+	 * 
+	 * @param deadReactions
+	 */
+	public void addDeadReactions(
+			HashMap<String, BioChemicalReaction> deadReactions) {
+		this.deadReactions.putAll(deadReactions);
+
+		for (BioChemicalReaction reaction : deadReactions.values()) {
+			for (BioGene gene : reaction.getListOfGenes().values()) {
+				this.genesInvolvedInDeadReactions.put(gene.getId(), gene);
+			}
+		}
 	}
 
 }

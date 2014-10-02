@@ -95,6 +95,10 @@ public class ConditionComparisonResult extends AnalysisResult {
 	public Boolean launchRegulatorAnalysis;
 
 	public HashMap<String, BioEntity> regulators;
+	private HashMap<String, BioChemicalReaction> deadReactions;
+	
+	private HashMap<String, BioChemicalReaction> allReactions;
+	
 
 	/**
 	 * Constructor
@@ -127,6 +131,9 @@ public class ConditionComparisonResult extends AnalysisResult {
 		this.launchGeneAnalysis = launchGeneAnalysis;
 		this.launchReactionAnalysis = launchReactionAnalysis;
 		this.launchRegulatorAnalysis = launchRegulatorAnalysis;
+		
+		this.allReactions = new HashMap<String, BioChemicalReaction>();
+		this.allReactions.putAll(network.getBiochemicalReactionList());
 
 	}
 
@@ -390,6 +397,8 @@ public class ConditionComparisonResult extends AnalysisResult {
 		PrintWriter outConcurrent = null;
 		PrintWriter outIndependent = null;
 		PrintWriter outOptima = null;
+		PrintWriter outRedundant = null;
+		PrintWriter outDead = null;
 
 		HashMap<String, PrintWriter> writers = new HashMap<String, PrintWriter>();
 
@@ -413,6 +422,14 @@ public class ConditionComparisonResult extends AnalysisResult {
 					+ objectName + ".tsv"));
 			outOptima = new PrintWriter(new File(path + "/optima" + objectName
 					+ ".tsv"));
+			outDead = new PrintWriter(new File(path + "/dead" + objectName
+					+ ".tsv"));
+
+			if (objectName.compareTo("Genes") == 0) {
+				outRedundant = new PrintWriter(new File(path
+						+ "/redundantGenesForEssentialReactions" + objectName
+						+ ".tsv"));
+			}
 
 			writers.put("ess", outEssential);
 			writers.put("zf", outZeroFlux);
@@ -421,6 +438,11 @@ public class ConditionComparisonResult extends AnalysisResult {
 			writers.put("conc", outConcurrent);
 			writers.put("ind", outIndependent);
 			writers.put("opt", outOptima);
+			writers.put("dead", outDead);
+
+			if (objectName.compareTo("Genes") == 0) {
+				writers.put("red", outRedundant);
+			}
 
 			// Prints the headers
 			for (PrintWriter out : writers.values()) {
@@ -434,7 +456,6 @@ public class ConditionComparisonResult extends AnalysisResult {
 			// prints the lines corresponding to the conditions. Each cell
 			// corresponds to a fba result given a condition
 			// and an objective
-
 			for (Condition c : conditions) {
 				for (PrintWriter out : writers.values()) {
 					out.print(c.code);
@@ -489,6 +510,18 @@ public class ConditionComparisonResult extends AnalysisResult {
 						Collections.sort(optimaIds);
 						classification.put("opt", optimaIds);
 
+						ArrayList<String> deadIds = new ArrayList<String>(
+								result.get("dead" + objectName).keySet());
+						Collections.sort(deadIds);
+						classification.put("dead", deadIds);
+
+						if (objectName.compareTo("Genes") == 0) {
+							ArrayList<String> redundantIds = new ArrayList<String>(
+									result.redundantGenesForEssentialReactions
+											.keySet());
+							Collections.sort(redundantIds);
+							classification.put("red", redundantIds);
+						}
 						for (String key : writers.keySet()) {
 							PrintWriter out = writers.get(key);
 							ArrayList<String> ids = classification.get(key);
@@ -733,7 +766,11 @@ public class ConditionComparisonResult extends AnalysisResult {
 			out = new PrintWriter(new File(path + "/summary" + objectName
 					+ ".txt"));
 
-			out.write("name,essential,zeroFlux,mle,ele,conc,ind,opt\n");
+			if (isReaction) {
+				out.write("name,essential,zeroFlux,mle,ele,conc,ind,opt,dead\n");
+			} else {
+				out.write("name,essential,red,zeroFlux,mle,ele,conc,ind,opt,dead\n");
+			}
 
 			for (Condition c : conditions) {
 				HashMap<String, PFBAResult> pfbaResults = pfbaAllResults
@@ -750,6 +787,8 @@ public class ConditionComparisonResult extends AnalysisResult {
 					int nbConc = 0;
 					int nbInd = 0;
 					int nbOpt = 0;
+					int nbRed = 0;
+					int nbDead = 0;
 
 					if (result != null) {
 
@@ -762,11 +801,26 @@ public class ConditionComparisonResult extends AnalysisResult {
 						nbInd = result.get("objectiveIndependent" + objectName)
 								.size();
 						nbOpt = result.get("optima" + objectName).size();
+						nbDead = result.get("dead" + objectName).size();
+
+						if (!isReaction) {
+							nbRed = result.get(
+									"redundantGenesForEssentialReactions")
+									.size();
+						}
 
 					}
-					out.write(c.code + "__" + objName + "," + nbEssential + ","
-							+ nbZeroFlux + "," + nbMle + "," + nbEle + ","
-							+ nbConc + "," + nbInd + "," + nbOpt + "\n");
+					if (isReaction) {
+						out.write(c.code + "__" + objName + "," + nbEssential
+								+ "," + nbZeroFlux + "," + nbMle + "," + nbEle
+								+ "," + nbConc + "," + nbInd + "," + nbOpt
+								+ "," + nbDead + "\n");
+					} else {
+						out.write(c.code + "__" + objName + "," + nbEssential
+								+ "," + nbRed + "," + nbZeroFlux + "," + nbMle
+								+ "," + nbEle + "," + nbConc + "," + nbInd
+								+ "," + nbOpt + "," + nbDead + "\n");
+					}
 
 				}
 
@@ -871,9 +925,15 @@ public class ConditionComparisonResult extends AnalysisResult {
 			Utils.copyProjectResource(
 					"flexflux/data/web/templates/multiBar/multiBar.html",
 					outPath, "summary.html");
-			Utils.copyProjectResource(
-					"flexflux/data/web/templates/multiBar/multiBarPfba.js",
-					outPath, "multiBar.js");
+			if (isReaction) {
+				Utils.copyProjectResource(
+						"flexflux/data/web/templates/multiBar/multiBarReactions.js",
+						outPath, "multiBar.js");
+			} else {
+				Utils.copyProjectResource(
+						"flexflux/data/web/templates/multiBar/multiBarGenes.js",
+						outPath, "multiBar.js");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println("Error while copying web files");
@@ -886,7 +946,11 @@ public class ConditionComparisonResult extends AnalysisResult {
 		PrintWriter out = null;
 		try {
 			out = new PrintWriter(new File(outPath + "/multiBar_data.js"));
-			out.write("var str = \"name,essential,zeroFlux,mle,ele,conc,ind,opt\\n");
+			if (isReaction) {
+				out.write("var str = \"name,essential,zeroFlux,mle,ele,conc,ind,opt,dead\\n");
+			} else {
+				out.write("var str = \"name,essential,red,zeroFlux,mle,ele,conc,ind,opt,dead\\n");
+			}
 
 			for (Condition c : conditions) {
 
@@ -904,6 +968,8 @@ public class ConditionComparisonResult extends AnalysisResult {
 					int nbConc = 0;
 					int nbInd = 0;
 					int nbOpt = 0;
+					int nbRed = 0;
+					int nbDead = 0;
 
 					if (result != null) {
 
@@ -916,12 +982,25 @@ public class ConditionComparisonResult extends AnalysisResult {
 						nbInd = result.get("objectiveIndependent" + objectName)
 								.size();
 						nbOpt = result.get("optima" + objectName).size();
+						nbDead = result.get("dead" + objectName).size();
+						if (!isReaction) {
+							nbRed = result.get(
+									"redundantGenesForEssentialReactions")
+									.size();
+						}
 
 					}
-
-					out.write(c.code + "__" + objName + "," + nbEssential + ","
-							+ nbZeroFlux + "," + nbMle + "," + nbEle + ","
-							+ nbConc + "," + nbInd + "," + nbOpt + "\\n");
+					if (isReaction) {
+						out.write(c.code + "__" + objName + "," + nbEssential
+								+ "," + nbZeroFlux + "," + nbMle + "," + nbEle
+								+ "," + nbConc + "," + nbInd + "," + nbOpt
+								+ "," + nbDead + "\\n");
+					} else {
+						out.write(c.code + "__" + objName + "," + nbEssential
+								+ "," + nbRed + "," + nbZeroFlux + "," + nbMle
+								+ "," + nbEle + "," + nbConc + "," + nbInd
+								+ "," + nbOpt + "," + nbDead + "\\n");
+					}
 				}
 
 			}
@@ -1059,7 +1138,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		if (isReaction) {
 			outPath = reactionPath;
 			metaData = reactionMetaData;
-			ids = network.getBiochemicalReactionList().keySet();
+			ids = allReactions.keySet();
 			chokes = network.getChokeReactions();
 		}
 
@@ -1111,14 +1190,13 @@ public class ConditionComparisonResult extends AnalysisResult {
 			}
 
 			outMetaData.write("\n");
-
+			
 			for (String id : ids) {
 
 				outMetaData.write(id);
 
 				if (isReaction) {
-					BioChemicalReaction reaction = network
-							.getBiochemicalReactionList().get(id);
+					BioChemicalReaction reaction = allReactions.get(id);
 					HashMap<String, BioPathway> pathways = reaction
 							.getPathwayList();
 					// Build pathway string
@@ -1202,6 +1280,10 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 							if (result.get("essential" + objectName)
 									.containsKey(id)) {
+								value = 8;
+							} else if (!isReaction
+									&& result.redundantGenesForEssentialReactions
+											.containsKey(id)) {
 								value = 7;
 							} else if (result.get("optima" + objectName)
 									.containsKey(id)) {
@@ -1442,15 +1524,14 @@ public class ConditionComparisonResult extends AnalysisResult {
 			String jsonFile = outPath + "/heatmap_data.json";
 			String jsFile = outPath + "/heatmap_data.js";
 
-			
 			String cmd = "";
-			
-			if(metaData != null && metaData.size()>0) {
-			cmd = "python " + inchlibPath + " " + outPath
-					+ "/heatMapData.csv -m " + outPath + "/heatMapMetaData.csv"
-					+ " -dh -mh -a both -o " + jsonFile;
-			}
-			else {
+
+			if (metaData != null && metaData.size() > 0) {
+				cmd = "python " + inchlibPath + " " + outPath
+						+ "/heatMapData.csv -m " + outPath
+						+ "/heatMapMetaData.csv" + " -dh -mh -a both -o "
+						+ jsonFile;
+			} else {
 				cmd = "python " + inchlibPath + " " + outPath
 						+ "/heatMapData.csv -dh -a both -o " + jsonFile;
 			}
@@ -1597,13 +1678,12 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 */
 	public Boolean runInchlib(String inchlibCmd) throws IOException {
 
-		if(Vars.verbose)
-		{
+		if (Vars.verbose) {
 			System.err.println("\n********launch inchlib\n");
 			System.err.println(inchlibCmd);
-			
+
 		}
-		
+
 		Process p = null;
 		try {
 			p = Runtime.getRuntime().exec(inchlibCmd);
@@ -1916,4 +1996,24 @@ public class ConditionComparisonResult extends AnalysisResult {
 			}
 		}
 	}
+	
+	/**
+	 * Adds dead reactions in the analysis
+	 * fill in also the allReactions array
+	 * @param deadReactions
+	 */
+	public void setDeadReactions(HashMap<String, BioChemicalReaction> deadReactions) {
+		this.deadReactions = new HashMap<String, BioChemicalReaction>();
+		this.deadReactions.putAll(deadReactions);
+		this.allReactions.putAll(deadReactions);
+	}
+	
+	/**
+	 * 
+	 * @return the dead reactions
+	 */
+	public HashMap<String, BioChemicalReaction> getDeadReactions() {
+		return this.deadReactions;
+	}
+	
 }

@@ -62,11 +62,11 @@ public class FBAAnalysis extends Analysis {
 
 		if (objValue.flag != 0) {
 
-			if (Vars.verbose) {
-				System.err.println(objValue.result);
-
-				System.err.println("Unfeasible");
-			}
+//			if (Vars.verbose) {
+//				System.err.println(objValue.result);
+//
+//				System.err.println("Unfeasible");
+//			}
 			result.setObjValue(Double.NaN);
 
 		} else {

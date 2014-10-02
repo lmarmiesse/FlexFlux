@@ -62,7 +62,6 @@ import org.jfree.ui.RefineryUtilities;
 
 import parsebionet.biodata.BioEntity;
 
-
 /**
  * 
  * Class representing the result of a KO analysis.
@@ -195,78 +194,80 @@ public class KOResult extends AnalysisResult {
 	public Map<BioEntity, Double> getMap() {
 		return map;
 	}
-	
+
 	/**
 	 * 
 	 * @return a hashMap of the essential genes
 	 */
 	public HashMap<String, BioEntity> getEssentialEntities() {
-		
+
 		HashMap<String, BioEntity> essentialEntities = new HashMap<String, BioEntity>();
-		
+
 		for (BioEntity entity : map.keySet()) {
-			
+
 			Double value = Vars.round(map.get(entity));
-			if(value  == 0)
+			if (value.isNaN() || value == 0)
 				essentialEntities.put(entity.getId(), entity);
 		}
 		return essentialEntities;
-		
+
 	}
-	
+
 	/**
 	 * 
-	 * @return a hashMap of the optima essential genes 
-	 * a gene is optima essential if its ko only decreases the objective optimal value
+	 * @return a hashMap of the optima essential genes a gene is optima
+	 *         essential if its ko only decreases the objective optimal value
 	 */
 	public HashMap<String, BioEntity> getOptimaEntities(Double optimalValue) {
-		
+
 		HashMap<String, BioEntity> optimaEntities = new HashMap<String, BioEntity>();
-		
+
 		for (BioEntity entity : map.keySet()) {
-			
+
 			Double value = Vars.round(map.get(entity));
-			
-			optimalValue = Vars.round(optimalValue);
-			
-			Double diff = Math.abs(optimalValue) - Math.abs(value);
-			
-			if(diff > 0 && value != 0) {
-				optimaEntities.put(entity.getId(), entity);
+
+			if (!value.isNaN()) {
+
+				optimalValue = Vars.round(optimalValue);
+
+				Double diff = Math.abs(optimalValue) - Math.abs(value);
+
+				if (diff > 0 && value != 0) {
+					optimaEntities.put(entity.getId(), entity);
+				}
 			}
-			
-				
+
 		}
 		return optimaEntities;
-		
+
 	}
-	
+
 	/**
 	 * 
-	 * @return a hashMap of the neutral genes 
-	 * a gene is neutral if its ko doesn't decrease the objective optimal value
+	 * @return a hashMap of the neutral genes a gene is neutral if its ko
+	 *         doesn't decrease the objective optimal value
 	 */
 	public HashMap<String, BioEntity> getNeutralEntities(Double optimalValue) {
-		
+
 		HashMap<String, BioEntity> neutralEntities = new HashMap<String, BioEntity>();
-		
+
 		for (BioEntity entity : map.keySet()) {
-			
+
 			Double value = Vars.round(map.get(entity));
-			
-			optimalValue = Vars.round(optimalValue);
-			
-			Double diff = Math.abs(optimalValue) - Math.abs(value);
-			
-			if(diff == 0) {
-				neutralEntities.put(entity.getId(), entity);
+
+			if (!value.isNaN()) {
+
+				optimalValue = Vars.round(optimalValue);
+
+				Double diff = Math.abs(optimalValue) - Math.abs(value);
+
+				if (diff == 0) {
+					neutralEntities.put(entity.getId(), entity);
+				}
 			}
 		}
 		return neutralEntities;
-		
+
 	}
-	
-	
-	
 
 }

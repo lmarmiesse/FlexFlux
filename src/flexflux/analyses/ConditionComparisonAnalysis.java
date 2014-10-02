@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
+import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.biodata.BioPhysicalEntity;
@@ -52,6 +52,8 @@ public class ConditionComparisonAnalysis extends Analysis {
 	Boolean minFlux = false;
 
 	HashMap<String, BioEntity> regulators;
+	
+	HashMap<String, BioChemicalReaction> deadReactions;
 
 	/**
 	 * Separator for columns in metadata file
@@ -313,6 +315,21 @@ public class ConditionComparisonAnalysis extends Analysis {
 				
 				// We reinit the bind
 				this.init(objName, condition, false);
+				
+				
+				if(result.getDeadReactions() == null) 
+				{
+					
+					deadReactions = new HashMap<String, BioChemicalReaction>();
+					for(BioChemicalReaction deadReaction : b.getDeadReactions()) {
+						deadReactions.put(deadReaction.getId(), deadReaction);
+					}
+					
+					System.err.println(deadReactions.size()+" dead reactions");
+					
+					result.setDeadReactions(deadReactions);
+					
+				}
 
 				/**
 				 * Computes FBA (we don't minimize the fluxes)
@@ -338,9 +355,10 @@ public class ConditionComparisonAnalysis extends Analysis {
 					}
 					
 					PFBAResult resPFBA = null;
-					if (res != 0) {
+					if (! res.isNaN() && res != 0) {
 						this.init(objName, condition, false);
 						PFBAAnalysis a = new PFBAAnalysis(b, launchGeneAnalysis);
+						a.addDeadReactions(deadReactions);
 						resPFBA = a.runAnalysis();
 						
 						b.end();
@@ -360,7 +378,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 
 					KOResult koResult = null;
 
-					if (res != 0) {
+					if (! res.isNaN() && res != 0) {
 						this.init(objName, condition, false);
 						KOAnalysis koAnalysis = new KOAnalysis(b, 1, regulators);
 						koResult = koAnalysis.runAnalysis();
@@ -371,43 +389,45 @@ public class ConditionComparisonAnalysis extends Analysis {
 					result.addKoResult(obj, condition, koResult);
 
 				}
-
-				/**
-				 * Reads the metaDataFiles
-				 */
-
-				if(Vars.verbose)
-				{
-					System.err.println("************\nMetaData reading\n************");
-				}
-				
-				if (geneMetaDataFile != "" && launchGeneAnalysis) {
-					HashMap<String, HashMap<String, String>> geneMetaData = this
-							.readMetaDataFile(geneMetaDataFile, false,
-									this.mdSep);
-					result.geneMetaData = geneMetaData;
-				}
-
-				if (reactionMetaDataFile != "" && launchReactionAnalysis) {
-					HashMap<String, HashMap<String, String>> reactionMetaData = this
-							.readMetaDataFile(reactionMetaDataFile, true,
-									this.mdSep);
-					result.reactionMetaData = reactionMetaData;
-				}
-
-				if (regulatorMetaDataFile != "" && launchRegulatorAnalysis) {
-					HashMap<String, HashMap<String, String>> regulatorMetaData = this
-							.readMetaDataFile(regulatorMetaDataFile, true,
-									this.mdSep);
-					result.regulatorMetaData = regulatorMetaData;
-				}
-
-				for (BioEntity e : this.b.getInteractionNetwork()
-						.getTargetToInteractions().keySet()) {
-					result.interactionTargets.add(e.getId());
-				}
 			}
 		}
+		
+		/**
+		 * Reads the metaDataFiles
+		 */
+
+		if(Vars.verbose)
+		{
+			System.err.println("************\nMetaData reading\n************");
+		}
+		
+		if (geneMetaDataFile != "" && launchGeneAnalysis) {
+			HashMap<String, HashMap<String, String>> geneMetaData = this
+					.readMetaDataFile(geneMetaDataFile, false,
+							this.mdSep);
+			result.geneMetaData = geneMetaData;
+		}
+
+		if (reactionMetaDataFile != "" && launchReactionAnalysis) {
+			HashMap<String, HashMap<String, String>> reactionMetaData = this
+					.readMetaDataFile(reactionMetaDataFile, true,
+							this.mdSep);
+			result.reactionMetaData = reactionMetaData;
+		}
+
+		if (regulatorMetaDataFile != "" && launchRegulatorAnalysis) {
+			HashMap<String, HashMap<String, String>> regulatorMetaData = this
+					.readMetaDataFile(regulatorMetaDataFile, true,
+							this.mdSep);
+			result.regulatorMetaData = regulatorMetaData;
+		}
+
+		for (BioEntity e : this.b.getInteractionNetwork()
+				.getTargetToInteractions().keySet()) {
+			result.interactionTargets.add(e.getId());
+		}
+		
+		
 		return result;
 	}
 
