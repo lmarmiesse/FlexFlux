@@ -97,9 +97,9 @@ public class FVAAnalysis extends Analysis {
 
 		if (result.flag != 0) {
 
-			if (Vars.verbose) {
-				System.err.println("Unfeasible");
-			}
+//			if (Vars.verbose) {
+//				System.err.println("Unfeasible");
+//			}
 			fvaResult = new FVAResult(Double.NaN);
 			return fvaResult;
 

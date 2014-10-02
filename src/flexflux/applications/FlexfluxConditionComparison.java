@@ -15,7 +15,7 @@ import flexflux.general.CplexBind;
 import flexflux.general.GLPKBind;
 import flexflux.general.Vars;
 
-public class FlexfluxConditionComparison extends FFApplication{
+public class FlexfluxConditionComparison {
 
 	public String applicationName = FlexfluxConditionComparison.class
 			.getSimpleName();

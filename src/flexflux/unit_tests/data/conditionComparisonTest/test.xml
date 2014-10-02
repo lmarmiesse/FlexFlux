@@ -38,9 +38,14 @@
   <species id="Q" name ="Q" compartment="b" boundaryCondition="false" />
   <species id="OBJ" name ="OBJ" compartment="b" boundaryCondition="false" />
   <species id="OBJ2" name ="OBJ2" compartment="b" boundaryCondition="false" />
+  <species id="XX" name ="XX" compartment="b" boundaryCondition="false" />
+  <species id="YY" name ="YY" compartment="b" boundaryCondition="false" />
 </listOfSpecies>
 <listOfReactions>
   <reaction id="R_A_EX" name ="R_A_EX" reversible="false">
+  	 <notes>
+      <html:p>GENE_ASSOCIATION: G00 or G01</html:p>
+    </notes>
     <listOfReactants>
       <speciesReference species="A_ex" stoichiometry="1"/>
     </listOfReactants>
@@ -403,6 +408,28 @@
     </listOfReactants>
     <listOfProducts>
       <speciesReference species="Q" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="-99999" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="99999" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+  <reaction id="DEAD" name ="dead" reversible="true">
+    <notes>
+      <html:p>GENE_ASSOCIATION: G12</html:p>
+      <html:p>PROTEIN_ASSOCIATION: ( P12 )</html:p>
+      <html:p>SUBSYSTEM: Pathway2</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="XX" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="YY" stoichiometry="1"/>
     </listOfProducts>
     <kineticLaw>
     <math xmlns="http://www.w3.org/1998/Math/MathML">

@@ -36,6 +36,7 @@ public class TestConditionComparison {
 	private static File tempResultConcurrentFile = null;
 	private static File tempResultIndependentFile = null;
 	private static File tempResultOptimaFile = null;
+	private static File tempResultDeadFile = null;
 
 	private static File tempResultEssentialGeneFile = null;
 	private static File tempResultZeroFluxGeneFile = null;
@@ -44,6 +45,7 @@ public class TestConditionComparison {
 	private static File tempResultEleGeneFile = null;
 	private static File tempResultIndependentGeneFile = null;
 	private static File tempResultOptimaGeneFile = null;
+	private static File tempResultDeadGeneFile = null;
 
 	private static File tempResultEssentialRegulatorFile = null;
 	private static File tempResultOptimaRegulatorFile = null;
@@ -61,6 +63,7 @@ public class TestConditionComparison {
 	private static String referenceConcurrentFile = "";
 	private static String referenceIndependentFile = "";
 	private static String referenceOptimaFile = "";
+	private static String referenceDeadFile = "";
 
 	private static String referenceEssentialGeneFile = "";
 	private static String referenceZeroFluxGeneFile = "";
@@ -69,6 +72,8 @@ public class TestConditionComparison {
 	private static String referenceEleGeneFile = "";
 	private static String referenceIndependentGeneFile = "";
 	private static String referenceOptimaGeneFile = "";
+	private static String referenceDeadGeneFile = "";
+
 
 	private static String referenceEssentialRegulatorFile = "";
 	private static String referenceOptimaRegulatorFile = "";
@@ -115,6 +120,7 @@ public class TestConditionComparison {
 		java.nio.file.Path tmpResultConcurrent = null;
 		java.nio.file.Path tmpResultIndependent = null;
 		java.nio.file.Path tmpResultOptima = null;
+		java.nio.file.Path tmpResultDead = null;
 
 		java.nio.file.Path tmpResultEssentialGenes = null;
 		java.nio.file.Path tmpResultZeroFluxGenes = null;
@@ -123,6 +129,7 @@ public class TestConditionComparison {
 		java.nio.file.Path tmpResultEleGenes = null;
 		java.nio.file.Path tmpResultIndependentGenes = null;
 		java.nio.file.Path tmpResultOptimaGenes = null;
+		java.nio.file.Path tmpResultDeadGenes = null;
 
 		java.nio.file.Path tmpResultEssentialRegulators = null;
 		java.nio.file.Path tmpResultOptimaRegulators = null;
@@ -151,6 +158,8 @@ public class TestConditionComparison {
 					".tab");
 			tmpResultOptima = java.nio.file.Files
 					.createTempFile("test", ".tab");
+			tmpResultDead = java.nio.file.Files
+					.createTempFile("test", ".tab");
 
 			tmpResultEssentialGenes = java.nio.file.Files.createTempFile(
 					"test", ".tab");
@@ -178,6 +187,9 @@ public class TestConditionComparison {
 					".tab");
 			tmpMetaDataReactions = java.nio.file.Files.createTempFile("test",
 					".tab");
+			
+			tmpResultDeadGenes = java.nio.file.Files
+					.createTempFile("test", ".tab");
 
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -199,7 +211,8 @@ public class TestConditionComparison {
 		tempResultConcurrentFile = tmpResultConcurrent.toFile();
 		tempResultIndependentFile = tmpResultIndependent.toFile();
 		tempResultOptimaFile = tmpResultOptima.toFile();
-
+		tempResultDeadFile = tmpResultDead.toFile();
+		
 		tempResultEssentialGeneFile = tmpResultEssentialGenes.toFile();
 		tempResultZeroFluxGeneFile = tmpResultZeroFluxGenes.toFile();
 		tempResultMleGeneFile = tmpResultMleGenes.toFile();
@@ -207,6 +220,7 @@ public class TestConditionComparison {
 		tempResultEleGeneFile = tmpResultEleGenes.toFile();
 		tempResultIndependentGeneFile = tmpResultIndependentGenes.toFile();
 		tempResultOptimaGeneFile = tmpResultOptimaGenes.toFile();
+		tempResultDeadGeneFile = tmpResultDeadGenes.toFile();
 
 		tempResultEssentialRegulatorFile = tmpResultEssentialRegulators
 				.toFile();
@@ -278,6 +292,11 @@ public class TestConditionComparison {
 					.copyProjectResource(
 							"flexflux/unit_tests/data/conditionComparisonTest/resultOptima.tab",
 							tempResultOptimaFile);
+			
+			referenceDeadFile = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/conditionComparisonTest/resultDead.tab",
+							tempResultDeadFile);
 
 			referenceEssentialGeneFile = TestUtils
 					.copyProjectResource(
@@ -314,6 +333,11 @@ public class TestConditionComparison {
 							"flexflux/unit_tests/data/conditionComparisonTest/resultOptimaGenes.tab",
 							tempResultOptimaGeneFile);
 
+			referenceDeadGeneFile = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/conditionComparisonTest/resultDeadGenes.tab",
+							tempResultDeadGeneFile);
+			
 			referenceEssentialRegulatorFile = TestUtils
 					.copyProjectResource(
 							"flexflux/unit_tests/data/conditionComparisonTest/resultEssentialRegulators.tab",
@@ -603,6 +627,31 @@ public class TestConditionComparison {
 				"Neutral regulators are different from the reference", fileRef,
 				fileTest);
 
+	}
+	
+	
+	@Test
+	public void testDead() {
+
+		String pathFileTest = basePath + "/deadReactions.tsv";
+		File fileTest = new File(pathFileTest);
+		File fileRef = new File(referenceDeadFile);
+
+		FileAssert.assertEquals(
+				"Dead reactions are different from the reference", fileRef,
+				fileTest);
+	}
+	
+	@Test
+	public void testDeadGenes() {
+
+		String pathFileTest = basePath + "/deadGenes.tsv";
+		File fileTest = new File(pathFileTest);
+		File fileRef = new File(referenceDeadGeneFile);
+
+		FileAssert.assertEquals(
+				"Dead genes are different from the reference", fileRef,
+				fileTest);
 	}
 
 	@AfterClass

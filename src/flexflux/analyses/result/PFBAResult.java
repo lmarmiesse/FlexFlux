@@ -13,6 +13,7 @@ public class PFBAResult extends AnalysisResult {
 	public HashMap<String, BioEntity> eleReactions;
 	public HashMap<String, BioEntity> objectiveIndependentReactions;
 	public HashMap<String, BioEntity> optimaReactions;
+	public HashMap<String, BioEntity> deadReactions;
 
 	public HashMap<String, BioEntity> essentialGenes;
 	public HashMap<String, BioEntity> zeroFluxGenes;
@@ -21,6 +22,8 @@ public class PFBAResult extends AnalysisResult {
 	public HashMap<String, BioEntity> eleGenes;
 	public HashMap<String, BioEntity> objectiveIndependentGenes;
 	public HashMap<String, BioEntity> optimaGenes;
+	public HashMap<String, BioEntity> redundantGenesForEssentialReactions;
+	public HashMap<String, BioEntity> deadGenes;
 
 	public double objectiveValue = 0.0;
 
@@ -67,6 +70,12 @@ public class PFBAResult extends AnalysisResult {
 			return objectiveIndependentGenes;
 		case "optimaGenes":
 			return optimaGenes;
+		case "redundantGenesForEssentialReactions":
+			return redundantGenesForEssentialReactions;
+		case "deadGenes":
+			return deadGenes;
+		case "deadReactions":
+			return deadReactions;
 		default:
 			System.err.println("This field does not exist");
 			return null;
