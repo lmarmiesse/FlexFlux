@@ -186,7 +186,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 		/**
 		 * Loads the metabolic network
 		 */
-		b.setNetwork(this.network);
+		b.setNetworkAndConstraints(this.network);
 
 		/**
 		 * Loads the constraints applied on the metabolic network

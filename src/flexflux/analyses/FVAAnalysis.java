@@ -37,10 +37,11 @@ import flexflux.analyses.result.FVAResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.DoubleResult;
-import flexflux.general.Objective;
 import flexflux.general.Vars;
 import flexflux.thread.ResolveThread;
+import flexflux.thread.ThreadFVA;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -156,8 +157,22 @@ public class FVAAnalysis extends Analysis {
 		}
 
 		for (int j = 0; j < Vars.maxThread; j++) {
-			threads.add(b.getThreadFactory().makeFVAThread(entQueue,
-					entQueueCopy, fvaResult));
+			
+Bind newBind = null;
+			
+			try {
+				newBind = b.copy();
+			} catch (ClassNotFoundException | NoSuchMethodException
+					| SecurityException | InstantiationException
+					| IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+			
+			ThreadFVA threadFva = new ThreadFVA(newBind, entQueue, entQueueCopy, fvaResult);
+			
+			threads.add(threadFva);
 		}
 
 		if (Vars.verbose) {

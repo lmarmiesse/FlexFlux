@@ -41,6 +41,7 @@ import flexflux.general.Vars;
 import flexflux.thread.ResolveThread;
 import flexflux.thread.ThreadReac;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -125,8 +126,22 @@ public class ReacAnalysis extends Analysis {
 				end, deltaF);
 
 		for (int j = 0; j < Vars.maxThread; j++) {
-			threads.add(b.getThreadFactory().makeReacThread(fluxesQueue,
-					entities, result, b.getObjective()));
+			
+			Bind newBind = null;
+			
+			try {
+				newBind = b.copy();
+			} catch (ClassNotFoundException | NoSuchMethodException
+					| SecurityException | InstantiationException
+					| IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+			
+			ThreadReac threadReac = new ThreadReac(newBind, fluxesQueue, entities, result, b.getObjective());
+			
+			threads.add(threadReac);
 
 		}
 
