@@ -42,6 +42,7 @@ import flexflux.interaction.Interaction;
 import flexflux.thread.ResolveThread;
 import flexflux.thread.ThreadKO;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -156,7 +157,7 @@ public class KOAnalysis extends Analysis {
 		SteadyStateAnalysis ssa = new SteadyStateAnalysis(b,b.getInteractionNetwork(),b.getSimpleConstraints());
 		SteadyStateAnalysisResult res = ssa.runAnalysis();
 
-		List<Constraint> interactionNetwotkConstraints = res.getSteadyStateConstraints();
+		List<Constraint> interactionNetworkConstraints = res.getSteadyStateConstraints();
 		// ////////////////
 
 		Queue<BioEntity> tasks = new LinkedBlockingQueue<BioEntity>();
@@ -167,9 +168,20 @@ public class KOAnalysis extends Analysis {
 
 		for (int j = 0; j < Vars.maxThread; j++) {
 			
-			ThreadKO threadKo = b.getThreadFactory().makeKOThread(tasks, koResult,
-					b.getObjective(), entitiesInInteractionNetwork,
-					interactionNetwotkConstraints);
+			Bind newBind = null;
+			
+			try {
+				newBind = b.copy();
+			} catch (ClassNotFoundException | NoSuchMethodException
+					| SecurityException | InstantiationException
+					| IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+			
+			ThreadKO threadKo = new ThreadKO(newBind, tasks, koResult, b.getObjective(),
+	                entitiesInInteractionNetwork, interactionNetworkConstraints); 
 			
 			threads.add(threadKo);
 		}

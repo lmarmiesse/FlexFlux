@@ -36,7 +36,6 @@ package flexflux.general;
 import flexflux.interaction.InteractionNetwork;
 import flexflux.interaction.RelationFactory;
 import flexflux.operation.OperationFactory;
-import flexflux.thread.ThreadFactoryCPLEX;
 import ilog.concert.IloConstraint;
 import ilog.concert.IloException;
 import ilog.concert.IloNumExpr;
@@ -116,8 +115,6 @@ public class CplexBind extends Bind {
 		// creation of the right factories
 		this.operationFactory = new OperationFactory();
 		this.relationFactory = new RelationFactory();
-		this.threadFactory = new ThreadFactoryCPLEX(constraints,
-				simpleConstraints, intNet);
 	}
 
 	public CplexBind() {

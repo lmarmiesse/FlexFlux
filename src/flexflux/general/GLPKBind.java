@@ -50,7 +50,6 @@ import parsebionet.biodata.BioNetwork;
 import flexflux.interaction.InteractionNetwork;
 import flexflux.interaction.RelationFactory;
 import flexflux.operation.OperationFactory;
-import flexflux.thread.ThreadFactoryGLPK;
 
 /**
  * 
@@ -98,8 +97,6 @@ public class GLPKBind extends Bind {
 		// creation of the right factories
 		this.operationFactory = new OperationFactory();
 		this.relationFactory = new RelationFactory();
-		this.threadFactory = new ThreadFactoryGLPK(constraints,
-				simpleConstraints, intNet);
 	}
 
 	public GLPKBind() {

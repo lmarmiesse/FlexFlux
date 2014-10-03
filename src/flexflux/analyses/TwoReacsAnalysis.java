@@ -41,6 +41,7 @@ import flexflux.general.Vars;
 import flexflux.thread.ResolveThread;
 import flexflux.thread.ThreadTwoReacs;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -145,9 +146,22 @@ public class TwoReacsAnalysis extends Analysis {
 				init, end, deltaF, init2, end2, deltaF2);
 
 		for (int j = 0; j < Vars.maxThread; j++) {
-			threads.add((ThreadTwoReacs) b.getThreadFactory()
-					.makeTwoReacsThread(fluxesQueue, result, entities1,
-							entities2, b.getObjective()));
+			
+Bind newBind = null;
+			
+			try {
+				newBind = b.copy();
+			} catch (ClassNotFoundException | NoSuchMethodException
+					| SecurityException | InstantiationException
+					| IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+			
+			ThreadTwoReacs thread = new ThreadTwoReacs(newBind, fluxesQueue, result, entities1, entities2, b.getObjective());
+			
+			threads.add(thread);
 
 		}
 

@@ -13,3 +13,4 @@ l'algo de fastFVA ?
 trouver une solution pour simplifier tout ça !
 - BIND.FBA() : à revoir : on peut effacer des simpleConstraints non désirées.
 - ne pas accéder aux attributs avec des tableaux
+- Tests ReacAnalysis et TwoReacAnalysis

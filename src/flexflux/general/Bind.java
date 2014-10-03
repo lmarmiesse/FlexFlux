@@ -71,7 +71,6 @@ import flexflux.interaction.Relation;
 import flexflux.interaction.RelationFactory;
 import flexflux.interaction.Unique;
 import flexflux.operation.OperationFactory;
-import flexflux.thread.ThreadFactory;
 
 /**
  * 
@@ -109,10 +108,6 @@ public abstract class Bind {
 	 * To create the right relations.
 	 */
 	protected RelationFactory relationFactory;
-	/**
-	 * To create the right type of thread.
-	 */
-	protected ThreadFactory threadFactory;
 
 	/**
 	 * The interaction network of the problem.
@@ -575,7 +570,15 @@ public abstract class Bind {
 	 */
 	public void loadSbmlNetwork(String path, boolean ext) {
 		Sbml2Bionetwork parser = new Sbml2Bionetwork(path, ext);
-		setNetwork(parser.getBioNetwork());
+		setNetworkAndConstraints(parser.getBioNetwork());
+	}
+	
+	/**
+	 * 
+	 * @param network
+	 */
+	public void setNetwork(BioNetwork network) {
+		this.bioNet = network;
 	}
 
 	/**
@@ -585,10 +588,8 @@ public abstract class Bind {
 	 * 
 	 * @param network
 	 *            Network to give the problem.
-	 * @param ext
-	 *            If true : uses extended SBML format.
 	 */
-	public void setNetwork(BioNetwork network) {
+	public void setNetworkAndConstraints(BioNetwork network) {
 
 		if (network == null) {
 
@@ -599,7 +600,6 @@ public abstract class Bind {
 		this.bioNet = network;
 		deadReactions = bioNet.trim();
 
-		threadFactory.setBioNet(bioNet);
 		simpleConstraints.clear();
 		constraints.clear();
 		intNet.clear();
@@ -1786,15 +1786,13 @@ public abstract class Bind {
 			makeSolverObjective();
 		}
 	}
+	
+	public abstract void init();
 
 	public abstract void end();
 
 	public Objective getObjective() {
 		return obj;
-	}
-
-	public ThreadFactory getThreadFactory() {
-		return threadFactory;
 	}
 
 	public Map<BioChemicalReaction, Map<BioEntity, Double>> getExchangeInteractions() {
@@ -1858,7 +1856,25 @@ public abstract class Bind {
 	public void addSimpleConstraint(BioEntity e, Constraint c) {
 		this.simpleConstraints.put(e, c);
 	}
-
+	
+	
+	/**
+	 * 
+	 * @param interactionNetwork
+	 */
+	public void setInteractionNetwork(InteractionNetwork interactionNetwork) {
+		this.intNet = interactionNetwork;
+	}
+	
+	/**
+	 * 
+	 * @param constraints
+	 */
+	public void setConstraints(List<Constraint> constraints) {
+		this.constraints = constraints;
+	}
+	
+	
 	/**
 	 * Computes reduced costs and shadow prices
 	 * 
@@ -1866,6 +1882,34 @@ public abstract class Bind {
 	 */
 	public abstract void sensitivityAnalysis(String fileName);
 
+	/**
+	 * Create a new Bind with the good constructor
+	 * 
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	public Bind createNewBind() throws ClassNotFoundException, NoSuchMethodException,
+			SecurityException, InstantiationException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException {
+
+		String className = this.getClass().getName();
+
+		Class<?> myClass = Class.forName(className);
+
+		Constructor<?> ctor = myClass.getConstructor();
+
+		Bind newBind = (Bind) ctor.newInstance();
+		
+		return newBind;
+
+	}
+	
 	/**
 	 * Copy the Bind Be careful, the entities are not duplicated
 	 * 
@@ -1889,61 +1933,13 @@ public abstract class Bind {
 		Constructor<?> ctor = myClass.getConstructor();
 
 		Bind newBind = (Bind) ctor.newInstance();
-
-		for (Constraint c : this.constraints) {
-			Constraint newC;
-
-			if (c.getNot() && c.getLb() == c.getUb()) {
-				newC = new Constraint(c.getEntities(), c.getLb(), c.getNot());
-			} else {
-				newC = new Constraint(c.getEntities(), c.getLb(), c.getUb());
-			}
-
-			newBind.constraints.add(newC);
-
-			if (c.getEntities().size() == 1) {
-				newBind.simpleConstraints.put(c.getEntities().keySet()
-						.iterator().next(), newC);
-			}
-
-		}
-
-		// we copy the interaction network
-		for (BioEntity ent : intNet.getNumEntities()) {
-			newBind.intNet.addNumEntity(ent);
-		}
-		for (BioEntity ent : intNet.getIntEntities()) {
-			newBind.intNet.addIntEntity(ent);
-		}
-		for (BioEntity ent : intNet.getBinaryEntities()) {
-			newBind.intNet.addBinaryEntity(ent);
-		}
-
-		for (Interaction inter : intNet.getGPRInteractions()) {
-			newBind.intNet.addGPRIntercation(inter);
-		}
-
-		for (BioEntity ent : intNet.getInitialConstraints().keySet()) {
-			newBind.intNet.addInitialConstraint(ent, intNet
-					.getInitialConstraints().get(ent));
-			;
-		}
-
-		for (Interaction inter : intNet.getGPRInteractions()) {
-			newBind.intNet.addGPRIntercation(inter);
-		}
-
-		for (Interaction inter : intNet.getInteractionToConstraints().keySet()) {
-			newBind.intNet.addInteractionToConstraints(inter);
-		}
-
-		for (BioEntity ent : intNet.getTargetToInteractions().keySet()) {
-			newBind.intNet.setTargetToInteractions(ent, intNet
-					.getTargetToInteractions().get(ent));
-		}
-
-		newBind.setNetwork(this.bioNet);
-
+		
+		newBind.getConstraints().addAll(this.getConstraints());
+		newBind.getSimpleConstraints().putAll(this.getSimpleConstraints());
+		newBind.setInteractionNetwork(this.getInteractionNetwork());
+		newBind.setNetwork(this.getBioNetwork());
+		newBind.init();
+		
 		return newBind;
 
 	}

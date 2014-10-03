@@ -189,7 +189,7 @@ public class TestBind {
 		Sbml2Bionetwork parser = new Sbml2Bionetwork("Data/test.xml", false);
 
 		BioNetwork network = parser.getBioNetwork();
-		bind.setNetwork(network);
+		bind.setNetworkAndConstraints(network);
 
 		Assert.assertTrue(bind.getConstraints().size() == 13);
 		Assert.assertTrue(bind.getInteractionNetwork().getNumEntities().size() == 17);
@@ -214,7 +214,7 @@ public class TestBind {
 		Assert.assertTrue(bind.getSolvedValue(new BioEntity("g")) == 58.0);
 
 		Bind bind2 = new CplexBind();
-		bind2.setNetwork(network);
+		bind2.setNetworkAndConstraints(network);
 
 		Assert.assertTrue(bind2.getConstraints().size() == 13);
 		Assert.assertTrue(bind2.getInteractionNetwork().getNumEntities().size() == 17);
