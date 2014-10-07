@@ -98,9 +98,9 @@ public class FVAAnalysis extends Analysis {
 
 		if (result.flag != 0) {
 
-//			if (Vars.verbose) {
-//				System.err.println("Unfeasible");
-//			}
+			// if (Vars.verbose) {
+			// System.err.println("Unfeasible");
+			// }
 			fvaResult = new FVAResult(Double.NaN);
 			return fvaResult;
 
@@ -157,9 +157,9 @@ public class FVAAnalysis extends Analysis {
 		}
 
 		for (int j = 0; j < Vars.maxThread; j++) {
-			
-Bind newBind = null;
-			
+
+			Bind newBind = null;
+
 			try {
 				newBind = b.copy();
 			} catch (ClassNotFoundException | NoSuchMethodException
@@ -169,9 +169,10 @@ Bind newBind = null;
 				e.printStackTrace();
 				System.exit(1);
 			}
-			
-			ThreadFVA threadFva = new ThreadFVA(newBind, entQueue, entQueueCopy, fvaResult);
-			
+
+			ThreadFVA threadFva = new ThreadFVA(newBind, entQueue,
+					entQueueCopy, fvaResult);
+
 			threads.add(threadFva);
 		}
 
