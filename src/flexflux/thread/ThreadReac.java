@@ -106,9 +106,9 @@ public class ThreadReac extends ResolveThread {
 	public void run() {
 		int todo = fluxesQueue.size();
 
-		while (fluxesQueue.size() > 0) {
-
-			double value = fluxesQueue.poll();
+		Double value;
+		
+		while ((value = fluxesQueue.poll()) != null) {
 
 			List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 			constraintsToAdd.add(new Constraint(entities, value, value));

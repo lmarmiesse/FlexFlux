@@ -98,10 +98,10 @@ public class ThreadKO extends ResolveThread {
 	}
 
 	public void run() {
-		double size;
-		while ((size = entities.size()) > 0) {
 
-			BioEntity entity = entities.poll();
+		BioEntity entity;
+		
+		while ((entity = entities.poll()) != null) {
 
 			Map<BioEntity, Double> entityMap = new HashMap<BioEntity, Double>();
 			entityMap.put(entity, 1.0);
@@ -119,14 +119,13 @@ public class ThreadKO extends ResolveThread {
 				bind.checkInteractionNetwork = false;
 			}
 
-
 			DoubleResult value = bind.FBA(constraintsToAdd, false, true);
 
 			result.addLine(entity, value.result);
 
 			bind.checkInteractionNetwork = true;
 
-			int percent = (int) Math.round((todo - size) / todo * 100);
+			int percent = (int) Math.round((todo - entities.size()) / todo * 100);
 			if (percent > percentage) {
 				percentage = percent;
 				if (percent % 2 == 0) {
@@ -135,7 +134,6 @@ public class ThreadKO extends ResolveThread {
 					}
 				}
 			}
-
 		}
 
 		bind.end();

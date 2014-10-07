@@ -94,6 +94,8 @@ public class TestConditionComparison {
 	public static void init() throws IOException {
 
 		Vars.writeInteractionNetworkStates = false;
+		
+		Vars.maxThread = 10;
 
 		String solver = "GLPK";
 		if (System.getProperties().containsKey("solver")) {

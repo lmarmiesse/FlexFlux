@@ -98,15 +98,16 @@ public class ThreadFVA extends ResolveThread {
 		// we do all the minimize
 		bind.setObjSense(false);
 		double size;
-		while ((size = entities.size()) > 0) {
-
-			BioEntity entity = entities.poll();
+		
+		BioEntity entity;
+		
+		while ((entity = entities.poll()) != null) {
 			
 			bind.changeObjVarValue(entity, 1.0);
 			result.setMin(entity, bind.FBA(new ArrayList<Constraint>(),false, false).result);
 			bind.changeObjVarValue(entity, 0.0);
 
-			int percent = (int) Math.round((todo - size) / todo * 50);
+			int percent = (int) Math.round((todo - entities.size()) / todo * 50);
 			if (percent > percentage) {
 
 				percentage = percent;
@@ -118,14 +119,14 @@ public class ThreadFVA extends ResolveThread {
 		}
 		// and all the maximize
 		bind.setObjSense(true);
-		while ((size = entitiesCopy.size()) > 0) {
-			BioEntity reaction = entitiesCopy.poll();
+		
+		while ((entity = entitiesCopy.poll()) != null) {
 
-			bind.changeObjVarValue(reaction, 1.0);
-			result.setMax(reaction, bind.FBA(new ArrayList<Constraint>(),false, false).result);
-			bind.changeObjVarValue(reaction, 0.0);
+			bind.changeObjVarValue(entity, 1.0);
+			result.setMax(entity, bind.FBA(new ArrayList<Constraint>(),false, false).result);
+			bind.changeObjVarValue(entity, 0.0);
 
-			int percent = (int) Math.round((todo - size) / todo * 50) + 50;
+			int percent = (int) Math.round((todo - entitiesCopy.size()) / todo * 50) + 50;
 			if (percent > percentage) {
 				percentage = percent;
 				if (Vars.verbose && percent % 2 == 0 && percentage != 0) {
