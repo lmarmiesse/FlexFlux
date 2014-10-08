@@ -2,6 +2,7 @@ package flexflux.unit_tests;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import junitx.framework.FileAssert;
 
@@ -381,9 +382,17 @@ public class TestConditionComparison {
 			Vars.verbose = true;
 		}
 
+		HashMap<String, String> objectives = f
+				.loadObjectiveFile(f.objectiveFile);
+		
+		if (objectives == null) {
+			Assert.fail("Error in reading the objective file");
+		}
+		
+		
 		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
 				f.sbmlFile, f.intFile, f.conditionFile, f.constraintFile,
-				f.objectiveFile, ConstraintType.DOUBLE, false, solver,
+				objectives, ConstraintType.DOUBLE, false, solver,
 				metaDataReactionFile, metaDataGeneFile, metaDataRegulatorFile,
 				",", inchlibPath, true, false, false, false, 0.0, 6);
 

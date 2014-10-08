@@ -139,19 +139,19 @@ public class CplexBind extends Bind {
 			model = new IloCplexModeler();
 			cplex.setModel(model);
 
-			for (BioEntity entity : intNet.getNumEntities()) {
+			for (BioEntity entity : intNet.getNumEntities().values()) {
 				// System.out.println(entity.getId());
 				// what default value ?
 
 				vars.put(entity.getId(), cplex.numVar(-Double.MAX_VALUE,
 						Double.MAX_VALUE, entity.getId()));
 			}
-			for (BioEntity entity : intNet.getIntEntities()) {
+			for (BioEntity entity : intNet.getIntEntities().values()) {
 				// System.out.println(entity.getId());
 				vars.put(entity.getId(), cplex.intVar(-Integer.MAX_VALUE,
 						Integer.MAX_VALUE, entity.getId()));
 			}
-			for (BioEntity entity : intNet.getBinaryEntities()) {
+			for (BioEntity entity : intNet.getBinaryEntities().values()) {
 
 				// System.out.println(entity.getId());
 

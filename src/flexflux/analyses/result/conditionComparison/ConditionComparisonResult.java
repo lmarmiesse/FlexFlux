@@ -2,12 +2,9 @@ package flexflux.analyses.result.conditionComparison;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,6 +42,8 @@ import flexflux.condition.Condition;
 import flexflux.general.Objective;
 import flexflux.general.Vars;
 import flexflux.io.Utils;
+import flexflux.utils.run.Runner;
+import flexflux.utils.web.JsonUtils;
 
 public class ConditionComparisonResult extends AnalysisResult {
 
@@ -96,9 +95,8 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 	public HashMap<String, BioEntity> regulators;
 	private HashMap<String, BioChemicalReaction> deadReactions;
-	
+
 	private HashMap<String, BioChemicalReaction> allReactions;
-	
 
 	/**
 	 * Constructor
@@ -131,7 +129,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		this.launchGeneAnalysis = launchGeneAnalysis;
 		this.launchReactionAnalysis = launchReactionAnalysis;
 		this.launchRegulatorAnalysis = launchRegulatorAnalysis;
-		
+
 		this.allReactions = new HashMap<String, BioChemicalReaction>();
 		this.allReactions.putAll(network.getBiochemicalReactionList());
 
@@ -210,7 +208,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 			}
 		}
 
-		this.createWebDirectories(path);
+		this.createWebDirectories();
 
 		if (launchGeneAnalysis || launchReactionAnalysis
 				|| launchRegulatorAnalysis) {
@@ -733,8 +731,8 @@ public class ConditionComparisonResult extends AnalysisResult {
 					+ "/fba_results.csv" + " -dh -mh -a both -o " + jsonFile;
 
 			try {
-				this.runInchlib(cmd);
-				this.jsonToJs(jsonFile, jsFile);
+				Runner.runExternalCommand(cmd);
+				JsonUtils.jsonToJs(jsonFile, jsFile);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1190,7 +1188,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 			}
 
 			outMetaData.write("\n");
-			
+
 			for (String id : ids) {
 
 				outMetaData.write(id);
@@ -1351,8 +1349,8 @@ public class ConditionComparisonResult extends AnalysisResult {
 					+ " -dh -mh -a both -o " + jsonFile;
 
 			try {
-				this.runInchlib(cmd);
-				this.jsonToJs(jsonFile, jsFile);
+				Runner.runExternalCommand(cmd);
+				JsonUtils.jsonToJs(jsonFile, jsFile);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1536,8 +1534,8 @@ public class ConditionComparisonResult extends AnalysisResult {
 						+ "/heatMapData.csv -dh -a both -o " + jsonFile;
 			}
 			try {
-				this.runInchlib(cmd);
-				this.jsonToJs(jsonFile, jsFile);
+				Runner.runExternalCommand(cmd);
+				JsonUtils.jsonToJs(jsonFile, jsFile);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1671,58 +1669,11 @@ public class ConditionComparisonResult extends AnalysisResult {
 	}
 
 	/**
-	 * Run the inchlib command
-	 * 
-	 * @return
-	 * @throws IOException
-	 */
-	public Boolean runInchlib(String inchlibCmd) throws IOException {
-
-		if (Vars.verbose) {
-			System.err.println("\n********launch inchlib\n");
-			System.err.println(inchlibCmd);
-
-		}
-
-		Process p = null;
-		try {
-			p = Runtime.getRuntime().exec(inchlibCmd);
-			String lineError;
-			BufferedReader bre = new BufferedReader(new InputStreamReader(
-					p.getErrorStream()));
-			while ((lineError = bre.readLine()) != null) {
-				System.err.println(lineError);
-			}
-			p.waitFor();
-		} catch (IOException e) {
-			System.err.println("Error in launching the command " + inchlibCmd);
-			e.printStackTrace();
-			return false;
-		} catch (InterruptedException e) {
-			System.err.println("Interruption of the command " + inchlibCmd);
-			e.printStackTrace();
-			return false;
-		} finally {
-			if (p != null) {
-				if (p.getOutputStream() != null)
-					p.getOutputStream().close();
-				if (p.getInputStream() != null)
-					p.getInputStream().close();
-				if (p.getErrorStream() != null)
-					p.getErrorStream().close();
-			}
-		}
-
-		return true;
-
-	}
-
-	/**
 	 * Create required web directories and Files
 	 * 
 	 * @param path
 	 */
-	private void createWebDirectories(String path) {
+	private void createWebDirectories() {
 
 		// Create web directories
 		this.webPath = directoryPath + "/" + "web";
@@ -1781,8 +1732,8 @@ public class ConditionComparisonResult extends AnalysisResult {
 		// copy summary.html in index.html
 		try {
 			Utils.copyProjectResource(
-					"flexflux/data/web/templates/summary.html", webPath,
-					"index.html");
+					"flexflux/data/web/templates/conditionComparison/summary.html",
+					webPath, "index.html");
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println("Error while copying web files");
@@ -1805,64 +1756,6 @@ public class ConditionComparisonResult extends AnalysisResult {
 			System.err.println("Error while copying heatmap js files");
 			return;
 		}
-
-	}
-
-	/**
-	 * Transform a json file to a js file to enable direct loadin of data
-	 * 
-	 * @param jsonFile
-	 * @param jsFile
-	 * @return
-	 */
-	private Boolean jsonToJs(String jsonFile, String jsFile) {
-
-		Boolean flag = true;
-
-		BufferedReader in = null;
-		PrintWriter out = null;
-
-		try {
-			in = new BufferedReader(new FileReader(jsonFile));
-			out = new PrintWriter(new File(jsFile));
-
-			out.write("var data = ");
-
-			String line = "";
-
-			while ((line = in.readLine()) != null) {
-
-				line = line.replaceAll("\"", "'");
-
-				out.write(line);
-				out.write("\n");
-			}
-
-			out.write(";");
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			System.err.println("Json file " + jsonFile + " not found");
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.err.println("Error reading Json file " + jsonFile);
-		}
-
-		finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-					System.err.println("Error while closing " + jsonFile);
-				}
-			}
-			if (out != null) {
-				out.close();
-			}
-		}
-
-		return flag;
 
 	}
 
@@ -1987,27 +1880,27 @@ public class ConditionComparisonResult extends AnalysisResult {
 					+ " -dh -mh -a both -o " + jsonFile;
 
 			try {
-				this.runInchlib(cmd);
-				this.jsonToJs(jsonFile, jsFile);
+				Runner.runExternalCommand(cmd);
+				JsonUtils.jsonToJs(jsonFile, jsFile);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				System.err.println("Problem while running inchlib");
 			}
 		}
 	}
-	
+
 	/**
-	 * Adds dead reactions in the analysis
-	 * fill in also the allReactions array
+	 * Adds dead reactions in the analysis fill in also the allReactions array
+	 * 
 	 * @param deadReactions
 	 */
-	public void setDeadReactions(HashMap<String, BioChemicalReaction> deadReactions) {
+	public void setDeadReactions(
+			HashMap<String, BioChemicalReaction> deadReactions) {
 		this.deadReactions = new HashMap<String, BioChemicalReaction>();
 		this.deadReactions.putAll(deadReactions);
 		this.allReactions.putAll(deadReactions);
 	}
-	
+
 	/**
 	 * 
 	 * @return the dead reactions
@@ -2015,5 +1908,5 @@ public class ConditionComparisonResult extends AnalysisResult {
 	public HashMap<String, BioChemicalReaction> getDeadReactions() {
 		return this.deadReactions;
 	}
-	
+
 }

@@ -97,7 +97,6 @@ public class ThreadFVA extends ResolveThread {
 		
 		// we do all the minimize
 		bind.setObjSense(false);
-		double size;
 		
 		BioEntity entity;
 		
