@@ -78,6 +78,13 @@ public class FVAAnalysis extends Analysis {
 	 */
 	protected List<ResolveThread> threads = new ArrayList<ResolveThread>();
 
+	
+	/**
+	 * Constructor
+	 * @param b
+	 * @param mapEntities
+	 * @param constraints
+	 */
 	public FVAAnalysis(Bind b, Map<String, BioEntity> mapEntities,
 			List<Constraint> constraints) {
 		super(b);
@@ -88,6 +95,9 @@ public class FVAAnalysis extends Analysis {
 		}
 	}
 
+	/**
+	 * Run analysis
+	 */
 	public FVAResult runAnalysis() {
 
 		double startTime = System.currentTimeMillis();

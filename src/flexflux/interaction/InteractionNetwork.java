@@ -115,7 +115,7 @@ public class InteractionNetwork {
 	}
 
 	public void addInitialConstraint(BioEntity ent, Constraint constr) {
-		initialConstraints.put(ent, constr);
+			initialConstraints.put(ent, constr);
 	}
 
 	public List<BioEntity> getEntities() {
@@ -180,15 +180,6 @@ public class InteractionNetwork {
 		numEntities.put(e.getId(), e);
 	}
 
-	public Set<BioEntity> getNumEntities() {
-
-		Set<BioEntity> ents = new HashSet<BioEntity>();
-		for (String s : numEntities.keySet()) {
-			ents.add(numEntities.get(s));
-		}
-		return ents;
-	}
-
 	public void addIntEntity(BioEntity e) {
 		if (numEntities.containsKey(e.getId())
 				|| intEntities.containsKey(e.getId())
@@ -200,15 +191,6 @@ public class InteractionNetwork {
 		intEntities.put(e.getId(), e);
 	}
 
-	public Set<BioEntity> getIntEntities() {
-
-		Set<BioEntity> ents = new HashSet<BioEntity>();
-		for (String s : intEntities.keySet()) {
-			ents.add(intEntities.get(s));
-		}
-		return ents;
-	}
-
 	public void addBinaryEntity(BioEntity e) {
 		if (numEntities.containsKey(e.getId())
 				|| intEntities.containsKey(e.getId())
@@ -218,15 +200,6 @@ public class InteractionNetwork {
 			return;
 		}
 		binaryEntities.put(e.getId(), e);
-	}
-
-	public Set<BioEntity> getBinaryEntities() {
-
-		Set<BioEntity> ents = new HashSet<BioEntity>();
-		for (String s : binaryEntities.keySet()) {
-			ents.add(binaryEntities.get(s));
-		}
-		return ents;
 	}
 
 	public BioEntity getEntity(String name) {
@@ -260,5 +233,68 @@ public class InteractionNetwork {
 	public void removeNumEntity(BioEntity entity) {
 		numEntities.remove(entity.getId());
 	}
+	
+	/**
+	 * Copy this interaction network without duplicating all the entities
+	 * @return
+	 */
+	public InteractionNetwork copy() {
+		InteractionNetwork newInteractionNetwork = new InteractionNetwork();
+		
+		newInteractionNetwork.setBinaryEntities(this.getBinaryEntities());
+		newInteractionNetwork.setGPRInteractions(this.getGPRInteractions());
+		newInteractionNetwork.setInitialConstraints(this.getInitialConstraints());
+		newInteractionNetwork.setIntEntities(this.getIntEntities());
+		newInteractionNetwork.setInteractionToConstraints(this.getInteractionToConstraints());
+		newInteractionNetwork.setNumEntities(this.getNumEntities());
+		newInteractionNetwork.setTargetToInteractions(this.getTargetToInteractions());
+		
+		return newInteractionNetwork;
+	}
+
+	public void setNumEntities(Map<String, BioEntity> numEntities) {
+		this.numEntities = numEntities;
+	}
+
+	public void setIntEntities(Map<String, BioEntity> intEntities) {
+		this.intEntities = intEntities;
+	}
+
+	public void setBinaryEntities(Map<String, BioEntity> binaryEntities) {
+		this.binaryEntities = binaryEntities;
+	}
+
+	public void setGPRInteractions(List<Interaction> gPRInteractions) {
+		GPRInteractions = gPRInteractions;
+	}
+
+	public void setInitialConstraints(Map<BioEntity, Constraint> initialConstraints) {
+		this.initialConstraints = initialConstraints;
+	}
+
+	public void setInteractionToConstraints(
+			Map<Interaction, List<Constraint>> interactionToConstraints) {
+		this.interactionToConstraints = interactionToConstraints;
+	}
+
+	public void setTargetToInteractions(
+			Map<BioEntity, FFTransition> targetToInteractions) {
+		this.targetToInteractions = targetToInteractions;
+	}
+
+	public Map<String, BioEntity> getBinaryEntities() {
+		return binaryEntities;
+	}
+
+	public Map<String, BioEntity> getIntEntities() {
+		return intEntities;
+	}
+
+	public Map<String, BioEntity> getNumEntities() {
+		return numEntities;
+	}
+	
+	
+	
 
 }

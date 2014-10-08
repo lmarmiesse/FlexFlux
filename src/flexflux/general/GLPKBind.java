@@ -114,7 +114,7 @@ public class GLPKBind extends Bind {
 	public void entitiesToSolverVars() {
 		vars.clear();
 
-		for (BioEntity entity : intNet.getNumEntities()) {
+		for (BioEntity entity : intNet.getNumEntities().values()) {
 			// what default value ?
 			int index = GLPK.glp_add_cols(model, 1);
 
@@ -136,7 +136,7 @@ public class GLPKBind extends Bind {
 					-999999.0, 999999.0);
 
 		}
-		for (BioEntity entity : intNet.getIntEntities()) {
+		for (BioEntity entity : intNet.getIntEntities().values()) {
 
 			int index = GLPK.glp_add_cols(model, 1);
 
@@ -149,7 +149,7 @@ public class GLPKBind extends Bind {
 					999999);
 
 		}
-		for (BioEntity entity : intNet.getBinaryEntities()) {
+		for (BioEntity entity : intNet.getBinaryEntities().values()) {
 
 			int index = GLPK.glp_add_cols(model, 1);
 			vars.put(entity.getId(), index);

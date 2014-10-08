@@ -64,7 +64,7 @@ import parsebionet.biodata.BioEntity;
  */
 public class FlexfluxFVA extends FFApplication{
 
-	public static String message = "FlexfluxFVA\n"
+	public String message = "FlexfluxFVA\n"
 
 			+ "Computes an FVA given a metabolic network, an objective function and constraints.\n"
 			+ "An FVA analysis consists in getting the optimal value for the objective function, setting this value as a\n"

@@ -1987,38 +1987,7 @@ public abstract class Bind {
 		}
 
 		// we copy the interaction network
-		for (BioEntity ent : intNet.getNumEntities()) {
-			newBind.intNet.addNumEntity(ent);
-		}
-		for (BioEntity ent : intNet.getIntEntities()) {
-			newBind.intNet.addIntEntity(ent);
-		}
-		for (BioEntity ent : intNet.getBinaryEntities()) {
-			newBind.intNet.addBinaryEntity(ent);
-		}
-
-		for (Interaction inter : intNet.getGPRInteractions()) {
-			newBind.intNet.addGPRIntercation(inter);
-		}
-
-		for (BioEntity ent : intNet.getInitialConstraints().keySet()) {
-			newBind.intNet.addInitialConstraint(ent, intNet
-					.getInitialConstraints().get(ent));
-			;
-		}
-
-		for (Interaction inter : intNet.getGPRInteractions()) {
-			newBind.intNet.addGPRIntercation(inter);
-		}
-
-		for (Interaction inter : intNet.getInteractionToConstraints().keySet()) {
-			newBind.intNet.addInteractionToConstraints(inter);
-		}
-
-		for (BioEntity ent : intNet.getTargetToInteractions().keySet()) {
-			newBind.intNet.setTargetToInteractions(ent, intNet
-					.getTargetToInteractions().get(ent));
-		}
+		newBind.setInteractionNetwork(this.getInteractionNetwork().copy());
 
 		newBind.setNetwork(this.bioNet);
 		newBind.init();
