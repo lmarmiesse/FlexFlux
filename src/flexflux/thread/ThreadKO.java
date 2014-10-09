@@ -100,7 +100,7 @@ public class ThreadKO extends ResolveThread {
 	public void run() {
 
 		BioEntity entity;
-		
+
 		while ((entity = entities.poll()) != null) {
 
 			Map<BioEntity, Double> entityMap = new HashMap<BioEntity, Double>();
@@ -125,7 +125,8 @@ public class ThreadKO extends ResolveThread {
 
 			bind.checkInteractionNetwork = true;
 
-			int percent = (int) Math.round((todo - entities.size()) / todo * 100);
+			int percent = (int) Math.round((todo - entities.size()) / todo
+					* 100);
 			if (percent > percentage) {
 				percentage = percent;
 				if (percent % 2 == 0) {

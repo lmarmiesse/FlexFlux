@@ -65,7 +65,7 @@ public class TestKoWithInteractions {
 							tempConditionFile);
 			intFile = TestUtils
 					.copyProjectResource(
-							"flexflux/unit_tests/data/ko/interactions.txt",
+							"flexflux/unit_tests/data/ko/interactions.sbml",
 							tempInteractionFile);
 
 		} catch (IOException e) {

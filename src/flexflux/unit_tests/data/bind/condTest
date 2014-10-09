@@ -1,0 +1,21 @@
+obj : MAX(VBiomass)
+
+
+a 5
+b 5
+c 10
+d 0 50
+e 4 8
+f 20 200
+g 0 100
+#Vexd 3
+
+INTEGER
+
+u 5 12
+
+EQUATIONS
+
+
+
+d = 2*a + 3*c

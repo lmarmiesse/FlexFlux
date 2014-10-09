@@ -1,0 +1,7 @@
+obj : MAX(VBiomass)
+
+
+a	0	10
+b	0	10
+c	0	10
+

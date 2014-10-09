@@ -62,6 +62,11 @@ import flexflux.interaction.Unique;
 public class InteractionNetwork {
 
 	/**
+	 * List of entities that belong to the interaction network
+	 */
+	private Map<String, BioEntity> interactionNetworkEntities = new HashMap<String, BioEntity>();
+
+	/**
 	 * List of entities with real values.
 	 */
 	private Map<String, BioEntity> numEntities = new HashMap<String, BioEntity>();
@@ -85,6 +90,12 @@ public class InteractionNetwork {
 	protected Map<BioEntity, Constraint> initialConstraints = new ConcurrentHashMap<BioEntity, Constraint>();
 
 	/**
+	 * List of initial qualitative states of the entities of the interaction
+	 * network.
+	 */
+	protected Map<BioEntity, Integer> initialStates = new HashMap<BioEntity, Integer>();
+
+	/**
 	 * Links an interactions to a list of constraints. To avoid doing it
 	 * multiple times
 	 */
@@ -92,6 +103,83 @@ public class InteractionNetwork {
 	protected Map<Interaction, List<Constraint>> interactionToConstraints = new HashMap<Interaction, List<Constraint>>();
 
 	private Map<BioEntity, FFTransition> targetToInteractions = new HashMap<BioEntity, FFTransition>();
+
+	/**
+	 * Map to get a constraint from an entity state and vice versa
+	 */
+	protected Map<BioEntity, Map<Integer, Constraint>> entityStateConstraintTranslation = new HashMap<BioEntity, Map<Integer, Constraint>>();
+
+	public Map<BioEntity, Map<Integer, Constraint>> getEntityStateConstraintTranslation() {
+		return entityStateConstraintTranslation;
+	}
+
+	public void addEntityStateConstraintTranslation(BioEntity ent,
+			Integer state, Constraint c) {
+
+		if (!entityStateConstraintTranslation.containsKey(ent)) {
+			entityStateConstraintTranslation.put(ent,
+					new HashMap<Integer, Constraint>());
+		}
+
+		entityStateConstraintTranslation.get(ent).put(state, c);
+
+	}
+
+	public Map<String, BioEntity> getInteractionNetworkEntities() {
+		return interactionNetworkEntities;
+	}
+
+	public void addInteractionNetworkEntity(BioEntity ent) {
+		interactionNetworkEntities.put(ent.getId(), ent);
+	}
+
+	public boolean canTranslate(BioEntity ent) {
+		return entityStateConstraintTranslation.containsKey(ent);
+	}
+
+	public Map<BioEntity, Integer> getInitialStates() {
+		return initialStates;
+	}
+
+	public Constraint getConstraintFromState(BioEntity ent, Integer state) {
+
+		if (entityStateConstraintTranslation.get(ent).get(state) == null) {
+			return (new Constraint(ent, -Double.MAX_VALUE, Double.MAX_VALUE));
+		}
+
+		return entityStateConstraintTranslation.get(ent).get(state);
+
+	}
+
+	public Integer getStateFromValue(BioEntity ent, double value) {
+
+		int ndState = -1;
+
+		for (Integer i : entityStateConstraintTranslation.get(ent).keySet()) {
+
+			Constraint c = entityStateConstraintTranslation.get(ent).get(i);
+
+			if (c == null) {
+				ndState = i;
+				continue;
+			}
+
+			if (value >= c.getLb() && value <= c.getUb()) {
+				return i;
+			}
+
+		}
+
+		if (ndState == -1) {
+			System.err.println("Error : value " + value + " for variable "
+					+ ent.getId()
+					+ " does not correspond to any qualitative state.");
+			System.exit(0);
+		}
+
+		return ndState;
+
+	}
 
 	public Map<Interaction, List<Constraint>> getInteractionToConstraints() {
 		return interactionToConstraints;
@@ -110,12 +198,20 @@ public class InteractionNetwork {
 		return initialConstraints.get(ent);
 	}
 
+	public Integer getInitialState(BioEntity ent) {
+		return initialStates.get(ent);
+	}
+
 	public Map<BioEntity, Constraint> getInitialConstraints() {
 		return initialConstraints;
 	}
 
 	public void addInitialConstraint(BioEntity ent, Constraint constr) {
 		initialConstraints.put(ent, constr);
+	}
+
+	public void addInitialState(BioEntity ent, Integer state) {
+		initialStates.put(ent, state);
 	}
 
 	public List<BioEntity> getEntities() {
@@ -254,6 +350,7 @@ public class InteractionNetwork {
 		binaryEntities.clear();
 		GPRInteractions.clear();
 		initialConstraints.clear();
+		initialStates.clear();
 		interactionToConstraints.clear();
 	}
 

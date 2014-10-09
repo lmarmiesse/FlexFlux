@@ -94,13 +94,15 @@ public class TestRFBA {
 
 		Vars.maxThread = 1;
 
-		bind.loadSbmlNetwork("Data/coli.xml", false);
+		bind.loadSbmlNetwork("src/flexflux/unit_tests/data/rfba/coli.xml", false);
 		n = bind.getBioNetwork();
 		i = bind.getInteractionNetwork();
 
-		bind.loadConditionsFile("Data/condTestRfba");
+		bind.loadConditionsFile("src/flexflux/unit_tests/data/rfba/condTestRfba");
 
-		bind.loadInteractionsFile("Data/intTestRfba");
+//		bind.loadInteractionsFile("Data/intTestRfba");
+		
+		bind.loadInteractionsFile("src/flexflux/unit_tests/data/rfba/rfba.sbml");
 
 		bind.prepareSolver();
 
@@ -121,6 +123,15 @@ public class TestRFBA {
 				"R_Ec_biomass_iAF1260_core_59p81M", 0.003, 0.1, 150,
 				new ArrayList<String>());
 		RFBAResult result = rfba.runAnalysis();
+		
+		result.plot();
+
+		int a = 1;
+
+		while (a == 1) {
+
+		}
+		
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(
 					"Data/rFBATest"));

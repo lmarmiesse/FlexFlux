@@ -75,7 +75,7 @@ public class TestExternalMetaboliteConstraints {
 			
 			intFile = TestUtils
 					.copyProjectResource(
-							"flexflux/unit_tests/data/externalMetaboliteConstraints/interactions.txt",
+							"flexflux/unit_tests/data/externalMetaboliteConstraints/interactions.sbml",
 							tempInteractionFile);
 
 		} catch (IOException e) {

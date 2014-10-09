@@ -1,0 +1,32 @@
+obj : MAX(R_Ec_biomass_iAF1260_core_59p81M)
+
+A 0 10
+B 0 10
+
+
+#M_lcts_b 5.8
+
+#lacZ 0.001 0.03
+
+
+R_EX_glc_e_ -10.5 999999
+R_EX_o2_e_ -15 999999
+
+R_EX_ac_e_ -2.5 4
+
+#R_EX_lcts_e_ -3 999999
+
+a 0
+x 5
+y 4
+z 5
+b 0
+
+
+INTEGER
+
+
+BINARY
+h
+
+EQUATIONS

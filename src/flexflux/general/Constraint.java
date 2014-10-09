@@ -68,12 +68,6 @@ public class Constraint {
 	protected boolean not = false;
 
 	/**
-	 * Determines if the constraints must overwrite an existing constraint for
-	 * the same entities.
-	 */
-//	private boolean overWritesBounds = true;
-
-	/**
 	 * 
 	 * Creates a constraint;
 	 * 

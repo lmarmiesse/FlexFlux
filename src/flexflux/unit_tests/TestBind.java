@@ -186,7 +186,7 @@ public class TestBind {
 		}
 		Assert.assertTrue(gpr);
 
-		Sbml2Bionetwork parser = new Sbml2Bionetwork("Data/test.xml", false);
+		Sbml2Bionetwork parser = new Sbml2Bionetwork("src/flexflux/unit_tests/data/bind/test.xml", false);
 
 		BioNetwork network = parser.getBioNetwork();
 		bind.setNetworkAndConstraints(network);
@@ -196,8 +196,8 @@ public class TestBind {
 
 		// starting tests on analysis and parsing files
 
-		bind.loadConditionsFile("Data/condTest");
-		bind.loadInteractionsFile("Data/intTest");
+		bind.loadConditionsFile("src/flexflux/unit_tests/data/bind/condTest");
+		bind.loadInteractionsFile("src/flexflux/unit_tests/data/bind/intTest.sbml");
 
 		bind.prepareSolver();
 		Assert.assertTrue(bind.isMIP());
@@ -219,8 +219,8 @@ public class TestBind {
 		Assert.assertTrue(bind2.getConstraints().size() == 13);
 		Assert.assertTrue(bind2.getInteractionNetwork().getNumEntities().size() == 17);
 
-		bind2.loadConditionsFile("Data/condTest");
-		bind2.loadInteractionsFile("Data/intTest");
+		bind2.loadConditionsFile("src/flexflux/unit_tests/data/bind/condTest");
+		bind2.loadInteractionsFile("src/flexflux/unit_tests/data/bind/intTest.sbml");
 
 		bind2.prepareSolver();
 

@@ -642,13 +642,8 @@ public abstract class Bind {
 	 */
 	public void loadInteractionsFile(String path) {
 
-		if (path.endsWith(".xml") || path.endsWith(".sbml")) {
-			intNet = SBMLQualReader.loadSbmlQual(path, intNet, relationFactory);
-		} else {
-			intNet = InteractionFileReader.readInteractionFile(path, intNet,
-					relationFactory);
-		}
-
+		intNet = SBMLQualReader.loadSbmlQual(path, intNet, relationFactory);
+	
 	}
 
 	/**
@@ -2004,7 +1999,11 @@ public abstract class Bind {
 		for (BioEntity ent : intNet.getInitialConstraints().keySet()) {
 			newBind.intNet.addInitialConstraint(ent, intNet
 					.getInitialConstraints().get(ent));
-			;
+		}
+
+		for (BioEntity ent : intNet.getInitialStates().keySet()) {
+			newBind.intNet.addInitialState(ent, intNet.getInitialState(ent));
+
 		}
 
 		for (Interaction inter : intNet.getGPRInteractions()) {
@@ -2018,6 +2017,18 @@ public abstract class Bind {
 		for (BioEntity ent : intNet.getTargetToInteractions().keySet()) {
 			newBind.intNet.setTargetToInteractions(ent, intNet
 					.getTargetToInteractions().get(ent));
+		}
+
+		for (BioEntity ent : intNet.getEntityStateConstraintTranslation()
+				.keySet()) {
+
+			for (Integer state : intNet.getEntityStateConstraintTranslation()
+					.get(ent).keySet()) {
+				newBind.intNet.addEntityStateConstraintTranslation(ent, state,
+						intNet.getEntityStateConstraintTranslation().get(ent)
+								.get(state));
+			}
+
 		}
 
 		newBind.setNetwork(this.bioNet);

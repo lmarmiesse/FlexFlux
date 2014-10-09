@@ -155,10 +155,10 @@ public class TestInteraction {
 
 	private void fbaTest(Bind bind) {
 
-		bind.loadSbmlNetwork("Data/test.xml", false);
+		bind.loadSbmlNetwork("src/flexflux/unit_tests/data/testInteraction/test.xml", false);
 
-		bind.loadConditionsFile("Data/condElseTest.txt");
-		bind.loadInteractionsFile("Data/intElseTest.txt");
+		bind.loadConditionsFile("src/flexflux/unit_tests/data/testInteraction/condElseTest.txt");
+		bind.loadInteractionsFile("src/flexflux/unit_tests/data/testInteraction/intElseTest.sbml");
 
 		bind.prepareSolver();
 
@@ -190,8 +190,8 @@ public class TestInteraction {
 
 		Assert.assertTrue(result.getObjValue() == 9.0);
 		
-		System.out.println(bind.getSolvedValue(bind.getInteractionNetwork()
-				.getEntity("c")));
+//		System.out.println(bind.getSolvedValue(bind.getInteractionNetwork()
+//				.getEntity("c")));
 		
 		Assert.assertTrue(bind.getSolvedValue(bind.getInteractionNetwork()
 				.getEntity("c")) > 1.6);
@@ -204,10 +204,10 @@ public class TestInteraction {
 
 	private void extMetabTest(Bind bind) {
 
-		bind.loadSbmlNetwork("Data/test.xml", false);
-		bind.loadConditionsFile("Data/condExtMetab.txt");
+		bind.loadSbmlNetwork("src/flexflux/unit_tests/data/testInteraction/test.xml", false);
+		bind.loadConditionsFile("src/flexflux/unit_tests/data/testInteraction/condExtMetab.txt");
 
-		bind.loadInteractionsFile("Data/intExtMetab.txt");
+		bind.loadInteractionsFile("src/flexflux/unit_tests/data/testInteraction/intExtMetab.sbml");
 
 		bind.prepareSolver();
 

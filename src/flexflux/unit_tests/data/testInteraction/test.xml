@@ -1,0 +1,255 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2" version="1" level="2" xmlns:html="http://www.w3.org/1999/xhtml">
+<model id="NA" name="NA">
+	<listOfUnitDefinitions>
+	<unitDefinition id="mmol_per_gDW_per_hr">
+		<listOfUnits>
+			<unit kind="mole" scale="-3"/>
+			<unit kind="gram" exponent="-1"/>
+			<unit kind="second" multiplier=".00027777" exponent="-1"/>
+		</listOfUnits>
+	</unitDefinition>
+</listOfUnitDefinitions>
+<listOfCompartments>
+<compartment id="NA" name ="NA" />
+</listOfCompartments>
+<listOfSpecies>
+  <species id="D" name="D" compartment="NA" boundaryCondition="false" />
+  <species id="Biomass_ex" name="Biomass_ex" compartment="NA" boundaryCondition="true" />
+  <species id="A" name="A" compartment="NA" boundaryCondition="false" />
+  <species id="B" name="B" compartment="NA" boundaryCondition="false" />
+  <species id="C" name="C" compartment="NA" boundaryCondition="false" />
+  <species id="Biomass" name="Biomass" compartment="NA" boundaryCondition="false" />
+  <species id="Aex" name="Aex" compartment="NA" boundaryCondition="true" />
+  <species id="Dex" name="Dex" compartment="NA" boundaryCondition="true" />
+</listOfSpecies>
+<listOfReactions>
+  <reaction id="V2" name="V2" reversible="false">
+    <notes>
+      <html:p>GENE_ASSOCIATION: </html:p>
+      <html:p>PROTEIN_ASSOCIATION: </html:p>
+      <html:p>SUBSYSTEM: NA</html:p>
+      <html:p>PROTEIN_CLASS: </html:p>
+      <html:p>GENERIC: false</html:p>
+      <html:p>TYPE: small</html:p>
+      <html:p>HOLE: true</html:p>
+      <html:p>SCORE: NA</html:p>
+      <html:p>STATUS: NA</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="B" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="C" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<ci> FLUX_VALUE </ci>
+			</math>
+			<listOfParameters>
+				<parameter id="LOWER_BOUND" value="0.000000" units="mmol_per_gDW_per_hr"/>
+				<parameter id="UPPER_BOUND" value="8.000000" units="mmol_per_gDW_per_hr"/>
+			</listOfParameters>
+		</kineticLaw>
+  </reaction>
+  <reaction id="V3" name="V3" reversible="false">
+    <notes>
+      <html:p>GENE_ASSOCIATION: </html:p>
+      <html:p>PROTEIN_ASSOCIATION: </html:p>
+      <html:p>SUBSYSTEM: NA</html:p>
+      <html:p>PROTEIN_CLASS: </html:p>
+      <html:p>GENERIC: false</html:p>
+      <html:p>TYPE: small</html:p>
+      <html:p>HOLE: true</html:p>
+      <html:p>SCORE: NA</html:p>
+      <html:p>STATUS: NA</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="B" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="D" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<ci> FLUX_VALUE </ci>
+			</math>
+			<listOfParameters>
+				<parameter id="LOWER_BOUND" value="0.000000" units="mmol_per_gDW_per_hr"/>
+				<parameter id="UPPER_BOUND" value="6.000000" units="mmol_per_gDW_per_hr"/>
+			</listOfParameters>
+		</kineticLaw>
+  </reaction>
+  <reaction id="Vexa" name="Vexa" reversible="false">
+    <notes>
+      <html:p>GENE_ASSOCIATION: </html:p>
+      <html:p>PROTEIN_ASSOCIATION: </html:p>
+      <html:p>SUBSYSTEM: NA</html:p>
+      <html:p>PROTEIN_CLASS: </html:p>
+      <html:p>GENERIC: false</html:p>
+      <html:p>TYPE: small</html:p>
+      <html:p>HOLE: true</html:p>
+      <html:p>SCORE: NA</html:p>
+      <html:p>STATUS: NA</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="Aex" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="A" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<ci> FLUX_VALUE </ci>
+			</math>
+			<listOfParameters>
+				<parameter id="LOWER_BOUND" value="0.000000" units="mmol_per_gDW_per_hr"/>
+				<parameter id="UPPER_BOUND" value="10.000000" units="mmol_per_gDW_per_hr"/>
+			</listOfParameters>
+		</kineticLaw>
+  </reaction>
+  
+   <reaction id="Vexd" name="Vexd" reversible="true">
+    <notes>
+      <html:p>GENE_ASSOCIATION: ( gene1 ) </html:p>
+      <html:p>PROTEIN_ASSOCIATION: </html:p>
+      <html:p>SUBSYSTEM: NA</html:p>
+      <html:p>PROTEIN_CLASS: </html:p>
+      <html:p>GENERIC: false</html:p>
+      <html:p>TYPE: small</html:p>
+      <html:p>HOLE: true</html:p>
+      <html:p>SCORE: NA</html:p>
+      <html:p>STATUS: NA</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="D" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="Dex" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<ci> FLUX_VALUE </ci>
+			</math>
+			<listOfParameters>
+				<parameter id="LOWER_BOUND" value="-10.000000" units="mmol_per_gDW_per_hr"/>
+				<parameter id="UPPER_BOUND" value="10" units="mmol_per_gDW_per_hr"/>
+			</listOfParameters>
+		</kineticLaw>
+  </reaction>
+  
+  <reaction id="V4" name="V4" reversible="false">
+    <notes>
+      <html:p>GENE_ASSOCIATION: </html:p>
+      <html:p>PROTEIN_ASSOCIATION: </html:p>
+      <html:p>SUBSYSTEM: NA</html:p>
+      <html:p>PROTEIN_CLASS: </html:p>
+      <html:p>GENERIC: false</html:p>
+      <html:p>TYPE: small</html:p>
+      <html:p>HOLE: true</html:p>
+      <html:p>SCORE: NA</html:p>
+      <html:p>STATUS: NA</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="C" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="Biomass" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<ci> FLUX_VALUE </ci>
+			</math>
+			<listOfParameters>
+				<parameter id="LOWER_BOUND" value="0.000000" units="mmol_per_gDW_per_hr"/>
+				<parameter id="UPPER_BOUND" value="10.000000" units="mmol_per_gDW_per_hr"/>
+			</listOfParameters>
+		</kineticLaw>
+  </reaction>
+  <reaction id="V5" name="V5" reversible="false">
+    <notes>
+      <html:p>GENE_ASSOCIATION: </html:p>
+      <html:p>PROTEIN_ASSOCIATION: </html:p>
+      <html:p>SUBSYSTEM: NA</html:p>
+      <html:p>PROTEIN_CLASS: </html:p>
+      <html:p>GENERIC: false</html:p>
+      <html:p>TYPE: small</html:p>
+      <html:p>HOLE: true</html:p>
+      <html:p>SCORE: NA</html:p>
+      <html:p>STATUS: NA</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="D" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="Biomass" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<ci> FLUX_VALUE </ci>
+			</math>
+			<listOfParameters>
+				<parameter id="LOWER_BOUND" value="0.000000" units="mmol_per_gDW_per_hr"/>
+				<parameter id="UPPER_BOUND" value="6.000000" units="mmol_per_gDW_per_hr"/>
+			</listOfParameters>
+		</kineticLaw>
+  </reaction>
+  <reaction id="VBiomass" name="VBiomass" reversible="false">
+    <notes>
+      <html:p>GENE_ASSOCIATION: </html:p>
+      <html:p>PROTEIN_ASSOCIATION: </html:p>
+      <html:p>SUBSYSTEM: NA</html:p>
+      <html:p>PROTEIN_CLASS: </html:p>
+      <html:p>GENERIC: false</html:p>
+      <html:p>TYPE: small</html:p>
+      <html:p>HOLE: true</html:p>
+      <html:p>SCORE: NA</html:p>
+      <html:p>STATUS: NA</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="Biomass" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="Biomass_ex" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<ci> FLUX_VALUE </ci>
+			</math>
+			<listOfParameters>
+				<parameter id="LOWER_BOUND" value="0.000000" units="mmol_per_gDW_per_hr"/>
+				<parameter id="UPPER_BOUND" value="999999.000000" units="mmol_per_gDW_per_hr"/>
+			</listOfParameters>
+		</kineticLaw>
+  </reaction>
+  <reaction id="V1" name="V1" reversible="false">
+    <notes>
+      <html:p>GENE_ASSOCIATION: </html:p>
+      <html:p>PROTEIN_ASSOCIATION: </html:p>
+      <html:p>SUBSYSTEM: NA</html:p>
+      <html:p>PROTEIN_CLASS: </html:p>
+      <html:p>GENERIC: false</html:p>
+      <html:p>TYPE: small</html:p>
+      <html:p>HOLE: true</html:p>
+      <html:p>SCORE: NA</html:p>
+      <html:p>STATUS: NA</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="A" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="B" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+			<math xmlns="http://www.w3.org/1998/Math/MathML">
+				<ci> FLUX_VALUE </ci>
+			</math>
+			<listOfParameters>
+				<parameter id="LOWER_BOUND" value="0.000000" units="mmol_per_gDW_per_hr"/>
+				<parameter id="UPPER_BOUND" value="9.000000" units="mmol_per_gDW_per_hr"/>
+			</listOfParameters>
+		</kineticLaw>
+  </reaction>
+</listOfReactions>
+</model>
+</sbml>

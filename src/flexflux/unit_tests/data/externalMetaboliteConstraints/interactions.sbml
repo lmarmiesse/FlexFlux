@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" xmlns:qual="http://www.sbml.org/sbml/level3/version1/qual/version1" level="3" version="1" qual:required="true">
+  <model>
+    <listOfCompartments>
+      <compartment id="c" constant="true"/>
+    </listOfCompartments>
+    <qual:listOfQualitativeSpecies>
+      <qual:qualitativeSpecies qual:id="T2" qual:compartment="c" qual:constant="false" qual:name="T2" qual:initialLevel="1" qual:maxLevel="1"/>
+      <qual:qualitativeSpecies qual:id="G2" qual:compartment="c" qual:constant="false" qual:name="G2" qual:initialLevel="1" qual:maxLevel="1"/>
+      <qual:qualitativeSpecies qual:id="G1" qual:compartment="c" qual:constant="false" qual:name="G1" qual:initialLevel="1" qual:maxLevel="1"/>
+      <qual:qualitativeSpecies qual:id="T1" qual:compartment="c" qual:constant="false" qual:name="T1" qual:initialLevel="0" qual:maxLevel="1"/>
+    </qual:listOfQualitativeSpecies>
+    <qual:listOfTransitions>
+      <qual:transition qual:id="tr_G2">
+        <qual:listOfInputs>
+          <qual:input qual:id="tr_G2_out_0" qual:qualitativeSpecies="T2" qual:transitionEffect="none"/>
+        </qual:listOfInputs>
+        <qual:listOfOutputs>
+          <qual:output qual:id="tr_G2_out" qual:qualitativeSpecies="G2" qual:transitionEffect="assignmentLevel"/>
+        </qual:listOfOutputs>
+        <qual:listOfFunctionTerms>
+          <qual:defaultTerm qual:resultLevel="1">
+            <notes>
+              <body xmlns="http://www.w3.org/1999/xhtml">
+                <p>STARTS: 0</p>
+                <p>LASTS: 0</p>
+              </body>
+            </notes>
+          </qual:defaultTerm>
+          <qual:functionTerm qual:resultLevel="0">
+            <notes>
+              <body xmlns="http://www.w3.org/1999/xhtml">
+                <p>STARTS: 0</p>
+                <p>LASTS: 0</p>
+              </body>
+            </notes>
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <apply>
+                <eq/>
+                <ci> T2 </ci>
+                <cn type="integer"> 0 </cn>
+              </apply>
+            </math>
+          </qual:functionTerm>
+        </qual:listOfFunctionTerms>
+      </qual:transition>
+      <qual:transition qual:id="tr_G1">
+        <qual:listOfInputs>
+          <qual:input qual:id="tr_G1_out_0" qual:qualitativeSpecies="T1" qual:transitionEffect="none"/>
+        </qual:listOfInputs>
+        <qual:listOfOutputs>
+          <qual:output qual:id="tr_G1_out" qual:qualitativeSpecies="G1" qual:transitionEffect="assignmentLevel"/>
+        </qual:listOfOutputs>
+        <qual:listOfFunctionTerms>
+          <qual:defaultTerm qual:resultLevel="1">
+            <notes>
+              <body xmlns="http://www.w3.org/1999/xhtml">
+                <p>STARTS: 0</p>
+                <p>LASTS: 0</p>
+              </body>
+            </notes>
+          </qual:defaultTerm>
+          <qual:functionTerm qual:resultLevel="0">
+            <notes>
+              <body xmlns="http://www.w3.org/1999/xhtml">
+                <p>STARTS: 0</p>
+                <p>LASTS: 0</p>
+              </body>
+            </notes>
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <apply>
+                <eq/>
+                <ci> T1 </ci>
+                <cn type="integer"> 0 </cn>
+              </apply>
+            </math>
+          </qual:functionTerm>
+        </qual:listOfFunctionTerms>
+      </qual:transition>
+      <qual:transition qual:id="tr_T1">
+        <qual:listOfInputs>
+          <qual:input qual:id="tr_T1_out_0" qual:qualitativeSpecies="G1" qual:transitionEffect="none"/>
+        </qual:listOfInputs>
+        <qual:listOfOutputs>
+          <qual:output qual:id="tr_T1_out" qual:qualitativeSpecies="T1" qual:transitionEffect="assignmentLevel"/>
+        </qual:listOfOutputs>
+        <qual:listOfFunctionTerms>
+          <qual:defaultTerm qual:resultLevel="0">
+            <notes>
+              <body xmlns="http://www.w3.org/1999/xhtml">
+                <p>STARTS: 0</p>
+                <p>LASTS: 0</p>
+              </body>
+            </notes>
+          </qual:defaultTerm>
+          <qual:functionTerm qual:resultLevel="1">
+            <notes>
+              <body xmlns="http://www.w3.org/1999/xhtml">
+                <p>STARTS: 0</p>
+                <p>LASTS: 0</p>
+              </body>
+            </notes>
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <apply>
+                <eq/>
+                <ci> G1 </ci>
+                <cn type="integer"> 0 </cn>
+              </apply>
+            </math>
+          </qual:functionTerm>
+        </qual:listOfFunctionTerms>
+      </qual:transition>
+    </qual:listOfTransitions>
+  </model>
+</sbml>

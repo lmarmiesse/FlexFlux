@@ -3,7 +3,9 @@ package flexflux.input;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -22,6 +24,7 @@ import org.sbml.jsbml.xml.XMLNode;
 
 import parsebionet.biodata.BioEntity;
 import flexflux.general.Constraint;
+import flexflux.general.Vars;
 import flexflux.interaction.And;
 import flexflux.interaction.Interaction;
 import flexflux.interaction.InteractionNetwork;
@@ -40,8 +43,6 @@ import flexflux.operation.OperationLt;
 public class SBMLQualReader {
 
 	private static InteractionNetwork intNet;
-
-	private static Map<BioEntity, Map<Integer, Double>> integerValuesToRealValues = new HashMap<BioEntity, Map<Integer, Double>>();
 
 	public static InteractionNetwork loadSbmlQual(String path,
 			InteractionNetwork intNet, RelationFactory relationFactory) {
@@ -74,8 +75,8 @@ public class SBMLQualReader {
 			}
 
 			BioEntity ent = intNet.getEntity(species.getId());
+			intNet.addInteractionNetworkEntity(ent);
 
-			// looks in the notes to look for real Values for the states
 			if (species.getNotes() != null) {
 				XMLNode htmlNode = species.getNotes().getChildAt(1);
 
@@ -83,21 +84,70 @@ public class SBMLQualReader {
 					XMLNode node = htmlNode.getChildAt(i);
 					if (node.getName().equals("p")) {
 						String text = node.getChildAt(0).getCharacters();
+
 						if (text.startsWith("STATE")) {
+							String stateString = text.split(":")[0];
+							String intervalString = text.split(":")[1];
 
-							if (!integerValuesToRealValues.containsKey(ent)) {
-								integerValuesToRealValues.put(ent,
-										new HashMap<Integer, Double>());
-							}
+							intervalString = intervalString.replaceAll(" ", "");
 
-							int state = Integer.parseInt(text.split(":")[0]
+							int stateNumber = Integer.parseInt(stateString
 									.split(" ")[1]);
 
-							double realValue = Double.parseDouble(text
-									.split(":")[1]);
+							if (intervalString.equals("ND")) {
+								intNet.addEntityStateConstraintTranslation(ent,
+										stateNumber, null);
+							} else {
+								double lb = 0;
+								double ub = 0;
 
-							integerValuesToRealValues.get(ent).put(state,
-									realValue);
+								String lbIncludedString = intervalString
+										.substring(0, 1);
+								String ubIncludedString = intervalString
+										.substring(intervalString.length() - 1);
+
+								boolean lbIncluded = lbIncludedString
+										.equals("[");
+								boolean ubIncluded = ubIncludedString
+										.equals("]");
+
+								intervalString = intervalString
+										.replace("[", "");
+								intervalString = intervalString
+										.replace("]", "");
+
+								if (intervalString.split(",")[0].equals("-inf")) {
+									lb = -Double.MAX_VALUE;
+								} else if (intervalString.split(",")[0]
+										.equals("+inf")) {
+									lb = Double.MAX_VALUE;
+								} else {
+									lb = Double.parseDouble(intervalString
+											.split(",")[0]);
+								}
+
+								if (intervalString.split(",")[1].equals("-inf")) {
+									ub = -Double.MAX_VALUE;
+								} else if (intervalString.split(",")[1]
+										.equals("+inf")) {
+									ub = Double.MAX_VALUE;
+								} else {
+									ub = Double.parseDouble(intervalString
+											.split(",")[1]);
+								}
+
+								if (!lbIncluded) {
+									lb += Vars.epsilon;
+								}
+								if (!ubIncluded) {
+									ub -= Vars.epsilon;
+								}
+
+								intNet.addEntityStateConstraintTranslation(ent,
+										stateNumber,
+										new Constraint(ent, lb, ub));
+							}
+
 						}
 
 					}
@@ -110,21 +160,15 @@ public class SBMLQualReader {
 				Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
 				constMap.put(ent, 1.0);
 
-				double initValue = 0;
+				int initValue = species.getInitialLevel();
 
-				if (integerValuesToRealValues.containsKey(ent)) {
-					initValue = integerValuesToRealValues.get(ent).get(
-							(int) species.getInitialLevel());
-				} else {
-					initValue = species.getInitialLevel();
-				}
-
-				intNet.addInitialConstraint(ent, new Constraint(constMap,
-						initValue, initValue));
+				intNet.addInitialState(ent, initValue);
 
 			}
 
 		}
+
+		checkConsistency();
 
 		for (Species sp : model.getListOfSpecies()) {
 
@@ -167,12 +211,7 @@ public class SBMLQualReader {
 
 				double resValue = 0;
 
-				if (integerValuesToRealValues.containsKey(outEntity)) {
-					resValue = integerValuesToRealValues.get(outEntity).get(
-							ft.getResultLevel().intValue());
-				} else {
-					resValue = ft.getResultLevel();
-				}
+				resValue = ft.getResultLevel();
 
 				if (ft.isDefaultTerm()) {
 
@@ -224,6 +263,7 @@ public class SBMLQualReader {
 				}
 
 				inter.setTimeInfos(new double[] { starts, lasts });
+				
 			}
 
 		}
@@ -232,12 +272,73 @@ public class SBMLQualReader {
 
 	}
 
+	/**
+	 * checks that a value cannot be in two states
+	 */
+
+	private static void checkConsistency() {
+
+		for (BioEntity ent : intNet.getEntityStateConstraintTranslation()
+				.keySet()) {
+
+			Set<Double> thresholds = new HashSet<Double>();
+
+			for (Integer state : intNet.getEntityStateConstraintTranslation()
+					.get(ent).keySet()) {
+				Constraint c = intNet.getEntityStateConstraintTranslation()
+						.get(ent).get(state);
+				
+				if (c == null) {
+					continue;
+				}
+
+				thresholds.add(c.getLb());
+				thresholds.add(c.getUb());
+
+			}
+
+			for (double val : thresholds) {
+
+				boolean belongsToAState = false;
+				for (Integer i : intNet.getEntityStateConstraintTranslation()
+						.get(ent).keySet()) {
+
+					Constraint c = intNet.getEntityStateConstraintTranslation()
+							.get(ent).get(i);
+
+					if (c == null) {
+						continue;
+					}
+
+					if (val >= c.getLb() && val <= c.getUb()) {
+						if (!belongsToAState) {
+							belongsToAState = true;
+						} else {
+							System.err
+									.println("Error : for variable "
+											+ ent.getId()
+											+ ", the value "
+											+ val
+											+ " belongs to more than one qualitative state.");
+							System.exit(0);
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
 	private static Relation createRealtion(ASTNode ast) {
 
 		Relation rel = getRightRelation(ast);
 
 		for (ASTNode astChild : ast.getListOfNodes()) {
-
+			
 			try {
 				RelationWithList rel2 = (RelationWithList) rel;
 				if (rel2 != null) {
@@ -271,12 +372,7 @@ public class SBMLQualReader {
 
 			BioEntity ent = intNet.getEntity(ast.getChild(0).toString());
 
-			if (integerValuesToRealValues.containsKey(ent)) {
-				value = integerValuesToRealValues.get(ent).get(
-						Integer.parseInt(ast.getChild(1).toString()));
-			} else {
-				value = Double.parseDouble(ast.getChild(1).toString());
-			}
+			value = Double.parseDouble(ast.getChild(1).toString());
 
 			Unique unique = new Unique(ent, new OperationEq(), value);
 
@@ -288,12 +384,7 @@ public class SBMLQualReader {
 
 			BioEntity ent = intNet.getEntity(ast.getChild(0).toString());
 
-			if (integerValuesToRealValues.containsKey(ent)) {
-				value = integerValuesToRealValues.get(ent).get(
-						Integer.parseInt(ast.getChild(1).toString()));
-			} else {
-				value = Double.parseDouble(ast.getChild(1).toString());
-			}
+			value = Double.parseDouble(ast.getChild(1).toString());
 
 			Unique unique = new Unique(ent, new OperationLe(), value);
 
@@ -305,12 +396,7 @@ public class SBMLQualReader {
 
 			BioEntity ent = intNet.getEntity(ast.getChild(0).toString());
 
-			if (integerValuesToRealValues.containsKey(ent)) {
-				value = integerValuesToRealValues.get(ent).get(
-						Integer.parseInt(ast.getChild(1).toString()));
-			} else {
-				value = Double.parseDouble(ast.getChild(1).toString());
-			}
+			value = Double.parseDouble(ast.getChild(1).toString());
 
 			Unique unique = new Unique(ent, new OperationGe(), value);
 
@@ -322,12 +408,7 @@ public class SBMLQualReader {
 
 			BioEntity ent = intNet.getEntity(ast.getChild(0).toString());
 
-			if (integerValuesToRealValues.containsKey(ent)) {
-				value = integerValuesToRealValues.get(ent).get(
-						Integer.parseInt(ast.getChild(1).toString()));
-			} else {
-				value = Double.parseDouble(ast.getChild(1).toString());
-			}
+			value = Double.parseDouble(ast.getChild(1).toString());
 
 			Unique unique = new Unique(ent, new OperationLt(), value);
 
@@ -339,12 +420,7 @@ public class SBMLQualReader {
 
 			BioEntity ent = intNet.getEntity(ast.getChild(0).toString());
 
-			if (integerValuesToRealValues.containsKey(ent)) {
-				value = integerValuesToRealValues.get(ent).get(
-						Integer.parseInt(ast.getChild(1).toString()));
-			} else {
-				value = Double.parseDouble(ast.getChild(1).toString());
-			}
+			value = Double.parseDouble(ast.getChild(1).toString());
 
 			Unique unique = new Unique(ent, new OperationGt(), value);
 
