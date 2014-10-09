@@ -52,7 +52,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 	Boolean minFlux = false;
 
 	HashMap<String, BioEntity> regulators;
-	
+
 	HashMap<String, BioChemicalReaction> deadReactions;
 
 	/**
@@ -74,12 +74,13 @@ public class ConditionComparisonAnalysis extends Analysis {
 
 	public ConditionComparisonAnalysis(Bind bind, String sbmlFile,
 			String interactionFile, String conditionFile,
-			String constraintFile, String objectiveFile, ConstraintType type,
-			Boolean extended, String solver, String reactionMetaDataFile,
-			String geneMetaDataFile, String regulatorMetaDataFile,
-			String mdSep, String inchlibPath, Boolean minFlux,
-			Boolean noReactionAnalysis, Boolean noGeneAnalysis,
-			Boolean noRegulatorAnalysis, Double liberty, int precision) {
+			String constraintFile, HashMap<String, String> objectives,
+			ConstraintType type, Boolean extended, String solver,
+			String reactionMetaDataFile, String geneMetaDataFile,
+			String regulatorMetaDataFile, String mdSep, String inchlibPath,
+			Boolean minFlux, Boolean noReactionAnalysis,
+			Boolean noGeneAnalysis, Boolean noRegulatorAnalysis,
+			Double liberty, int precision) {
 
 		super(bind);
 
@@ -88,7 +89,6 @@ public class ConditionComparisonAnalysis extends Analysis {
 		this.solver = solver;
 		this.conditionFile = conditionFile;
 		this.interactionFile = interactionFile;
-		this.objectiveFile = objectiveFile;
 		this.constraintType = type;
 		this.constraintFile = constraintFile;
 		this.reactionMetaDataFile = reactionMetaDataFile;
@@ -101,6 +101,8 @@ public class ConditionComparisonAnalysis extends Analysis {
 		this.launchReactionAnalysis = !noReactionAnalysis;
 		this.launchRegulatorAnalysis = !noRegulatorAnalysis;
 
+		this.objectives = objectives;
+
 		Vars.libertyPercentage = liberty;
 		Vars.decimalPrecision = precision;
 
@@ -112,20 +114,12 @@ public class ConditionComparisonAnalysis extends Analysis {
 			this.flag = false;
 		} else {
 			/**
-			 * Reads the objective file
+			 * Reads the SBML file
 			 */
-			flag = this.loadObjectiveFile();
-			if (flag == false) {
-				this.flag = false;
-			} else {
-				/**
-				 * Reads the SBML file
-				 */
-				Sbml2Bionetwork parser = new Sbml2Bionetwork(this.sbmlFile,
-						extended);
-				this.network = parser.getBioNetwork();
+			Sbml2Bionetwork parser = new Sbml2Bionetwork(this.sbmlFile,
+					extended);
+			this.network = parser.getBioNetwork();
 
-			}
 		}
 	}
 
@@ -289,7 +283,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 		}
 
 		b.prepareSolver();
-		
+
 		return true;
 
 	}
@@ -310,25 +304,26 @@ public class ConditionComparisonAnalysis extends Analysis {
 			for (Condition condition : conditions) {
 
 				if (Vars.verbose) {
-					System.err.println("\n**************\n"+condition.code + "__" + objName);
+					System.err.println("\n**************\n" + condition.code
+							+ "__" + objName);
 				}
-				
+
 				// We reinit the bind
 				this.init(objName, condition, false);
-				
-				
-				if(result.getDeadReactions() == null) 
-				{
-					
+
+				if (result.getDeadReactions() == null) {
+
 					deadReactions = new HashMap<String, BioChemicalReaction>();
-					for(BioChemicalReaction deadReaction : b.getDeadReactions()) {
+					for (BioChemicalReaction deadReaction : b
+							.getDeadReactions()) {
 						deadReactions.put(deadReaction.getId(), deadReaction);
 					}
-					
-					System.err.println(deadReactions.size()+" dead reactions");
-					
+
+					System.err
+							.println(deadReactions.size() + " dead reactions");
+
 					result.setDeadReactions(deadReactions);
-					
+
 				}
 
 				/**
@@ -336,7 +331,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 				 */
 				DoubleResult objValue = b.FBA(new ArrayList<Constraint>(),
 						true, true);
-				
+
 				b.end();
 
 				Double res = Vars.round(objValue.result);
@@ -349,18 +344,18 @@ public class ConditionComparisonAnalysis extends Analysis {
 
 				if (this.launchReactionAnalysis || this.launchGeneAnalysis) {
 
-					if(Vars.verbose)
-					{
-						System.err.println("************\nPFBA analysis\n************");
+					if (Vars.verbose) {
+						System.err
+								.println("************\nPFBA analysis\n************");
 					}
-					
+
 					PFBAResult resPFBA = null;
-					if (! res.isNaN() && res != 0) {
+					if (!res.isNaN() && res != 0) {
 						this.init(objName, condition, false);
 						PFBAAnalysis a = new PFBAAnalysis(b, launchGeneAnalysis);
 						a.addDeadReactions(deadReactions);
 						resPFBA = a.runAnalysis();
-						
+
 						b.end();
 					}
 
@@ -368,21 +363,21 @@ public class ConditionComparisonAnalysis extends Analysis {
 				}
 
 				if (this.launchRegulatorAnalysis) {
-					
-					if(Vars.verbose)
-					{
-						System.err.println("************\nRegulator KO analysis\n************");
+
+					if (Vars.verbose) {
+						System.err
+								.println("************\nRegulator KO analysis\n************");
 					}
 
 					result.regulators = regulators;
 
 					KOResult koResult = null;
 
-					if (! res.isNaN() && res != 0) {
+					if (!res.isNaN() && res != 0) {
 						this.init(objName, condition, false);
 						KOAnalysis koAnalysis = new KOAnalysis(b, 1, regulators);
 						koResult = koAnalysis.runAnalysis();
-						
+
 						b.end();
 					}
 
@@ -391,34 +386,30 @@ public class ConditionComparisonAnalysis extends Analysis {
 				}
 			}
 		}
-		
+
 		/**
 		 * Reads the metaDataFiles
 		 */
 
-		if(Vars.verbose)
-		{
+		if (Vars.verbose) {
 			System.err.println("************\nMetaData reading\n************");
 		}
-		
+
 		if (geneMetaDataFile != "" && launchGeneAnalysis) {
 			HashMap<String, HashMap<String, String>> geneMetaData = this
-					.readMetaDataFile(geneMetaDataFile, false,
-							this.mdSep);
+					.readMetaDataFile(geneMetaDataFile, false, this.mdSep);
 			result.geneMetaData = geneMetaData;
 		}
 
 		if (reactionMetaDataFile != "" && launchReactionAnalysis) {
 			HashMap<String, HashMap<String, String>> reactionMetaData = this
-					.readMetaDataFile(reactionMetaDataFile, true,
-							this.mdSep);
+					.readMetaDataFile(reactionMetaDataFile, true, this.mdSep);
 			result.reactionMetaData = reactionMetaData;
 		}
 
 		if (regulatorMetaDataFile != "" && launchRegulatorAnalysis) {
 			HashMap<String, HashMap<String, String>> regulatorMetaData = this
-					.readMetaDataFile(regulatorMetaDataFile, true,
-							this.mdSep);
+					.readMetaDataFile(regulatorMetaDataFile, true, this.mdSep);
 			result.regulatorMetaData = regulatorMetaData;
 		}
 
@@ -426,8 +417,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 				.getTargetToInteractions().keySet()) {
 			result.interactionTargets.add(e.getId());
 		}
-		
-		
+
 		return result;
 	}
 
@@ -571,79 +561,6 @@ public class ConditionComparisonAnalysis extends Analysis {
 				} catch (IOException e) {
 					System.err
 							.println("Error while closing the condition file");
-					e.printStackTrace();
-				}
-			}
-		}
-
-		return flag;
-
-	}
-
-	/**
-	 * Reads the objective file : each line corresponds to an objective First
-	 * column : the name of the objective function Second column : its
-	 * expression (ex : MAX(R_BIOMASS))
-	 * 
-	 * @return false if there is a problem while loading the file
-	 */
-
-	public Boolean loadObjectiveFile() {
-		Boolean flag = true;
-
-		BufferedReader in = null;
-
-		try {
-			in = new BufferedReader(new FileReader(this.objectiveFile));
-
-			String line;
-
-			int nbLine = 0;
-
-			while ((line = in.readLine()) != null) {
-				if (line.startsWith("#") || line.equals("")) {
-					nbLine++;
-					continue;
-				}
-
-				String tab[] = line.split("\t");
-
-				if (tab.length != 2) {
-					System.err.println("Error line " + nbLine
-							+ " does not contain two columns");
-					return false;
-				}
-
-				String objExpression = tab[1];
-
-				if (!objExpression.contains("MIN(")
-						&& !objExpression.contains("MAX(")) {
-					System.err
-							.println("Objective function badly formatted line "
-									+ nbLine + " (" + objExpression + ")");
-					return false;
-				}
-
-				String objName = tab[0];
-
-				objectives.put(objName, objExpression);
-			}
-		} catch (FileNotFoundException e) {
-			System.err.println(objectiveFile + " not found");
-			e.printStackTrace();
-			return false;
-		} catch (IOException e) {
-			System.err.println("Error while reading " + objectiveFile);
-			e.printStackTrace();
-		}
-
-		finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e) {
-					System.err
-							.println("Error while closing the objective file");
 					e.printStackTrace();
 				}
 			}

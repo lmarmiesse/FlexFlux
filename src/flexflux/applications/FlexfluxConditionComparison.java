@@ -1,6 +1,7 @@
 package flexflux.applications;
 
 import java.io.File;
+import java.util.HashMap;
 
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -15,7 +16,7 @@ import flexflux.general.CplexBind;
 import flexflux.general.GLPKBind;
 import flexflux.general.Vars;
 
-public class FlexfluxConditionComparison {
+public class FlexfluxConditionComparison extends FFApplication {
 
 	public String applicationName = FlexfluxConditionComparison.class
 			.getSimpleName();
@@ -35,7 +36,7 @@ public class FlexfluxConditionComparison {
 
 	@Option(name = "-mdg", usage = "[OPTIONAL] Gene metadata file used for heatmap analysis", metaVar = "File", required = false)
 	public String metaGeneDataFile = "";
-	
+
 	@Option(name = "-mdreg", usage = "[OPTIONAL] Regulator metadata file used for heatmap analysis", metaVar = "File", required = false)
 	public String metaRegulatorDataFile = "";
 
@@ -60,7 +61,7 @@ public class FlexfluxConditionComparison {
 	@Option(name = "-plot", usage = "[OPTIONAL, default = false] Plots the results")
 	public Boolean plot = false;
 
-	@Option(name = "-out", usage = "[OPTIONAL] Output file name", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL] Output file directory", metaVar = "File")
 	public String outName = "";
 
 	@Option(name = "-n", usage = "[OPTIONAL, default = number of available processors] Number of threads", metaVar = "Integer")
@@ -96,7 +97,6 @@ public class FlexfluxConditionComparison {
 	@Option(name = "-verbose", usage = "[default=false] Activates the verbose mode")
 	public Boolean verbose = false;
 
-	
 	@Option(name = "-h", usage = "Prints this help")
 	public Boolean h = false;
 
@@ -152,25 +152,32 @@ public class FlexfluxConditionComparison {
 			c = ConstraintType.DOUBLE;
 		}
 
+		HashMap<String, String> objectives = f
+				.loadObjectiveFile(f.objectiveFile);
+		
+		if (objectives == null) {
+			System.err.println("Error in reading the objective file");
+			System.exit(0);
+		}
+
 		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
 				f.sbmlFile, f.intFile, f.conditionFile, f.constraintFile,
-				f.objectiveFile, c, f.extended, f.solver,
-				f.metaReactionDataFile, f.metaGeneDataFile, f.metaRegulatorDataFile, f.mdSep,
-				f.inchlibPath, f.minFlux, f.noReactionAnalysis,
-				f.noGeneAnalysis, f.noRegulatorAnalysis, f.liberty, f.precision);
+				objectives, c, f.extended, f.solver,
+				f.metaReactionDataFile, f.metaGeneDataFile,
+				f.metaRegulatorDataFile, f.mdSep, f.inchlibPath, f.minFlux,
+				f.noReactionAnalysis, f.noGeneAnalysis, f.noRegulatorAnalysis,
+				f.liberty, f.precision);
 
-		if(f.verbose) 
-		{
+		if (f.verbose) {
 			Vars.verbose = true;
 		}
-		
+
 		AnalysisResult r = a.runAnalysis();
 
-		
 		if (!f.outName.equals("")) {
 			r.writeToFile(f.outName);
 		}
-		
+
 		if (f.plot) {
 			r.plot();
 		}

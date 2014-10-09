@@ -14,3 +14,31 @@ trouver une solution pour simplifier tout ça !
 - BIND.FBA() : à revoir : on peut effacer des simpleConstraints non désirées.
 - ne pas accéder aux attributs avec des tableaux
 - Tests ReacAnalysis et TwoReacAnalysis
+- Sortir la lecture des fichiers de ConditionComparisonAnalysis
+- Web mode dans Result
+- Sortir l'appel de inchlib des classes
+- Bind.FBA trnasforme constraintsToAdd : peut être générateur d'erreur
+- Se pencher sur ce problème :
+> Bonne réponse. C'était juste pour voir si tu étais bien réveillé . Et du coup, si je mets ça, le parser doit me jeter, c'est ça ?
+>
+> Ludo
+> Le 08/10/2014 07:59, Lucas Marmiesse a écrit :
+>> En théorie t'as pas le droit d'avoir ça, il faut une seule règle par cible
+>> Le 08/10/2014 07:57, Ludovic Cottret a écrit :
+>>> Salut,
+>>>
+>>> Dans ce réseau d'interactions
+>>> IF[T1=1]THEN[G1=0]ELSE[G1=1]
+>>> IF[T2=1]THEN[G1=1]ELSE[G1=0]
+>>>
+>>>  si j'ai comme état de départ : T1 = 1, T2 = 1, quelle valeur va prendre G1 à l'étape suivante ou après la recherche de l'état d'équilibre ?
+>>>
+>>> Ludo
+Dans l'état actuel du code qui parse le réseau d'interaction ça va ajouter les deux IF/THEN aux "ConditionalInteraction" de G1 et par contre il n'y a qu'une "DefaultInteraction" par target donc le 2eme ELSE va écraser le premier.
+Ensuite dans la résolution du réseau il va tester les ConditionalInteraction pour G1 et s'arrêter des qu'il en trouve une vrai. Donc la si T1 = 1 il va mettre G1 à 0.
+De toute façon en SBMLQual on peut pas avoir 2 règles (qui s’appellent transition) par cible.
+Il reste le problème que deux conditions différentes peuvent être vraies en même temps.
+Pour l'instant j'ai pas vraiment géré ce problème là, FlexFlux prend le premier qui est vrai.
+Peut-être qu'il faudrait l'interdire mais c'est contraignant. De plus c'est pas forcément facile à tester
+
+- 
