@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" xmlns:qual="http://www.sbml.org/sbml/level3/version1/qual/version1" level="3" version="1" qual:required="true">
+  <model>
+    <listOfCompartments>
+      <compartment id="c_c" constant="true"/>
+    </listOfCompartments>
+    <qual:listOfQualitativeSpecies>
+      <qual:qualitativeSpecies qual:id="a" qual:compartment="c" qual:constant="false" qual:name="a" qual:initialLevel="5" qual:maxLevel="150"/>
+      <qual:qualitativeSpecies qual:id="c" qual:compartment="c" qual:constant="false" qual:name="c" qual:initialLevel="0" qual:maxLevel="150"/>
+      <qual:qualitativeSpecies qual:id="b" qual:compartment="c" qual:constant="false" qual:name="b" qual:initialLevel="0" qual:maxLevel="150"/>
+      <qual:qualitativeSpecies qual:id="e" qual:compartment="c" qual:constant="false" qual:name="e" qual:initialLevel="0" qual:maxLevel="150"/>
+      <qual:qualitativeSpecies qual:id="d" qual:compartment="c" qual:constant="false" qual:name="d" qual:initialLevel="0" qual:maxLevel="150"/>
+    </qual:listOfQualitativeSpecies>
+    <qual:listOfTransitions>
+      <qual:transition qual:id="tr_e">
+        <qual:listOfInputs>
+          <qual:input qual:id="tr_e_out_0" qual:qualitativeSpecies="a" qual:transitionEffect="none"/>
+        </qual:listOfInputs>
+        <qual:listOfOutputs>
+          <qual:output qual:id="tr_e_out" qual:qualitativeSpecies="e" qual:transitionEffect="assignmentLevel"/>
+        </qual:listOfOutputs>
+        <qual:listOfFunctionTerms>
+          <qual:defaultTerm qual:resultLevel="8">
+            <notes>
+              <body xmlns="http://www.w3.org/1999/xhtml">
+                <p>STARTS: 0</p>
+                <p>LASTS: 0</p>
+              </body>
+            </notes>
+          </qual:defaultTerm>
+          <qual:functionTerm qual:resultLevel="5">
+            <notes>
+              <body xmlns="http://www.w3.org/1999/xhtml">
+                <p>STARTS: 0</p>
+                <p>LASTS: 0</p>
+              </body>
+            </notes>
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <apply>
+                <gt/>
+                <ci> a </ci>
+                <cn type="integer"> 0 </cn>
+              </apply>
+            </math>
+          </qual:functionTerm>
+        </qual:listOfFunctionTerms>
+      </qual:transition>
+      <qual:transition qual:id="tr_g">
+        <qual:listOfInputs>
+          <qual:input qual:id="tr_g_out_0" qual:qualitativeSpecies="f" qual:transitionEffect="none"/>
+          <qual:input qual:id="tr_g_out_1" qual:qualitativeSpecies="g" qual:transitionEffect="none"/>
+        </qual:listOfInputs>
+        <qual:listOfOutputs>
+          <qual:output qual:id="tr_g_out" qual:qualitativeSpecies="g" qual:transitionEffect="assignmentLevel"/>
+        </qual:listOfOutputs>
+        <qual:listOfFunctionTerms>
+          <qual:defaultTerm qual:resultLevel="63">
+            <notes>
+              <body xmlns="http://www.w3.org/1999/xhtml">
+                <p>STARTS: 0</p>
+                <p>LASTS: 0</p>
+              </body>
+            </notes>
+          </qual:defaultTerm>
+          <qual:functionTerm qual:resultLevel="58">
+            <notes>
+              <body xmlns="http://www.w3.org/1999/xhtml">
+                <p>STARTS: 0</p>
+                <p>LASTS: 0</p>
+              </body>
+            </notes>
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <apply>
+                <or/>
+                <apply>
+                  <eq/>
+                  <ci> f </ci>
+                  <cn type="integer"> 122 </cn>
+                </apply>
+                <apply>
+                  <eq/>
+                  <ci> g </ci>
+                  <cn type="integer"> 58 </cn>
+                </apply>
+              </apply>
+            </math>
+          </qual:functionTerm>
+        </qual:listOfFunctionTerms>
+      </qual:transition>
+      <qual:transition qual:id="tr_f">
+        <qual:listOfInputs>
+          <qual:input qual:id="tr_f_out_0" qual:qualitativeSpecies="a" qual:transitionEffect="none"/>
+        </qual:listOfInputs>
+        <qual:listOfOutputs>
+          <qual:output qual:id="tr_f_out" qual:qualitativeSpecies="f" qual:transitionEffect="assignmentLevel"/>
+        </qual:listOfOutputs>
+        <qual:listOfFunctionTerms>
+          <qual:defaultTerm qual:resultLevel="150">
+            <notes>
+              <body xmlns="http://www.w3.org/1999/xhtml">
+                <p>STARTS: 0</p>
+                <p>LASTS: 0</p>
+              </body>
+            </notes>
+          </qual:defaultTerm>
+          <qual:functionTerm qual:resultLevel="122">
+            <notes>
+              <body xmlns="http://www.w3.org/1999/xhtml">
+                <p>STARTS: 0</p>
+                <p>LASTS: 0</p>
+              </body>
+            </notes>
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <apply>
+                <gt/>
+                <ci> a </ci>
+                <cn type="integer"> 0 </cn>
+              </apply>
+            </math>
+          </qual:functionTerm>
+        </qual:listOfFunctionTerms>
+      </qual:transition>
+    </qual:listOfTransitions>
+  </model>
+</sbml>

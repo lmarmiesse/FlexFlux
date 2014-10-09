@@ -12,7 +12,6 @@ import parsebionet.biodata.BioPhysicalEntity;
 import flexflux.analyses.result.SteadyStateAnalysisResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
-import flexflux.general.Vars;
 import flexflux.interaction.Interaction;
 import flexflux.interaction.InteractionNetwork;
 
@@ -20,9 +19,9 @@ public class SteadyStateAnalysis extends Analysis {
 
 	private InteractionNetwork intNet;
 
-	private List<Map<BioEntity, Constraint>> statesList = new ArrayList<Map<BioEntity, Constraint>>();
+	private List<Map<BioEntity, Integer>> statesList = new ArrayList<Map<BioEntity, Integer>>();
 
-	private List<Map<BioEntity, Constraint>> atractorStatesList = new ArrayList<Map<BioEntity, Constraint>>();
+	private List<Map<BioEntity, Integer>> atractorStatesList = new ArrayList<Map<BioEntity, Integer>>();
 
 	private List<Constraint> finalConstraints = new ArrayList<Constraint>();
 
@@ -48,23 +47,68 @@ public class SteadyStateAnalysis extends Analysis {
 		SteadyStateAnalysisResult res = new SteadyStateAnalysisResult();
 
 		if (intNet.getTargetToInteractions().isEmpty()
-				&& intNet.getInitialConstraints().isEmpty()) {
+				&& intNet.getInitialConstraints().isEmpty()
+				&& intNet.getInitialStates().isEmpty()) {
 			return res;
 		}
 
 		List<BioEntity> entitiesToCheck = new ArrayList<BioEntity>();
 		entitiesToCheck.addAll(intNet.getTargetToInteractions().keySet());
-		
-		for (BioEntity ent : entitiesToCheck){
+
+		for (BioEntity ent : entitiesToCheck) {
 			res.addResultEntity(ent);
 		}
 
 		// we set the values for the variables in the first state
-		Map<BioEntity, Constraint> thisState = new HashMap<BioEntity, Constraint>();
+		Map<BioEntity, Integer> thisState = intNet.getInitialStates();
+		
+		for (BioEntity b : intNet.getInitialConstraints().keySet()) {
+			
+			// TRANSLATION
+			if (intNet.canTranslate(b)) {
+				thisState.put(
+						b,
+						intNet.getStateFromValue(b, intNet
+								.getInitialConstraints().get(b).getLb()));
+			} else {
+				try {
+					thisState.put(b, (int) intNet.getInitialConstraints()
+							.get(b).getLb());
+				} catch (Exception e) {
+					System.err
+							.println("Error : no translation available for variable "
+									+ b.getId()
+									+ " and value "
+									+ simpleConstraints.get(b).getLb());
+				}
+			}
+			// if this entity had a simple constraint, but not fix (ub!=lb) we
+			// overwrite it
+
+			if (simpleConstraints.containsKey(b)) {
+				if (simpleConstraints.get(b).getLb() != simpleConstraints
+						.get(b).getUb()) {
+
+					if (intNet.canTranslate(b)) {
+						thisState.put(b, intNet.getStateFromValue(b, intNet
+								.getInitialConstraints().get(b).getLb()));
+					} else {
+						try {
+							thisState.put(b, (int) intNet
+									.getInitialConstraints().get(b).getLb());
+						} catch (Exception e) {
+							System.err
+									.println("Error : no translation available for variable "
+											+ b.getId()
+											+ " and value "
+											+ simpleConstraints.get(b).getLb());
+						}
+					}
+				}
+			}
+		}
 
 		for (BioEntity b : simpleConstraints.keySet()) {
-
-			thisState.put(b, simpleConstraints.get(b));
 
 			// if the entity is already set by a constraint, we remove te
 			// interactions
@@ -72,27 +116,30 @@ public class SteadyStateAnalysis extends Analysis {
 			if (simpleConstraints.get(b).getLb() == simpleConstraints.get(b)
 					.getUb()) {
 
+				// TRANSLATION
+				if (intNet.canTranslate(b)) {
+
+					thisState.put(b, intNet.getStateFromValue(b,
+							simpleConstraints.get(b).getLb()));
+				} else {
+					try {
+						thisState
+								.put(b, (int) simpleConstraints.get(b).getLb());
+					} catch (Exception e) {
+						System.err
+								.println("Error : no translation available for variable "
+										+ b.getId()
+										+ " and value "
+										+ simpleConstraints.get(b).getLb());
+					}
+				}
+
 				if (intNet.getTargetToInteractions().containsKey(b)) {
 					entitiesToCheck.remove(b);
 				}
 			}
 		}
 		//
-		
-		for (BioEntity b : intNet.getInitialConstraints().keySet()) {
-
-			if (!thisState.containsKey(b)) {
-				thisState.put(b, intNet.getInitialConstraints().get(b));
-			}
-			// if this entity had a simple constraint, but not fix (ub!=lb) we
-			// overwrite it
-			else {
-				if (simpleConstraints.get(b).getLb() != simpleConstraints
-						.get(b).getUb()) {
-					thisState.put(b, intNet.getInitialConstraints().get(b));
-				}
-			}
-		}
 
 		int attractorSize = 0;
 
@@ -100,7 +147,7 @@ public class SteadyStateAnalysis extends Analysis {
 			statesList.add(thisState);
 
 			// we copy the previous state
-			Map<BioEntity, Constraint> newState = new HashMap<BioEntity, Constraint>();
+			Map<BioEntity, Integer> newState = new HashMap<BioEntity, Integer>();
 			for (BioEntity b : thisState.keySet()) {
 				newState.put(b, thisState.get(b));
 			}
@@ -111,14 +158,14 @@ public class SteadyStateAnalysis extends Analysis {
 			// we update the values
 			for (Constraint c : newtStepConstraints.keySet()) {
 				newState.put((BioEntity) c.getEntities().keySet().toArray()[0],
-						c);
+						(int) c.getLb());
 			}
 
 			thisState = newState;
 
 			// /////We check that this step has not already been achieved
 			boolean areTheSame = false;
-			for (Map<BioEntity, Constraint> previousStep : statesList) {
+			for (Map<BioEntity, Integer> previousStep : statesList) {
 				areTheSame = true;
 				// compare "thisStepSimpleConstraints" with "previousStep"
 				// They have to be exactly the same
@@ -128,13 +175,11 @@ public class SteadyStateAnalysis extends Analysis {
 
 					for (BioEntity b : thisState.keySet()) {
 						if (previousStep.containsKey(b)) {
-							Constraint c1 = thisState.get(b);
-							Constraint c2 = previousStep.get(b);
 
-							if (c1.getLb() != c2.getLb()
-									|| c1.getUb() != c2.getUb()) {
+							if (thisState.get(b) != previousStep.get(b)) {
 								areTheSame = false;
 							}
+
 						} else {
 							areTheSame = false;
 						}
@@ -156,11 +201,11 @@ public class SteadyStateAnalysis extends Analysis {
 			}
 
 			if (areTheSame) {
-//				if (Vars.verbose) {
-//					System.err.println("Steady state found in " + (it)
-//							+ " iterations.");
-//					System.err.println("Attractor size : " + attractorSize);
-//				}
+				// if (Vars.verbose) {
+				// System.err.println("Steady state found in " + (it)
+				// + " iterations.");
+				// System.err.println("Attractor size : " + attractorSize);
+				// }
 				break;
 			}
 
@@ -191,8 +236,16 @@ public class SteadyStateAnalysis extends Analysis {
 					double lb = 0;
 					double ub = 0;
 					for (int nb = 0; nb < atractorStatesList.size(); nb++) {
-						lb += atractorStatesList.get(nb).get(b).getLb();
-						ub += atractorStatesList.get(nb).get(b).getUb();
+						if (intNet.canTranslate(b)) {
+							lb += intNet.getConstraintFromState(b,
+									atractorStatesList.get(nb).get(b)).getLb();
+							ub += intNet.getConstraintFromState(b,
+									atractorStatesList.get(nb).get(b)).getUb();
+						} else {
+							lb += atractorStatesList.get(nb).get(b);
+							ub += atractorStatesList.get(nb).get(b);
+						}
+
 					}
 
 					lb = lb / atractorStatesList.size();
@@ -210,15 +263,27 @@ public class SteadyStateAnalysis extends Analysis {
 
 		}
 		res.setStatesList(statesList);
+
+		//////TRANSLATION
+
 		res.setSteadyStateConstraints(finalConstraints);
 
+		System.out.println("Attractor size : "+attractorSize);
+		
 		return res;
 
 	}
 
 	public Map<Constraint, double[]> goToNextInteractionNetworkState(
-			Map<BioEntity, Constraint> networkState,
+			Map<BioEntity, Integer> networkState,
 			List<BioEntity> entitiesToCheck) {
+		Map<BioEntity, Constraint> netConstraints = new HashMap<BioEntity, Constraint>();
+		for (BioEntity ent : networkState.keySet()) {
+
+			netConstraints.put(ent,
+					new Constraint(ent, (double) networkState.get(ent),
+							(double) networkState.get(ent)));
+		}
 
 		Map<Constraint, double[]> contToTimeInfos = new HashMap<Constraint, double[]>();
 
@@ -231,7 +296,7 @@ public class SteadyStateAnalysis extends Analysis {
 			for (Interaction i : intNet.getTargetToInteractions().get(entity)
 					.getConditionalInteractions()) {
 
-				if (i.getCondition().isTrue(networkState)) {
+				if (i.getCondition().isTrue(netConstraints)) {
 
 					// we go through all the consequences (there should be only
 					// one)

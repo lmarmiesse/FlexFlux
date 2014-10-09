@@ -244,7 +244,7 @@ public class TestConditionComparison {
 							tempConditionFile);
 			f.intFile = TestUtils
 					.copyProjectResource(
-							"flexflux/unit_tests/data/conditionComparisonTest/interactions.txt",
+							"flexflux/unit_tests/data/conditionComparisonTest/interactions.sbml",
 							tempInteractionFile);
 
 			f.objectiveFile = TestUtils

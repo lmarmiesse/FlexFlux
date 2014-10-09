@@ -40,7 +40,7 @@ public class SteadyStateAnalysisResult extends AnalysisResult {
 
 	private JTable resultTable;
 
-	private List<Map<BioEntity, Constraint>> statesList = new ArrayList<Map<BioEntity, Constraint>>();
+	private List<Map<BioEntity, Integer>> statesList = new ArrayList<Map<BioEntity, Integer>>();
 
 	private List<Constraint> finalConstraints = new ArrayList<Constraint>();
 
@@ -50,7 +50,7 @@ public class SteadyStateAnalysisResult extends AnalysisResult {
 		resultEntities.add(ent);
 	}
 
-	public void setStatesList(List<Map<BioEntity, Constraint>> states) {
+	public void setStatesList(List<Map<BioEntity, Integer>> states) {
 		statesList = states;
 	}
 
@@ -80,7 +80,7 @@ public class SteadyStateAnalysisResult extends AnalysisResult {
 
 					if (statesList.get(j).containsKey(ent)) {
 
-						out.print("\t" + statesList.get(j).get(ent).getLb());
+						out.print("\t" + statesList.get(j).get(ent));
 					} else {
 						out.print("\t" + "?");
 					}
@@ -123,7 +123,7 @@ public class SteadyStateAnalysisResult extends AnalysisResult {
 			for (int j = 0; j < statesList.size(); j++) {
 
 				if (statesList.get(j).containsKey(ent)) {
-					entValues[j + 1] = statesList.get(j).get(ent).getLb();
+					entValues[j + 1] = statesList.get(j).get(ent);
 				}else
 				{
 					entValues[j + 1] = "?";

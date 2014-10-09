@@ -1,9 +1,5 @@
 IF[M_glc_D_b>0.01]THEN[R_EX_ac_e_>=0][0][0.4]ELSE[R_EX_ac_e_<=0]
 
 
-#IF[M_glc_D_b<5]THEN[A=2][1][0]
-
-
-#IF[x=5]THEN[h=1.0]
 M_glc_D_b 10.4
 M_ac_b 0.3

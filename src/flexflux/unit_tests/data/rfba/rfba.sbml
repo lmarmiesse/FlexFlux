@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" xmlns:qual="http://www.sbml.org/sbml/level3/version1/qual/version1" level="3" version="1" qual:required="true">
+  <model>
+    <listOfCompartments>
+      <compartment id="c" constant="true"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="M_ac_b" compartment="c" initialConcentration="0.3" hasOnlySubstanceUnits="true" boundaryCondition="false" constant="false"/>
+    </listOfSpecies>
+    <qual:listOfQualitativeSpecies>
+      <qual:qualitativeSpecies qual:id="R_EX_ac_e_" qual:compartment="c" qual:constant="false" qual:name="R_EX_ac_e_" qual:initialLevel="1" qual:maxLevel="1">
+        <notes>
+          <body xmlns="http://www.w3.org/1999/xhtml">
+            <p>STATE 1:[0,+inf]</p>
+            <p>STATE 0:[-inf,0[</p>
+          </body>
+        </notes>
+      </qual:qualitativeSpecies>
+      <qual:qualitativeSpecies qual:id="M_glc_D_b" qual:compartment="c" qual:constant="false" qual:name="M_glc_D_b" qual:initialLevel="2" qual:maxLevel="2">
+        <notes>
+          <body xmlns="http://www.w3.org/1999/xhtml">
+            <p>STATE 1:]0.1,10.4[</p>
+            <p>STATE 0:[-inf,0.1]</p>
+            <p>STATE 2:[10.4,10.4]</p>
+          </body>
+        </notes>
+      </qual:qualitativeSpecies>
+    </qual:listOfQualitativeSpecies>
+    <qual:listOfTransitions>
+      <qual:transition qual:id="tr_R_EX_ac_e_">
+        <qual:listOfInputs>
+          <qual:input qual:id="tr_R_EX_ac_e__out_0" qual:qualitativeSpecies="M_glc_D_b" qual:transitionEffect="none"/>
+        </qual:listOfInputs>
+        <qual:listOfOutputs>
+          <qual:output qual:id="tr_R_EX_ac_e__out" qual:qualitativeSpecies="R_EX_ac_e_" qual:transitionEffect="assignmentLevel"/>
+        </qual:listOfOutputs>
+        <qual:listOfFunctionTerms>
+          <qual:defaultTerm qual:resultLevel="0">
+            <notes>
+              <body xmlns="http://www.w3.org/1999/xhtml">
+                <p>STARTS: 0</p>
+                <p>LASTS: 0</p>
+              </body>
+            </notes>
+          </qual:defaultTerm>
+          <qual:functionTerm qual:resultLevel="1">
+            <notes>
+              <body xmlns="http://www.w3.org/1999/xhtml">
+                <p>STARTS: 0</p>
+                <p>LASTS: 0.4</p>
+              </body>
+            </notes>
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <apply>
+                <geq/>
+                <ci> M_glc_D_b </ci>
+                <cn type="integer"> 1 </cn>
+              </apply>
+            </math>
+          </qual:functionTerm>
+        </qual:listOfFunctionTerms>
+      </qual:transition>
+    </qual:listOfTransitions>
+  </model>
+</sbml>

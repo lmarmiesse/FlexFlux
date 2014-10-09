@@ -33,42 +33,47 @@ public class TestSBMLQual {
 		BioEntity entity4 = bind.getInteractionNetwork()
 				.getEntity("s_Bacteria");
 
-		assertTrue(bind.getInteractionNetwork().getInitialConstraint(entity1)
-				.getLb() == 3.5);
-		assertTrue(bind.getInteractionNetwork().getInitialConstraint(entity1)
-				.getUb() == 3.5);
+		
+		
+		assertTrue(bind.getInteractionNetwork().getInitialState(entity1) == 3);
 
-		assertTrue(bind.getInteractionNetwork().getInitialConstraint(entity2)
-				.getLb() == 0);
-		assertTrue(bind.getInteractionNetwork().getInitialConstraint(entity2)
-				.getUb() == 0);
+		assertTrue(bind.getInteractionNetwork().getInitialState(entity2) == 1);
 
-		assertTrue(bind.getInteractionNetwork().getInitialConstraint(entity3)
-				.getLb() == 0.2);
-		assertTrue(bind.getInteractionNetwork().getInitialConstraint(entity3)
-				.getUb() == 0.2);
+		assertTrue(bind.getInteractionNetwork().getInitialState(entity3) == 0);
 
 		// /interactions
 
 		assertTrue(bind.getInteractionNetwork().getTargetToInteractions()
 				.get(entity1).getConditionalInteractions().get(0).getCondition().getInvolvedEntities().get(0)
 				.getId().equals("s_Bacteria"));
+		
+		
+	
+		
 
 		assertTrue(((Unique) bind.getInteractionNetwork().getTargetToInteractions()
 				.get(entity1).getConditionalInteractions().get(0).getCondition())
-				.getValue() == 6.3);
+				.getValue() == 6);
 
 		assertTrue(bind.getInteractionNetwork().getTargetToInteractions()
 				.get(entity1).getConditionalInteractions().get(0).getConsequence().getEntity() == entity1);
 
+		
 		assertTrue(bind.getInteractionNetwork().getTargetToInteractions()
-				.get(entity1).getConditionalInteractions().get(0).getConsequence().getValue() == 1.8);
+				.get(entity1).getConditionalInteractions().get(0).getConsequence().getValue() == 1);
 
 		assertTrue(bind.getInteractionNetwork().getTargetToInteractions()
 				.get(entity1).getdefaultInteraction().getConsequence().getValue() == 0);
 
-		System.out.println(bind.getInteractionNetwork().getTargetToInteractions()
-				.get(entity2).getConditionalInteractions().get(0));
+		
+		assertTrue(bind.getInteractionNetwork().getConstraintFromState(entity1, 0).getLb()==0.0);
+		assertTrue(bind.getInteractionNetwork().getConstraintFromState(entity1, 0).getUb()==0.5);
+		
+		assertTrue(bind.getInteractionNetwork().getStateFromValue(entity1, 0.7)==1);
+		
+		
+//		System.out.println(bind.getInteractionNetwork().getTargetToInteractions()
+//				.get(entity2).getConditionalInteractions().get(0));
 
 	}
 

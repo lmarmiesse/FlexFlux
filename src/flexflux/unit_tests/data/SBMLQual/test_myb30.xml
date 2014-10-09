@@ -35,9 +35,17 @@
     </listOfCompartments>
       <qual:listOfQualitativeSpecies xmlns:qual="http://www.sbml.org/sbml/level3/version1/qual/version1">
       <qual:qualitativeSpecies qual:constant="true" qual:compartment="extracellular" qual:name="Bacteria" qual:id="s_Bacteria"/>
-      <qual:qualitativeSpecies qual:constant="false" qual:compartment="cytosol" qual:maxLevel="3.2" qual:name="MYB30" qual:initialLevel="3.5" qual:id="s_MYB30"/>
-      <qual:qualitativeSpecies qual:constant="false" qual:compartment="cytosol" qual:maxLevel="1" qual:name="MYB96" qual:initialLevel="0" qual:id="s_MYB96"/>
-      <qual:qualitativeSpecies qual:constant="false" qual:compartment="cytosol" qual:maxLevel="1" qual:name="VLCFA" qual:initialLevel="0.2" qual:id="s_VLCFA"/>
+      <qual:qualitativeSpecies qual:constant="false" qual:compartment="cytosol" qual:maxLevel="3" qual:name="MYB30" qual:initialLevel="3" qual:id="s_MYB30">
+       <notes>
+          <body xmlns="http://www.w3.org/1999/xhtml">
+            <p>STATE 1:]0.5,+inf]</p>
+            <p>STATE 0:[0,0.5]</p>
+            <p>STATE 2:ND</p>
+          </body>
+        </notes>
+      </qual:qualitativeSpecies>
+      <qual:qualitativeSpecies qual:constant="false" qual:compartment="cytosol" qual:maxLevel="1" qual:name="MYB96" qual:initialLevel="1" qual:id="s_MYB96"/>
+      <qual:qualitativeSpecies qual:constant="false" qual:compartment="cytosol" qual:maxLevel="1" qual:name="VLCFA" qual:initialLevel="0" qual:id="s_VLCFA"/>
     </qual:listOfQualitativeSpecies>
     <qual:listOfTransitions xmlns:qual="http://www.sbml.org/sbml/level3/version1/qual/version1">
       <qual:transition qual:id="tr_MYB30">
@@ -50,12 +58,12 @@
         <qual:listOfFunctionTerms>
           <qual:defaultTerm qual:resultLevel="0">
           </qual:defaultTerm>
-          <qual:functionTerm qual:resultLevel="1.8">
+          <qual:functionTerm qual:resultLevel="1">
             <math xmlns="http://www.w3.org/1998/Math/MathML">            
               <apply>
                 <eq/>
                 <ci> s_Bacteria </ci>
-                <cn > 6.3 </cn>
+                <cn > 6 </cn>
               </apply>
             </math>
             
@@ -71,9 +79,9 @@
           <qual:output qual:transitionEffect="assignmentLevel" qual:qualitativeSpecies="s_MYB96"/>
         </qual:listOfOutputs>
         <qual:listOfFunctionTerms>
-          <qual:defaultTerm qual:resultLevel="0.2">
+          <qual:defaultTerm qual:resultLevel="0">
           </qual:defaultTerm>
-          <qual:functionTerm qual:resultLevel="3.5">
+          <qual:functionTerm qual:resultLevel="1">
             <math xmlns="http://www.w3.org/1998/Math/MathML">            
               <apply>
                 <and/>

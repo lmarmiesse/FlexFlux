@@ -77,7 +77,7 @@ public class TestPFBA {
 								tempConstraintFile);
 				interactionFile = TestUtils
 						.copyProjectResource(
-								"flexflux/unit_tests/data/pfba/interactions.txt",
+								"flexflux/unit_tests/data/pfba/interactions.sbml",
 								tempInteractionFile);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
