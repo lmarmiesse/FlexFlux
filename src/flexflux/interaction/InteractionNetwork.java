@@ -341,12 +341,21 @@ public class InteractionNetwork {
 		newInteractionNetwork.setIntEntities(this.getIntEntities());
 		newInteractionNetwork.setNumEntities(this.getNumEntities());
 		
-		newInteractionNetwork.setGPRInteractions(this.getGPRInteractions());
+		for (Interaction gprInt : this.getGPRInteractions())
+		{
+			newInteractionNetwork.addGPRIntercation(gprInt);
+		}
+
 		
-		newInteractionNetwork.setInitialConstraints(this
-				.getInitialConstraints());
-		newInteractionNetwork.setInitialStates(this
-				.getInitialStates());
+		for (BioEntity ent : initialConstraints.keySet()){
+			newInteractionNetwork.addInitialConstraint(ent, initialConstraints.get(ent));
+			
+		}
+		
+		for (BioEntity ent : initialStates.keySet()) {
+			newInteractionNetwork.addInitialState(ent, initialStates.get(ent));
+		}
+
 		
 		newInteractionNetwork.setInteractionToConstraints(this
 				.getInteractionToConstraints());
