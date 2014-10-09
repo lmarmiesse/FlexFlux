@@ -186,7 +186,7 @@ public class TestInteraction {
 		}
 		result.formatResult();
 
-		result.plot();
+//		result.plot();
 
 		Assert.assertTrue(result.getObjValue() == 9.0);
 		
@@ -230,7 +230,7 @@ public class TestInteraction {
 		}
 		result.formatResult();
 
-		result.plot();
+//		result.plot();
 
 		System.out.println(result.getObjValue());
 

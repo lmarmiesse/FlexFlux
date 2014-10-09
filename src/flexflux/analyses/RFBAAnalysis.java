@@ -169,7 +169,6 @@ public class RFBAAnalysis extends Analysis {
 				}
 			}
 
-
 			if (i != 0) {
 
 				SteadyStateAnalysis ssa = new SteadyStateAnalysis(b,
@@ -187,7 +186,7 @@ public class RFBAAnalysis extends Analysis {
 
 				// translation
 				for (Constraint c1 : nextStepStates.keySet()) {
-					
+
 					BioEntity enti = (BioEntity) c1.getEntities().keySet()
 							.toArray()[0];
 
@@ -218,7 +217,6 @@ public class RFBAAnalysis extends Analysis {
 
 					for (int iter = iterBegin; iter <= iterEnd; iter++) {
 						if (iter < iterations) {
-
 							timeConstraintMap.get(iter).add(c);
 
 						}
@@ -226,17 +224,33 @@ public class RFBAAnalysis extends Analysis {
 				}
 			}
 
+			//to check if an entity has multiple simple constraints in the same iteration
+			Set<BioEntity> hasConstraint= new HashSet<BioEntity>();
 			// we add the constraints for the current iteration
 			for (Constraint c : timeConstraintMap.get(i)) {
 				if (c.getEntities().size() == 1) {
-					
-					BioEntity ent = null;
 
+					BioEntity ent = null;
+					
 					for (BioEntity e : c.getEntities().keySet()) {
 						ent = e;
 					}
 
-					simpleConstraints.put(ent, c);
+					if (hasConstraint.contains(ent)) {
+
+						Constraint c1 = c;
+						Constraint c2 = simpleConstraints.get(ent);
+
+						double newLb = Math.max(c1.getLb(), c2.getLb());
+						double newUb = Math.min(c1.getUb(), c2.getUb());
+
+						simpleConstraints.put(ent, new Constraint(ent, newLb,
+								newUb));
+
+					} else {
+						simpleConstraints.put(ent, c);
+						hasConstraint.add(ent);
+					}
 				}
 			}
 			for (BioEntity ent : b.getInteractionNetwork()
@@ -259,7 +273,7 @@ public class RFBAAnalysis extends Analysis {
 				for (BioEntity metab : exchangeInteractions.get(reac).keySet()) {
 
 					if (simpleConstraints.containsKey(metab)) {
-						
+
 						valuesMap.put(metab.getId(),
 								simpleConstraints.get(metab).getUb());
 
@@ -277,7 +291,7 @@ public class RFBAAnalysis extends Analysis {
 							Constraint c = new Constraint(constraintMap,
 									simpleConstraints.get(reac).getLb(),
 									availableSubstrate);
-							
+
 							metabConstraints.put(metab, c);
 
 						} else {
@@ -287,7 +301,7 @@ public class RFBAAnalysis extends Analysis {
 							Constraint c = new Constraint(constraintMap,
 									availableSubstrate, simpleConstraints.get(
 											reac).getUb());
-							
+
 							metabConstraints.put(metab, c);
 						}
 
@@ -315,7 +329,6 @@ public class RFBAAnalysis extends Analysis {
 			double fbaResult = 0;
 			double mu = 0;
 			DoubleResult result;
-
 
 			try {
 				result = b.FBA(new ArrayList<Constraint>(constraintsToAdd),
@@ -345,7 +358,7 @@ public class RFBAAnalysis extends Analysis {
 			for (String s : toPlot) {
 				valuesMap.put(s, lastSolve.get(s));
 			}
-			
+
 			rFBAResult.addValues(deltaT * i, valuesMap);
 
 			if (mu == 0) {
