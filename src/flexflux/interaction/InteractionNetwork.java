@@ -338,22 +338,23 @@ public class InteractionNetwork {
 		InteractionNetwork newInteractionNetwork = new InteractionNetwork();
 
 		newInteractionNetwork.setBinaryEntities(this.getBinaryEntities());
+		newInteractionNetwork.setIntEntities(this.getIntEntities());
+		newInteractionNetwork.setNumEntities(this.getNumEntities());
+		
 		newInteractionNetwork.setGPRInteractions(this.getGPRInteractions());
+		
 		newInteractionNetwork.setInitialConstraints(this
 				.getInitialConstraints());
 		newInteractionNetwork.setInitialStates(this
 				.getInitialStates());
-		newInteractionNetwork.setIntEntities(this.getIntEntities());
+		
 		newInteractionNetwork.setInteractionToConstraints(this
 				.getInteractionToConstraints());
-		newInteractionNetwork.setNumEntities(this.getNumEntities());
 		newInteractionNetwork.setTargetToInteractions(this
 				.getTargetToInteractions());
 		newInteractionNetwork.setInteractionNetworkEntities(this.getInteractionNetworkEntities());
 		
 		newInteractionNetwork.entityStateConstraintTranslation=this.getEntityStateConstraintTranslation();
-		
-		
 		
 		
 		return newInteractionNetwork;
