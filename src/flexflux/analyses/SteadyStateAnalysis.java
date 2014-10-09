@@ -268,7 +268,7 @@ public class SteadyStateAnalysis extends Analysis {
 
 		res.setSteadyStateConstraints(finalConstraints);
 
-		System.out.println("Attractor size : "+attractorSize);
+//		System.out.println("Attractor size : "+attractorSize);
 		
 		return res;
 

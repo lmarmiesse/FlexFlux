@@ -123,14 +123,7 @@ public class TestRFBA {
 				"R_Ec_biomass_iAF1260_core_59p81M", 0.003, 0.1, 150,
 				new ArrayList<String>());
 		RFBAResult result = rfba.runAnalysis();
-		
-		result.plot();
-
-		int a = 1;
-
-		while (a == 1) {
-
-		}
+	
 		
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(

@@ -139,19 +139,19 @@ public class CplexBind extends Bind {
 			model = new IloCplexModeler();
 			cplex.setModel(model);
 
-			for (BioEntity entity : intNet.getNumEntities()) {
+			for (BioEntity entity : intNet.getNumEntities().values()) {
 				// System.out.println(entity.getId());
 				// what default value ?
 
 				vars.put(entity.getId(), cplex.numVar(-Double.MAX_VALUE,
 						Double.MAX_VALUE, entity.getId()));
 			}
-			for (BioEntity entity : intNet.getIntEntities()) {
+			for (BioEntity entity : intNet.getIntEntities().values()) {
 				// System.out.println(entity.getId());
 				vars.put(entity.getId(), cplex.intVar(-Integer.MAX_VALUE,
 						Integer.MAX_VALUE, entity.getId()));
 			}
-			for (BioEntity entity : intNet.getBinaryEntities()) {
+			for (BioEntity entity : intNet.getBinaryEntities().values()) {
 
 				// System.out.println(entity.getId());
 
@@ -199,36 +199,6 @@ public class CplexBind extends Bind {
 					toRemoveFromModel.add(cplexConstraint);
 				}
 				model.add(cplexConstraint);
-			}
-
-			// if the constraint is just of the type : A = 5, we set
-			// the bounds of the var A
-			if (entities.size() == 1 && !constraint.getNot() && false) {
-
-				for (BioEntity entity : entities.keySet()) {
-					// if it is a "simple" constraint
-
-					if (entities.get(entity) == 1.0) {
-
-						if (oldBounds != null) {
-							oldBounds.put(entity.getId(),
-									new double[] {
-											vars.get(entity.getId()).getLB(),
-											vars.get(entity.getId()).getUB() });
-						}
-
-						if (solverSimpleConstraints.containsKey(entity)) {
-							model.remove((IloConstraint) solverSimpleConstraints
-									.get(entity));
-							solverSimpleConstraints.remove(entity);
-						} else {
-							solverSimpleConstraints
-									.put(entity, cplexConstraint);
-						}
-						vars.get(entity.getId()).setLB(lb);
-						vars.get(entity.getId()).setUB(ub);
-					}
-				}
 			}
 
 		} catch (IloException e) {
