@@ -96,7 +96,10 @@ public class TestConditionComparison {
 
 		Vars.writeInteractionNetworkStates = false;
 		
-		Vars.maxThread = 10;
+		Vars.maxThread = 20;
+//		Vars.maxThread = 2;
+		
+		
 
 		String solver = "GLPK";
 		if (System.getProperties().containsKey("solver")) {
@@ -668,6 +671,7 @@ public class TestConditionComparison {
 	@AfterClass
 	public static void afterTest() {
 
+		System.out.println(Vars.maxThread);
 		// tempDir.delete();
 
 	}

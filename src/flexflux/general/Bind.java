@@ -1983,8 +1983,6 @@ public abstract class Bind {
 
 		newBind.setInteractionNetwork(this.getInteractionNetwork().copy());
 
-//		newBind.intNet=this.intNet;
-		
 		newBind.setNetwork(this.bioNet);
 		newBind.init();
 
