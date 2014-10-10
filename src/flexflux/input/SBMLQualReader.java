@@ -64,9 +64,9 @@ public class SBMLQualReader {
 				.getExtension("qual");
 
 		// ////////////////////////////////initial values
-
 		for (QualitativeSpecies species : qualPlugin
 				.getListOfQualitativeSpecies()) {
+			
 
 			if (intNet.getEntity(species.getId()) == null) {
 
@@ -74,7 +74,9 @@ public class SBMLQualReader {
 
 			}
 
+			
 			BioEntity ent = intNet.getEntity(species.getId());
+			
 			intNet.addInteractionNetworkEntity(ent);
 
 			if (species.getNotes() != null) {
@@ -196,9 +198,9 @@ public class SBMLQualReader {
 			Output out = tr.getListOfOutputs().get(0);
 
 			String outEntityName = out.getQualitativeSpecies();
-
+			
 			BioEntity outEntity = intNet.getEntity(outEntityName);
-
+			
 			Relation ifRelation = null;
 			Unique thenRelation = null;
 			Unique elseRelation = null;
@@ -234,7 +236,7 @@ public class SBMLQualReader {
 
 					inter = relationFactory.makeIfThenInteraction(thenRelation,
 							ifRelation);
-
+					
 					intNet.addTargetConditionalInteraction(outEntity, inter);
 
 				}
@@ -305,7 +307,7 @@ public class SBMLQualReader {
 
 					Constraint c = intNet.getEntityStateConstraintTranslation()
 							.get(ent).get(i);
-
+					
 					if (c == null) {
 						continue;
 					}

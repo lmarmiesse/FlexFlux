@@ -61,9 +61,9 @@ public class SteadyStateAnalysis extends Analysis {
 
 		// we set the values for the variables in the first state
 		Map<BioEntity, Integer> thisState = intNet.getInitialStates();
-		
+
 		for (BioEntity b : intNet.getInitialConstraints().keySet()) {
-			
+
 			// TRANSLATION
 			if (intNet.canTranslate(b)) {
 				thisState.put(
@@ -263,13 +263,14 @@ public class SteadyStateAnalysis extends Analysis {
 
 		}
 		res.setStatesList(statesList);
+		res.setatractorStatesList(atractorStatesList);
 
-		//////TRANSLATION
+		// ////TRANSLATION
 
 		res.setSteadyStateConstraints(finalConstraints);
 
-//		System.out.println("Attractor size : "+attractorSize);
-		
+		// System.out.println("Attractor size : "+attractorSize);
+
 		return res;
 
 	}
