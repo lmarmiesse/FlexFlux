@@ -23,7 +23,7 @@ body {
 
 </style>
 <body>
-<script src="../d3.v3.min.js"></script>
+<script src="../js/d3.v3.js"></script>
 <!-- init the var values -->
 <script src="values.js"></script>
 <script>
@@ -35,8 +35,10 @@ var margin = {top: 10, right: 30, bottom: 30, left: 30},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
+var max_value = Math.max.apply(Math, values);
+
 var x = d3.scale.linear()
-    .domain([0, 1])
+    .domain([0, max_value+1])
     .range([0, width]);
 
 // Generate a histogram using twenty uniformly-spaced bins.

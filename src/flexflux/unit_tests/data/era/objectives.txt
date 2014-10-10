@@ -1,0 +1,5 @@
+maxR_BIOMASS	MAX(R_BIOMASS)
+maxR_EX_EPS_e_	MAX(R_EX_EPS_e_)
+maxR_EX_protein_Pme_e_	MAX(R_EX_protein_Pme_e_)
+maxR_EX_T3SS_E_RipA1_e_	MAX(R_EX_T3SS_E_RipA1_e_)
+maxR_EX_etle_e_	MAX(R_EX_etle_e_)
