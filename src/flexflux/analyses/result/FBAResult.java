@@ -99,25 +99,27 @@ public class FBAResult extends AnalysisResult {
 	}
 
 	public void formatResult() {
+		if (!Double.isNaN(objValue)) {
 
-		for (BioEntity entity : bind.getInteractionNetwork().getEntities()) {
-			if (!entity.getId().contains(Vars.Irrev1)
-					&& !entity.getId().contains(Vars.Irrev2)) {
+			for (BioEntity entity : bind.getInteractionNetwork().getEntities()) {
+				if (!entity.getId().contains(Vars.Irrev1)
+						&& !entity.getId().contains(Vars.Irrev2)) {
 
-				if (bind.constrainedEntities.contains(entity)) {
+					if (bind.constrainedEntities.contains(entity)) {
 
-					if (bind.getDeadReactions().contains(entity)) {
-						entToResult.put(entity.getId() + " (Dead)",
-								String.valueOf(Vars.round(bind
-										.getSolvedValue(entity))));
+						if (bind.getDeadReactions().contains(entity)) {
+							entToResult.put(entity.getId() + " (Dead)", String
+									.valueOf(Vars.round(bind
+											.getSolvedValue(entity))));
+						} else {
+							entToResult.put(entity.getId(), String.valueOf(Vars
+									.round(bind.getSolvedValue(entity))));
+						}
 					} else {
-						entToResult.put(entity.getId(), String.valueOf(Vars
-								.round(bind.getSolvedValue(entity))));
+						entToResult.put(entity.getId(), "Not Constrained");
 					}
-				} else {
-					entToResult.put(entity.getId(), "Not Constrained");
-				}
 
+				}
 			}
 		}
 
@@ -130,15 +132,20 @@ public class FBAResult extends AnalysisResult {
 			out.println("FBA result\n");
 			out.println("obj : " + Vars.round(objValue));
 
-			for (String entName : entToResult.keySet()) {
+			if (Double.isNaN(objValue)) {
+				out.println("Unfeasible");
+			} else {
 
-				out.println(entName + "\t" + entToResult.get(entName));
+				for (String entName : entToResult.keySet()) {
 
+					out.println(entName + "\t" + entToResult.get(entName));
+
+				}
 			}
 			out.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("path " + path
+					+ " is not a valid path, or file could not be created.");
 		}
 
 	}
@@ -149,64 +156,62 @@ public class FBAResult extends AnalysisResult {
 
 	public void plot() {
 
-		String[] columnNames = { "Entity name", "Value" };
-
-		Object[][] data = new Object[entToResult.size()][columnNames.length];
-
-		
-		int i = 0;
-		for (String entName : entToResult.keySet()) {
-
-			data[i] = new Object[] { entName, entToResult.get(entName) };
-			i++;
-			
-//			double val=0.0;
-//			if(entToResult.get(entName).equals("Not Constrained")){
-//				val=0.0;
-//			}
-//			else{
-//				val = Double.parseDouble(entToResult.get(entName));
-//			}
-		}
-		
-		DefaultTableModel model = new MyTableModel(data, columnNames);
-		resultTable.setModel(model);
-		final MyTableRowSorter<TableModel> sorter = new MyTableRowSorter<TableModel>(
-				resultTable.getModel());
-
-		resultTable.setRowSorter(sorter);
-
 		JPanel northPanel = new JPanel();
 		northPanel.add(new JLabel("obj : " + Vars.round(objValue)));
 
 		JPanel centerPanel = new JPanel();
 		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.PAGE_AXIS));
 
-		JPanel searchPanel = new JPanel(new FlowLayout());
+		if (!Double.isNaN(objValue)) {
 
-		searchPanel.add(new JLabel("Search for an entity : "));
+			String[] columnNames = { "Entity name", "Value" };
 
-		searchField = new JTextField(10);
-		searchField.getDocument().addDocumentListener(new DocumentListener() {
+			Object[][] data = new Object[entToResult.size()][columnNames.length];
 
-			public void changedUpdate(DocumentEvent arg0) {
-				updateTable(sorter);
+			int i = 0;
+			for (String entName : entToResult.keySet()) {
+
+				data[i] = new Object[] { entName, entToResult.get(entName) };
+				i++;
 			}
 
-			public void insertUpdate(DocumentEvent arg0) {
-				updateTable(sorter);
-			}
+			DefaultTableModel model = new MyTableModel(data, columnNames);
+			resultTable.setModel(model);
+			final MyTableRowSorter<TableModel> sorter = new MyTableRowSorter<TableModel>(
+					resultTable.getModel());
 
-			public void removeUpdate(DocumentEvent arg0) {
-				updateTable(sorter);
-			}
+			resultTable.setRowSorter(sorter);
 
-		});
+			JPanel searchPanel = new JPanel(new FlowLayout());
 
-		searchPanel.add(searchField);
+			searchPanel.add(new JLabel("Search for an entity : "));
 
-		centerPanel.add(searchPanel);
-		centerPanel.add(new JScrollPane(resultTable));
+			searchField = new JTextField(10);
+			searchField.getDocument().addDocumentListener(
+					new DocumentListener() {
+
+						public void changedUpdate(DocumentEvent arg0) {
+							updateTable(sorter);
+						}
+
+						public void insertUpdate(DocumentEvent arg0) {
+							updateTable(sorter);
+						}
+
+						public void removeUpdate(DocumentEvent arg0) {
+							updateTable(sorter);
+						}
+
+					});
+
+			searchPanel.add(searchField);
+
+			centerPanel.add(searchPanel);
+			centerPanel.add(new JScrollPane(resultTable));
+
+		} else {
+			centerPanel.add(new JLabel("Unfeasible"));
+		}
 
 		JFrame frame = new JFrame("FBA results");
 

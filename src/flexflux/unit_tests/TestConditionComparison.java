@@ -671,8 +671,7 @@ public class TestConditionComparison {
 	@AfterClass
 	public static void afterTest() {
 
-		System.out.println(Vars.maxThread);
-		// tempDir.delete();
+		 tempDir.delete();
 
 	}
 

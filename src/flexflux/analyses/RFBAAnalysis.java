@@ -224,14 +224,15 @@ public class RFBAAnalysis extends Analysis {
 				}
 			}
 
-			//to check if an entity has multiple simple constraints in the same iteration
-			Set<BioEntity> hasConstraint= new HashSet<BioEntity>();
+			// to check if an entity has multiple simple constraints in the same
+			// iteration
+			Set<BioEntity> hasConstraint = new HashSet<BioEntity>();
 			// we add the constraints for the current iteration
 			for (Constraint c : timeConstraintMap.get(i)) {
 				if (c.getEntities().size() == 1) {
 
 					BioEntity ent = null;
-					
+
 					for (BioEntity e : c.getEntities().keySet()) {
 						ent = e;
 					}
@@ -330,6 +331,7 @@ public class RFBAAnalysis extends Analysis {
 			double mu = 0;
 			DoubleResult result;
 
+
 			try {
 				result = b.FBA(new ArrayList<Constraint>(constraintsToAdd),
 						true, false);
@@ -346,6 +348,7 @@ public class RFBAAnalysis extends Analysis {
 
 			// if it's unfeasbile : no growth
 			if (result.flag != 0) {
+				
 				mu = 0;
 			} else {
 				lastSolve = b.getLastSolve();

@@ -231,7 +231,7 @@ public class InteractionNetwork {
 
 	public void addTargetConditionalInteraction(BioEntity target,
 			Interaction inter) {
-
+		
 		if (targetToInteractions.get(target) == null) {
 			targetToInteractions.put(target, new FFTransition());
 		}
