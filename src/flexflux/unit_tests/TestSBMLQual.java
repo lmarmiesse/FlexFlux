@@ -1,12 +1,14 @@
 package flexflux.unit_tests;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
 import parsebionet.biodata.BioEntity;
 import flexflux.general.Bind;
 import flexflux.general.CplexBind;
+import flexflux.general.GLPKBind;
 import flexflux.input.SBMLQualReader;
 import flexflux.interaction.RelationFactory;
 import flexflux.interaction.Unique;
@@ -15,8 +17,24 @@ public class TestSBMLQual {
 
 	@Test
 	public void test() {
+		
+		Bind bind=null;
 
-		Bind bind = new CplexBind();
+		String solver = "GLPK";
+		if (System.getProperties().containsKey("solver")) {
+			solver = System.getProperty("solver");
+		}
+		
+		try {
+			if (solver.equals("CPLEX")) {
+				bind = new CplexBind();
+			} else {
+				bind = new GLPKBind();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			fail("Solver error");
+		}
 
 		bind.loadSbmlNetwork(
 				"src/flexflux/unit_tests/data/SBMLQual/coli_core.xml", false);
