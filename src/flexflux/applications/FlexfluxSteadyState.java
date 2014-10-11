@@ -27,9 +27,9 @@ import flexflux.interaction.RelationFactory;
  * 
  */
 
-public class FlexfluxSteadyState extends FFApplication{
-	
-	public static boolean requiresSolver=false;
+public class FlexfluxSteadyState extends FFApplication {
+
+	public static boolean requiresSolver = false;
 
 	public static String message = "FlexfluxSteadyState [options...]\n"
 			+ "Find an attractor or the steady state of a given interaction network with initial values.";
@@ -81,13 +81,10 @@ public class FlexfluxSteadyState extends FFApplication{
 		}
 
 		InteractionNetwork intNet = null;
-		if (f.intFile.endsWith(".xml") || f.intFile.endsWith(".sbml")) {
-			intNet = SBMLQualReader.loadSbmlQual(f.intFile,
-					new InteractionNetwork(), new RelationFactory());
-		} else {
-			intNet = InteractionFileReader.readInteractionFile(f.intFile,
-					new InteractionNetwork(), new RelationFactory());
-		}
+
+		intNet = SBMLQualReader.loadSbmlQual(f.intFile,
+				new InteractionNetwork(), new RelationFactory());
+
 		SteadyStateAnalysis analysis = new SteadyStateAnalysis(null, intNet,
 				new HashMap<BioEntity, Constraint>());
 
