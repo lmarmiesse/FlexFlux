@@ -213,7 +213,23 @@ public class TestBind {
 //		Assert.assertTrue(bind.getSolvedValue(new BioEntity("f")) == 122.0);
 		Assert.assertTrue(bind.getSolvedValue(new BioEntity("g")) == 58.0);
 
-		Bind bind2 = new CplexBind();
+		
+		Bind bind2=null;
+		String solver = "GLPK";
+		if (System.getProperties().containsKey("solver")) {
+			solver = System.getProperty("solver");
+		}
+		
+		try {
+			if (solver.equals("CPLEX")) {
+				bind2 = new CplexBind();
+			} else {
+				bind2 = new GLPKBind();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			fail("Solver error");
+		}
 		bind2.setNetworkAndConstraints(network);
 
 		Assert.assertTrue(bind2.getConstraints().size() == 13);
