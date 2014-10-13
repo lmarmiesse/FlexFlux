@@ -17,7 +17,9 @@ import flexflux.general.DoubleResult;
 import flexflux.general.GLPKBind;
 import parsebionet.unit_tests.TestUtils;
 
-public class TestExternalMetaboliteConstraints {
+public class TestExternalMetaboliteConstraints extends FFUnitTest{
+	
+	
 
 	private static File tempSbmlFile = null;
 	private static File tempConditionFile = null;

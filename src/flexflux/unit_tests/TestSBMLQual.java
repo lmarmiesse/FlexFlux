@@ -13,7 +13,7 @@ import flexflux.input.SBMLQualReader;
 import flexflux.interaction.RelationFactory;
 import flexflux.interaction.Unique;
 
-public class TestSBMLQual {
+public class TestSBMLQual extends FFUnitTest{
 
 	@Test
 	public void test() {

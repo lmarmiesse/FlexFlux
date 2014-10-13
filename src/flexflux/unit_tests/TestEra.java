@@ -21,7 +21,7 @@ import flexflux.general.CplexBind;
 import flexflux.general.GLPKBind;
 import flexflux.general.Vars;
 
-public class TestEra {
+public class TestEra extends FFUnitTest{
 
 	private static boolean verbose = true;
 	private static boolean plot = true;

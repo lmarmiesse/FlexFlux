@@ -9,7 +9,7 @@ import org.math.plot.Plot2DPanel;
 
 import flexflux.utils.maths.RandomGaussian;
 
-public class TestRandomGaussian {
+public class TestRandomGaussian extends FFUnitTest{
 
 	public static void main(String[] args) {
 		RandomGaussian r = new RandomGaussian();

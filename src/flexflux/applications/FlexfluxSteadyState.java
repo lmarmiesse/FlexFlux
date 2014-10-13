@@ -52,7 +52,6 @@ public class FlexfluxSteadyState extends FFApplication {
 	public boolean h = false;
 
 	public static void main(String[] args) {
-
 		FlexfluxSteadyState f = new FlexfluxSteadyState();
 
 		CmdLineParser parser = new CmdLineParser(f);

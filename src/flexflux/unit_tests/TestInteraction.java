@@ -65,7 +65,7 @@ import parsebionet.biodata.BioEntity;
  * @author lmarmiesse 8 mars 2013
  * 
  */
-public class TestInteraction {
+public class TestInteraction extends FFUnitTest{
 
 	static BioEntity a;
 	static BioEntity b;

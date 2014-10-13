@@ -18,7 +18,7 @@ import flexflux.general.Bind;
 import flexflux.general.CplexBind;
 import flexflux.general.GLPKBind;
 
-public class TestKoWithInteractions {
+public class TestKoWithInteractions extends FFUnitTest{
 
 	private static File tempSbmlFile = null;
 	private static File tempConditionFile = null;

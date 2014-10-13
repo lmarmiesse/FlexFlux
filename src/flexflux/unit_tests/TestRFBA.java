@@ -64,7 +64,7 @@ import parsebionet.biodata.BioNetwork;
  * @author lmarmiesse 11 avr. 2013
  * 
  */
-public class TestRFBA {
+public class TestRFBA extends FFUnitTest{
 	
 	
 	
