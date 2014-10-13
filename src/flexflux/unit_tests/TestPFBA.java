@@ -17,7 +17,7 @@ import flexflux.general.Bind;
 import flexflux.general.CplexBind;
 import flexflux.general.GLPKBind;
 
-public class TestPFBA {
+public class TestPFBA extends FFUnitTest{
 
 	private static Bind b=null;
 	

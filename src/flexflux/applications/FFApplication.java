@@ -11,6 +11,15 @@ public class FFApplication {
 	
 	public static boolean requiresSolver = true;
 	
+//	/**
+//	 * The following static block is needed in order to load the libSBML Java
+//	 * interface library when the application starts.
+//	 */
+//	static {
+//		System.loadLibrary("sbmlj");
+//	}
+
+	
 	/**
 	 * Reads the objective file : each line corresponds to an objective First
 	 * column : the name of the objective function Second column : its

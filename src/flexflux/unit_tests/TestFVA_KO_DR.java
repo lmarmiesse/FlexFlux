@@ -67,7 +67,7 @@ import parsebionet.biodata.BioNetwork;
  * @author lmarmiesse 13 mars 2013
  * 
  */
-public class TestFVA_KO_DR {
+public class TestFVA_KO_DR extends FFUnitTest{
 
 	static Bind bind;
 

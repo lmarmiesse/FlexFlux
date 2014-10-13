@@ -61,7 +61,7 @@ import parsebionet.io.Sbml2Bionetwork;
  * @author lmarmiesse 8 mars 2013
  * 
  */
-public class TestBind {
+public class TestBind extends FFUnitTest{
 
 	static Bind bind;
 	static BioNetwork n;

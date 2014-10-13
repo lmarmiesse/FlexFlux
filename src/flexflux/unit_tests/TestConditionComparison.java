@@ -18,7 +18,7 @@ import flexflux.applications.FlexfluxConditionComparison;
 import flexflux.general.ConstraintType;
 import flexflux.general.Vars;
 
-public class TestConditionComparison {
+public class TestConditionComparison extends FFUnitTest{
 
 	private static boolean verbose = true;
 

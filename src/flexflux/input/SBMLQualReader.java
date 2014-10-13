@@ -17,7 +17,7 @@ import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.qual.FunctionTerm;
 import org.sbml.jsbml.ext.qual.Output;
-import org.sbml.jsbml.ext.qual.QualitativeModel;
+import org.sbml.jsbml.ext.qual.QualModelPlugin;
 import org.sbml.jsbml.ext.qual.QualitativeSpecies;
 import org.sbml.jsbml.ext.qual.Transition;
 import org.sbml.jsbml.xml.XMLNode;
@@ -60,7 +60,7 @@ public class SBMLQualReader {
 
 		Model model = document.getModel();
 
-		QualitativeModel qualPlugin = (QualitativeModel) model
+		QualModelPlugin qualPlugin = (QualModelPlugin) model
 				.getExtension("qual");
 
 		// ////////////////////////////////initial values
