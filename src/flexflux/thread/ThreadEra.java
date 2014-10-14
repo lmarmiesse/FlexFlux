@@ -163,7 +163,7 @@ public class ThreadEra extends ResolveThread {
 					inputsWithPositiveValue.add(input.getId());
 				}
 				
-				bind.getInteractionNetwork().addInitialConstraint(e, constraint);
+				bind.addSimpleConstraint(e, constraint);
 			}
 			
 			bind.prepareSolver();
