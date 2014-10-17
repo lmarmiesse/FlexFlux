@@ -172,14 +172,6 @@ public class FlexfluxERA extends FFApplication {
 			System.exit(0);
 		}
 
-		if (f.minInputs > inputRandomParameterList.size()) {
-			f.minInputs = inputRandomParameterList.size();
-		}
-
-		if (f.maxInputs < inputRandomParameterList.size()) {
-			f.maxInputs = inputRandomParameterList.size();
-		}
-
 		Bind bind = null;
 
 		try {

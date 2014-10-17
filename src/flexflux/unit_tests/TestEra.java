@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import org.junit.AfterClass;
@@ -38,7 +39,7 @@ public class TestEra extends FFUnitTest{
 	@BeforeClass
 	public static void init() throws IOException {
 
-		int nbSim = 20;
+		int nbSim = 100;
 		
 		Vars.verbose = verbose;
 
@@ -84,7 +85,7 @@ public class TestEra extends FFUnitTest{
 		f.meanGaussian = 10.0;
 		f.stdGaussian = 100.0;
 		f.minInputs = 5;
-		f.maxInputs = 100;
+		f.maxInputs = 20;
 
 		HashMap<String, String> objectives = f
 				.loadObjectiveFile(f.objectiveFile);
@@ -154,6 +155,24 @@ public class TestEra extends FFUnitTest{
 
 	}
 
+	@Test
+	public void testDistribution() {
+		ArrayList<Integer> nbActivatedInputs = r.getNumberOfActivatedInputs();
+		
+		int min = Collections.min(nbActivatedInputs);
+		int max = Collections.max(nbActivatedInputs);
+		
+		if(min < f.minInputs) {
+			fail("Error in the minimum number of activated inputs");
+		}
+		
+		if(max > f.maxInputs) {
+			fail("Error in the minimum number of activated inputs");
+		}
+		
+	}
+	
+	
 	@Test
 	/**
 	 * Test if the input RSp0837 that has a weight of 1000 is always present
