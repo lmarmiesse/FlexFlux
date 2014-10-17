@@ -89,6 +89,15 @@ public class ERAAnalysis extends Analysis {
 
 		this.gaussianMean = gaussianMean;
 		this.gaussianStd = gaussianStd;
+		
+		if (minInputs > inputRandomParameters.size()) {
+			minInputs = inputRandomParameters.size();
+		}
+
+		if (maxInputs > inputRandomParameters.size()) {
+			maxInputs = inputRandomParameters.size();
+		}
+		
 		this.minInputs = minInputs;
 		this.maxInputs = maxInputs;
 
@@ -96,6 +105,12 @@ public class ERAAnalysis extends Analysis {
 
 	@Override
 	public ERAResult runAnalysis() {
+		
+		if(minInputs > maxInputs)
+		{
+			System.err.println("[ERROR] minInputs > maxInputs");
+			System.exit(0);
+		}
 		
 		double startTime = System.currentTimeMillis();
 
