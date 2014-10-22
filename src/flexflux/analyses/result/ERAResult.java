@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import flexflux.io.Utils;
@@ -38,6 +39,9 @@ public class ERAResult extends AnalysisResult {
 	 * Array indicated the number of activated inputs per simulation
 	 */
 	protected ArrayList<Integer> numberOfActivatedInputs;
+	
+	protected Set<Set<String>> activatedInputSets;
+	
 
 	/**
 	 * Directory used for web files
@@ -59,6 +63,8 @@ public class ERAResult extends AnalysisResult {
 		inputOccurences = new HashMap<String, Integer>();
 		objInputMatrix = new HashMap<String, HashMap<String, Integer>>();
 
+		activatedInputSets = new HashSet<Set<String>>();
+		
 		for (String obj : objectiveNames) {
 			objSimCount.put(obj, 0);
 		}
@@ -89,6 +95,15 @@ public class ERAResult extends AnalysisResult {
 		Integer prev = objSimCount.get(objName);
 		objSimCount.put(objName, prev + 1);
 	}
+	
+	/**
+	 * 
+	 * @param set
+	 */
+	public synchronized void addActivatedInputSet(Set<String> set) {
+		activatedInputSets.add(set);
+	}
+	
 
 	/**
 	 * Increment the number of simulations where a objective is active when an
@@ -605,6 +620,10 @@ public class ERAResult extends AnalysisResult {
 
 	public ArrayList<Integer> getNumberOfActivatedInputs() {
 		return numberOfActivatedInputs;
+	}
+
+	public Set<Set<String>> getActivatedInputSets() {
+		return activatedInputSets;
 	}
 	
 	
