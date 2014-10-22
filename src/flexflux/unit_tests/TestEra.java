@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -35,11 +37,12 @@ public class TestEra extends FFUnitTest{
 	private static File tempDir;
 
 	static FlexfluxERA f;
+	
+	static int nbSim = 100;
 
 	@BeforeClass
 	public static void init() throws IOException {
 
-		int nbSim = 100;
 		
 		Vars.verbose = verbose;
 
@@ -86,7 +89,7 @@ public class TestEra extends FFUnitTest{
 		f.stdGaussian = 100.0;
 		f.minInputs = 5;
 		f.maxInputs = 20;
-
+		
 		HashMap<String, String> objectives = f
 				.loadObjectiveFile(f.objectiveFile);
 
@@ -183,7 +186,12 @@ public class TestEra extends FFUnitTest{
 		}
 	}
 	
-
+	@Test
+	public void testNumberOfDistinctConditions() {
+			assertEquals("Bad number of distinct conditions", nbSim, r.getActivatedInputSets().size());
+	}
+	
+	
 	@AfterClass
 	public static void afterTest() {
 

@@ -58,9 +58,8 @@ public class ThreadEra extends ResolveThread {
 	/**
 	 * Array indicating for inputs in InteractionNetwork one value of activation
 	 * (activationValue), one value of inhibition (inhibitionValue) and a weight
-	 * to constraint the random choice (weight)
-	 * In this array, each element can appear several times depending on 
-	 * their weight
+	 * to constraint the random choice (weight) In this array, each element can
+	 * appear several times depending on their weight
 	 */
 	ArrayList<InputRandomParameters> inputRandomParameterList;
 
@@ -74,7 +73,7 @@ public class ThreadEra extends ResolveThread {
 	public ThreadEra(Bind b, Queue<Integer> simulationNumbers,
 			HashMap<String, String> objectives, double gaussianMean,
 			double gaussianStd, int minInputs, int maxInputs,
-			ArrayList<InputRandomParameters>inputRandomParameterList,
+			ArrayList<InputRandomParameters> inputRandomParameterList,
 			ERAResult result) {
 
 		super(b);
@@ -88,7 +87,8 @@ public class ThreadEra extends ResolveThread {
 		this.maxInputs = maxInputs;
 		this.inputRandomParameterList = inputRandomParameterList;
 		percentage = 0;
-
+		
+		
 	}
 
 	/**
@@ -96,118 +96,143 @@ public class ThreadEra extends ResolveThread {
 	 */
 	public void run() {
 
-		
 		while (simulationNumbers.poll() != null) {
 
-			
-			// We select a number of activated inputs in a truncated gaussian
-			// distribution.
-			int numberActivatedInputs = randomGaussian(this.gaussianMean,
-					this.gaussianStd, this.minInputs, this.maxInputs);
-			
-			result.addNumberOfActivatedInputs(numberActivatedInputs);
-			
-			// We build a new input parameter array in this way : we duplicate the inputs according to
-		 	// the weight value and we randomize the order of the rows.
-			ArrayList<InputRandomParameters> randomInputRandomParameters = randomInputs();
-			
+			Boolean flag = false;
+
+			int n = 0;
+
 			Set<String> activatedInputs = new HashSet<String>();
-			
-			int n=0;
-			while(activatedInputs.size() < numberActivatedInputs) {
-				InputRandomParameters entry = randomInputRandomParameters.get(n);
-				
-				if(! activatedInputs.contains(entry.getId())) {
-					activatedInputs.add(entry.getId());
-					result.incrementInputOccurences(entry.getId());
+
+			/**
+			 * check the redondances of the conditions
+			 * Be careful, the checking of the number of permutations / nb simulations must be done before
+			 * to avoid infinite loops !!!
+			 */
+			while (!flag) {
+				// We select a number of activated inputs in a truncated
+				// gaussian
+				// distribution.
+				int numberActivatedInputs = randomGaussian(this.gaussianMean,
+						this.gaussianStd, this.minInputs, this.maxInputs);
+
+
+				// We build a new input parameter array in this way : we
+				// duplicate
+				// the inputs according to
+				// the weight value and we randomize the order of the rows.
+				ArrayList<InputRandomParameters> randomInputRandomParameters = randomInputs();
+
+				n = 0;
+				activatedInputs.clear();
+				while (activatedInputs.size() < numberActivatedInputs) {
+					InputRandomParameters entry = randomInputRandomParameters
+							.get(n);
+
+					if (!activatedInputs.contains(entry.getId())) {
+						activatedInputs.add(entry.getId());
+					}
+
+					n++;
 				}
-				
-				n++;
+
+				if (!result.getActivatedInputSets().contains(activatedInputs)) {
+					result.addActivatedInputSet(activatedInputs);
+					result.addNumberOfActivatedInputs(numberActivatedInputs);
+					flag = true;
+				}
 			}
-			
-			// In the new set of conditions, the value of selected inputs corresponds
+
+			for (String inputId : activatedInputs) {
+				result.incrementInputOccurences(inputId);
+			}
+
+			// In the new set of conditions, the value of selected inputs
+			// corresponds
 			// to their activationValue, the value of the other ones corresponds
 			// to their inhibitionValue
-			Set<InputRandomParameters> inputSet = new HashSet<InputRandomParameters>(inputRandomParameterList);
-			
+			Set<InputRandomParameters> inputSet = new HashSet<InputRandomParameters>(
+					inputRandomParameterList);
+
 			Set<String> inputsWithPositiveValue = new HashSet<String>();
-			
-			
-			for(InputRandomParameters input : inputSet)
-			{
+
+			for (InputRandomParameters input : inputSet) {
 				if (bind.getInteractionNetwork().getEntity(input.getId()) == null) {
 
-					BioEntity bioEntity = new BioEntity(input.getId(), input.getId());
+					BioEntity bioEntity = new BioEntity(input.getId(),
+							input.getId());
 
 					bind.addRightEntityType(bioEntity, false, false);
 				}
-				
-				BioEntity e = bind.getInteractionNetwork().getEntity(input.getId());
-				
+
+				BioEntity e = bind.getInteractionNetwork().getEntity(
+						input.getId());
+
 				Map<BioEntity, Double> constraintMap = new HashMap<BioEntity, Double>();
 				constraintMap.put(e, 1.0);
 
 				Constraint constraint = null;
-				
+
 				Double value;
-				if(activatedInputs.contains(input.getId())) {
+				if (activatedInputs.contains(input.getId())) {
 					value = input.getActivationValue();
-				}
-				else {
+				} else {
 					value = input.getInhibitionValue();
 				}
-				
+
 				constraint = new Constraint(constraintMap, value, value);
-				
-				if(value > 0) {
+
+				if (value > 0) {
 					inputsWithPositiveValue.add(input.getId());
 				}
-				
+
 				bind.addSimpleConstraint(e, constraint);
 			}
-			
+
 			bind.prepareSolver();
-			
-			// the value in  ObjSimCount for an objective function and the value for the activated inputs
-		 	// in ObjInputMatrix are incremented if the new set of conditions activates it
-			for(String objName : objectives.keySet())
-			{
+
+			// the value in ObjSimCount for an objective function and the value
+			// for the activated inputs
+			// in ObjInputMatrix are incremented if the new set of conditions
+			// activates it
+			for (String objName : objectives.keySet()) {
 				this.setObjective(objName);
-				
-				DoubleResult res = bind.FBA(new ArrayList<Constraint>(), false, true);
-				
+
+				DoubleResult res = bind.FBA(new ArrayList<Constraint>(), false,
+						true);
+
 				double value = Vars.round(res.result);
-				
-				if(value > 0)
-				{
+
+				if (value > 0) {
 					result.incrementObjSimCount(objName);
-					for(String inputId : inputsWithPositiveValue)
-					{
+					for (String inputId : inputsWithPositiveValue) {
 						result.incrementObjInputMatrix(objName, inputId);
 					}
 				}
 			}
-			
-//			Double prop = ((double) todo - (double) simulationNumbers.size()) / (double) todo;
-//			
-//			long percent = Math.round(prop * 100);
-			
-			int percent = (int) Math.round(((double) todo - (double) simulationNumbers.size()) / (double)todo
-					* 100);
-			
+
+			// Double prop = ((double) todo - (double) simulationNumbers.size())
+			// / (double) todo;
+			//
+			// long percent = Math.round(prop * 100);
+
+			int percent = (int) Math
+					.round(((double) todo - (double) simulationNumbers.size())
+							/ (double) todo * 100);
+
 			if (percent > percentage) {
 
 				percentage = percent;
-				if (Vars.verbose && percent % 2== 0) {
+				if (Vars.verbose && percent % 2 == 0) {
 					System.err.print("*");
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * 
-	 * Set a new objective 
+	 * Set a new objective
 	 */
 	private void setObjective(String objName) {
 		String expr = objectives.get(objName);
@@ -222,10 +247,10 @@ public class ThreadEra extends ResolveThread {
 			maximize = true;
 		}
 
-		Objective obj = bind.makeObjectiveFromString(objString, maximize, objName);
+		Objective obj = bind.makeObjectiveFromString(objString, maximize,
+				objName);
 		bind.setObjective(obj);
 	}
-	
 
 	/**
 	 * 
@@ -267,28 +292,27 @@ public class ThreadEra extends ResolveThread {
 		return (int) val;
 
 	}
-	
+
 	/**
 	 * @return a new randomised array of input random parameters
 	 */
 	private ArrayList<InputRandomParameters> randomInputs() {
-		
+
 		ArrayList<InputRandomParameters> randomizedArray = new ArrayList<InputRandomParameters>();
-		
-		for(InputRandomParameters input : this.inputRandomParameterList) {
+
+		for (InputRandomParameters input : this.inputRandomParameterList) {
 			int weight = input.getWeight();
-			
-			for(int i=0; i<weight;i++) {
+
+			for (int i = 0; i < weight; i++) {
 				randomizedArray.add(input);
 			}
 		}
-		
+
 		long seed = System.nanoTime();
 		Collections.shuffle(randomizedArray, new Random(seed));
-		
+
 		return randomizedArray;
-		
+
 	}
-	
 
 }
