@@ -1,3 +1,33 @@
+/*******************************************************************************
+ * Copyright INRA
+ * 
+ *  Contact: ludovic.cottret@toulouse.inra.fr
+ * 
+ * 
+ * This software is governed by the CeCILL license under French law and
+ * abiding by the rules of distribution of free software.  You can  use,
+ * modify and/ or redistribute the software under the terms of the CeCILL
+ * license as circulated by CEA, CNRS and INRIA at the following URL
+ * "http://www.cecill.info".
+ * 
+ * As a counterpart to the access to the source code and  rights to copy,
+ * modify and redistribute granted by the license, users are provided only
+ * with a limited warranty  and the software's author,  the holder of the
+ * economic rights,  and the successive licensors  have only  limited
+ * liability.
+ *  In this respect, the user's attention is drawn to the risks associated
+ * with loading,  using,  modifying and/or developing or reproducing the
+ * software by the user in light of its specific status of free software,
+ * that may mean  that it is complicated to manipulate,  and  that  also
+ * therefore means  that it is reserved for developers  and  experienced
+ * professionals having in-depth computer knowledge. Users are therefore
+ * encouraged to load and test the software's suitability as regards their
+ * requirements in conditions enabling the security of their systems and/or
+ * data to be ensured and,  more generally, to use and operate it in the
+ * same conditions as regards security.
+ *  The fact that you are presently reading this means that you have had
+ * knowledge of the CeCILL license and that you accept its terms.
+ ******************************************************************************/
 package flexflux.analyses;
 
 import java.io.BufferedReader;
@@ -20,6 +50,7 @@ import flexflux.analyses.result.KOResult;
 import flexflux.analyses.result.PFBAResult;
 import flexflux.analyses.result.conditionComparison.ConditionComparisonResult;
 import flexflux.condition.Condition;
+import flexflux.condition.ListOfConditions;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.ConstraintType;
@@ -65,7 +96,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 	HashMap<String, HashMap<String, Double>> conditionConstraints;
 	ArrayList<String> entities;
 
-	public ArrayList<Condition> conditions = new ArrayList<Condition>();
+	public ListOfConditions conditions = new ListOfConditions();
 	public HashMap<String, String> objectives = new HashMap<String, String>();
 
 	public Boolean launchReactionAnalysis;
@@ -105,14 +136,20 @@ public class ConditionComparisonAnalysis extends Analysis {
 
 		Vars.libertyPercentage = liberty;
 		Vars.decimalPrecision = precision;
-
+		
+		
+		conditions = new ListOfConditions();
+		
 		/**
 		 * Reads the conditionFile
 		 */
-		Boolean flag = this.loadConditionFile();
+		Boolean flag = conditions.loadConditionFile(conditionFile, constraintType);
 		if (flag == false) {
 			this.flag = false;
 		} else {
+			
+			entities = conditions.entities;
+			
 			/**
 			 * Reads the SBML file
 			 */
@@ -421,154 +458,6 @@ public class ConditionComparisonAnalysis extends Analysis {
 		return result;
 	}
 
-	/**
-	 * Read a file containing the description of the conditions This must a
-	 * tabulated network giving the state of each actor (0,1) in each condition:
-	 * 1st column : the name of the condition 2nd column : the code of the
-	 * condition following columns : the state of the actors (their names are in
-	 * the header)
-	 * 
-	 * All the constraints must belong to the same type : binary, double or
-	 * integer
-	 * 
-	 * @return false if there is a problem while reading the file
-	 */
-	public Boolean loadConditionFile() {
-
-		Boolean flag = true;
-
-		int ncol = 0;
-
-		BufferedReader in = null;
-
-		try {
-			in = new BufferedReader(new FileReader(this.conditionFile));
-
-			String line;
-
-			int nbLine = 0;
-
-			conditionConstraints = new HashMap<String, HashMap<String, Double>>();
-			entities = new ArrayList<String>();
-
-			while ((line = in.readLine()) != null) {
-				if (line.startsWith("#") || line.equals("")) {
-					nbLine++;
-					continue;
-				}
-
-				String[] tab = line.split("\t");
-
-				if (nbLine == 0) {
-					/**
-					 * Reads the header The first two columns are for the name
-					 * and the code of the condition
-					 */
-					if (tab.length < 3) {
-						System.err
-								.println("Error in the header of the condition file : the number of columns\n"
-										+ "must be greater than 3. The first two columns must correspond to the name and to\n"
-										+ "the code of the conditions. The following columns must correspond to the identifier\n"
-										+ "of the regulation network actors");
-						return false;
-					}
-
-					/**
-					 * Inits the number of columns to check the number of
-					 * columns of the following lines
-					 */
-					ncol = tab.length;
-
-					/**
-					 * Fills the entity array
-					 */
-					for (int i = 2; i < ncol; i++) {
-						entities.add(tab[i]);
-						conditionConstraints.put(tab[i],
-								new HashMap<String, Double>());
-					}
-
-				} else {
-					/**
-					 * Following lines
-					 */
-					if (tab.length != ncol) {
-						System.err.println("Bad number of columns line "
-								+ nbLine);
-						return false;
-					}
-
-					String conditionName = tab[0];
-					String conditionCode = tab[1];
-
-					Condition condition = new Condition(conditionCode,
-							conditionName);
-
-					/**
-					 * Adds the constraints in the condition
-					 */
-					for (int i = 2; i < tab.length; i++) {
-
-						String entityId = entities.get(i - 2);
-
-						String valueStr = tab[i];
-
-						Double value = null;
-
-						try {
-
-							value = Double.parseDouble(valueStr);
-
-						} catch (NumberFormatException e) {
-							System.err.println("Error in condition file line "
-									+ nbLine
-									+ " : the state value is not a number");
-							return false;
-						}
-
-						if (constraintType.equals(ConstraintType.BINARY)) {
-
-							if (value != 1 && value != 0) {
-								System.err
-										.println("Error in condition file line "
-												+ nbLine
-												+ " : the state value is different than 0 or 1");
-								return false;
-							}
-						}
-						condition.addConstraint(entityId, value, value,
-								constraintType);
-
-					}
-
-					conditions.add(condition);
-				}
-				nbLine++;
-			}
-		} catch (FileNotFoundException e) {
-			System.err.println(conditionFile + " not found");
-			e.printStackTrace();
-			return false;
-		} catch (IOException e) {
-			System.err.println("Error while reading " + conditionFile);
-			e.printStackTrace();
-		}
-
-		finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e) {
-					System.err
-							.println("Error while closing the condition file");
-					e.printStackTrace();
-				}
-			}
-		}
-
-		return flag;
-
-	}
 
 	/**
 	 * 

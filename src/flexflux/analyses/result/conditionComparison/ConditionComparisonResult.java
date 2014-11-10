@@ -39,6 +39,7 @@ import flexflux.analyses.result.KOResult;
 import flexflux.analyses.result.MyTableModel;
 import flexflux.analyses.result.PFBAResult;
 import flexflux.condition.Condition;
+import flexflux.condition.ListOfConditions;
 import flexflux.general.Objective;
 import flexflux.general.Vars;
 import flexflux.io.Utils;
@@ -52,7 +53,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 	public ConditionComparisonFbaResultSet fbaAllResults = null;
 
-	ArrayList<Condition> conditions = null;
+	ListOfConditions conditions = null;
 	HashMap<String, String> objectives = null;
 
 	public HashMap<String, HashMap<String, String>> reactionMetaData = null;
@@ -106,7 +107,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 * @param objectives
 	 *            : list of objectives
 	 */
-	public ConditionComparisonResult(ArrayList<Condition> conditions,
+	public ConditionComparisonResult(ListOfConditions conditions,
 			HashMap<String, String> objectives, BioNetwork network,
 			String inchlibPath, Boolean launchReactionAnalysis,
 			Boolean launchGeneAnalysis, Boolean launchRegulatorAnalysis) {
