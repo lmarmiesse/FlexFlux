@@ -15,8 +15,8 @@ import flexflux.analyses.result.KOResult;
 import flexflux.analyses.result.PFBAResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
-import flexflux.general.Objective;
 import flexflux.general.Vars;
+import flexflux.objective.Objective;
 
 public class PFBAAnalysis extends Analysis {
 

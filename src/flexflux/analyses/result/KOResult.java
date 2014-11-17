@@ -84,7 +84,7 @@ public class KOResult extends AnalysisResult {
 	/**
 	 * Table with all results.
 	 */
-	private JTable resultTable = new JTable(0, 2);
+	private JTable resultTable;
 
 	/**
 	 * Adds a value to the map.
@@ -117,6 +117,8 @@ public class KOResult extends AnalysisResult {
 	}
 
 	public void plot() {
+		
+		resultTable = new JTable(0, 2);
 
 		String[] columnNames = { "Entity name", "Objective value" };
 

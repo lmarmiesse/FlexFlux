@@ -31,22 +31,28 @@
 package flexflux.condition;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import flexflux.general.ConstraintType;
+import flexflux.general.SimplifiedConstraint;
 
-public class ListOfConditions implements Iterable<Condition>  {
-	
-	
+public class ListOfConditions implements Iterable<Condition> {
+
 	public ArrayList<Condition> conditions;
 	public ArrayList<String> entities;
 	
+	public static final String fileFormat = "This must a tabulated network giving the state of each actor "
+			+ "(0,1) in each condition: 1st column : the name of the condition 2nd column :"
+			+ " the code of the condition following columns : the state of the actors (their names are in the header)";
 	
+
 	/**
 	 * Constructor
 	 */
@@ -54,35 +60,40 @@ public class ListOfConditions implements Iterable<Condition>  {
 		conditions = new ArrayList<Condition>();
 		entities = new ArrayList<String>();
 	}
-	
+
 	/**
-	 * Read a file containing the description of the conditions. 
+	 * Read a file containing the description of the conditions.
 	 * 
 	 * All the constraints must belong to the same type : binary, double or
 	 * integer
 	 * 
 	 * 
-	 * @param conditionFile : This must a
-	 * tabulated network giving the state of each actor (0,1) in each condition:
-	 * 1st column : the name of the condition 2nd column : the code of the
-	 * condition following columns : the state of the actors (their names are in
-	 * the header)
+	 * @param conditionFile
+	 *            : This must a tabulated network giving the state of each actor
+	 *            (0,1) in each condition: 1st column : the name of the
+	 *            condition 2nd column : the code of the condition following
+	 *            columns : the state of the actors (their names are in the
+	 *            header)
 	 * 
-	 * @param constraintType : {@link ConstraintType} : type of the variables
-	 * @param entities : {@link ArrayList} of {@link String}. Will be filled during the process : these are the entities
-	 * found in the condition file
+	 * @param constraintType
+	 *            : {@link ConstraintType} : type of the variables
+	 * @param entities
+	 *            : {@link ArrayList} of {@link String}. Will be filled during
+	 *            the process : these are the entities found in the condition
+	 *            file
 	 * 
 	 * @return false if there is a problem while reading the file
 	 * 
 	 */
-	public boolean loadConditionFile(String conditionFile, ConstraintType constraintType) {
-		
+	public boolean loadConditionFile(String conditionFile,
+			ConstraintType constraintType) {
+
 		Boolean flag = true;
-		
+
 		int ncol = 0;
 
 		BufferedReader in = null;
-		
+
 		try {
 			in = new BufferedReader(new FileReader(conditionFile));
 
@@ -90,7 +101,6 @@ public class ListOfConditions implements Iterable<Condition>  {
 
 			int nbLine = 0;
 
-			HashMap<String, HashMap<String, Double>> conditionConstraints = new HashMap<String, HashMap<String, Double>>();
 			entities = new ArrayList<String>();
 
 			while ((line = in.readLine()) != null) {
@@ -126,8 +136,6 @@ public class ListOfConditions implements Iterable<Condition>  {
 					 */
 					for (int i = 2; i < ncol; i++) {
 						entities.add(tab[i]);
-						conditionConstraints.put(tab[i],
-								new HashMap<String, Double>());
 					}
 
 				} else {
@@ -177,7 +185,7 @@ public class ListOfConditions implements Iterable<Condition>  {
 								return false;
 							}
 						}
-						condition.addConstraint(entityId, value, value,
+						condition.addConstraint(entityId, value,
 								constraintType);
 
 					}
@@ -208,16 +216,25 @@ public class ListOfConditions implements Iterable<Condition>  {
 		}
 
 		return flag;
-		
+
 	}
-	
-	
-	
+
 	/**
-	 * Adds a condition
+	 * Adds a condition and adds entity ids in the list
+	 * 
 	 * @param condition
 	 */
 	public void add(Condition condition) {
+		if (this.contains(condition)) {
+			System.err.println("[FLEXFLUX WARNING] condition " + condition.code
+					+ " - " + condition.name + " is duplicated");
+		}
+		for (SimplifiedConstraint c : condition.constraints.values()) {
+			if (!entities.contains(c.entityId)) {
+				entities.add(c.entityId);
+			}
+		}
+
 		conditions.add(condition);
 	}
 
@@ -225,7 +242,7 @@ public class ListOfConditions implements Iterable<Condition>  {
 	public Iterator<Condition> iterator() {
 		return conditions.iterator();
 	}
-	
+
 	/**
 	 * 
 	 * @return the number of conditions
@@ -233,7 +250,87 @@ public class ListOfConditions implements Iterable<Condition>  {
 	public int size() {
 		return conditions.size();
 	}
+
+	/**
+	 * Test if a similar condition (same constraints) exist in conditions
+	 * 
+	 * @param c
+	 * @return
+	 */
+	public Boolean contains(Condition c) {
+
+		for (Condition cRef : conditions) {
+			if (c.equals(cRef)) {
+				return true;
+			}
+		}
+
+		return false;
+
+	}
+
 	
-	
+	/**
+	 * Write conditions in a file
+	 * @param fileName
+	 * @return
+	 */
+	public Boolean writeConditionFile(String fileName) {
+
+		FileWriter fw = null;
+		
+		try {
+			fw = new FileWriter(new File(fileName));
+			
+			// Header
+			fw.write("conditionId\tconditionName");
+			
+			for(String entityId : this.entities) {
+				fw.write("\t"+entityId);
+			}
+			
+			fw.write("\n");
+			
+			// prints each condition
+			for(Condition condition : this.conditions) {
+				fw.write(condition.code+"\t"+condition.name);
+				
+				for(String entityId : this.entities)
+				{
+					Double value = 0.0;
+					if(condition.containsConstraint(entityId)) {
+						value = condition.getConstraint(entityId).getValue();
+					}
+					
+					fw.write("\t"+value);
+				}
+				
+				fw.write("\n");
+				
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.err
+					.println("[FlexFlux Error] Problem while writing the file "
+							+ fileName);
+			return false;
+		}
+		
+		finally {
+			if(fw != null) {
+				try {
+					fw.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+					System.err.println("Problem while closing the file "+fileName);
+					return false;
+				}
+			}
+		}
+
+		return true;
+
+	}
 
 }

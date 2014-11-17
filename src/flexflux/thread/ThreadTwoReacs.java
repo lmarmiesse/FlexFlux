@@ -37,7 +37,7 @@ import flexflux.analyses.result.TwoReacsAnalysisResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.DoubleResult;
-import flexflux.general.Objective;
+import flexflux.objective.Objective;
 
 import java.util.ArrayList;
 import java.util.HashMap;

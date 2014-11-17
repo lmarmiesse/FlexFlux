@@ -3,8 +3,6 @@ package flexflux.applications;
 import java.io.File;
 import java.util.HashMap;
 
-import org.kohsuke.args4j.CmdLineException;
-import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 import parsebionet.biodata.BioEntity;
@@ -12,7 +10,6 @@ import flexflux.analyses.SteadyStateAnalysis;
 import flexflux.analyses.result.SteadyStateAnalysisResult;
 import flexflux.general.Constraint;
 import flexflux.general.Vars;
-import flexflux.input.InteractionFileReader;
 import flexflux.input.SBMLQualReader;
 import flexflux.interaction.InteractionNetwork;
 import flexflux.interaction.RelationFactory;
@@ -48,29 +45,10 @@ public class FlexfluxSteadyState extends FFApplication {
 	@Option(name = "-pre", usage = "[OPTIONAL, default = 6]Number of decimals of precision for calculations and results", metaVar = "Integer")
 	public int precision = 6;
 
-	@Option(name = "-h", usage = "Prints this help")
-	public boolean h = false;
-
 	public static void main(String[] args) {
 		FlexfluxSteadyState f = new FlexfluxSteadyState();
 
-		CmdLineParser parser = new CmdLineParser(f);
-
-		try {
-			parser.parseArgument(args);
-		} catch (CmdLineException e) {
-			System.err.println(e.getMessage());
-			System.err.println(f.message);
-			parser.printUsage(System.err);
-			System.err.println(f.example);
-			System.exit(0);
-		}
-
-		if (f.h) {
-			System.err.println(f.message);
-			parser.printUsage(System.out);
-			System.exit(1);
-		}
+		f.parseArguments(args);
 
 		Vars.decimalPrecision = f.precision;
 
@@ -97,5 +75,15 @@ public class FlexfluxSteadyState extends FFApplication {
 			res.writeToFile(f.outName);
 		}
 
+	}
+
+	@Override
+	public String getMessage() {
+		return message;
+	}
+
+	@Override
+	public String getExample() {
+		return example;
 	}
 }

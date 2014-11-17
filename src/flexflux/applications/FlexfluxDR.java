@@ -44,8 +44,6 @@ import flexflux.general.Vars;
 import java.io.File;
 import java.util.Collection;
 
-import org.kohsuke.args4j.CmdLineException;
-import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 import parsebionet.biodata.BioChemicalReaction;
@@ -111,38 +109,19 @@ public class FlexfluxDR extends FFApplication{
 	@Option(name = "-ext", usage = "[OPTIONAL, default = false]Uses the extended SBML format")
 	public boolean extended = false;
 
-	@Option(name = "-h", usage = "Prints this help")
-	public boolean h = false;
-
 	public static void main(String[] args) {
 
 		FlexfluxDR f = new FlexfluxDR();
 
-		CmdLineParser parser = new CmdLineParser(f);
-
-		try {
-			parser.parseArgument(args);
-		} catch (CmdLineException e) {
-			System.err.println(e.getMessage());
-			System.err.println(f.message);
-			parser.printUsage(System.err);
-			System.err.println(f.example);
-			System.exit(0);
-		}
-
-		if (f.h) {
-			System.err.println(f.message);
-			parser.printUsage(System.out);
-			System.exit(1);
-		}
-
+		f.parseArguments(args);
+		
 		Vars.libertyPercentage = f.liberty;
 		Vars.decimalPrecision = f.precision;
 
 		if (f.mode > 1) {
 			System.err.println("-mode must be 0 or 1");
-			System.err.println(f.message);
-			parser.printUsage(System.err);
+			System.err.println(f.getMessage());
+			f.parser.printUsage(System.err);
 			System.exit(0);
 		}
 
@@ -175,7 +154,7 @@ public class FlexfluxDR extends FFApplication{
 				bind = new GLPKBind();
 			} else {
 				System.err.println("Unknown solver name");
-				parser.printUsage(System.err);
+				f.parser.printUsage(System.err);
 				System.exit(0);
 			}
 		} catch (UnsatisfiedLinkError e) {
@@ -247,6 +226,16 @@ public class FlexfluxDR extends FFApplication{
 		}
 
 		bind.end();
+	}
+
+	@Override
+	public String getMessage() {
+		return message;
+	}
+
+	@Override
+	public String getExample() {
+		return example;
 	}
 
 }

@@ -1,23 +1,51 @@
+/*******************************************************************************
+ * Copyright INRA
+ * 
+ *  Contact: ludovic.cottret@toulouse.inra.fr
+ * 
+ * 
+ * This software is governed by the CeCILL license under French law and
+ * abiding by the rules of distribution of free software.  You can  use,
+ * modify and/ or redistribute the software under the terms of the CeCILL
+ * license as circulated by CEA, CNRS and INRIA at the following URL
+ * "http://www.cecill.info".
+ * 
+ * As a counterpart to the access to the source code and  rights to copy,
+ * modify and redistribute granted by the license, users are provided only
+ * with a limited warranty  and the software's author,  the holder of the
+ * economic rights,  and the successive licensors  have only  limited
+ * liability.
+ *  In this respect, the user's attention is drawn to the risks associated
+ * with loading,  using,  modifying and/or developing or reproducing the
+ * software by the user in light of its specific status of free software,
+ * that may mean  that it is complicated to manipulate,  and  that  also
+ * therefore means  that it is reserved for developers  and  experienced
+ * professionals having in-depth computer knowledge. Users are therefore
+ * encouraged to load and test the software's suitability as regards their
+ * requirements in conditions enabling the security of their systems and/or
+ * data to be ensured and,  more generally, to use and operate it in the
+ * same conditions as regards security.
+ *  The fact that you are presently reading this means that you have had
+ * knowledge of the CeCILL license and that you accept its terms.
+ ******************************************************************************/
 package flexflux.thread;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Random;
 import java.util.Set;
 
 import parsebionet.biodata.BioEntity;
-import flexflux.analyses.era.InputRandomParameters;
 import flexflux.analyses.result.ERAResult;
+import flexflux.condition.Condition;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.DoubleResult;
-import flexflux.general.Objective;
 import flexflux.general.Vars;
-import flexflux.utils.maths.RandomGaussian;
+import flexflux.objective.ListOfObjectives;
+import flexflux.objective.Objective;
 
 public class ThreadEra extends ResolveThread {
 
@@ -27,9 +55,9 @@ public class ThreadEra extends ResolveThread {
 	private int todo;
 
 	/**
-	 * Contains all the numbers of the simulations to treat
+	 * Contains all the conditions to treat
 	 */
-	private Queue<Integer> simulationNumbers;
+	private Queue<Condition> conditions;
 
 	/**
 	 * ERA result
@@ -39,29 +67,7 @@ public class ThreadEra extends ResolveThread {
 	/**
 	 * Map [name objective<->expression objective]
 	 */
-	private HashMap<String, String> objectives;
-
-	/**
-	 * parameters of the Gaussian distribution built to generate random number
-	 * of activated inputs
-	 */
-	private double gaussianMean;
-	private double gaussianStd;
-
-	/**
-	 * minimum number and the maximum number of activated inputs at each step of
-	 * the simulation
-	 */
-	private int minInputs;
-	private int maxInputs;
-
-	/**
-	 * Array indicating for inputs in InteractionNetwork one value of activation
-	 * (activationValue), one value of inhibition (inhibitionValue) and a weight
-	 * to constraint the random choice (weight) In this array, each element can
-	 * appear several times depending on their weight
-	 */
-	ArrayList<InputRandomParameters> inputRandomParameterList;
+	private ListOfObjectives objectives;
 
 	/**
 	 * 
@@ -70,24 +76,16 @@ public class ThreadEra extends ResolveThread {
 	 */
 	private static long percentage = 0;
 
-	public ThreadEra(Bind b, Queue<Integer> simulationNumbers,
-			HashMap<String, String> objectives, double gaussianMean,
-			double gaussianStd, int minInputs, int maxInputs,
-			ArrayList<InputRandomParameters> inputRandomParameterList,
+	public ThreadEra(Bind b, Queue<Condition> conditions,
+			ListOfObjectives objectives,
 			ERAResult result) {
 
 		super(b);
-		this.todo = simulationNumbers.size();
-		this.simulationNumbers = simulationNumbers;
+		this.todo = conditions.size();
+		this.conditions = conditions;
 		this.result = result;
 		this.objectives = objectives;
-		this.gaussianMean = gaussianMean;
-		this.gaussianStd = gaussianStd;
-		this.minInputs = minInputs;
-		this.maxInputs = maxInputs;
-		this.inputRandomParameterList = inputRandomParameterList;
 		percentage = 0;
-		
 		
 	}
 
@@ -96,128 +94,67 @@ public class ThreadEra extends ResolveThread {
 	 */
 	public void run() {
 
-		while (simulationNumbers.poll() != null) {
-
-			Boolean flag = false;
-
-			int n = 0;
-
-			Set<String> activatedInputs = new HashSet<String>();
-
-			/**
-			 * check the redondances of the conditions
-			 * Be careful, the checking of the number of permutations / nb simulations must be done before
-			 * to avoid infinite loops !!!
-			 */
-			while (!flag) {
-				// We select a number of activated inputs in a truncated
-				// gaussian
-				// distribution.
-				int numberActivatedInputs = randomGaussian(this.gaussianMean,
-						this.gaussianStd, this.minInputs, this.maxInputs);
-
-
-				// We build a new input parameter array in this way : we
-				// duplicate
-				// the inputs according to
-				// the weight value and we randomize the order of the rows.
-				ArrayList<InputRandomParameters> randomInputRandomParameters = randomInputs();
-
-				n = 0;
-				activatedInputs.clear();
-				while (activatedInputs.size() < numberActivatedInputs) {
-					InputRandomParameters entry = randomInputRandomParameters
-							.get(n);
-
-					if (!activatedInputs.contains(entry.getId())) {
-						activatedInputs.add(entry.getId());
-					}
-
-					n++;
-				}
-
-				if (!result.getActivatedInputSets().contains(activatedInputs)) {
-					result.addActivatedInputSet(activatedInputs);
-					result.addNumberOfActivatedInputs(numberActivatedInputs);
-					flag = true;
-				}
-			}
-
-			for (String inputId : activatedInputs) {
-				result.incrementInputOccurences(inputId);
-			}
-
-			// In the new set of conditions, the value of selected inputs
-			// corresponds
-			// to their activationValue, the value of the other ones corresponds
-			// to their inhibitionValue
-			Set<InputRandomParameters> inputSet = new HashSet<InputRandomParameters>(
-					inputRandomParameterList);
+		Condition condition;
+		
+		while ((condition=conditions.poll()) != null) {
 
 			Set<String> inputsWithPositiveValue = new HashSet<String>();
-
-			for (InputRandomParameters input : inputSet) {
-				if (bind.getInteractionNetwork().getEntity(input.getId()) == null) {
-
-					BioEntity bioEntity = new BioEntity(input.getId(),
-							input.getId());
-
+			
+			for(String entityId : condition.constraints.keySet()) {
+				if (bind.getInteractionNetwork().getEntity(entityId) == null) {
+					BioEntity bioEntity = new BioEntity(entityId,
+							entityId);
 					bind.addRightEntityType(bioEntity, false, false);
 				}
-
+				
 				BioEntity e = bind.getInteractionNetwork().getEntity(
-						input.getId());
-
+						entityId);
+				
 				Map<BioEntity, Double> constraintMap = new HashMap<BioEntity, Double>();
 				constraintMap.put(e, 1.0);
 
 				Constraint constraint = null;
-
-				Double value;
-				if (activatedInputs.contains(input.getId())) {
-					value = input.getActivationValue();
-				} else {
-					value = input.getInhibitionValue();
+				
+				Double value = condition.getConstraint(entityId).getValue();
+				
+				if(value > 0)
+				{
+					inputsWithPositiveValue.add(entityId);
 				}
-
+				
+				
 				constraint = new Constraint(constraintMap, value, value);
-
-				if (value > 0) {
-					inputsWithPositiveValue.add(input.getId());
-				}
-
+				
 				bind.addSimpleConstraint(e, constraint);
 			}
-
+			
 			bind.prepareSolver();
 
 			// the value in ObjSimCount for an objective function and the value
 			// for the activated inputs
 			// in ObjInputMatrix are incremented if the new set of conditions
 			// activates it
-			for (String objName : objectives.keySet()) {
+			for (String objName : objectives.objectives.keySet()) {
 				this.setObjective(objName);
 
 				DoubleResult res = bind.FBA(new ArrayList<Constraint>(), false,
 						true);
 
 				double value = Vars.round(res.result);
-
-				if (value > 0) {
-					result.incrementObjSimCount(objName);
+				
+				Objective o = bind.getObjective();
+				Boolean maximize = o.getMaximize();
+				
+				if ((maximize && value > 0) || (!maximize && value < 0)) {
+					result.incrementObjCondCount(objName);
 					for (String inputId : inputsWithPositiveValue) {
 						result.incrementObjInputMatrix(objName, inputId);
 					}
 				}
 			}
 
-			// Double prop = ((double) todo - (double) simulationNumbers.size())
-			// / (double) todo;
-			//
-			// long percent = Math.round(prop * 100);
-
 			int percent = (int) Math
-					.round(((double) todo - (double) simulationNumbers.size())
+					.round(((double) todo - (double) conditions.size())
 							/ (double) todo * 100);
 
 			if (percent > percentage) {
@@ -250,69 +187,6 @@ public class ThreadEra extends ResolveThread {
 		Objective obj = bind.makeObjectiveFromString(objString, maximize,
 				objName);
 		bind.setObjective(obj);
-	}
-
-	/**
-	 * 
-	 * @param gaussianMean
-	 * @param gaussianStd
-	 * @param min
-	 *            : minimum for the random number
-	 * @param max
-	 *            : max for the random number
-	 * @return a random integer selected in a truncated gaussian distribution
-	 */
-	private int randomGaussian(double gaussianMean, double gaussianStd,
-			int min, int max) {
-
-		if (min > max) {
-			System.err.println("min > max");
-			return -1;
-		}
-
-		if (min < 1) {
-			System.err
-					.println("the minimum number of inputs must be at least 1");
-			return 1;
-		}
-
-		Boolean flag = false;
-
-		RandomGaussian rg = new RandomGaussian();
-
-		long val = -1;
-
-		while (!flag) {
-			val = rg.getRandomInteger(gaussianMean, Math.pow(gaussianStd, 2));
-			if (val >= min && val <= max) {
-				flag = true;
-			}
-		}
-
-		return (int) val;
-
-	}
-
-	/**
-	 * @return a new randomised array of input random parameters
-	 */
-	private ArrayList<InputRandomParameters> randomInputs() {
-
-		ArrayList<InputRandomParameters> randomizedArray = new ArrayList<InputRandomParameters>();
-
-		for (InputRandomParameters input : this.inputRandomParameterList) {
-			int weight = input.getWeight();
-
-			for (int i = 0; i < weight; i++) {
-				randomizedArray.add(input);
-			}
-		}
-
-		long seed = System.nanoTime();
-		Collections.shuffle(randomizedArray, new Random(seed));
-
-		return randomizedArray;
-
 	}
 
 }

@@ -43,8 +43,6 @@ import flexflux.general.Vars;
 
 import java.io.File;
 
-import org.kohsuke.args4j.CmdLineException;
-import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 /**
@@ -124,30 +122,11 @@ public class FlexfluxPareto extends FFApplication{
 	@Option(name = "-all", usage = "[OPTIONAL, default = false]Plots all results. If false, plots 1D results and only the best result for 2D and 3D results")
 	public boolean plotAll = false;
 
-	@Option(name = "-h", usage = "Prints this help")
-	public boolean h = false;
-
 	public static void main(String[] args) {
 
 		FlexfluxPareto f = new FlexfluxPareto();
 
-		CmdLineParser parser = new CmdLineParser(f);
-
-		try {
-			parser.parseArgument(args);
-		} catch (CmdLineException e) {
-			System.err.println(e.getMessage());
-			System.err.println(f.message);
-			parser.printUsage(System.err);
-			System.err.println(f.example);
-			System.exit(0);
-		}
-
-		if (f.h) {
-			System.err.println(f.message);
-			parser.printUsage(System.out);
-			System.exit(1);
-		}
+		f.parseArguments(args);
 
 		Vars.libertyPercentage = f.liberty;
 		Vars.decimalPrecision = f.precision;
@@ -176,7 +155,7 @@ public class FlexfluxPareto extends FFApplication{
 				bind = new GLPKBind();
 			} else {
 				System.err.println("Unknown solver name");
-				parser.printUsage(System.err);
+				f.parser.printUsage(System.err);
 				System.exit(0);
 			}
 
@@ -218,6 +197,16 @@ public class FlexfluxPareto extends FFApplication{
 			result.writeToFile(f.outName);
 		}
 		bind.end();
+	}
+
+	@Override
+	public String getMessage() {
+		return message;
+	}
+
+	@Override
+	public String getExample() {
+		return example;
 	}
 
 }

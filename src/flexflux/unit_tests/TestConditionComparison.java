@@ -2,7 +2,6 @@ package flexflux.unit_tests;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 import junitx.framework.FileAssert;
 
@@ -17,6 +16,7 @@ import flexflux.analyses.result.AnalysisResult;
 import flexflux.applications.FlexfluxConditionComparison;
 import flexflux.general.ConstraintType;
 import flexflux.general.Vars;
+import flexflux.objective.ListOfObjectives;
 
 public class TestConditionComparison extends FFUnitTest{
 
@@ -385,10 +385,11 @@ public class TestConditionComparison extends FFUnitTest{
 			Vars.verbose = true;
 		}
 
-		HashMap<String, String> objectives = f
-				.loadObjectiveFile(f.objectiveFile);
+		ListOfObjectives objectives = new ListOfObjectives();
 		
-		if (objectives == null) {
+		Boolean flag = objectives.loadObjectiveFile(f.objectiveFile);
+		
+		if (flag == false) {
 			Assert.fail("Error in reading the objective file");
 		}
 		

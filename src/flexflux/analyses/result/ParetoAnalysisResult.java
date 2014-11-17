@@ -56,7 +56,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RefineryUtilities;
 
-import flexflux.general.Objective;
+import flexflux.objective.Objective;
 
 
 

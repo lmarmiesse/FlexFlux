@@ -87,7 +87,7 @@ public class FBAResult extends AnalysisResult {
 	/**
 	 * Table with all results.
 	 */
-	private JTable resultTable = new JTable(0, 2);
+	private JTable resultTable;
 
 	private Bind bind;
 
@@ -176,6 +176,7 @@ public class FBAResult extends AnalysisResult {
 			}
 
 			DefaultTableModel model = new MyTableModel(data, columnNames);
+			resultTable = new JTable(0, 2);
 			resultTable.setModel(model);
 			final MyTableRowSorter<TableModel> sorter = new MyTableRowSorter<TableModel>(
 					resultTable.getModel());

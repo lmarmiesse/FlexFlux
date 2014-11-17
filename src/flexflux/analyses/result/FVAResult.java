@@ -103,7 +103,7 @@ public class FVAResult extends AnalysisResult {
 	/**
 	 * Table with all results.
 	 */
-	private JTable resultTable = new JTable(0, 2);
+	private JTable resultTable;
 
 	public FVAResult(double objValue) {
 		this.objValue = objValue;
@@ -252,6 +252,8 @@ public class FVAResult extends AnalysisResult {
 
 	public void plot() {
 
+		resultTable = new JTable(0, 2);
+		
 		String[] columnNames = { "Entity name", "Min", "Max" };
 		Object[][] data = new Object[map.size()][columnNames.length];
 
