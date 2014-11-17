@@ -45,8 +45,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kohsuke.args4j.CmdLineException;
-import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 import parsebionet.biodata.BioEntity;
@@ -126,30 +124,11 @@ public class FlexfluxRFBA extends FFApplication{
 	@Option(name = "-ext", usage = "[OPTIONAL, default = false]Uses the extended SBML format")
 	public boolean extended = false;
 
-	@Option(name = "-h", usage = "Prints this help")
-	public boolean h = false;
-
 	public static void main(String[] args) {
 
 		FlexfluxRFBA f = new FlexfluxRFBA();
 
-		CmdLineParser parser = new CmdLineParser(f);
-
-		try {
-			parser.parseArgument(args);
-		} catch (CmdLineException e) {
-			System.err.println(e.getMessage());
-			System.err.println(f.message);
-			parser.printUsage(System.err);
-			System.err.println(f.example);
-			System.exit(0);
-		}
-
-		if (f.h) {
-			System.err.println(f.message);
-			parser.printUsage(System.out);
-			System.exit(1);
-		}
+		f.parseArguments(args);
 
 		Vars.libertyPercentage = f.liberty;
 		Vars.decimalPrecision = f.precision;
@@ -174,7 +153,7 @@ public class FlexfluxRFBA extends FFApplication{
 				bind = new GLPKBind();
 			} else {
 				System.err.println("Unknown solver name");
-				parser.printUsage(System.err);
+				f.parser.printUsage(System.err);
 				System.exit(0);
 			}
 
@@ -220,7 +199,7 @@ public class FlexfluxRFBA extends FFApplication{
 				if (b == null) {
 					System.err.println("Unknown entity " + entitiesArray[i]
 							+ " in the arguments");
-					parser.printUsage(System.err);
+					f.parser.printUsage(System.err);
 					System.exit(0);
 				}
 
@@ -240,6 +219,16 @@ public class FlexfluxRFBA extends FFApplication{
 		}
 
 		bind.end();
+	}
+
+	@Override
+	public String getMessage() {
+		return message;
+	}
+
+	@Override
+	public String getExample() {
+		return example;
 	}
 
 }

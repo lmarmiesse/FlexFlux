@@ -108,7 +108,7 @@ public class CompFVAResult extends AnalysisResult {
 	/**
 	 * Table containing all results.
 	 */
-	private JTable resultTable = new JTable(0, 2);
+	private JTable resultTable;
 
 	public CompFVAResult(Map<String, double[]> map, double obj1, double obj2) {
 		this.map = map;
@@ -146,6 +146,8 @@ public class CompFVAResult extends AnalysisResult {
 	}
 
 	public void plot() {
+		
+		resultTable = new JTable(0, 2);
 
 		String[] columnNames = { "Entity name", "Min first FVA",
 				"Max first FVA", "Min second FVA", "Max second FVA",

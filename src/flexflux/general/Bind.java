@@ -61,7 +61,6 @@ import flexflux.analyses.FBAAnalysis;
 import flexflux.analyses.SteadyStateAnalysis;
 import flexflux.analyses.result.FBAResult;
 import flexflux.analyses.result.SteadyStateAnalysisResult;
-import flexflux.input.InteractionFileReader;
 import flexflux.input.SBMLQualReader;
 import flexflux.interaction.And;
 import flexflux.interaction.Interaction;
@@ -70,6 +69,7 @@ import flexflux.interaction.Or;
 import flexflux.interaction.Relation;
 import flexflux.interaction.RelationFactory;
 import flexflux.interaction.Unique;
+import flexflux.objective.Objective;
 import flexflux.operation.OperationFactory;
 
 /**

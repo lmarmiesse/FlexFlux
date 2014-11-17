@@ -40,9 +40,10 @@ import flexflux.analyses.result.MyTableModel;
 import flexflux.analyses.result.PFBAResult;
 import flexflux.condition.Condition;
 import flexflux.condition.ListOfConditions;
-import flexflux.general.Objective;
 import flexflux.general.Vars;
 import flexflux.io.Utils;
+import flexflux.objective.ListOfObjectives;
+import flexflux.objective.Objective;
 import flexflux.utils.run.Runner;
 import flexflux.utils.web.JsonUtils;
 
@@ -54,7 +55,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 	public ConditionComparisonFbaResultSet fbaAllResults = null;
 
 	ListOfConditions conditions = null;
-	HashMap<String, String> objectives = null;
+	ListOfObjectives objectives = null;
 
 	public HashMap<String, HashMap<String, String>> reactionMetaData = null;
 	public HashMap<String, HashMap<String, String>> geneMetaData = null;
@@ -108,7 +109,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 *            : list of objectives
 	 */
 	public ConditionComparisonResult(ListOfConditions conditions,
-			HashMap<String, String> objectives, BioNetwork network,
+			ListOfObjectives objectives, BioNetwork network,
 			String inchlibPath, Boolean launchReactionAnalysis,
 			Boolean launchGeneAnalysis, Boolean launchRegulatorAnalysis) {
 
@@ -333,7 +334,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		PrintWriter out = null;
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 
 		try {
 			out = new PrintWriter(new File(path + "/fba_results.csv"));
@@ -404,7 +405,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		HashMap<String, ArrayList<String>> classification = new HashMap<String, ArrayList<String>>();
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 
 		try {
 			outEssential = new PrintWriter(new File(path + "/essential"
@@ -574,7 +575,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		HashMap<String, ArrayList<String>> classification = new HashMap<String, ArrayList<String>>();
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 
 		try {
 			outEssential = new PrintWriter(new File(path
@@ -759,7 +760,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		PrintWriter out = null;
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 
 		try {
 			out = new PrintWriter(new File(path + "/summary" + objectName
@@ -849,7 +850,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		PrintWriter out = null;
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 
 		try {
 			out = new PrintWriter(new File(path + "/summaryRegulators.txt"));
@@ -941,7 +942,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 		// Create js files with data inside
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 		PrintWriter out = null;
 		try {
 			out = new PrintWriter(new File(outPath + "/multiBar_data.js"));
@@ -1045,7 +1046,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 		// Create js files with data inside
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 		PrintWriter out = null;
 		try {
 			out = new PrintWriter(new File(outPath + "/multiBar_data.js"));
@@ -1126,7 +1127,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		PrintWriter outData = null;
 		PrintWriter outMetaData = null;
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 
 		String outPath = genePath;
 		HashMap<String, HashMap<String, String>> metaData = geneMetaData;
@@ -1383,7 +1384,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		PrintWriter outData = null;
 		PrintWriter outMetaData = null;
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 
 		String outPath = regulatorPath;
 		HashMap<String, HashMap<String, String>> metaData = regulatorMetaData;
@@ -1554,7 +1555,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		columnNames.add("conditionCode");
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 
 		for (String objName : objectiveNames) {
 			columnNames.add(objName);
@@ -1768,7 +1769,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		PrintWriter outData = null;
 		PrintWriter outMetaData = null;
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 
 		String outPath = pathwayPath;
 		Set<String> ids = network.getPathwayList().keySet();

@@ -34,18 +34,11 @@
 package flexflux.applications;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
 
-import org.kohsuke.args4j.CmdLineException;
-import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
-import parsebionet.biodata.BioChemicalReaction;
-import parsebionet.biodata.BioPhysicalEntityParticipant;
 import flexflux.analyses.Analysis;
 import flexflux.analyses.FBAAnalysis;
-import flexflux.analyses.result.AnalysisResult;
 import flexflux.analyses.result.FBAResult;
 import flexflux.general.Bind;
 import flexflux.general.CplexBind;
@@ -100,31 +93,13 @@ public class FlexfluxFBA extends FFApplication{
 	@Option(name = "-senFile", usage = "[OPTIONAL] A sensitivity analysis is performed and saved in the indicated file name", metaVar = "File")
 	public String senFile="";
 
-	@Option(name = "-h", usage = "Prints this help")
-	public boolean h = false;
 
 	public static void main(String[] args) {
 
 		FlexfluxFBA f = new FlexfluxFBA();
 
-		CmdLineParser parser = new CmdLineParser(f);
-
-		try {
-			parser.parseArgument(args);
-		} catch (CmdLineException e) {
-			System.err.println(e.getMessage());
-			System.err.println(f.message);
-			parser.printUsage(System.err);
-			System.err.println(f.example);
-			System.exit(0);
-		}
-
-		if (f.h) {
-			System.err.println(f.message);
-			parser.printUsage(System.out);
-			System.exit(1);
-		}
-
+		f.parseArguments(args);
+		
 		Vars.libertyPercentage = f.liberty;
 		Vars.decimalPrecision = f.precision;
 
@@ -146,7 +121,7 @@ public class FlexfluxFBA extends FFApplication{
 				bind = new GLPKBind();
 			} else {
 				System.err.println("Unknown solver name");
-				parser.printUsage(System.err);
+				f.parser.printUsage(System.err);
 				System.exit(0);
 			}
 		} catch (UnsatisfiedLinkError e) {
@@ -193,5 +168,15 @@ public class FlexfluxFBA extends FFApplication{
 		}
 	
 		bind.end();
+	}
+
+	@Override
+	public String getMessage() {
+		return message;
+	}
+
+	@Override
+	public String getExample() {
+		return example;
 	}
 }

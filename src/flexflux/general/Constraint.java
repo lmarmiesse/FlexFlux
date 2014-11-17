@@ -198,5 +198,5 @@ public class Constraint {
 		return result.subSequence(0, result.length() - 3) + " <= " + ub;
 
 	}
-
+	
 }

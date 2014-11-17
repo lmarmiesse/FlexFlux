@@ -38,8 +38,8 @@ import flexflux.analyses.result.ParetoAnalysisResult;
 import flexflux.analyses.result.ReacAnalysisResult;
 import flexflux.analyses.result.TwoReacsAnalysisResult;
 import flexflux.general.Bind;
-import flexflux.general.Objective;
 import flexflux.general.Vars;
+import flexflux.objective.Objective;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

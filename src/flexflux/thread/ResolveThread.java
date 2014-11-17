@@ -35,7 +35,7 @@ package flexflux.thread;
 
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
-import flexflux.general.Objective;
+import flexflux.objective.Objective;
 
 import java.util.HashMap;
 import java.util.Map;
