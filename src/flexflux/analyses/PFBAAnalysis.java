@@ -96,9 +96,6 @@ public class PFBAAnalysis extends Analysis {
 			}
 		}
 
-		System.err.println("Number of dead reactions : "
-				+ this.deadReactions.size());
-
 		// It's important to keep the order
 		double opt = this.fba();
 
@@ -166,6 +163,8 @@ public class PFBAAnalysis extends Analysis {
 		res.zeroFluxGenes = zeroFluxGenes;
 		res.redundantGenesForEssentialReactions = redundantGenesForEssentialReactions;
 		res.deadGenes = deadGenes;
+		
+		res.network = b.getBioNetwork();
 
 		return res;
 

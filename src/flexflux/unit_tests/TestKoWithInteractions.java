@@ -1,7 +1,6 @@
 package flexflux.unit_tests;
 
 import static org.junit.Assert.fail;
-import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +10,7 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 
-import parsebionet.unit_tests.TestUtils;
+import parsebionet.unit_tests.utils.TestUtils;
 import flexflux.analyses.KOAnalysis;
 import flexflux.analyses.result.KOResult;
 import flexflux.general.Bind;

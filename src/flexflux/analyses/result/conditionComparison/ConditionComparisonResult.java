@@ -34,6 +34,8 @@ import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.biodata.BioPathway;
+import parsebionet.io.BioNetwork2CytoscapeFile;
+import parsebionet.io.BioNetworkToAttributeTable;
 import flexflux.analyses.result.AnalysisResult;
 import flexflux.analyses.result.KOResult;
 import flexflux.analyses.result.MyTableModel;
@@ -1648,26 +1650,142 @@ public class ConditionComparisonResult extends AnalysisResult {
 		}
 
 	}
+	
+	/**
+	 * Write sif file and classification attributes
+	 * @return true if ok, false if problem
+	 * @param prefix : the prefix of the filenames. Adds .sif for the network file and .attr for the attribute file
+	 */
+	public Boolean writeCytoscapeNetwork(String networkFile, Boolean sbmlEncode) {
+		
+		if(network == null)
+		{
+			return false;
+		}
+		
+		System.err.println("network File : "+networkFile);
+		
+		/**
+		 * writes the network
+		 */
+		BioNetwork2CytoscapeFile writer = new BioNetwork2CytoscapeFile(network, false, true, networkFile, sbmlEncode, false);
+		try {
+			writer.write();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.err.println("[PFBA error]Error while writing the network File");
+			return false;
+		}
+		
+		
+		return true;
+	}
+	
+	/**
+	 * Write Cytoscape generic attributes
+	 * @return true if ok, false if problem
+	 * @param prefix : the prefix of the filename
+	 */
+	public Boolean writeCytoscapeGenericAttributes(String fileName, Boolean sbmlEncode) {
+		
+		if(network == null)
+		{
+			return false;
+		}
+			
+		
+		/**
+		 * writes the general attributes
+		 */
+		BioNetworkToAttributeTable writerAttr = new BioNetworkToAttributeTable(network, fileName);
+		
+		try {
+			writerAttr.writeAttributes(sbmlEncode);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			System.err.println("[PFBA error]Error while writing the generic attribute file");
+			return false;
+		}
+		
+		return true;
+	}
+	
 
 	/**
+	 * Write Cytoscape sif files and the classification attribute file for each
+	 * pair obj/condition
 	 * 
-	 * @author lcottret
-	 * 
+	 * @return
 	 */
-	class MyDocumentListener implements DocumentListener {
-		String newline = "\n";
+	public Boolean writeCytoscapeFiles(String dir, Boolean sbmlEncode) {
+		
+		File dirFile = new File(dir);
+		
+		if (!dirFile.exists()) {
+			try {
+				dirFile.mkdirs();
 
-		public void changedUpdate(DocumentEvent arg0) {
-			updateTable(fbaTableSorter, arg0);
+			} catch (SecurityException se) {
+				se.printStackTrace();
+				System.err.println("Security Exception during creation of "
+						+ dir);
+			}
+		}
+		
+		this.writeCytoscapeNetwork(dir+"/network.sif", sbmlEncode);
+		this.writeCytoscapeGenericAttributes(dir+"/genericAttributes.tab", sbmlEncode);
+		
+		for (String condition : this.pfbaAllResults.keySet()) {
+			String conditionPath = dir + "/"
+					+ condition;
+
+			File conditionFile = new File(conditionPath);
+			if (!conditionFile.exists()) {
+				try {
+					conditionFile.mkdir();
+
+				} catch (SecurityException se) {
+					se.printStackTrace();
+					System.err.println("Security Exception during creation of "
+							+ conditionFile);
+				}
+			}
+
+			for (String obj : this.pfbaAllResults.get(condition).keySet()) {
+				String objPath = conditionPath + "/" + obj;
+				File objFile = new File(objPath);
+				if (!objFile.exists()) {
+					try {
+						objFile.mkdir();
+						System.err.println("Creation of "+objPath);
+
+					} catch (SecurityException se) {
+						se.printStackTrace();
+						System.err
+								.println("Security Exception during creation of "
+										+ objFile);
+					}
+				}
+
+				/**
+				 * Write pfba results
+				 */
+				PFBAResult res = this.pfbaAllResults.get(condition).get(obj);
+
+				Boolean flag = res.writeCytoscapeClassifAttribute(objPath + "/classif.attr", sbmlEncode);
+
+				if (!flag) {
+					System.err
+							.println("[ConditionComparison Error] Problem while creating Cytoscape file for "
+									+ condition + " -- " + obj);
+					return flag;
+				}
+
+			}
+
 		}
 
-		public void insertUpdate(DocumentEvent arg0) {
-			updateTable(fbaTableSorter, arg0);
-		}
-
-		public void removeUpdate(DocumentEvent arg0) {
-			updateTable(fbaTableSorter, arg0);
-		}
+		return true;
 	}
 
 	/**
@@ -1679,11 +1797,11 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 		// Create web directories
 		this.webPath = directoryPath + "/" + "web";
-		File webFile = new File(webPath);
 
+		File webFile = new File(webPath);
 		if (!webFile.exists()) {
 			try {
-				webFile.mkdir();
+				webFile.mkdirs();
 			} catch (SecurityException se) {
 				se.printStackTrace();
 				System.err.println("Security Exception during creation of "
@@ -1909,6 +2027,27 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 */
 	public HashMap<String, BioChemicalReaction> getDeadReactions() {
 		return this.deadReactions;
+	}
+
+	/**
+	 * 
+	 * @author lcottret
+	 * 
+	 */
+	class MyDocumentListener implements DocumentListener {
+		String newline = "\n";
+
+		public void changedUpdate(DocumentEvent arg0) {
+			updateTable(fbaTableSorter, arg0);
+		}
+
+		public void insertUpdate(DocumentEvent arg0) {
+			updateTable(fbaTableSorter, arg0);
+		}
+
+		public void removeUpdate(DocumentEvent arg0) {
+			updateTable(fbaTableSorter, arg0);
+		}
 	}
 
 }

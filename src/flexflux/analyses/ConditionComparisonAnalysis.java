@@ -44,7 +44,6 @@ import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.biodata.BioPhysicalEntity;
 import parsebionet.io.Sbml2Bionetwork;
-import flexflux.analyses.result.AnalysisResult;
 import flexflux.analyses.result.KOResult;
 import flexflux.analyses.result.PFBAResult;
 import flexflux.analyses.result.conditionComparison.ConditionComparisonResult;
@@ -326,7 +325,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 	}
 
 	@Override
-	public AnalysisResult runAnalysis() {
+	public ConditionComparisonResult runAnalysis() {
 
 		ConditionComparisonResult result = new ConditionComparisonResult(
 				conditions, objectives, network, inchlibPath,
@@ -355,9 +354,6 @@ public class ConditionComparisonAnalysis extends Analysis {
 							.getDeadReactions()) {
 						deadReactions.put(deadReaction.getId(), deadReaction);
 					}
-
-					System.err
-							.println(deadReactions.size() + " dead reactions");
 
 					result.setDeadReactions(deadReactions);
 
