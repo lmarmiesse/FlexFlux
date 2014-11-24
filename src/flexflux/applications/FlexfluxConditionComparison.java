@@ -1,12 +1,11 @@
 package flexflux.applications;
 
 import java.io.File;
-import java.util.HashMap;
 
 import org.kohsuke.args4j.Option;
 
 import flexflux.analyses.ConditionComparisonAnalysis;
-import flexflux.analyses.result.AnalysisResult;
+import flexflux.analyses.result.conditionComparison.ConditionComparisonResult;
 import flexflux.general.ConstraintType;
 import flexflux.general.Vars;
 import flexflux.objective.ListOfObjectives;
@@ -93,6 +92,9 @@ public class FlexfluxConditionComparison extends FFApplication {
 
 	@Option(name = "-noRegulatorAnalysis", usage = "Don't perform regulator essentiality analysis")
 	public Boolean noRegulatorAnalysis = false;
+	
+	@Option(name = "-cytoscape", usage = "Generates cytoscape files")
+	public Boolean cytoscape = false;
 
 	public static void main(String[] args) {
 
@@ -132,9 +134,9 @@ public class FlexfluxConditionComparison extends FFApplication {
 
 		
 		ListOfObjectives objectives = new ListOfObjectives();
-		objectives.loadObjectiveFile(f.objectiveFile);
+		Boolean flag = objectives.loadObjectiveFile(f.objectiveFile);
 		
-		if (objectives == null) {
+		if (flag == false) {
 			System.err.println("Error in reading the objective file");
 			System.exit(0);
 		}
@@ -151,7 +153,7 @@ public class FlexfluxConditionComparison extends FFApplication {
 			Vars.verbose = true;
 		}
 
-		AnalysisResult r = a.runAnalysis();
+		ConditionComparisonResult r = a.runAnalysis();
 
 		if (!f.outName.equals("")) {
 			r.writeToFile(f.outName);
@@ -160,7 +162,10 @@ public class FlexfluxConditionComparison extends FFApplication {
 		if (f.plot) {
 			r.plot();
 		}
-
+		
+		if (f.cytoscape) {
+			r.writeCytoscapeFiles(f.outName+"/cytoscape", true);
+		}
 	}
 
 	@Override
@@ -172,6 +177,12 @@ public class FlexfluxConditionComparison extends FFApplication {
 	public String getExample() {
 		return "";
 	}
+
+	public Boolean getCytoscape() {
+		return cytoscape;
+	}
+	
+	
 
 
 }

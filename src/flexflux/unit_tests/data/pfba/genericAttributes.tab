@@ -1,0 +1,43 @@
+id	sbml type	sbml name	mass	formula	pathways	ec	rev	compartment	geneRules	protRules	lb	ub
+A	species	A			Pathway1 _+_ Pathway2	NA	c	NA	NA	NA	NA
+A_ex	species	A_ex				NA	b	NA	NA	NA	NA
+B	species	B			Pathway1	NA	c	NA	NA	NA	NA
+B_ex	species	B_ex				NA	b	NA	NA	NA	NA
+C	species	C			Pathway1	NA	c	NA	NA	NA	NA
+C_ex	species	C_ex				NA	b	NA	NA	NA	NA
+D	species	D			Pathway1 _+_ Pathway2	NA	c	NA	NA	NA	NA
+E	species	E			Pathway2	NA	b	NA	NA	NA	NA
+E_ex	species	E_ex				NA	b	NA	NA	NA	NA
+F	species	F			Pathway2	NA	b	NA	NA	NA	NA
+F_ex	species	F_ex				NA	b	NA	NA	NA	NA
+G	species	G			Pathway2	NA	b	NA	NA	NA	NA
+H	species	H			Pathway1 _+_ Pathway2	NA	b	NA	NA	NA	NA
+I	species	I			Pathway2	NA	b	NA	NA	NA	NA
+I_ex	species	I_ex				NA	b	NA	NA	NA	NA
+OBJ	species	OBJ			Pathway2	NA	b	NA	NA	NA	NA
+OBJ2	species	OBJ2			Pathway2	NA	b	NA	NA	NA	NA
+OBJ2_ex	species	OBJ2_ex				NA	b	NA	NA	NA	NA
+OBJ_ex	species	OBJ_ex				NA	b	NA	NA	NA	NA
+P	species	P			Pathway2	NA	b	NA	NA	NA	NA
+P_ex	species	P_ex				NA	b	NA	NA	NA	NA
+Q	species	Q			Pathway2	NA	b	NA	NA	NA	NA
+Q_ex	species	Q_ex				NA	b	NA	NA	NA	NA
+R1	reaction	R1	NA	A[c] + B[c] + H[b] -> D[c] + C[c]	Pathway1		false	b _+_ c	( G1 )	( G1 )	0	10
+R2	reaction	R2	NA	A[c] + I[b] -> D[c]	Pathway2		false	b _+_ c	( G2 ) or ( G9 )	( G2 ) or ( G9 )	0	99999
+R3	reaction	R3	NA	E[b] + A[c] -> D[c] + F[b]	Pathway2		false	b _+_ c	( G3 ) or ( G2 )	( G3 ) or ( G2 )	0	99999
+R4	reaction	R4	NA	D[c] -> G[b]	Pathway2		false	c	( G4 )	( G4 )	0	99999
+R5	reaction	R5	NA	D[c] -> H[b]	Pathway2		false	c	( G5 )	( G5 )	0	99999
+R6	reaction	R6	NA	G[b] -> H[b]	Pathway2		false	b	( G6 )	( G6 )	0	99999
+R7	reaction	R7	NA	H[b] -> OBJ2[b]	Pathway2		false	b	( G7 )	( G7 )	0	99999
+R8	reaction	R8	NA	H[b] -> OBJ[b]	Pathway2		false	b	( G8 )	( G8 )	0	99999
+RAV	reaction	RAV	NA	P[b] <-> Q[b]	Pathway2		true	b	( G10 )	( G10 )	-99999	99999
+R_A_EX	reaction	R_A_EX	NA	A_ex[b] -> A[c]			false	b	( G01 ) or ( G00 )	( G01 ) or ( G00 )	0	10
+R_B_EX	reaction	R_B_EX	NA	B_ex[b] -> B[c]			false	b			0	1000
+R_C_EX	reaction	R_C_EX	NA	C_ex[b] <-> C[c]			true	b			-99999	99999
+R_E_EX	reaction	R_E_EX	NA	E_ex[b] -> E[b]			false	b			0	99999
+R_F_EX	reaction	R_F_EX	NA	F_ex[b] <-> F[b]			true	b			-99999	99999
+R_I_EX	reaction	R_I_EX	NA	I_ex[b] <-> I[b]			true	b			0	0
+R_OBJ2_EX	reaction	R_OBJ2_EX	NA	OBJ2_ex[b] <-> OBJ2[b]			true	b			-99999	99999
+R_OBJ_EX	reaction	R_OBJ_EX	NA	OBJ[b] -> OBJ_ex[b]			false	b			0	99999
+R_P_EX	reaction	R_P_EX	NA	P_ex[b] <-> P[b]			true	b			-99999	99999
+R_Q_EX	reaction	R_Q_EX	NA	Q_ex[b] <-> Q[b]			true	b			-99999	99999

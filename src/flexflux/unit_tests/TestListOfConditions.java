@@ -6,15 +6,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.hp.hpl.jena.util.FileUtils;
 
-import parsebionet.unit_tests.TestUtils;
+import parsebionet.unit_tests.utils.TestUtils;
 import flexflux.condition.Condition;
 import flexflux.condition.ListOfConditions;
 import flexflux.general.ConstraintType;
