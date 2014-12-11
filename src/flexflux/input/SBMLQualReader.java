@@ -66,17 +66,14 @@ public class SBMLQualReader {
 		// ////////////////////////////////initial values
 		for (QualitativeSpecies species : qualPlugin
 				.getListOfQualitativeSpecies()) {
-			
-
 			if (intNet.getEntity(species.getId()) == null) {
 
 				intNet.addNumEntity(new BioEntity(species.getId()));
 
 			}
 
-			
 			BioEntity ent = intNet.getEntity(species.getId());
-			
+
 			intNet.addInteractionNetworkEntity(ent);
 
 			if (species.getNotes() != null) {
@@ -163,9 +160,10 @@ public class SBMLQualReader {
 				constMap.put(ent, 1.0);
 
 				int initValue = species.getInitialLevel();
-
+				
 				intNet.addInitialState(ent, initValue);
-
+				
+		
 			}
 
 		}
@@ -192,15 +190,14 @@ public class SBMLQualReader {
 		}
 
 		// ////////////////:interactions
-
 		for (Transition tr : qualPlugin.getListOfTransitions()) {
 
 			Output out = tr.getListOfOutputs().get(0);
 
 			String outEntityName = out.getQualitativeSpecies();
-			
+
 			BioEntity outEntity = intNet.getEntity(outEntityName);
-			
+
 			Relation ifRelation = null;
 			Unique thenRelation = null;
 			Unique elseRelation = null;
@@ -236,7 +233,7 @@ public class SBMLQualReader {
 
 					inter = relationFactory.makeIfThenInteraction(thenRelation,
 							ifRelation);
-					
+
 					intNet.addTargetConditionalInteraction(outEntity, inter);
 
 				}
@@ -265,11 +262,10 @@ public class SBMLQualReader {
 				}
 
 				inter.setTimeInfos(new double[] { starts, lasts });
-				
+
 			}
 
 		}
-
 		return intNet;
 
 	}
@@ -289,7 +285,7 @@ public class SBMLQualReader {
 					.get(ent).keySet()) {
 				Constraint c = intNet.getEntityStateConstraintTranslation()
 						.get(ent).get(state);
-				
+
 				if (c == null) {
 					continue;
 				}
@@ -307,7 +303,7 @@ public class SBMLQualReader {
 
 					Constraint c = intNet.getEntityStateConstraintTranslation()
 							.get(ent).get(i);
-					
+
 					if (c == null) {
 						continue;
 					}
@@ -340,7 +336,7 @@ public class SBMLQualReader {
 		Relation rel = getRightRelation(ast);
 
 		for (ASTNode astChild : ast.getListOfNodes()) {
-			
+
 			try {
 				RelationWithList rel2 = (RelationWithList) rel;
 				if (rel2 != null) {
