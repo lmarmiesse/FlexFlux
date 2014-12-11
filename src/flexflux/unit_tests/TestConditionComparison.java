@@ -2,7 +2,6 @@ package flexflux.unit_tests;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 import junitx.framework.FileAssert;
 
@@ -11,12 +10,13 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import parsebionet.unit_tests.TestUtils;
+import parsebionet.unit_tests.utils.TestUtils;
 import flexflux.analyses.ConditionComparisonAnalysis;
-import flexflux.analyses.result.AnalysisResult;
+import flexflux.analyses.result.conditionComparison.ConditionComparisonResult;
 import flexflux.applications.FlexfluxConditionComparison;
 import flexflux.general.ConstraintType;
 import flexflux.general.Vars;
+import flexflux.objective.ListOfObjectives;
 
 public class TestConditionComparison extends FFUnitTest{
 
@@ -87,6 +87,9 @@ public class TestConditionComparison extends FFUnitTest{
 	private static String basePath = "";
 
 	private static String tmpPath = "/tmp/testConditionComparison";
+	
+	
+	private static ConditionComparisonResult r;
 
 	// The temporary folder will be removed at the end of the test
 	private static File tempDir;
@@ -385,10 +388,11 @@ public class TestConditionComparison extends FFUnitTest{
 			Vars.verbose = true;
 		}
 
-		HashMap<String, String> objectives = f
-				.loadObjectiveFile(f.objectiveFile);
+		ListOfObjectives objectives = new ListOfObjectives();
 		
-		if (objectives == null) {
+		Boolean flag = objectives.loadObjectiveFile(f.objectiveFile);
+		
+		if (flag == false) {
 			Assert.fail("Error in reading the objective file");
 		}
 		
@@ -399,7 +403,7 @@ public class TestConditionComparison extends FFUnitTest{
 				metaDataReactionFile, metaDataGeneFile, metaDataRegulatorFile,
 				",", inchlibPath, true, false, false, false, 0.0, 6);
 
-		AnalysisResult r = a.runAnalysis();
+		r = a.runAnalysis();
 
 		tempDir = new File(tmpPath);
 		if (!tempDir.exists()) {
@@ -668,6 +672,11 @@ public class TestConditionComparison extends FFUnitTest{
 				fileTest);
 	}
 
+	@Test
+	public void testWriteCytoscapeFiles() {
+		r.writeCytoscapeFiles(basePath+"/cytoscape", true);
+	}
+	
 	@AfterClass
 	public static void afterTest() {
 

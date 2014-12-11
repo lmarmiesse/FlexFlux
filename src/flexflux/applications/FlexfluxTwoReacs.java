@@ -45,8 +45,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.kohsuke.args4j.CmdLineException;
-import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 import parsebionet.biodata.BioEntity;
@@ -121,36 +119,17 @@ public class FlexfluxTwoReacs extends FFApplication{
 	@Option(name = "-ext", usage = "[OPTIONAL, default = false]Uses the extended SBML format")
 	public boolean extended = false;
 
-	@Option(name = "-h", usage = "Prints this help")
-	public boolean h = false;
-
 	public static void main(String[] args) {
 
 		FlexfluxTwoReacs f = new FlexfluxTwoReacs();
 
-		CmdLineParser parser = new CmdLineParser(f);
-
-		try {
-			parser.parseArgument(args);
-		} catch (CmdLineException e) {
-			System.err.println(e.getMessage());
-			System.err.println(f.message);
-			parser.printUsage(System.err);
-			System.err.println(f.example);
-			System.exit(0);
-		}
-
+		f.parseArguments(args);
+		
 		if (f.end < f.init || f.end2 < f.init2) {
 			System.err
 					.println("The initial value should be less than the final value");
-			parser.printUsage(System.err);
+			f.parser.printUsage(System.err);
 			System.exit(0);
-		}
-
-		if (f.h) {
-			System.err.println(f.message);
-			parser.printUsage(System.out);
-			System.exit(1);
 		}
 
 		Vars.libertyPercentage = f.liberty;
@@ -176,7 +155,7 @@ public class FlexfluxTwoReacs extends FFApplication{
 				bind = new GLPKBind();
 			} else {
 				System.err.println("Unknown solver name");
-				parser.printUsage(System.err);
+				f.parser.printUsage(System.err);
 				System.exit(0);
 			}
 		} catch (UnsatisfiedLinkError e) {
@@ -235,6 +214,16 @@ public class FlexfluxTwoReacs extends FFApplication{
 		}
 
 		bind.end();
+	}
+
+	@Override
+	public String getMessage() {
+		return message;
+	}
+
+	@Override
+	public String getExample() {
+		return example;
 	}
 
 }

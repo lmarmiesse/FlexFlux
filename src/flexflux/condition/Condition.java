@@ -34,11 +34,13 @@
  */
 package flexflux.condition;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
+import flexflux.general.Constraint;
 import flexflux.general.ConstraintType;
-import flexflux.general.SimpleConstraint;
+import flexflux.general.SimplifiedConstraint;
 
 public class Condition {
 
@@ -46,10 +48,9 @@ public class Condition {
 	public String code = "NA";
 
 	/**
-	 * 
+	 * Map of {@link SimplifiedConstraint}. The key is the entities id
 	 */
-
-	public List<SimpleConstraint> constraints = new ArrayList<SimpleConstraint>();
+	public HashMap<String, SimplifiedConstraint> constraints = new HashMap<String, SimplifiedConstraint>();
 
 	/**
 	 * Constructor
@@ -76,15 +77,90 @@ public class Condition {
 	 * @param type
 	 *            : type of the constraint
 	 */
-	public Boolean addConstraint(String entityId, double lb, double ub,
+	public void addConstraint(String entityId, double value,
 			ConstraintType type) {
 
-		SimpleConstraint constraint = new SimpleConstraint(entityId, lb, ub, type);
+		SimplifiedConstraint constraint = new SimplifiedConstraint(entityId,value, type);
 		
-		constraints.add(constraint);
+		constraints.put(entityId, constraint);
 		
-		return true;
+		return;
 
 	}
+	
+	/**
+	 * Compare to another condition
+	 * Compare only the constraints and not the name and the codes
+	 * @param c2
+	 * @return
+	 */
+	@Override
+	public boolean equals(Object other) {
+
+		if(other == null)
+		{
+			return false;
+		}
+		if(other == this) {
+			return true;
+		}
+		
+		if (!(other instanceof Condition))return false;
+		
+		Condition c2 = (Condition) other;
+		
+		if(! c2.constraints.equals(this.constraints)) {
+			return false;
+		}
+		
+		return true;
+		
+	}
+	
+	@Override
+	public int hashCode() {
+		
+		int prim =  name.hashCode()+code.hashCode();
+		
+		for(SimplifiedConstraint c : constraints.values()) {
+			prim += c.hashCode();
+		}
+		
+		return prim;
+		
+	}
+	
+	
+	/**
+	 * 
+	 * @return the number of constraints
+	 */
+	public int size() {
+		return constraints.size();
+	}
+	
+	/**
+	 * Get a constraint by the entity id
+	 * @param entityId
+	 * @return
+	 */
+	public SimplifiedConstraint getConstraint(String entityId) {
+		
+		return this.constraints.get(entityId);
+		
+		
+	}
+	
+	/**
+	 * Check if a constraint exists for an entity id
+	 * @param entityId
+	 * @return
+	 */
+	public Boolean containsConstraint(String entityId) {
+		return this.constraints.containsKey(entityId);
+	}
+	
+	
+	
 }
 

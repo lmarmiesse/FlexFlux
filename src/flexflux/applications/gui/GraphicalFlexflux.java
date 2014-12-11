@@ -53,10 +53,10 @@ public class GraphicalFlexflux {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public static List<Class> getClasses(String packageName)
+	public static List<Class<?>> getClasses(String packageName)
 			throws ClassNotFoundException, IOException {
 
-		ArrayList<Class> classes = new ArrayList<Class>();
+		ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
 
 		ClassLoader classLoader = Thread.currentThread()
 				.getContextClassLoader();
@@ -112,10 +112,10 @@ public class GraphicalFlexflux {
 	 * @return The classes
 	 * @throws ClassNotFoundException
 	 */
-	private static List<Class> findClasses(File directory, String packageName)
+	private static List<Class<?>> findClasses(File directory, String packageName)
 			throws ClassNotFoundException {
 
-		List<Class> classes = new ArrayList<Class>();
+		List<Class<?>> classes = new ArrayList<Class<?>>();
 		if (!directory.exists()) {
 			return classes;
 		}

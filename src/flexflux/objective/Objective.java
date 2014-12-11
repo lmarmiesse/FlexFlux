@@ -31,7 +31,7 @@
 /**
  * 11 mars 2013 
  */
-package flexflux.general;
+package flexflux.objective;
 import parsebionet.biodata.BioEntity;
 
 /**

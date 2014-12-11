@@ -31,7 +31,6 @@
 package flexflux.analyses;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,7 +44,6 @@ import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.biodata.BioPhysicalEntity;
 import parsebionet.io.Sbml2Bionetwork;
-import flexflux.analyses.result.AnalysisResult;
 import flexflux.analyses.result.KOResult;
 import flexflux.analyses.result.PFBAResult;
 import flexflux.analyses.result.conditionComparison.ConditionComparisonResult;
@@ -57,9 +55,10 @@ import flexflux.general.ConstraintType;
 import flexflux.general.CplexBind;
 import flexflux.general.DoubleResult;
 import flexflux.general.GLPKBind;
-import flexflux.general.Objective;
-import flexflux.general.SimpleConstraint;
+import flexflux.general.SimplifiedConstraint;
 import flexflux.general.Vars;
+import flexflux.objective.ListOfObjectives;
+import flexflux.objective.Objective;
 
 public class ConditionComparisonAnalysis extends Analysis {
 
@@ -97,7 +96,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 	ArrayList<String> entities;
 
 	public ListOfConditions conditions = new ListOfConditions();
-	public HashMap<String, String> objectives = new HashMap<String, String>();
+	public ListOfObjectives objectives;
 
 	public Boolean launchReactionAnalysis;
 	public Boolean launchGeneAnalysis;
@@ -105,7 +104,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 
 	public ConditionComparisonAnalysis(Bind bind, String sbmlFile,
 			String interactionFile, String conditionFile,
-			String constraintFile, HashMap<String, String> objectives,
+			String constraintFile, ListOfObjectives objectives,
 			ConstraintType type, Boolean extended, String solver,
 			String reactionMetaDataFile, String geneMetaDataFile,
 			String regulatorMetaDataFile, String mdSep, String inchlibPath,
@@ -297,7 +296,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 		 */
 
 		List<Constraint> constraints = new ArrayList<Constraint>();
-		for (SimpleConstraint c : condition.constraints) {
+		for (SimplifiedConstraint c : condition.constraints.values()) {
 			String id = c.entityId;
 			BioEntity e = null;
 
@@ -310,7 +309,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 			Map<BioEntity, Double> constraintMap = new HashMap<BioEntity, Double>();
 			constraintMap.put(e, 1.0);
 
-			Constraint constraint = new Constraint(constraintMap, c.lb, c.ub);
+			Constraint constraint = new Constraint(constraintMap, c.getValue(), c.getValue());
 
 			constraints.add(constraint);
 
@@ -326,7 +325,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 	}
 
 	@Override
-	public AnalysisResult runAnalysis() {
+	public ConditionComparisonResult runAnalysis() {
 
 		ConditionComparisonResult result = new ConditionComparisonResult(
 				conditions, objectives, network, inchlibPath,
@@ -334,7 +333,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 				launchRegulatorAnalysis);
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 
 		for (String objName : objectiveNames) {
 
@@ -355,9 +354,6 @@ public class ConditionComparisonAnalysis extends Analysis {
 							.getDeadReactions()) {
 						deadReactions.put(deadReaction.getId(), deadReaction);
 					}
-
-					System.err
-							.println(deadReactions.size() + " dead reactions");
 
 					result.setDeadReactions(deadReactions);
 

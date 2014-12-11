@@ -6,10 +6,67 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class FFApplication {
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
+import org.kohsuke.args4j.Option;
+
+public abstract class FFApplication {
+	
+	@Option(name = "-verbose", usage = "[default=false] Activates the verbose mode")
+	public Boolean verbose = false;
+	
+	@Option(name = "-h", usage = "Prints this help")
+	public Boolean h = false;
 
 	
 	public static boolean requiresSolver = true;
+	
+	public CmdLineParser parser;
+	
+	/**
+	 * Constructor
+	 */
+	public FFApplication() {
+		parser = new CmdLineParser(this);
+	}
+	
+	/**
+	 * parse args from main
+	 * @param args
+	 */
+	public void parseArguments(String[] args) {
+		
+		try {
+			parser.parseArgument(args);
+		} catch (CmdLineException e) {
+			System.err.println(e.getMessage());
+			System.err.println(this.getMessage());
+			parser.printUsage(System.err);
+			System.err.println(this.getMessage());
+			System.exit(0);
+		}
+
+		if (this.h) {
+			System.err.println(this.getMessage());
+			parser.printUsage(System.out);
+			System.exit(1);
+		}
+		
+	}
+	
+	/**
+	 * abstract method to get the message
+	 * @return
+	 */
+	public abstract String getMessage();
+	
+	
+	/**
+	 * abstract methode to get the example
+	 * @return
+	 */
+	public abstract String getExample();
+	
 	
 //	/**
 //	 * The following static block is needed in order to load the libSBML Java
@@ -18,87 +75,5 @@ public class FFApplication {
 //	static {
 //		System.loadLibrary("sbmlj");
 //	}
-
-	
-	/**
-	 * Reads the objective file : each line corresponds to an objective First
-	 * column : the name of the objective function Second column : its
-	 * expression (ex : MAX(R_BIOMASS))
-	 * 
-	 * @return null if there is a problem while loading the file
-	 * or a hashmap with key = objective name and value its expression
-	 */
-
-	public HashMap<String, String> loadObjectiveFile(String objectiveFile) {
-
-		BufferedReader in = null;
-		
-		HashMap<String, String> objectives = new HashMap<String, String>();
-
-		try {
-			in = new BufferedReader(new FileReader(objectiveFile));
-
-			String line;
-
-			int nbLine = 0;
-
-			while ((line = in.readLine()) != null) {
-				if (line.startsWith("#") || line.equals("")) {
-					nbLine++;
-					continue;
-				}
-				
-				nbLine++;
-
-				String tab[] = line.split("\t");
-
-				if (tab.length != 2) {
-					System.err.println("Error line " + nbLine
-							+ " does not contain two columns");
-					return null;
-				}
-
-				String objExpression = tab[1];
-
-				if (!objExpression.contains("MIN(")
-						&& !objExpression.contains("MAX(")) {
-					System.err
-							.println("Objective function badly formatted line "
-									+ nbLine + " (" + objExpression + ")");
-					return null;
-				}
-
-				String objName = tab[0];
-
-				objectives.put(objName, objExpression);
-				
-			}
-		} catch (FileNotFoundException e) {
-			System.err.println(objectiveFile + " not found");
-			e.printStackTrace();
-			return null;
-		} catch (IOException e) {
-			System.err.println("Error while reading " + objectiveFile);
-			e.printStackTrace();
-		}
-
-		finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e) {
-					System.err
-							.println("Error while closing the objective file");
-					e.printStackTrace();
-				}
-			}
-		}
-
-		return objectives;
-
-	}
-	
-	
-	
 	
 }

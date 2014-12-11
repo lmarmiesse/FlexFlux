@@ -84,4 +84,14 @@ public class FlexfluxTest extends FFApplication{
 
 	}
 
+	@Override
+	public String getMessage() {
+		return message;
+	}
+
+	@Override
+	public String getExample() {
+		return "";
+	}
+
 }

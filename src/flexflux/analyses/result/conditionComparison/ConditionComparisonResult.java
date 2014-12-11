@@ -34,15 +34,18 @@ import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.biodata.BioPathway;
+import parsebionet.io.BioNetwork2CytoscapeFile;
+import parsebionet.io.BioNetworkToAttributeTable;
 import flexflux.analyses.result.AnalysisResult;
 import flexflux.analyses.result.KOResult;
 import flexflux.analyses.result.MyTableModel;
 import flexflux.analyses.result.PFBAResult;
 import flexflux.condition.Condition;
 import flexflux.condition.ListOfConditions;
-import flexflux.general.Objective;
 import flexflux.general.Vars;
 import flexflux.io.Utils;
+import flexflux.objective.ListOfObjectives;
+import flexflux.objective.Objective;
 import flexflux.utils.run.Runner;
 import flexflux.utils.web.JsonUtils;
 
@@ -54,7 +57,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 	public ConditionComparisonFbaResultSet fbaAllResults = null;
 
 	ListOfConditions conditions = null;
-	HashMap<String, String> objectives = null;
+	ListOfObjectives objectives = null;
 
 	public HashMap<String, HashMap<String, String>> reactionMetaData = null;
 	public HashMap<String, HashMap<String, String>> geneMetaData = null;
@@ -108,7 +111,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 *            : list of objectives
 	 */
 	public ConditionComparisonResult(ListOfConditions conditions,
-			HashMap<String, String> objectives, BioNetwork network,
+			ListOfObjectives objectives, BioNetwork network,
 			String inchlibPath, Boolean launchReactionAnalysis,
 			Boolean launchGeneAnalysis, Boolean launchRegulatorAnalysis) {
 
@@ -333,7 +336,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		PrintWriter out = null;
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 
 		try {
 			out = new PrintWriter(new File(path + "/fba_results.csv"));
@@ -404,7 +407,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		HashMap<String, ArrayList<String>> classification = new HashMap<String, ArrayList<String>>();
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 
 		try {
 			outEssential = new PrintWriter(new File(path + "/essential"
@@ -574,7 +577,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		HashMap<String, ArrayList<String>> classification = new HashMap<String, ArrayList<String>>();
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 
 		try {
 			outEssential = new PrintWriter(new File(path
@@ -759,7 +762,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		PrintWriter out = null;
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 
 		try {
 			out = new PrintWriter(new File(path + "/summary" + objectName
@@ -849,7 +852,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		PrintWriter out = null;
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 
 		try {
 			out = new PrintWriter(new File(path + "/summaryRegulators.txt"));
@@ -941,7 +944,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 		// Create js files with data inside
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 		PrintWriter out = null;
 		try {
 			out = new PrintWriter(new File(outPath + "/multiBar_data.js"));
@@ -1045,7 +1048,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 		// Create js files with data inside
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 		PrintWriter out = null;
 		try {
 			out = new PrintWriter(new File(outPath + "/multiBar_data.js"));
@@ -1126,7 +1129,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		PrintWriter outData = null;
 		PrintWriter outMetaData = null;
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 
 		String outPath = genePath;
 		HashMap<String, HashMap<String, String>> metaData = geneMetaData;
@@ -1383,7 +1386,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		PrintWriter outData = null;
 		PrintWriter outMetaData = null;
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 
 		String outPath = regulatorPath;
 		HashMap<String, HashMap<String, String>> metaData = regulatorMetaData;
@@ -1554,7 +1557,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		columnNames.add("conditionCode");
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 
 		for (String objName : objectiveNames) {
 			columnNames.add(objName);
@@ -1647,26 +1650,142 @@ public class ConditionComparisonResult extends AnalysisResult {
 		}
 
 	}
+	
+	/**
+	 * Write sif file and classification attributes
+	 * @return true if ok, false if problem
+	 * @param prefix : the prefix of the filenames. Adds .sif for the network file and .attr for the attribute file
+	 */
+	public Boolean writeCytoscapeNetwork(String networkFile, Boolean sbmlEncode) {
+		
+		if(network == null)
+		{
+			return false;
+		}
+		
+		System.err.println("network File : "+networkFile);
+		
+		/**
+		 * writes the network
+		 */
+		BioNetwork2CytoscapeFile writer = new BioNetwork2CytoscapeFile(network, false, true, networkFile, sbmlEncode, false);
+		try {
+			writer.write();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.err.println("[PFBA error]Error while writing the network File");
+			return false;
+		}
+		
+		
+		return true;
+	}
+	
+	/**
+	 * Write Cytoscape generic attributes
+	 * @return true if ok, false if problem
+	 * @param prefix : the prefix of the filename
+	 */
+	public Boolean writeCytoscapeGenericAttributes(String fileName, Boolean sbmlEncode) {
+		
+		if(network == null)
+		{
+			return false;
+		}
+			
+		
+		/**
+		 * writes the general attributes
+		 */
+		BioNetworkToAttributeTable writerAttr = new BioNetworkToAttributeTable(network, fileName);
+		
+		try {
+			writerAttr.writeAttributes(sbmlEncode);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			System.err.println("[PFBA error]Error while writing the generic attribute file");
+			return false;
+		}
+		
+		return true;
+	}
+	
 
 	/**
+	 * Write Cytoscape sif files and the classification attribute file for each
+	 * pair obj/condition
 	 * 
-	 * @author lcottret
-	 * 
+	 * @return
 	 */
-	class MyDocumentListener implements DocumentListener {
-		String newline = "\n";
+	public Boolean writeCytoscapeFiles(String dir, Boolean sbmlEncode) {
+		
+		File dirFile = new File(dir);
+		
+		if (!dirFile.exists()) {
+			try {
+				dirFile.mkdirs();
 
-		public void changedUpdate(DocumentEvent arg0) {
-			updateTable(fbaTableSorter, arg0);
+			} catch (SecurityException se) {
+				se.printStackTrace();
+				System.err.println("Security Exception during creation of "
+						+ dir);
+			}
+		}
+		
+		this.writeCytoscapeNetwork(dir+"/network.sif", sbmlEncode);
+		this.writeCytoscapeGenericAttributes(dir+"/genericAttributes.tab", sbmlEncode);
+		
+		for (String condition : this.pfbaAllResults.keySet()) {
+			String conditionPath = dir + "/"
+					+ condition;
+
+			File conditionFile = new File(conditionPath);
+			if (!conditionFile.exists()) {
+				try {
+					conditionFile.mkdir();
+
+				} catch (SecurityException se) {
+					se.printStackTrace();
+					System.err.println("Security Exception during creation of "
+							+ conditionFile);
+				}
+			}
+
+			for (String obj : this.pfbaAllResults.get(condition).keySet()) {
+				String objPath = conditionPath + "/" + obj;
+				File objFile = new File(objPath);
+				if (!objFile.exists()) {
+					try {
+						objFile.mkdir();
+						System.err.println("Creation of "+objPath);
+
+					} catch (SecurityException se) {
+						se.printStackTrace();
+						System.err
+								.println("Security Exception during creation of "
+										+ objFile);
+					}
+				}
+
+				/**
+				 * Write pfba results
+				 */
+				PFBAResult res = this.pfbaAllResults.get(condition).get(obj);
+
+				Boolean flag = res.writeCytoscapeClassifAttribute(objPath + "/classif.attr", sbmlEncode);
+
+				if (!flag) {
+					System.err
+							.println("[ConditionComparison Error] Problem while creating Cytoscape file for "
+									+ condition + " -- " + obj);
+					return flag;
+				}
+
+			}
+
 		}
 
-		public void insertUpdate(DocumentEvent arg0) {
-			updateTable(fbaTableSorter, arg0);
-		}
-
-		public void removeUpdate(DocumentEvent arg0) {
-			updateTable(fbaTableSorter, arg0);
-		}
+		return true;
 	}
 
 	/**
@@ -1678,11 +1797,11 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 		// Create web directories
 		this.webPath = directoryPath + "/" + "web";
-		File webFile = new File(webPath);
 
+		File webFile = new File(webPath);
 		if (!webFile.exists()) {
 			try {
-				webFile.mkdir();
+				webFile.mkdirs();
 			} catch (SecurityException se) {
 				se.printStackTrace();
 				System.err.println("Security Exception during creation of "
@@ -1768,7 +1887,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 		PrintWriter outData = null;
 		PrintWriter outMetaData = null;
 		ArrayList<String> objectiveNames = new ArrayList<String>(
-				objectives.keySet());
+				objectives.objectives.keySet());
 
 		String outPath = pathwayPath;
 		Set<String> ids = network.getPathwayList().keySet();
@@ -1908,6 +2027,27 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 */
 	public HashMap<String, BioChemicalReaction> getDeadReactions() {
 		return this.deadReactions;
+	}
+
+	/**
+	 * 
+	 * @author lcottret
+	 * 
+	 */
+	class MyDocumentListener implements DocumentListener {
+		String newline = "\n";
+
+		public void changedUpdate(DocumentEvent arg0) {
+			updateTable(fbaTableSorter, arg0);
+		}
+
+		public void insertUpdate(DocumentEvent arg0) {
+			updateTable(fbaTableSorter, arg0);
+		}
+
+		public void removeUpdate(DocumentEvent arg0) {
+			updateTable(fbaTableSorter, arg0);
+		}
 	}
 
 }

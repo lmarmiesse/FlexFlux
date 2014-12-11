@@ -36,8 +36,8 @@ package flexflux.thread;
 import flexflux.analyses.result.FVAResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
-import flexflux.general.Objective;
 import flexflux.general.Vars;
+import flexflux.objective.Objective;
 
 import java.util.ArrayList;
 import java.util.Queue;

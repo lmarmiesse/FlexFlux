@@ -1,7 +1,7 @@
 package flexflux.analyses.result.conditionComparison;
 
 import flexflux.condition.Condition;
-import flexflux.general.Objective;
+import flexflux.objective.Objective;
 
 public class ConditionComparisonFbaResult {
 	

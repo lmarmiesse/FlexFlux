@@ -45,8 +45,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.kohsuke.args4j.CmdLineException;
-import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 import parsebionet.biodata.BioEntity;
@@ -61,7 +59,7 @@ import parsebionet.biodata.BioEntity;
  * @author lmarmiesse 6 mars 2013
  * 
  */
-public class FlexfluxReac extends FFApplication{
+public class FlexfluxReac extends FFApplication {
 
 	public static String message = "FlexfluxReac\n"
 
@@ -69,7 +67,7 @@ public class FlexfluxReac extends FFApplication{
 			+ "by making a reaction flux change.";
 
 	public String example = "Example : FlexfluxReac -s network.xml -cond cond.txt -int int.txt -r R_EX_o2_e_ -init -10 -end 0 -plot -out out.txt";
-	
+
 	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
 	public String sbmlFile = "";
 
@@ -109,36 +107,17 @@ public class FlexfluxReac extends FFApplication{
 	@Option(name = "-ext", usage = "[OPTIONAL, default = false]Uses the extended SBML format")
 	public boolean extended = false;
 
-	@Option(name = "-h", usage = "Prints this help")
-	public boolean h = false;
-
 	public static void main(String[] args) {
 
 		FlexfluxReac f = new FlexfluxReac();
 
-		CmdLineParser parser = new CmdLineParser(f);
-
-		try {
-			parser.parseArgument(args);
-		} catch (CmdLineException e) {
-			System.err.println(e.getMessage());
-			System.err.println(f.message);
-			parser.printUsage(System.err);
-			System.err.println(f.example);
-			System.exit(0);
-		}
+		f.parseArguments(args);
 
 		if (f.end < f.init) {
 			System.err
 					.println("The initial value should be less than the final value");
-			parser.printUsage(System.err);
+			f.parser.printUsage(System.err);
 			System.exit(0);
-		}
-
-		if (f.h) {
-			System.err.println(f.message);
-			parser.printUsage(System.out);
-			System.exit(1);
 		}
 
 		Vars.libertyPercentage = f.liberty;
@@ -163,7 +142,7 @@ public class FlexfluxReac extends FFApplication{
 				bind = new GLPKBind();
 			} else {
 				System.err.println("Unknown solver name");
-				parser.printUsage(System.err);
+				f.parser.printUsage(System.err);
 				System.exit(0);
 			}
 		} catch (UnsatisfiedLinkError e) {
@@ -212,6 +191,16 @@ public class FlexfluxReac extends FFApplication{
 		}
 
 		bind.end();
+	}
+
+	@Override
+	public String getMessage() {
+		return message;
+	}
+
+	@Override
+	public String getExample() {
+		return example;
 	}
 
 }

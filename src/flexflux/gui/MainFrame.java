@@ -39,6 +39,10 @@ import org.kohsuke.args4j.Option;
  */
 public class MainFrame extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	Map<Option, Field> optionToField = new HashMap<Option, Field>();
 	List<Option> requiredOptions = new ArrayList<Option>();
 	List<Option> optionalOptions = new ArrayList<Option>();
@@ -48,9 +52,9 @@ public class MainFrame extends JFrame {
 	Map<String, String[]> previousArguments = new HashMap<String, String[]>();
 
 	private List<String> solvers;
-	private List<Class> executableClasses = new ArrayList<Class>();
+	private List<Class<?>> executableClasses = new ArrayList<Class<?>>();
 
-	private JComboBox executableList = new JComboBox();
+	private JComboBox<String> executableList = new JComboBox<String>();
 
 	JPanel northPanel = new JPanel();
 	JPanel centerPanel = new JPanel();
@@ -67,7 +71,7 @@ public class MainFrame extends JFrame {
 
 	private boolean hasSolver = true;
 
-	public MainFrame(List<String> solvers, List<Class> classes) {
+	public MainFrame(List<String> solvers, List<Class<?>> classes) {
 
 		if (solvers.size() == 0) {
 
@@ -83,7 +87,7 @@ public class MainFrame extends JFrame {
 
 		if (hasSolver == false) {
 			
-			for (Class cl : classes){
+			for (Class<?> cl : classes){
 				try {
 					
 					if(!(boolean) cl.getField("requiresSolver").get(null)){
@@ -172,7 +176,7 @@ public class MainFrame extends JFrame {
 	}
 
 	public void fillExecList() {
-		for (Class c : executableClasses) {
+		for (Class<?> c : executableClasses) {
 			executableList.addItem(c.getSimpleName().replace("Flexflux", ""));
 		}
 	}
@@ -183,7 +187,7 @@ public class MainFrame extends JFrame {
 	 * @param selectedIndex
 	 */
 	private void updateAnalysis(int selectedIndex) {
-		Class selectedClass = executableClasses.get(selectedIndex);
+		Class<?> selectedClass = executableClasses.get(selectedIndex);
 
 		// we check the previous arguments to keep them
 
@@ -340,7 +344,7 @@ public class MainFrame extends JFrame {
 
 	public void run() {
 
-		Class selectedClass = executableClasses.get(executableList
+		Class<?> selectedClass = executableClasses.get(executableList
 				.getSelectedIndex());
 
 		List<String> argsList = new ArrayList<String>();

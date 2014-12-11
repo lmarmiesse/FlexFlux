@@ -13,15 +13,13 @@ public class FlexfluxHelp extends FFApplication {
 	
 	public static void main(String[] args) throws ClassNotFoundException, IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		
-	
-	
 		System.out.println("Flexflux Help\n");
 		System.out.println("To get more details about a specific function, call it with the argument -h\n");
 		
 		System.out.println("List of flexflux functions : \n");
 	
 		
-		for (Class c : GraphicalFlexflux.getClasses("flexflux.applications")){
+		for (Class<?> c : GraphicalFlexflux.getClasses("flexflux.applications")){
 			
 			
 			System.out.println("- "+c.getSimpleName());
@@ -31,12 +29,15 @@ public class FlexfluxHelp extends FFApplication {
 			System.out.println("");
 			
 		}
-	
-	
-	
-	
-	
-	
-	
+	}
+
+	@Override
+	public String getMessage() {
+		return message;
+	}
+
+	@Override
+	public String getExample() {
+		return "";
 	}
 }
