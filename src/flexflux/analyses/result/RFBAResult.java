@@ -125,7 +125,7 @@ public class RFBAResult extends AnalysisResult {
 		try {
 			PrintWriter out = new PrintWriter(new File(path));
 
-			String line = "\t";
+			String line = "Time\t";
 			for (String s : entities) {
 
 				line += s + "\t";

@@ -299,7 +299,7 @@ public class MainFrame extends JFrame {
 		}
 
 		pack();
-
+		RefineryUtilities.centerFrameOnScreen(this);
 	}
 
 	private ArgumentComponent getRightComponent(String metaVar, String name) {
