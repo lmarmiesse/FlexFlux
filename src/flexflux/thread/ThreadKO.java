@@ -37,9 +37,9 @@ import flexflux.analyses.result.KOResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.DoubleResult;
-import flexflux.general.Objective;
 import flexflux.general.Vars;
 import flexflux.interaction.Interaction;
+import flexflux.objective.Objective;
 
 import java.util.ArrayList;
 import java.util.HashMap;

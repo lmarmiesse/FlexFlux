@@ -4,25 +4,23 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+
+import junitx.framework.FileAssert;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import parsebionet.unit_tests.TestUtils;
-import flexflux.analyses.era.ERAAnalysis;
-import flexflux.analyses.era.InputRandomParameters;
+import parsebionet.unit_tests.utils.TestUtils;
+import flexflux.analyses.ERAAnalysis;
 import flexflux.analyses.result.ERAResult;
-import flexflux.applications.FlexfluxERA;
+import flexflux.condition.ListOfConditions;
 import flexflux.general.Bind;
+import flexflux.general.ConstraintType;
 import flexflux.general.CplexBind;
 import flexflux.general.GLPKBind;
 import flexflux.general.Vars;
+import flexflux.objective.ListOfObjectives;
 
 public class TestEra extends FFUnitTest{
 
@@ -36,8 +34,6 @@ public class TestEra extends FFUnitTest{
 	// The temporary folder will be removed at the end of the test
 	private static File tempDir;
 
-	static FlexfluxERA f;
-	
 	static int nbSim = 100;
 
 	@BeforeClass
@@ -60,59 +56,57 @@ public class TestEra extends FFUnitTest{
 			inchlibPath = System.getProperty("inchlibPath");
 		}
 
-		f = new FlexfluxERA();
 
-		f.sbmlFile = TestUtils.copyProjectResource(
+		String sbmlFile = TestUtils.copyProjectResource(
 				"flexflux/unit_tests/data/era/test.xml", java.nio.file.Files
 						.createTempFile("test", ".xml").toFile());
 
-		f.intFile = TestUtils.copyProjectResource(
-				"flexflux/unit_tests/data/era/interactions.txt",
-				java.nio.file.Files.createTempFile("test", ".txt").toFile());
+		String intFile = TestUtils.copyProjectResource(
+				"flexflux/unit_tests/data/era/interactions.sbml",
+				java.nio.file.Files.createTempFile("test", ".sbml").toFile());
 
-		f.objectiveFile = TestUtils.copyProjectResource(
+		String objectiveFile = TestUtils.copyProjectResource(
 				"flexflux/unit_tests/data/era/objectives.txt",
 				java.nio.file.Files.createTempFile("test", ".txt").toFile());
 
-		f.constraintFile = TestUtils.copyProjectResource(
+		String constraintFile = TestUtils.copyProjectResource(
 				"flexflux/unit_tests/data/era/constraints.txt",
 				java.nio.file.Files.createTempFile("test", ".txt").toFile());
-
-		f.inputRandomParameterFile = TestUtils.copyProjectResource(
-				"flexflux/unit_tests/data/era/inputs.txt", java.nio.file.Files
-						.createTempFile("test", ".txt").toFile());
-
-		f.solver = solver;
-
-		f.nbSim = nbSim;
-		f.meanGaussian = 10.0;
-		f.stdGaussian = 100.0;
-		f.minInputs = 5;
-		f.maxInputs = 20;
 		
-		HashMap<String, String> objectives = f
-				.loadObjectiveFile(f.objectiveFile);
+		String conditionFile = TestUtils.copyProjectResource(
+				"flexflux/unit_tests/data/era/conditions.tab",
+				java.nio.file.Files.createTempFile("test", ".tab").toFile());
 
-		if (objectives == null) {
+
+		ListOfObjectives objectives = new ListOfObjectives();
+		
+		Boolean flag = objectives.loadObjectiveFile(objectiveFile);
+
+		if (flag == false) {
 			System.err.println("Error in reading the objective file "
-					+ f.objectiveFile);
+					+ objectiveFile);
 			System.exit(0);
 		}
-
-		ArrayList<InputRandomParameters> inputRandomParameterList = f
-				.loadInputRandomParameterFile(f.inputRandomParameterFile);
-		if (inputRandomParameterList == null) {
-			System.err.println("Error in reading the input file "
-					+ f.inputRandomParameterFile);
+		
+		/**
+		 * Load the condition file
+		 */
+		ListOfConditions conditions = new ListOfConditions();
+		
+		flag = conditions.loadConditionFile(conditionFile, ConstraintType.DOUBLE);
+		
+		if (flag == false) {
+			System.err.println("Error in reading the condition file "
+					+ objectiveFile);
 			System.exit(0);
 		}
 
 		Bind bind = null;
 
 		try {
-			if (f.solver.equals("CPLEX")) {
+			if (solver.equals("CPLEX")) {
 				bind = new CplexBind();
-			} else if (f.solver.equals("GLPK")) {
+			} else if (solver.equals("GLPK")) {
 				Vars.maxThread = 1;
 				bind = new GLPKBind();
 			} else {
@@ -120,30 +114,29 @@ public class TestEra extends FFUnitTest{
 			}
 		} catch (UnsatisfiedLinkError e) {
 			fail("Error, the solver "
-					+ f.solver
+					+ solver
 					+ " cannot be found. Check your solver installation and the configuration file, or choose a different solver (-sol).");
 		} catch (NoClassDefFoundError e) {
 			fail("Error, the solver "
-					+ f.solver
+					+ solver
 					+ " cannot be found. There seems to be a problem with the .jar file of "
-					+ f.solver + ".");
+					+ solver + ".");
 		}
 
-		bind.loadSbmlNetwork(f.sbmlFile, f.extended);
+		bind.loadSbmlNetwork(sbmlFile, false);
 
 		bind.setLoadObjective(false);
 
-		if (f.constraintFile != "") {
-			bind.loadConditionsFile(f.constraintFile);
+		if (constraintFile != "") {
+			bind.loadConditionsFile(constraintFile);
 		}
 
-		bind.loadInteractionsFile(f.intFile);
+		bind.loadInteractionsFile(intFile);
 
 		bind.prepareSolver();
 
-		ERAAnalysis a = new ERAAnalysis(bind, f.nbSim, objectives,
-				inputRandomParameterList, f.meanGaussian, f.stdGaussian,
-				f.minInputs, f.maxInputs);
+		ERAAnalysis a = new ERAAnalysis(bind, objectives,
+				conditions);
 
 		r = a.runAnalysis();
 
@@ -159,37 +152,39 @@ public class TestEra extends FFUnitTest{
 	}
 
 	@Test
-	public void testDistribution() {
-		ArrayList<Integer> nbActivatedInputs = r.getNumberOfActivatedInputs();
+	public void testObjCondCount() throws IOException {
 		
-		int min = Collections.min(nbActivatedInputs);
-		int max = Collections.max(nbActivatedInputs);
-		
-		if(min < f.minInputs) {
-			fail("Error in the minimum number of activated inputs");
-		}
-		
-		if(max > f.maxInputs) {
-			fail("Error in the minimum number of activated inputs");
-		}
-		
-	}
-	
-	
-	@Test
-	/**
-	 * Test if the input RSp0837 that has a weight of 1000 is always present
-	 */
-	public void testWeight() {
-		if(r.getInputOccurences().get("RSp0837")==0) {
-			fail("Strange : the input RSp0837 is not activated in any simulation while its weight is 1000 !");
-		}
+		 String refFile = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/era/resultsActivatedObjectives.txt",
+					java.nio.file.Files.createTempFile("test", ".txt").toFile());
+		 
+		 String testFile = tmpPath+"/activatedObjectives.tsv";
+		 
+		 FileAssert.assertEquals("activated objective files are different", new File(refFile), new File(testFile));
+		 
 	}
 	
 	@Test
-	public void testNumberOfDistinctConditions() {
-			assertEquals("Bad number of distinct conditions", nbSim, r.getActivatedInputSets().size());
+	public void testObjInputMatrix() {
+		assertEquals("test G1 maxR_OBJ", new Integer(4), r.getObjInputMatrix().get("G1").get("maxR_OBJ"));
+		assertEquals("test G1 minR_OBJ2", new Integer(4), r.getObjInputMatrix().get("G1").get("minR_OBJ2"));
+		
+		assertEquals("test G2 maxR_OBJ", new Integer(4), r.getObjInputMatrix().get("G2").get("maxR_OBJ"));
+		assertEquals("test G2 minR_OBJ2", new Integer(4), r.getObjInputMatrix().get("G2").get("minR_OBJ2"));
+		
+		assertEquals("test G3 maxR_OBJ", new Integer(4), r.getObjInputMatrix().get("G3").get("maxR_OBJ"));
+		assertEquals("test G3 minR_OBJ2", new Integer(5), r.getObjInputMatrix().get("G3").get("minR_OBJ2"));
+		
+		assertEquals("test G8 maxR_OBJ", new Integer(4), r.getObjInputMatrix().get("G8").get("maxR_OBJ"));
+		assertEquals("test G8 minR_OBJ2", new Integer(4), r.getObjInputMatrix().get("G8").get("minR_OBJ2"));
+		
+		assertEquals("test T1 maxR_OBJ", new Integer(2), r.getObjInputMatrix().get("T1").get("maxR_OBJ"));
+		assertEquals("test T1 minR_OBJ2", new Integer(2), r.getObjInputMatrix().get("T1").get("minR_OBJ2"));
+		
+		assertEquals("test T2 maxR_OBJ", new Integer(2), r.getObjInputMatrix().get("T2").get("maxR_OBJ"));
+		assertEquals("test T2 minR_OBJ2", new Integer(2), r.getObjInputMatrix().get("T2").get("minR_OBJ2"));
 	}
+	
 	
 	
 	@AfterClass

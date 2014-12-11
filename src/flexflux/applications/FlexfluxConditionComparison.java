@@ -1,23 +1,22 @@
 package flexflux.applications;
 
 import java.io.File;
-import java.util.HashMap;
 
-import org.kohsuke.args4j.CmdLineException;
-import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 import flexflux.analyses.ConditionComparisonAnalysis;
-import flexflux.analyses.result.AnalysisResult;
 import flexflux.analyses.result.conditionComparison.ConditionComparisonResult;
-import flexflux.general.Bind;
 import flexflux.general.ConstraintType;
-import flexflux.general.CplexBind;
-import flexflux.general.GLPKBind;
 import flexflux.general.Vars;
+import flexflux.objective.ListOfObjectives;
 
 public class FlexfluxConditionComparison extends FFApplication {
-
+	
+	public FlexfluxConditionComparison()
+	{
+		super();
+	}
+	
 	public String applicationName = FlexfluxConditionComparison.class
 			.getSimpleName();
 
@@ -93,35 +92,16 @@ public class FlexfluxConditionComparison extends FFApplication {
 
 	@Option(name = "-noRegulatorAnalysis", usage = "Don't perform regulator essentiality analysis")
 	public Boolean noRegulatorAnalysis = false;
-
-	@Option(name = "-verbose", usage = "[default=false] Activates the verbose mode")
-	public Boolean verbose = false;
-
-	@Option(name = "-h", usage = "Prints this help")
-	public Boolean h = false;
+	
+	@Option(name = "-cytoscape", usage = "Generates cytoscape files")
+	public Boolean cytoscape = false;
 
 	public static void main(String[] args) {
 
 		FlexfluxConditionComparison f = new FlexfluxConditionComparison();
 
-		CmdLineParser parser = new CmdLineParser(f);
-
-		try {
-			parser.parseArgument(args);
-		} catch (CmdLineException e) {
-			System.err.println(e.getMessage());
-			System.err.println(f.message);
-			parser.printUsage(System.err);
-			System.err.println(f.example);
-			System.exit(0);
-		}
-
-		if (f.h) {
-			System.err.println(f.message);
-			parser.printUsage(System.out);
-			System.exit(1);
-		}
-
+		f.parseArguments(args);
+		
 		Vars.libertyPercentage = f.liberty;
 		Vars.decimalPrecision = f.precision;
 
@@ -152,10 +132,11 @@ public class FlexfluxConditionComparison extends FFApplication {
 			c = ConstraintType.DOUBLE;
 		}
 
-		HashMap<String, String> objectives = f
-				.loadObjectiveFile(f.objectiveFile);
 		
-		if (objectives == null) {
+		ListOfObjectives objectives = new ListOfObjectives();
+		Boolean flag = objectives.loadObjectiveFile(f.objectiveFile);
+		
+		if (flag == false) {
 			System.err.println("Error in reading the objective file");
 			System.exit(0);
 		}
@@ -172,7 +153,7 @@ public class FlexfluxConditionComparison extends FFApplication {
 			Vars.verbose = true;
 		}
 
-		AnalysisResult r = a.runAnalysis();
+		ConditionComparisonResult r = a.runAnalysis();
 
 		if (!f.outName.equals("")) {
 			r.writeToFile(f.outName);
@@ -181,7 +162,27 @@ public class FlexfluxConditionComparison extends FFApplication {
 		if (f.plot) {
 			r.plot();
 		}
-
+		
+		if (f.cytoscape) {
+			r.writeCytoscapeFiles(f.outName+"/cytoscape", true);
+		}
 	}
+
+	@Override
+	public String getMessage() {
+		return message;
+	}
+
+	@Override
+	public String getExample() {
+		return "";
+	}
+
+	public Boolean getCytoscape() {
+		return cytoscape;
+	}
+	
+	
+
 
 }

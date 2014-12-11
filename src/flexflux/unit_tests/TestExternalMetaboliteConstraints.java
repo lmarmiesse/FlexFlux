@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import flexflux.general.Bind;
@@ -15,7 +14,7 @@ import flexflux.general.Constraint;
 import flexflux.general.CplexBind;
 import flexflux.general.DoubleResult;
 import flexflux.general.GLPKBind;
-import parsebionet.unit_tests.TestUtils;
+import parsebionet.unit_tests.utils.TestUtils;
 
 public class TestExternalMetaboliteConstraints extends FFUnitTest{
 	
