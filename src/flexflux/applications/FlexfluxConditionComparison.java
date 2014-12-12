@@ -51,8 +51,8 @@ public class FlexfluxConditionComparison extends FFApplication {
 	@Option(name = "-o", usage = "File containing the objective functions", metaVar = "File", required = true)
 	public String objectiveFile = "";
 
-	@Option(name = "-int", usage = "[OPTIONAL] Interaction file path", metaVar = "File")
-	public String intFile = "";
+	@Option(name = "-reg", usage = "[OPTIONAL] Regulation file path", metaVar = "File")
+	public String regFile = "";
 
 	@Option(name = "-type", usage = "[OPTIONAL, default=DOUBLE] Type of the condition states", metaVar = "[BINARY,INTEGER,DOUBLE]")
 	public String type = "DOUBLE";
@@ -142,7 +142,7 @@ public class FlexfluxConditionComparison extends FFApplication {
 		}
 
 		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
-				f.sbmlFile, f.intFile, f.conditionFile, f.constraintFile,
+				f.sbmlFile, f.regFile, f.conditionFile, f.constraintFile,
 				objectives, c, f.extended, f.solver,
 				f.metaReactionDataFile, f.metaGeneDataFile,
 				f.metaRegulatorDataFile, f.mdSep, f.inchlibPath, f.minFlux,

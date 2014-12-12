@@ -98,11 +98,11 @@ public class TestRFBA extends FFUnitTest{
 		n = bind.getBioNetwork();
 		i = bind.getInteractionNetwork();
 
-		bind.loadConditionsFile("src/flexflux/unit_tests/data/rfba/condTestRfba");
+		bind.loadConstraintsFile("src/flexflux/unit_tests/data/rfba/condTestRfba");
 
 //		bind.loadInteractionsFile("Data/intTestRfba");
 		
-		bind.loadInteractionsFile("src/flexflux/unit_tests/data/rfba/rfba.sbml");
+		bind.loadRegulationFile("src/flexflux/unit_tests/data/rfba/rfba.sbml");
 
 		bind.prepareSolver();
 

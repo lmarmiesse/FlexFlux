@@ -79,14 +79,14 @@ public class FlexfluxCompFVA extends FFApplication{
 	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-cond", usage = "First condition file path", metaVar = "File", required = true)
-	public String condFile = "";
+	@Option(name = "-cons", usage = "First constraint file path", metaVar = "File", required = true)
+	public String consFile = "";
 
-	@Option(name = "-cond2", usage = "Second condition file path", metaVar = "File", required = true)
-	public String condFile2 = "";
+	@Option(name = "-cons2", usage = "Second constraint file path", metaVar = "File", required = true)
+	public String consFile2 = "";
 
-	@Option(name = "-int", usage = "[OPTIONAL]Interaction file path", metaVar = "File")
-	public String intFile = "";
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File")
+	public String regFile = "";
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
 	public String solver = "GLPK";
@@ -136,12 +136,12 @@ public class FlexfluxCompFVA extends FFApplication{
 			System.err.println("Error : file " + f.sbmlFile + " not found");
 			System.exit(0);
 		}
-		if (!new File(f.condFile).isFile()) {
-			System.err.println("Error : file " + f.condFile + " not found");
+		if (!new File(f.consFile).isFile()) {
+			System.err.println("Error : file " + f.consFile + " not found");
 			System.exit(0);
 		}
-		if (!new File(f.condFile2).isFile()) {
-			System.err.println("Error : file " + f.condFile2 + " not found");
+		if (!new File(f.consFile2).isFile()) {
+			System.err.println("Error : file " + f.consFile2 + " not found");
 			System.exit(0);
 		}
 		try {
@@ -174,11 +174,11 @@ public class FlexfluxCompFVA extends FFApplication{
 		bind.loadSbmlNetwork(f.sbmlFile, f.extended);
 		bind2.loadSbmlNetwork(f.sbmlFile, f.extended);
 
-		bind.loadConditionsFile(f.condFile);
-		bind2.loadConditionsFile(f.condFile2);
-		if (f.intFile != "") {
-			bind.loadInteractionsFile(f.intFile);
-			bind2.loadInteractionsFile(f.intFile);
+		bind.loadConstraintsFile(f.consFile);
+		bind2.loadConstraintsFile(f.consFile2);
+		if (f.regFile != "") {
+			bind.loadRegulationFile(f.regFile);
+			bind2.loadRegulationFile(f.regFile);
 		}
 		bind.prepareSolver();
 		bind2.prepareSolver();

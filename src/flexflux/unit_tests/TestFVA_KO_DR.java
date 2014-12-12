@@ -99,7 +99,7 @@ public class TestFVA_KO_DR extends FFUnitTest{
 		n = bind.getBioNetwork();
 		i = bind.getInteractionNetwork();
 
-		bind.loadConditionsFile("Data/condColiTest");
+		bind.loadConstraintsFile("Data/condColiTest");
 
 		// bind.loadInteractionsFile("Data/intColiTest");
 

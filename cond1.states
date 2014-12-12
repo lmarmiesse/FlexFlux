@@ -1,0 +1,13 @@
+Steady state analysis result
+
+permease	0	0	0	2	0	0	0
+AMPc	0	2	2	2	2	2	2
+lacY	0	0	2	0	0	0	0
+lacZ	0	0	2	0	0	0	0
+R_LACZ	0	0	0	0	0	0	0
+EIIAGlc_p	0	1	1	1	1	1	1
+EIIAGlc	1	0	0	0	0	0	0
+betaGal	0	0	0	2	0	0	0
+R_LCTStpp	0	0	0	0	2	0	0
+allolactose	1	0	0	0	0	0	0
+P_lacI	1	0	1	1	1	1	1

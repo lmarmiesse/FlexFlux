@@ -1,6 +1,7 @@
 package flexflux.unit_tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +12,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import parsebionet.unit_tests.utils.TestUtils;
+import parsebionet.unit_tests.TestUtils;
 import flexflux.analyses.ERAAnalysis;
 import flexflux.analyses.result.ERAResult;
 import flexflux.condition.ListOfConditions;
@@ -61,7 +62,7 @@ public class TestEra extends FFUnitTest{
 				"flexflux/unit_tests/data/era/test.xml", java.nio.file.Files
 						.createTempFile("test", ".xml").toFile());
 
-		String intFile = TestUtils.copyProjectResource(
+		String regFile = TestUtils.copyProjectResource(
 				"flexflux/unit_tests/data/era/interactions.sbml",
 				java.nio.file.Files.createTempFile("test", ".sbml").toFile());
 
@@ -128,10 +129,10 @@ public class TestEra extends FFUnitTest{
 		bind.setLoadObjective(false);
 
 		if (constraintFile != "") {
-			bind.loadConditionsFile(constraintFile);
+			bind.loadConstraintsFile(constraintFile);
 		}
 
-		bind.loadInteractionsFile(intFile);
+		bind.loadRegulationFile(regFile);
 
 		bind.prepareSolver();
 

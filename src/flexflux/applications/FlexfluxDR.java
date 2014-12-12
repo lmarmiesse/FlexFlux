@@ -75,11 +75,11 @@ public class FlexfluxDR extends FFApplication{
 	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-cond", usage = "[OPTIONAL]Condition file path", metaVar = "File")
+	@Option(name = "-cons", usage = "[OPTIONAL]Constraints file path", metaVar = "File")
 	public String condFile = "";
 
-	@Option(name = "-int", usage = "[OPTIONAL]Interaction file path", metaVar = "File")
-	public String intFile = "";
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File")
+	public String regFile = "";
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
 	public String solver = "GLPK";
@@ -202,10 +202,10 @@ public class FlexfluxDR extends FFApplication{
 		}
 
 		if (f.condFile != "") {
-			bind.loadConditionsFile(f.condFile);
+			bind.loadConstraintsFile(f.condFile);
 		}
-		if (f.intFile != "") {
-			bind.loadInteractionsFile(f.intFile);
+		if (f.regFile != "") {
+			bind.loadRegulationFile(f.regFile);
 		}
 		bind.prepareSolver();
 

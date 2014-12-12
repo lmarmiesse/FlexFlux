@@ -16,7 +16,7 @@ import org.junit.Test;
 
 import parsebionet.biodata.BioNetwork;
 import parsebionet.io.Sbml2Bionetwork;
-import parsebionet.unit_tests.utils.TestUtils;
+import parsebionet.unit_tests.TestUtils;
 import flexflux.analyses.PFBAAnalysis;
 import flexflux.analyses.result.PFBAResult;
 import flexflux.general.Bind;
@@ -77,7 +77,7 @@ public class TestPFBA extends FFUnitTest {
 
 		String sbmlFile = null;
 		String constraintFile = null;
-		String interactionFile = null;
+		String regulationFile = null;
 
 		try {
 			sbmlFile = TestUtils.copyProjectResource(
@@ -85,7 +85,7 @@ public class TestPFBA extends FFUnitTest {
 			constraintFile = TestUtils.copyProjectResource(
 					"flexflux/unit_tests/data/pfba/constraints.txt",
 					tempConstraintFile);
-			interactionFile = TestUtils.copyProjectResource(
+			regulationFile = TestUtils.copyProjectResource(
 					"flexflux/unit_tests/data/pfba/interactions.sbml",
 					tempInteractionFile);
 		} catch (IOException e) {
@@ -99,8 +99,8 @@ public class TestPFBA extends FFUnitTest {
 		networkRef = s2b.getBioNetwork();
 
 		b.loadSbmlNetwork(sbmlFile, false);
-		b.loadConditionsFile(constraintFile);
-		b.loadInteractionsFile(interactionFile);
+		b.loadConstraintsFile(constraintFile);
+		b.loadRegulationFile(regulationFile);
 
 		b.prepareSolver();
 

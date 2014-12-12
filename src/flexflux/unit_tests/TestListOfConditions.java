@@ -1,6 +1,9 @@
 package flexflux.unit_tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,8 +14,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-
-import parsebionet.unit_tests.utils.TestUtils;
+import parsebionet.unit_tests.TestUtils;
 import flexflux.condition.Condition;
 import flexflux.condition.ListOfConditions;
 import flexflux.general.ConstraintType;
