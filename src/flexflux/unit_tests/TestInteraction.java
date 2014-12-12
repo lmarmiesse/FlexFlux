@@ -157,8 +157,8 @@ public class TestInteraction extends FFUnitTest{
 
 		bind.loadSbmlNetwork("src/flexflux/unit_tests/data/testInteraction/test.xml", false);
 
-		bind.loadConditionsFile("src/flexflux/unit_tests/data/testInteraction/condElseTest.txt");
-		bind.loadInteractionsFile("src/flexflux/unit_tests/data/testInteraction/intElseTest.sbml");
+		bind.loadConstraintsFile("src/flexflux/unit_tests/data/testInteraction/condElseTest.txt");
+		bind.loadRegulationFile("src/flexflux/unit_tests/data/testInteraction/intElseTest.sbml");
 
 		bind.prepareSolver();
 
@@ -205,9 +205,9 @@ public class TestInteraction extends FFUnitTest{
 	private void extMetabTest(Bind bind) {
 
 		bind.loadSbmlNetwork("src/flexflux/unit_tests/data/testInteraction/test.xml", false);
-		bind.loadConditionsFile("src/flexflux/unit_tests/data/testInteraction/condExtMetab.txt");
+		bind.loadConstraintsFile("src/flexflux/unit_tests/data/testInteraction/condExtMetab.txt");
 
-		bind.loadInteractionsFile("src/flexflux/unit_tests/data/testInteraction/intExtMetab.sbml");
+		bind.loadRegulationFile("src/flexflux/unit_tests/data/testInteraction/intExtMetab.sbml");
 
 		bind.prepareSolver();
 

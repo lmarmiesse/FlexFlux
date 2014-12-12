@@ -640,7 +640,7 @@ public abstract class Bind {
 	 * @param path
 	 *            Path to the interaction file.
 	 */
-	public void loadInteractionsFile(String path) {
+	public void loadRegulationFile(String path) {
 
 		intNet = SBMLQualReader.loadSbmlQual(path, intNet, relationFactory);
 	
@@ -680,7 +680,7 @@ public abstract class Bind {
 	 * @param path
 	 *            Path to the condition file.
 	 */
-	public void loadConditionsFile(String path) {
+	public void loadConstraintsFile(String path) {
 
 		try {
 

@@ -64,7 +64,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 
 	String conditionFile = "";
 	String objectiveFile = "";
-	String interactionFile = "";
+	String regulationFile = "";
 	String constraintFile = "";
 	String reactionMetaDataFile = "";
 	String geneMetaDataFile = "";
@@ -103,7 +103,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 	public Boolean launchRegulatorAnalysis;
 
 	public ConditionComparisonAnalysis(Bind bind, String sbmlFile,
-			String interactionFile, String conditionFile,
+			String regulationFile, String conditionFile,
 			String constraintFile, ListOfObjectives objectives,
 			ConstraintType type, Boolean extended, String solver,
 			String reactionMetaDataFile, String geneMetaDataFile,
@@ -118,7 +118,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 		this.extended = extended;
 		this.solver = solver;
 		this.conditionFile = conditionFile;
-		this.interactionFile = interactionFile;
+		this.regulationFile = regulationFile;
 		this.constraintType = type;
 		this.constraintFile = constraintFile;
 		this.reactionMetaDataFile = reactionMetaDataFile;
@@ -222,7 +222,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 		 * Loads the constraints applied on the metabolic network
 		 */
 		if (this.constraintFile != "")
-			b.loadConditionsFile(this.constraintFile);
+			b.loadConstraintsFile(this.constraintFile);
 
 		regulators = new HashMap<String, BioEntity>();
 
@@ -252,8 +252,8 @@ public class ConditionComparisonAnalysis extends Analysis {
 		/**
 		 * Loads interaction file
 		 */
-		if (this.interactionFile.compareTo("") != 0) {
-			b.loadInteractionsFile(this.interactionFile);
+		if (this.regulationFile.compareTo("") != 0) {
+			b.loadRegulationFile(this.regulationFile);
 		}
 
 		/**

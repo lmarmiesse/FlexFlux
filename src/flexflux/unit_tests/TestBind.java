@@ -196,8 +196,8 @@ public class TestBind extends FFUnitTest{
 
 		// starting tests on analysis and parsing files
 
-		bind.loadConditionsFile("src/flexflux/unit_tests/data/bind/condTest");
-		bind.loadInteractionsFile("src/flexflux/unit_tests/data/bind/intTest.sbml");
+		bind.loadConstraintsFile("src/flexflux/unit_tests/data/bind/condTest");
+		bind.loadRegulationFile("src/flexflux/unit_tests/data/bind/intTest.sbml");
 
 		bind.prepareSolver();
 		Assert.assertTrue(bind.isMIP());
@@ -235,8 +235,8 @@ public class TestBind extends FFUnitTest{
 		Assert.assertTrue(bind2.getConstraints().size() == 13);
 		Assert.assertTrue(bind2.getInteractionNetwork().getNumEntities().size() == 17);
 
-		bind2.loadConditionsFile("src/flexflux/unit_tests/data/bind/condTest");
-		bind2.loadInteractionsFile("src/flexflux/unit_tests/data/bind/intTest.sbml");
+		bind2.loadConstraintsFile("src/flexflux/unit_tests/data/bind/condTest");
+		bind2.loadRegulationFile("src/flexflux/unit_tests/data/bind/intTest.sbml");
 
 		bind2.prepareSolver();
 

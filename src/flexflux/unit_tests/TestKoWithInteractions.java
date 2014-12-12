@@ -10,7 +10,7 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 
-import parsebionet.unit_tests.utils.TestUtils;
+import parsebionet.unit_tests.TestUtils;
 import flexflux.analyses.KOAnalysis;
 import flexflux.analyses.result.KOResult;
 import flexflux.general.Bind;
@@ -21,7 +21,7 @@ public class TestKoWithInteractions extends FFUnitTest{
 
 	private static File tempSbmlFile = null;
 	private static File tempConditionFile = null;
-	private static File tempInteractionFile = null;
+	private static File tempRegulationFile = null;
 
 	@Test
 	public void test() {
@@ -33,12 +33,12 @@ public class TestKoWithInteractions extends FFUnitTest{
 
 		java.nio.file.Path tmpSbml = null;
 		java.nio.file.Path tmpCondition = null;
-		java.nio.file.Path tmpInteraction = null;
+		java.nio.file.Path tmpRegulation = null;
 
 		try {
 			tmpSbml = java.nio.file.Files.createTempFile("test", ".xml");
 			tmpCondition = java.nio.file.Files.createTempFile("test", ".tab");
-			tmpInteraction = java.nio.file.Files.createTempFile("test", ".txt");
+			tmpRegulation = java.nio.file.Files.createTempFile("test", ".txt");
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			Assert.fail("Creation of the temporary files");
@@ -47,11 +47,11 @@ public class TestKoWithInteractions extends FFUnitTest{
 
 		tempSbmlFile = tmpSbml.toFile();
 		tempConditionFile = tmpCondition.toFile();
-		tempInteractionFile = tmpInteraction.toFile();
+		tempRegulationFile = tmpRegulation.toFile();
 
 		String sbmlFile = "";
 		String conditionFile = "";
-		String intFile = "";
+		String regFile = "";
 
 		try {
 			sbmlFile = TestUtils
@@ -62,10 +62,10 @@ public class TestKoWithInteractions extends FFUnitTest{
 					.copyProjectResource(
 							"flexflux/unit_tests/data/ko/constraintsWithVariables.txt",
 							tempConditionFile);
-			intFile = TestUtils
+			regFile = TestUtils
 					.copyProjectResource(
 							"flexflux/unit_tests/data/ko/interactions.sbml",
-							tempInteractionFile);
+							tempRegulationFile);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -87,8 +87,8 @@ public class TestKoWithInteractions extends FFUnitTest{
 		}
 
 		bind.loadSbmlNetwork(sbmlFile, false);
-		bind.loadConditionsFile(conditionFile);
-		bind.loadInteractionsFile(intFile);
+		bind.loadConstraintsFile(conditionFile);
+		bind.loadRegulationFile(regFile);
 		
 		bind.prepareSolver();
 

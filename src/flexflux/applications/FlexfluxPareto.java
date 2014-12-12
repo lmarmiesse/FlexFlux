@@ -92,11 +92,11 @@ public class FlexfluxPareto extends FFApplication{
 	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-cond", usage = "Condition file path", metaVar = "File")
-	public String condFile = "";
+	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File")
+	public String consFile = "";
 
-	@Option(name = "-int", usage = "[OPTIONAL]Interaction file path", metaVar = "File")
-	public String intFile = "";
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File")
+	public String regFile = "";
 
 	@Option(name = "-exp", usage = "Path of file containing objective functions and experimental values", metaVar = "File", required = true)
 	public String expFile = "";
@@ -143,8 +143,8 @@ public class FlexfluxPareto extends FFApplication{
 			System.err.println("Error : file " + f.sbmlFile + " not found");
 			System.exit(0);
 		}
-		if (!new File(f.condFile).isFile() && !f.condFile.equals("")) {
-			System.err.println("Error : file " + f.condFile + " not found");
+		if (!new File(f.consFile).isFile() && !f.consFile.equals("")) {
+			System.err.println("Error : file " + f.consFile + " not found");
 			System.exit(0);
 		}
 
@@ -177,11 +177,11 @@ public class FlexfluxPareto extends FFApplication{
 		// it ignores the original objective function
 		bind.setLoadObjective(false);
 		bind.loadSbmlNetwork(f.sbmlFile, f.extended);
-		if (f.condFile != "") {
-			bind.loadConditionsFile(f.condFile);
+		if (f.consFile != "") {
+			bind.loadConstraintsFile(f.consFile);
 		}
-		if (f.intFile != "") {
-			bind.loadInteractionsFile(f.intFile);
+		if (f.regFile != "") {
+			bind.loadRegulationFile(f.regFile);
 		}
 		
 		Analysis analysis = new ParetoAnalysis(bind, f.expFile, f.plotAll);

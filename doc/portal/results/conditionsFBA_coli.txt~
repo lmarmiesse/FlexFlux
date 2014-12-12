@@ -1,0 +1,7 @@
+#maximize biomass production
+obj : MAX(R_BIOMASS)
+
+
+R_EX_glc_e_ -6.5 999999
+R_EX_o2_e_ -15 999999
+R_EX_lcts_e_ -3 999999

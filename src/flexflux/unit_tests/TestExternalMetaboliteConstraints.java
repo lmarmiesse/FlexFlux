@@ -1,6 +1,7 @@
 package flexflux.unit_tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,12 +10,12 @@ import java.util.ArrayList;
 import org.junit.Assert;
 import org.junit.Test;
 
+import parsebionet.unit_tests.TestUtils;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.CplexBind;
 import flexflux.general.DoubleResult;
 import flexflux.general.GLPKBind;
-import parsebionet.unit_tests.utils.TestUtils;
 
 public class TestExternalMetaboliteConstraints extends FFUnitTest{
 	
@@ -57,7 +58,7 @@ public class TestExternalMetaboliteConstraints extends FFUnitTest{
 		String sbmlFile = "";
 		String conditionFile = "";
 		String conditionFile2 = "";
-		String intFile = "";
+		String regFile = "";
 
 		try {
 			sbmlFile = TestUtils
@@ -74,7 +75,7 @@ public class TestExternalMetaboliteConstraints extends FFUnitTest{
 							"flexflux/unit_tests/data/externalMetaboliteConstraints/constraintsWithVariables.txt",
 							tempConditionFile2);
 			
-			intFile = TestUtils
+			regFile = TestUtils
 					.copyProjectResource(
 							"flexflux/unit_tests/data/externalMetaboliteConstraints/interactions.sbml",
 							tempInteractionFile);
@@ -100,8 +101,8 @@ public class TestExternalMetaboliteConstraints extends FFUnitTest{
 		}
 
 		bind.loadSbmlNetwork(sbmlFile, false);
-		bind.loadConditionsFile(conditionFile);
-		bind.loadInteractionsFile(intFile);
+		bind.loadConstraintsFile(conditionFile);
+		bind.loadRegulationFile(regFile);
 		
 		bind.prepareSolver();
 		
@@ -125,8 +126,8 @@ public class TestExternalMetaboliteConstraints extends FFUnitTest{
 		}
 
 		bind.loadSbmlNetwork(sbmlFile, false);
-		bind.loadConditionsFile(conditionFile2);
-		bind.loadInteractionsFile(intFile);
+		bind.loadConstraintsFile(conditionFile2);
+		bind.loadRegulationFile(regFile);
 
 		bind.prepareSolver();
 

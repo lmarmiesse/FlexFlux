@@ -65,6 +65,7 @@ public class FlexfluxFVA extends FFApplication{
 	public String message = "FlexfluxFVA\n"
 
 			+ "Computes an FVA given a metabolic network, an objective function and constraints.\n"
+			+ "Constraints can be obtained with calculated steady-states of a given regulatory network.\n"
 			+ "An FVA analysis consists in getting the optimal value for the objective function, setting this value as a\n"
 			+ "constraint and, given a list of entities, minimize and maximize their values.\n"
 			+ "If no entity is specified in argument -e, the FVA analysis is performed on all reactions.";
@@ -75,11 +76,11 @@ public class FlexfluxFVA extends FFApplication{
 	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-cond", usage = "Condition file path", metaVar = "File", required = true)
-	public String condFile = "";
+	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File", required = true)
+	public String consFile = "";
 
-	@Option(name = "-int", usage = "[OPTIONAL]Interaction file path", metaVar = "File")
-	public String intFile = "";
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File")
+	public String regFile = "";
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
 	public String solver = "GLPK";
@@ -129,8 +130,8 @@ public class FlexfluxFVA extends FFApplication{
 			System.err.println("Error : file " + f.sbmlFile + " not found");
 			System.exit(0);
 		}
-		if (!new File(f.condFile).isFile()) {
-			System.err.println("Error : condition file " + f.condFile + " not found");
+		if (!new File(f.consFile).isFile()) {
+			System.err.println("Error : condition file " + f.consFile + " not found");
 			System.exit(0);
 		}
 
@@ -161,11 +162,11 @@ public class FlexfluxFVA extends FFApplication{
 		}
 
 		bind.loadSbmlNetwork(f.sbmlFile, f.extended);
-		if (f.condFile != "") {
-			bind.loadConditionsFile(f.condFile);
+		if (f.consFile != "") {
+			bind.loadConstraintsFile(f.consFile);
 		}
-		if (f.intFile != "") {
-			bind.loadInteractionsFile(f.intFile);
+		if (f.regFile != "") {
+			bind.loadRegulationFile(f.regFile);
 		}
 
 		bind.prepareSolver();

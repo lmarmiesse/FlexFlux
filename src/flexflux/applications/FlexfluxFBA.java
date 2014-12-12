@@ -56,18 +56,19 @@ import flexflux.general.Vars;
 public class FlexfluxFBA extends FFApplication{
 
 	public static String message = "FlexfluxFBA [options...]\n"
-			+ "Computes an FBA given a metabolic network, an objective function and constraints.";
+			+ "Computes an FBA given a metabolic network, an objective function and constraints.\n"
+			+ "Constraints can be obtained with calculated steady-states of a given regulatory network.";
 
 	public String example = "Example : FlexfluxFBA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -states res.tab";
 
 	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-cond", usage = "Condition file path", metaVar = "File", required = true)
-	public String condFile = "";
+	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File", required = true)
+	public String consFile = "";
 
-	@Option(name = "-int", usage = "[OPTIONAL]Interaction file path", metaVar = "File")
-	public String intFile = "";
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File")
+	public String regFile = "";
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
 	public String solver = "GLPK";
@@ -78,7 +79,7 @@ public class FlexfluxFBA extends FFApplication{
 	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
 	public String outName = "";
 
-	@Option(name = "-states", usage = "[OPTIONAL]Interaction network states file name", metaVar = "File")
+	@Option(name = "-states", usage = "[OPTIONAL]The states of the regulatory network are saved in the indicated file name", metaVar = "File")
 	public String stateFile = "";
 
 	@Option(name = "-lib", usage = "[OPTIONAL, default = 0]Percentage of non optimality for new constraints", metaVar = "Double")
@@ -109,8 +110,8 @@ public class FlexfluxFBA extends FFApplication{
 			System.err.println("Error : file " + f.sbmlFile + " not found");
 			System.exit(0);
 		}
-		if (!new File(f.condFile).isFile()) {
-			System.err.println("Error : file " + f.condFile + " not found");
+		if (!new File(f.consFile).isFile()) {
+			System.err.println("Error : file " + f.consFile + " not found");
 			System.exit(0);
 		}
 
@@ -145,11 +146,11 @@ public class FlexfluxFBA extends FFApplication{
 		}
 		
 		bind.loadSbmlNetwork(f.sbmlFile, f.extended);
-		if (f.condFile != "") {
-			bind.loadConditionsFile(f.condFile);
+		if (f.consFile != "") {
+			bind.loadConstraintsFile(f.consFile);
 		}
-		if (f.intFile != "") {
-			bind.loadInteractionsFile(f.intFile);
+		if (f.regFile != "") {
+			bind.loadRegulationFile(f.regFile);
 		}
 		bind.prepareSolver();
 

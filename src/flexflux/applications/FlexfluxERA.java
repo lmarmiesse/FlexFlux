@@ -16,10 +16,10 @@ import flexflux.objective.ListOfObjectives;
 
 public class FlexfluxERA extends FFApplication {
 
-	private String applicationName = FlexfluxConditionComparison.class
+	public String applicationName = FlexfluxConditionComparison.class
 			.getSimpleName();
 
-	private String message = applicationName
+	public String message = applicationName
 			+ "[options...]\n"
 			+ "Computes Robustness of the network among a set of objective functions "
 			+ "in front of random perturbations.";
@@ -36,8 +36,8 @@ public class FlexfluxERA extends FFApplication {
 	@Option(name = "-o", usage = "File containing the objective functions", metaVar = "File", required = true)
 	public String objectiveFile = "";
 
-	@Option(name = "-int", usage = "[OPTIONAL] Interaction file path", metaVar = "File")
-	public String intFile = "";
+	@Option(name = "-reg", usage = "[OPTIONAL] Regulation file path", metaVar = "File")
+	public String regFile = "";
 
 	@Option(name = "-plot", usage = "[OPTIONAL, default = false] Plots the results")
 	public Boolean plot = false;
@@ -162,11 +162,11 @@ public class FlexfluxERA extends FFApplication {
 
 		bind.loadSbmlNetwork(f.sbmlFile, f.extended);
 		if (f.constraintFile != "") {
-			bind.loadConditionsFile(f.constraintFile);
+			bind.loadConstraintsFile(f.constraintFile);
 		}
 
-		if (f.intFile != "") {
-			bind.loadInteractionsFile(f.intFile);
+		if (f.regFile != "") {
+			bind.loadRegulationFile(f.regFile);
 		}
 
 		bind.prepareSolver();

@@ -39,7 +39,7 @@ public class TestSBMLQual extends FFUnitTest{
 		bind.loadSbmlNetwork(
 				"src/flexflux/unit_tests/data/SBMLQual/coli_core.xml", false);
 
-		bind.loadConditionsFile("src/flexflux/unit_tests/data/SBMLQual/conditionsFBA.txt");
+		bind.loadConstraintsFile("src/flexflux/unit_tests/data/SBMLQual/conditionsFBA.txt");
 
 		SBMLQualReader.loadSbmlQual(
 				"src/flexflux/unit_tests/data/SBMLQual/test_myb30.xml", bind.getInteractionNetwork(),

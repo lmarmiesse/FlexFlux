@@ -10,7 +10,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import parsebionet.unit_tests.utils.TestUtils;
+import parsebionet.unit_tests.TestUtils;
 import flexflux.analyses.ConditionComparisonAnalysis;
 import flexflux.analyses.result.conditionComparison.ConditionComparisonResult;
 import flexflux.applications.FlexfluxConditionComparison;
@@ -26,7 +26,7 @@ public class TestConditionComparison extends FFUnitTest{
 
 	private static File tempSbmlFile = null;
 	private static File tempConditionFile = null;
-	private static File tempInteractionFile = null;
+	private static File tempRegulationFile = null;
 	private static File tempObjectiveFile = null;
 	private static File tempConstraintFile = null;
 	private static File tempResultFbaFile = null;
@@ -118,7 +118,7 @@ public class TestConditionComparison extends FFUnitTest{
 
 		java.nio.file.Path tmpSbml = null;
 		java.nio.file.Path tmpCondition = null;
-		java.nio.file.Path tmpInteraction = null;
+		java.nio.file.Path tmpRegulation = null;
 		java.nio.file.Path tmpObjective = null;
 		java.nio.file.Path tmpConstraint = null;
 		java.nio.file.Path tmpResultFba = null;
@@ -151,7 +151,7 @@ public class TestConditionComparison extends FFUnitTest{
 		try {
 			tmpSbml = java.nio.file.Files.createTempFile("test", ".xml");
 			tmpCondition = java.nio.file.Files.createTempFile("test", ".tab");
-			tmpInteraction = java.nio.file.Files.createTempFile("test", ".txt");
+			tmpRegulation = java.nio.file.Files.createTempFile("test", ".txt");
 			tmpObjective = java.nio.file.Files.createTempFile("test", ".tab");
 			tmpConstraint = java.nio.file.Files.createTempFile("test", ".tab");
 			tmpResultFba = java.nio.file.Files.createTempFile("test", ".tab");
@@ -209,7 +209,7 @@ public class TestConditionComparison extends FFUnitTest{
 		tempSbmlFile = tmpSbml.toFile();
 		tempConditionFile = tmpCondition.toFile();
 		tempObjectiveFile = tmpObjective.toFile();
-		tempInteractionFile = tmpInteraction.toFile();
+		tempRegulationFile = tmpRegulation.toFile();
 		tempConstraintFile = tmpConstraint.toFile();
 
 		tempResultFbaFile = tmpResultFba.toFile();
@@ -249,10 +249,10 @@ public class TestConditionComparison extends FFUnitTest{
 					.copyProjectResource(
 							"flexflux/unit_tests/data/conditionComparisonTest/conditions.tab",
 							tempConditionFile);
-			f.intFile = TestUtils
+			f.regFile = TestUtils
 					.copyProjectResource(
 							"flexflux/unit_tests/data/conditionComparisonTest/interactions.sbml",
-							tempInteractionFile);
+							tempRegulationFile);
 
 			f.objectiveFile = TestUtils
 					.copyProjectResource(
@@ -398,7 +398,7 @@ public class TestConditionComparison extends FFUnitTest{
 		
 		
 		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
-				f.sbmlFile, f.intFile, f.conditionFile, f.constraintFile,
+				f.sbmlFile, f.regFile, f.conditionFile, f.constraintFile,
 				objectives, ConstraintType.DOUBLE, false, solver,
 				metaDataReactionFile, metaDataGeneFile, metaDataRegulatorFile,
 				",", inchlibPath, true, false, false, false, 0.0, 6);
