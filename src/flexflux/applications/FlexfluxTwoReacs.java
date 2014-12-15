@@ -112,6 +112,9 @@ public class FlexfluxTwoReacs extends FFApplication{
 
 	@Option(name = "-lib", usage = "[OPTIONAL, default = 0]Percentage of non optimality for new constraints", metaVar = "Double")
 	public double liberty = 0;
+	
+	@Option(name = "-n", usage = "[OPTIONAL, default = number of available processors]Number of threads", metaVar = "Integer")
+	public int nThreads = Runtime.getRuntime().availableProcessors();
 
 	@Option(name = "-pre", usage = "[OPTIONAL, default = 6]Number of decimals of precision for calculations and results", metaVar = "Integer")
 	public int precision = 6;
@@ -135,6 +138,13 @@ public class FlexfluxTwoReacs extends FFApplication{
 		Vars.libertyPercentage = f.liberty;
 		Vars.decimalPrecision = f.precision;
 
+		
+		if (f.nThreads > 0) {
+			Vars.maxThread = f.nThreads;
+		} else {
+			System.err.println("The number of threads must be at least 1");
+			System.exit(0);
+		}
 
 		Bind bind = null;
 

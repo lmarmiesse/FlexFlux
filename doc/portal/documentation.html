@@ -152,7 +152,7 @@ body {
 				This regulatory network is composed of components of different natures (genes, mRNAs, proteins, metabolites ...),
 				that interact with each other in	different ways and can have an effect on the metabolic network. 
 				FlexFlux performs synchronous updates of the regulatory network state from provided initial values.
-				Once a steady-state of this regulatory network is reached, the states are translated into continuous intervals (see the interaction file section)
+				Once a steady-state of this regulatory network is reached, the states are translated into continuous intervals (see the regulation file section)
 				used as constraints for the FBA.			
 				
 				</p>
@@ -987,8 +987,8 @@ Time	M_lcts_b	lacZ	X	M_glc_D_b
 					<h4>Command-line arguments</h4>
 					<ul>
 						<li>-s String : Sbml file path</li>
-						<li>-cond String : Condition file path
-						<li>-int String : [OPTIONAL]Interaction file path
+						<li>-cons String : Constraints file path
+						<li>-reg String : [OPTIONAL]Regulation file path
 						<li>-r String : Name of the reaction to test
 						<li>-init Double : Initial flux value of the reaction to test</li>
 						<li>-end Double : Final flux value of the reaction to test
@@ -1008,7 +1008,7 @@ Time	M_lcts_b	lacZ	X	M_glc_D_b
 						<li>-h : Prints help
 					</ul>
 					<p>Example :
-					<pre class="prettyprint">FlexfluxReac -s network.xml -cond cond.txt -int int.txt -r R1 -init -10 -end 0 -plot -out out.txt</pre>
+					<pre class="prettyprint">FlexfluxReac -s network.xml -cons cons.txt -reg regNetwork.xml -r R1 -init -10 -end 0 -plot -out out.txt</pre>
 					</p>
 
 
@@ -1018,9 +1018,9 @@ Time	M_lcts_b	lacZ	X	M_glc_D_b
 					<ul>
 						<li>the SBML file <a href="results/coli_core.xml">coli_core.xml</a>,
 						</li>
-						<li>the condition file <a href="results/conditionsFBA.txt">conditionsFBA.txt</a>,
+						<li>the constraints file <a href="results/constraintsFBA.txt">constraintsFBA.txt</a>,
 						</li>
-						<li>the command line : <pre class="prettyprint">FlexfluxReac -s coli_core.xml -cond conditionsFBA.txt -out Reac_result.txt -r R_EX_o2_e -init -20 -end 0 -f 0.05 -plot</pre>
+						<li>the command line : <pre class="prettyprint">FlexfluxReac -s coli_core.xml -cons constraintsFBA.txt -out Reac_result.txt -r R_EX_o2_e -init -20 -end 0 -f 0.05 -plot</pre>
 						</li>
 					</ul>
 
@@ -1071,8 +1071,8 @@ Flux	Objective
 					<h4>Command-line arguments</h4>
 					<ul>
 						<li>-s String : Sbml file path</li>
-						<li>-cond String : Condition file path
-						<li>-int String : [OPTIONAL]Interaction file path
+						<li>-cons String : Constraints file path
+						<li>-reg String : [OPTIONAL]Regulation file path
 						<li>-r String : Name of the first reaction to test
 						<li>-r2 String : Name of the second reaction to test
 						<li>-init Double : Initial flux value of the first reaction
@@ -1101,7 +1101,7 @@ Flux	Objective
 						<li>-h : Prints help
 					</ul>
 					<p>Example:
-					<pre class="prettyprint">FlexfluxTwoReacs -s network.xml -cond cond.txt -int int.txt -r R1 -init -20 -end 0 -r2 R2 -20 -end2 0 -f2 0.2 -plot -out out.txt</pre>
+					<pre class="prettyprint">FlexfluxTwoReacs -s network.xml -cons cons.txt -reg regNetwork.xml -r R1 -init -20 -end 0 -r2 R2 -20 -end2 0 -f2 0.2 -plot -out out.txt</pre>
 					</p>
 
 
@@ -1110,9 +1110,9 @@ Flux	Objective
 					For this example, we used :
 					<ul>
 						<li>The SBML file <a href="results/coli_core.xml">coli_core.xml</a></li>
-						<li>The condition file <a href="results/conditionsFBA.txt">conditionsFBA.txt</a></li>
+						<li>The constraints file <a href="results/constraintsFBA.txt">constraintsFBA.txt</a></li>
 						<li>The command line : FlexfluxTwoReacs -s coli_core.xml
-							-cond conditionsFBA.txt -out Two_Reacs_result.txt -r R_EX_glc_e
+							-cons constraintsFBA.txt -out Two_Reacs_result.txt -r R_EX_glc_e
 							-init -20 -end 0 -f 0.5 -r2 R_EX_o2_e -init2 -20 -end2 0 -f2 0.05
 							-plot</li>
 					</ul>
@@ -1172,7 +1172,7 @@ Flux1	Flux2	Objective
 						pareto optimal. This means that to increase the value of an
 						objective, you must decrease another.</p>
 
-					<p>In this analysis, the objective function of the condition
+					<p>In this analysis, the objective function of the constraints
 						file is optional and ignored if present.</p>
 
 					<h4>Objective function and experimental values file</h4>
@@ -1203,8 +1203,8 @@ Flux1	Flux2	Objective
 					<h4>Command-line arguments</h4>
 					<ul>
 						<li>-s String : Sbml file path</li>
-						<li>-cond String : Condition file path
-						<li>-int String : [OPTIONAL]Interaction file path
+						<li>-cons String : Constraints file path
+						<li>-reg String : [OPTIONAL]Regulation file path
 						<li>-exp String : Path of file containing objective functions
 							and experimental values
 						<li>-all : [OPTIONAL, default = false]Plots all results. If
@@ -1223,8 +1223,8 @@ Flux1	Flux2	Objective
 							format</li>
 						<li>-h : Prints help
 					</ul>
-					<p>Example : FlexfluxPareto -s network.xml -cond cond.txt -int
-						int.txt -plot -e expFile</p>
+					<p>Example : FlexfluxPareto -s network.xml -cons cons.txt -int
+						regNetwork.xml -plot -e expFile</p>
 
 
 					<h4>Results</h4>
@@ -1233,10 +1233,10 @@ Flux1	Flux2	Objective
 					For this example, we used :
 					<ul>
 						<li>the SBML file <a href="results/coli_core.xml">coli_core.xml</a></li>
-						<li>the condition file <a href="results/conditionsPareto.txt">conditionsPareto.txt</a></li>
+						<li>the constraint file <a href="results/constraintsPareto.txt">constraintsPareto.txt</a></li>
 						<li>the objective/experimental file <a
 							href="results/expFile.txt">expFile.txt</a></li>
-						<li>the command line: <pre class="prettyprint">FlexfluxPareto -s coli_core.xml -cond conditionsPareto.txt -exp expFile.txt -out pareto/ -plot</pre>
+						<li>the command line: <pre class="prettyprint">FlexfluxPareto -s coli_core.xml -cons constraintsPareto.txt -exp expFile.txt -out pareto/ -plot</pre>
 						</li>
 					</ul>
 
@@ -1289,8 +1289,8 @@ Flux1	Flux2	Objective
 					<h4>Command-line arguments</h4>
 					<ul>
 						<li>-s String : Sbml file path</li>
-						<li>-cond String : [OPTIONAL]Condition file path
-						<li>-int String : [OPTIONAL]Interaction file path
+						<li>-cons String : [OPTIONAL]Constraints file path
+						<li>-reg String : [OPTIONAL]Regulation file path
 						<li>-d Double : [OPTIONAL, default = 0.000001]Maximal
 							distance of the reaction flux from 0 to be considered as dead
 						<li>-mode Integer : [OPTIONAL, default = 0]Dead reactions
@@ -1315,8 +1315,8 @@ Flux1	Flux2	Objective
 					</ul>
 					<p>Example 1 : FlexfluxDR -s network.xml -plot -out out.txt</p>
 
-					<p>Example 2 : FlexfluxDR -s network.xml -cond cond.txt -int
-						int.txt -plot -out out.txt -mode 1 -d 0.1</p>
+					<p>Example 2 : FlexfluxDR -s network.xml -cons cons.txt -reg
+						regNetwork.xml -plot -out out.txt -mode 1 -d 0.1</p>
 
 
 					<h4>Results</h4>
