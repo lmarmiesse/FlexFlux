@@ -97,6 +97,9 @@ public class FlexfluxReac extends FFApplication {
 
 	@Option(name = "-f", usage = "[OPTIONAL, default = 0.1]Difference between each FBA for the reaction flux", metaVar = "Double")
 	public double deltaF = 0.1;
+	
+	@Option(name = "-n", usage = "[OPTIONAL, default = number of available processors]Number of threads", metaVar = "Integer")
+	public int nThreads = Runtime.getRuntime().availableProcessors();
 
 	@Option(name = "-lib", usage = "[OPTIONAL, default = 0]Percentage of non optimality for new constraints", metaVar = "Double")
 	public double liberty = 0;
@@ -122,6 +125,14 @@ public class FlexfluxReac extends FFApplication {
 
 		Vars.libertyPercentage = f.liberty;
 		Vars.decimalPrecision = f.precision;
+		
+		
+		if (f.nThreads > 0) {
+			Vars.maxThread = f.nThreads;
+		} else {
+			System.err.println("The number of threads must be at least 1");
+			System.exit(0);
+		}
 
 		Bind bind = null;
 
