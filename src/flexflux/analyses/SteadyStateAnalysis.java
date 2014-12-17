@@ -28,7 +28,7 @@ public class SteadyStateAnalysis extends Analysis {
 	private Map<BioEntity, Constraint> simpleConstraints = new HashMap<BioEntity, Constraint>();
 
 	/**
-	 * Maximal number of iterations to find a steady state in the interaction
+	 * Maximal number of iterations to find a steady state in the regulatory
 	 * network.
 	 */
 	private int steadyStatesIterations = 100;
@@ -261,6 +261,10 @@ public class SteadyStateAnalysis extends Analysis {
 				}
 			}
 
+		}
+		else{
+			System.err.println("Warning, no regulatory network attractor was found in "+steadyStatesIterations+ " iterations.");
+			
 		}
 		res.setStatesList(statesList);
 		res.setatractorStatesList(atractorStatesList);
