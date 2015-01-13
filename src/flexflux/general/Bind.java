@@ -86,7 +86,7 @@ public abstract class Bind {
 
 	/**
 	 * Used for pareto analysis and conditionComparison, if set to false, the
-	 * objective in the condition file is ignored.
+	 * objective in the constraints file is ignored.
 	 */
 	private boolean loadObjective = true;
 
@@ -96,7 +96,7 @@ public abstract class Bind {
 	protected Objective obj;
 
 	/**
-	 * List used when several objectives are given in the condition file.
+	 * List used when several objectives are given in the constraints file.
 	 */
 	public List<Objective> constraintObjectives = new ArrayList<Objective>();
 
@@ -674,11 +674,11 @@ public abstract class Bind {
 
 	/**
 	 * 
-	 * Loads the objective, creates variables and constraints from the condition
+	 * Loads the objective, creates variables and constraints from the constraints
 	 * file
 	 * 
 	 * @param path
-	 *            Path to the condition file.
+	 *            Path to the constraints file.
 	 */
 	public void loadConstraintsFile(String path) {
 
@@ -729,7 +729,10 @@ public abstract class Bind {
 					// we create the objective at the end
 				}
 
-				else if (!line.equals("")) {
+				
+				
+				else if (!line.replaceAll("\\s","").equals("")) {
+
 					// when it's not the equations
 					if (!equations) {
 
@@ -740,7 +743,7 @@ public abstract class Bind {
 							if (expr.length < 1 || expr.length > 3) {
 
 								System.err
-										.println("Warning : Error in condition file line "
+										.println("Warning : Error in constraints file line "
 												+ nbLine
 												+ " , binary misformed");
 								nbLine++;
@@ -751,7 +754,7 @@ public abstract class Bind {
 							if (expr.length < 2 || expr.length > 3) {
 
 								System.err
-										.println("Warning : Error in condition file line "
+										.println("Warning : Error in constraints file line "
 												+ nbLine);
 								// we go to the next line
 								nbLine++;
@@ -791,7 +794,7 @@ public abstract class Bind {
 						}
 
 						if (fileEntities.contains(entity)) {
-							System.err.println("Error in condition file line "
+							System.err.println("Error in constraints file line "
 									+ nbLine + ", entity " + expr[0]
 									+ " is set more than once");
 
@@ -809,7 +812,7 @@ public abstract class Bind {
 
 								if (entities.get(entity) == 1) {
 									// System.err
-									// .println("Warning : condition file line "
+									// .println("Warning : constraints file line "
 									// + nbLine
 									// +
 									// " : this constraint removes an existing one");
@@ -845,7 +848,7 @@ public abstract class Bind {
 							}
 						} catch (NumberFormatException e) {
 							System.err
-									.println("Warning : Error in condition file line "
+									.println("Warning : Error in constraints file line "
 											+ nbLine);
 							nbLine++;
 							continue;
@@ -854,7 +857,7 @@ public abstract class Bind {
 						if (binary) {
 							if ((lb != 1 && lb != 0) || (ub != 1 && ub != 0)) {
 								System.err
-										.println("Warning : Error in condition file line "
+										.println("Warning : Error in constraints file line "
 												+ nbLine
 												+ " , binary bounds must be 0 or 1");
 								nbLine++;
@@ -864,7 +867,7 @@ public abstract class Bind {
 
 						if (lb > ub) {
 							System.err
-									.println("Warning : Error in condition file line "
+									.println("Warning : Error in constraints file line "
 											+ nbLine
 											+ " , lower bound is higher than upper bound");
 							nbLine++;
@@ -888,7 +891,7 @@ public abstract class Bind {
 
 						if (equation.length != 2) {
 							System.err
-									.println("Warning : Error in condition file line "
+									.println("Warning : Error in constraints file line "
 											+ nbLine + " missformed equation");
 							nbLine++;
 							continue;
@@ -989,7 +992,7 @@ public abstract class Bind {
 			}
 
 			if (isError) {
-				System.err.println("Condition file not conform");
+				System.err.println("constraints file not conform");
 				System.exit(1);
 			}
 
@@ -1190,7 +1193,7 @@ public abstract class Bind {
 							coeffs[i] = Double.parseDouble(parts[0]);
 						} catch (Exception e) {
 							System.err
-									.println("Error in condition file line, objective coefficient must be a number");
+									.println("Error in constraints file line, objective coefficient must be a number");
 
 							System.exit(0);
 						}
@@ -1210,7 +1213,7 @@ public abstract class Bind {
 					coeffs[i] = Double.parseDouble(parts[0]);
 				} catch (Exception e) {
 					System.err
-							.println("Error in condition file line, objective coefficient must be a number");
+							.println("Error in constraints file line, objective coefficient must be a number");
 
 					System.exit(0);
 				}
@@ -1256,7 +1259,7 @@ public abstract class Bind {
 					map.put(null, coeff);
 
 				} catch (Exception e) {
-					System.err.println("Error : in condition file variable "
+					System.err.println("Error : in constraints file variable "
 							+ members[0] + " unknown");
 					System.exit(0);
 				}
@@ -1277,7 +1280,7 @@ public abstract class Bind {
 							map.put(entity, 1.0);
 						} else {
 							System.err
-									.println("Error : in condition file variable "
+									.println("Error : in constraints file variable "
 											+ parts[0] + " unknown");
 							System.exit(0);
 						}
@@ -1297,7 +1300,7 @@ public abstract class Bind {
 							} else {
 
 								System.err
-										.println("Error : in condition file variable "
+										.println("Error : in constraints file variable "
 												+ parts[1] + " unknown");
 								System.exit(0);
 							}
@@ -1307,7 +1310,7 @@ public abstract class Bind {
 						catch (Exception e) {
 
 							System.err
-									.println("Error :  in condition file, coefficient must be on the left side");
+									.println("Error :  in constraints file, coefficient must be on the left side");
 							System.exit(0);
 
 						}
