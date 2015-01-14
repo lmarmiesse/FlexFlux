@@ -34,12 +34,12 @@
 package flexflux.analyses;
 
 import flexflux.analyses.result.FVAResult;
-import flexflux.analyses.result.ReacAnalysisResult;
+import flexflux.analyses.result.PP2DResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.Vars;
 import flexflux.thread.ResolveThread;
-import flexflux.thread.ThreadReac;
+import flexflux.thread.ThreadPP2D;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ import parsebionet.biodata.BioEntity;
  * @author lmarmiesse 18 avr. 2013
  * 
  */
-public class ReacAnalysis extends Analysis {
+public class PP2DAnalysis extends Analysis {
 
 	/**
 	 * Name of the varying entity.
@@ -78,7 +78,7 @@ public class ReacAnalysis extends Analysis {
 	 */
 	double deltaF;
 
-	protected List<ThreadReac> threads = new ArrayList<ThreadReac>();
+	protected List<ThreadPP2D> threads = new ArrayList<ThreadPP2D>();
 
 	/**
 	 * Varying entity with it's coefficient (1) to make a constraint.
@@ -96,7 +96,7 @@ public class ReacAnalysis extends Analysis {
 	 */
 	private boolean fva;
 
-	public ReacAnalysis(Bind bind, Map<BioEntity, Double> entities,
+	public PP2DAnalysis(Bind bind, Map<BioEntity, Double> entities,
 			String name, double init, double end, double deltaF, boolean fva) {
 		super(bind);
 		this.name = name;
@@ -108,7 +108,7 @@ public class ReacAnalysis extends Analysis {
 
 	}
 
-	public ReacAnalysisResult runAnalysis() {
+	public PP2DResult runAnalysis() {
 		double startTime = System.currentTimeMillis();
 
 		Queue<Double> fluxesQueue = new LinkedBlockingQueue<Double>();
@@ -121,7 +121,7 @@ public class ReacAnalysis extends Analysis {
 		Map<Double, Double> resultValues = new HashMap<Double, Double>();
 		List<Double> fluxValues = new ArrayList<Double>();
 
-		ReacAnalysisResult result = new ReacAnalysisResult(b.getObjective()
+		PP2DResult result = new PP2DResult(b.getObjective()
 				.getName(), name, fluxValues, resultValues, minGrpsSize, init,
 				end, deltaF);
 
@@ -139,7 +139,7 @@ public class ReacAnalysis extends Analysis {
 				System.exit(1);
 			}
 			
-			ThreadReac threadReac = new ThreadReac(newBind, fluxesQueue, entities, result, b.getObjective());
+			ThreadPP2D threadReac = new ThreadPP2D(newBind, fluxesQueue, entities, result, b.getObjective());
 			
 			threads.add(threadReac);
 

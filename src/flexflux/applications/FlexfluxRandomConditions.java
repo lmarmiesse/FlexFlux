@@ -46,7 +46,7 @@ import flexflux.general.Vars;
  */
 public class FlexfluxRandomConditions extends FFApplication {
 
-	public String applicationName = FlexfluxConditionComparison.class
+	public String applicationName = FlexfluxBECO.class
 			.getSimpleName();
 
 	public String message = applicationName + " [options...]\n"

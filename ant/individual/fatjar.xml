@@ -18,6 +18,7 @@
     <target name="main">
         <fatjar.build output="/home/lcottret/workspaces/git_repositories/FlexFlux/jars/flexflux.jar">
             <fatjar.manifest/>
+        	<fatjar.jarsource file="/home/lcottret/workspaces/git_repositories/FlexFlux/lib/jsbml-1.0-rc1-with-dependencies.jar" relpath=""/>
             <fatjar.filesource path="/home/lcottret/workspaces/git_repositories/FlexFlux/bin" relpath=""/>
             <fatjar.jarsource file="/home/lcottret/workspaces/git_repositories/FlexFlux/lib/args4j-2.0.17.jar" relpath=""/>
             <fatjar.jarsource file="/home/lcottret/workspaces/git_repositories/FlexFlux/lib/commons-lang-2.6.jar" relpath=""/>
@@ -30,6 +31,7 @@
             <fatjar.jarsource file="/usr/local/cplex/cplex/lib/cplex.jar" relpath=""/>
             <fatjar.jarsource file="/home/lcottret/workspaces/git_repositories/FlexFlux/lib/hamcrest-all-1.3.jar" relpath=""/>
             <fatjar.jarsource file="/home/lcottret/workspaces/git_repositories/FlexFlux/lib/junit-addons-1.4/junit-addons-1.4.jar" relpath=""/>
+        	
         </fatjar.build>
     	<copy file="/home/lcottret/workspaces/git_repositories/FlexFlux/jars/flexflux.jar" todir="/home/lcottret/workspaces/git_repositories/FlexFlux/shell/lib" />
     </target>

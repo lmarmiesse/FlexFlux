@@ -72,11 +72,11 @@ public class ParetoAnalysisResult extends AnalysisResult {
 	/**
 	 * List of all the 2D results associated to their scores.
 	 */
-	Map<ReacAnalysisResult, Double> twoDResults = new HashMap<ReacAnalysisResult, Double>();
+	Map<PP2DResult, Double> twoDResults = new HashMap<PP2DResult, Double>();
 	/**
 	 * List of all the 3D results associated to their scores.
 	 */
-	Map<TwoReacsAnalysisResult, Double> threeDResults = new HashMap<TwoReacsAnalysisResult, Double>();
+	Map<PP3DResult, Double> threeDResults = new HashMap<PP3DResult, Double>();
 
 	/**
 	 * 1D results for all the objectives.
@@ -85,8 +85,8 @@ public class ParetoAnalysisResult extends AnalysisResult {
 	Map<Objective, List<Double>> oneDResults = new HashMap<Objective, List<Double>>();
 
 	public ParetoAnalysisResult(Map<Objective, List<Double>> oneDResults,
-			Map<ReacAnalysisResult, Double> twoDResults,
-			Map<TwoReacsAnalysisResult, Double> threeDResults) {
+			Map<PP2DResult, Double> twoDResults,
+			Map<PP3DResult, Double> threeDResults) {
 
 		this.oneDResults = oneDResults;
 		this.twoDResults = twoDResults;
@@ -131,7 +131,7 @@ public class ParetoAnalysisResult extends AnalysisResult {
 		// 2Dresults
 
 		int i = 1;
-		for (ReacAnalysisResult res : twoDResults.keySet()) {
+		for (PP2DResult res : twoDResults.keySet()) {
 			res.writeToFile(path + "/2D_" + i + ".txt");
 			i++;
 		}
@@ -139,7 +139,7 @@ public class ParetoAnalysisResult extends AnalysisResult {
 		// 3D results
 
 		i = 1;
-		for (TwoReacsAnalysisResult res : threeDResults.keySet()) {
+		for (PP3DResult res : threeDResults.keySet()) {
 			res.writeToFile(path + "/3D_" + i + ".txt");
 			i++;
 		}
@@ -202,13 +202,13 @@ public class ParetoAnalysisResult extends AnalysisResult {
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setVisible(true);
 
-		for (ReacAnalysisResult r : twoDResults.keySet()) {
+		for (PP2DResult r : twoDResults.keySet()) {
 
 			r.plot();
 
 		}
 
-		for (TwoReacsAnalysisResult r : threeDResults.keySet()) {
+		for (PP3DResult r : threeDResults.keySet()) {
 
 			r.plot();
 

@@ -38,7 +38,7 @@ import java.util.Queue;
 import java.util.Set;
 
 import parsebionet.biodata.BioEntity;
-import flexflux.analyses.result.ERAResult;
+import flexflux.analyses.result.ROBAResult;
 import flexflux.condition.Condition;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
@@ -47,7 +47,7 @@ import flexflux.general.Vars;
 import flexflux.objective.ListOfObjectives;
 import flexflux.objective.Objective;
 
-public class ThreadEra extends ResolveThread {
+public class ThreadROBA extends ResolveThread {
 
 	/**
 	 * Number of simulations to treat.
@@ -62,7 +62,7 @@ public class ThreadEra extends ResolveThread {
 	/**
 	 * ERA result
 	 */
-	private ERAResult result;
+	private ROBAResult result;
 
 	/**
 	 * Map [name objective<->expression objective]
@@ -76,9 +76,9 @@ public class ThreadEra extends ResolveThread {
 	 */
 	private static long percentage = 0;
 
-	public ThreadEra(Bind b, Queue<Condition> conditions,
+	public ThreadROBA(Bind b, Queue<Condition> conditions,
 			ListOfObjectives objectives,
-			ERAResult result) {
+			ROBAResult result) {
 
 		super(b);
 		this.todo = conditions.size();

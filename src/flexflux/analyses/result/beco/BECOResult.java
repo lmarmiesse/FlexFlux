@@ -1,4 +1,4 @@
-package flexflux.analyses.result.conditionComparison;
+package flexflux.analyses.result.beco;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -39,7 +39,7 @@ import parsebionet.io.BioNetworkToAttributeTable;
 import flexflux.analyses.result.AnalysisResult;
 import flexflux.analyses.result.KOResult;
 import flexflux.analyses.result.MyTableModel;
-import flexflux.analyses.result.PFBAResult;
+import flexflux.analyses.result.ClassificationResult;
 import flexflux.condition.Condition;
 import flexflux.condition.ListOfConditions;
 import flexflux.general.Vars;
@@ -49,12 +49,12 @@ import flexflux.objective.Objective;
 import flexflux.utils.run.Runner;
 import flexflux.utils.web.JsonUtils;
 
-public class ConditionComparisonResult extends AnalysisResult {
+public class BECOResult extends AnalysisResult {
 
-	HashMap<String, HashMap<String, PFBAResult>> pfbaAllResults = null;
+	HashMap<String, HashMap<String, ClassificationResult>> pfbaAllResults = null;
 	HashMap<String, HashMap<String, KOResult>> koAllResults = null;
 
-	public ConditionComparisonFbaResultSet fbaAllResults = null;
+	public BECOFbaResultSet fbaAllResults = null;
 
 	ListOfConditions conditions = null;
 	ListOfObjectives objectives = null;
@@ -110,15 +110,15 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 * @param objectives
 	 *            : list of objectives
 	 */
-	public ConditionComparisonResult(ListOfConditions conditions,
+	public BECOResult(ListOfConditions conditions,
 			ListOfObjectives objectives, BioNetwork network,
 			String inchlibPath, Boolean launchReactionAnalysis,
 			Boolean launchGeneAnalysis, Boolean launchRegulatorAnalysis) {
 
-		pfbaAllResults = new HashMap<String, HashMap<String, PFBAResult>>();
+		pfbaAllResults = new HashMap<String, HashMap<String, ClassificationResult>>();
 		koAllResults = new HashMap<String, HashMap<String, KOResult>>();
 
-		fbaAllResults = new ConditionComparisonFbaResultSet();
+		fbaAllResults = new BECOFbaResultSet();
 
 		this.inchlibPath = inchlibPath;
 
@@ -148,12 +148,12 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 * @param res
 	 *            a pfba result
 	 */
-	public void addPFBAResult(Objective o, Condition condition, PFBAResult res) {
+	public void addPFBAResult(Objective o, Condition condition, ClassificationResult res) {
 		String conditionId = condition.code;
 		String objId = o.getName();
 
 		if (!pfbaAllResults.containsKey(conditionId)) {
-			pfbaAllResults.put(conditionId, new HashMap<String, PFBAResult>());
+			pfbaAllResults.put(conditionId, new HashMap<String, ClassificationResult>());
 		}
 
 		pfbaAllResults.get(conditionId).put(objId, res);
@@ -186,7 +186,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 	 */
 	public void addFbaResult(Objective obj, Condition condition, Double value) {
 
-		ConditionComparisonFbaResult result = new ConditionComparisonFbaResult(
+		BECOFbaResult result = new BECOFbaResult(
 				obj, condition, value);
 
 		fbaAllResults.add(result);
@@ -355,11 +355,11 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 			for (Condition c : conditions) {
 				out.print(c.code);
-				HashMap<String, ConditionComparisonFbaResult> results = fbaAllResults
+				HashMap<String, BECOFbaResult> results = fbaAllResults
 						.get(c.code);
 
 				for (String objName : objectiveNames) {
-					ConditionComparisonFbaResult result = results.get(objName);
+					BECOFbaResult result = results.get(objName);
 					out.print("," + result.value);
 				}
 
@@ -463,7 +463,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 					out.print(c.code);
 				}
 
-				HashMap<String, PFBAResult> pfbaResults = pfbaAllResults
+				HashMap<String, ClassificationResult> pfbaResults = pfbaAllResults
 						.get(c.code);
 
 				for (String objName : objectiveNames) {
@@ -472,7 +472,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 						out.print("\t");
 					}
 
-					PFBAResult result = pfbaResults.get(objName);
+					ClassificationResult result = pfbaResults.get(objName);
 
 					if (result != null) {
 
@@ -614,7 +614,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 				}
 
 				HashMap<String, KOResult> koResults = koAllResults.get(c.code);
-				HashMap<String, ConditionComparisonFbaResult> fbaResults = fbaAllResults
+				HashMap<String, BECOFbaResult> fbaResults = fbaAllResults
 						.get(c.code);
 
 				for (String objName : objectiveNames) {
@@ -631,7 +631,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 					if (result != null) {
 
-						ConditionComparisonFbaResult fbaResult = fbaResults
+						BECOFbaResult fbaResult = fbaResults
 								.get(objName);
 						Double optValue = fbaResult.value;
 
@@ -775,12 +775,12 @@ public class ConditionComparisonResult extends AnalysisResult {
 			}
 
 			for (Condition c : conditions) {
-				HashMap<String, PFBAResult> pfbaResults = pfbaAllResults
+				HashMap<String, ClassificationResult> pfbaResults = pfbaAllResults
 						.get(c.code);
 
 				for (String objName : objectiveNames) {
 
-					PFBAResult result = pfbaResults.get(objName);
+					ClassificationResult result = pfbaResults.get(objName);
 
 					int nbEssential = 0;
 					int nbZeroFlux = 0;
@@ -861,7 +861,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 			for (Condition c : conditions) {
 				HashMap<String, KOResult> koResults = koAllResults.get(c.code);
-				HashMap<String, ConditionComparisonFbaResult> fbaResults = fbaAllResults
+				HashMap<String, BECOFbaResult> fbaResults = fbaAllResults
 						.get(c.code);
 
 				for (String objName : objectiveNames) {
@@ -874,7 +874,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 					if (result != null) {
 
-						ConditionComparisonFbaResult fbaResult = fbaResults
+						BECOFbaResult fbaResult = fbaResults
 								.get(objName);
 						Double optimalValue = fbaResult.value;
 
@@ -956,12 +956,12 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 			for (Condition c : conditions) {
 
-				HashMap<String, PFBAResult> pfbaResults = pfbaAllResults
+				HashMap<String, ClassificationResult> pfbaResults = pfbaAllResults
 						.get(c.code);
 
 				for (String objName : objectiveNames) {
 
-					PFBAResult result = pfbaResults.get(objName);
+					ClassificationResult result = pfbaResults.get(objName);
 
 					int nbEssential = 0;
 					int nbZeroFlux = 0;
@@ -1057,7 +1057,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 			for (Condition c : conditions) {
 
 				HashMap<String, KOResult> koResults = koAllResults.get(c.code);
-				HashMap<String, ConditionComparisonFbaResult> fbaResults = fbaAllResults
+				HashMap<String, BECOFbaResult> fbaResults = fbaAllResults
 						.get(c.code);
 
 				for (String objName : objectiveNames) {
@@ -1069,7 +1069,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 					if (result != null) {
 
-						ConditionComparisonFbaResult fbaResult = fbaResults
+						BECOFbaResult fbaResult = fbaResults
 								.get(objName);
 						Double optimalValue = fbaResult.value;
 
@@ -1270,11 +1270,11 @@ public class ConditionComparisonResult extends AnalysisResult {
 				outData.write(id);
 				for (Condition c : conditions) {
 
-					HashMap<String, PFBAResult> pfbaResults = pfbaAllResults
+					HashMap<String, ClassificationResult> pfbaResults = pfbaAllResults
 							.get(c.code);
 
 					for (String objName : objectiveNames) {
-						PFBAResult result = pfbaResults.get(objName);
+						ClassificationResult result = pfbaResults.get(objName);
 
 						int value = 0;
 
@@ -1462,12 +1462,12 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 					HashMap<String, KOResult> koResults = koAllResults
 							.get(c.code);
-					HashMap<String, ConditionComparisonFbaResult> fbaResults = fbaAllResults
+					HashMap<String, BECOFbaResult> fbaResults = fbaAllResults
 							.get(c.code);
 
 					for (String objName : objectiveNames) {
 						KOResult result = koResults.get(objName);
-						ConditionComparisonFbaResult fbaResult = fbaResults
+						BECOFbaResult fbaResult = fbaResults
 								.get(objName);
 						Double optimalValue = fbaResult.value;
 
@@ -1570,11 +1570,11 @@ public class ConditionComparisonResult extends AnalysisResult {
 			ArrayList<String> line = new ArrayList<String>();
 			line.add(c.code);
 
-			HashMap<String, ConditionComparisonFbaResult> results = fbaAllResults
+			HashMap<String, BECOFbaResult> results = fbaAllResults
 					.get(c.code);
 
 			for (String objName : objectiveNames) {
-				ConditionComparisonFbaResult result = results.get(objName);
+				BECOFbaResult result = results.get(objName);
 				line.add(result.value.toString());
 			}
 
@@ -1770,7 +1770,7 @@ public class ConditionComparisonResult extends AnalysisResult {
 				/**
 				 * Write pfba results
 				 */
-				PFBAResult res = this.pfbaAllResults.get(condition).get(obj);
+				ClassificationResult res = this.pfbaAllResults.get(condition).get(obj);
 
 				Boolean flag = res.writeCytoscapeClassifAttribute(objPath + "/classif.attr", sbmlEncode);
 
@@ -1936,10 +1936,10 @@ public class ConditionComparisonResult extends AnalysisResult {
 
 				for (Condition c : conditions) {
 
-					HashMap<String, PFBAResult> pfbaResults = pfbaAllResults
+					HashMap<String, ClassificationResult> pfbaResults = pfbaAllResults
 							.get(c.code);
 					for (String objName : objectiveNames) {
-						PFBAResult result = pfbaResults.get(objName);
+						ClassificationResult result = pfbaResults.get(objName);
 
 						int nbEssential = 0;
 

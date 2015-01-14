@@ -17,13 +17,13 @@ import org.junit.Test;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.io.Sbml2Bionetwork;
 import parsebionet.unit_tests.utils.TestUtils;
-import flexflux.analyses.PFBAAnalysis;
-import flexflux.analyses.result.PFBAResult;
+import flexflux.analyses.ClassificationAnalysis;
+import flexflux.analyses.result.ClassificationResult;
 import flexflux.general.Bind;
 import flexflux.general.CplexBind;
 import flexflux.general.GLPKBind;
 
-public class TestPFBA extends FFUnitTest {
+public class TestClassification extends FFUnitTest {
 
 	private static Bind b = null;
 
@@ -36,7 +36,7 @@ public class TestPFBA extends FFUnitTest {
 	 */
 	private static BioNetwork networkRef;
 
-	static PFBAResult res = null;
+	static ClassificationResult res = null;
 
 	static String tmpDir = "/tmp/testPfba";
 
@@ -104,7 +104,7 @@ public class TestPFBA extends FFUnitTest {
 
 		b.prepareSolver();
 
-		PFBAAnalysis a = new PFBAAnalysis(b, true);
+		ClassificationAnalysis a = new ClassificationAnalysis(b, true);
 
 		res = a.runAnalysis();
 

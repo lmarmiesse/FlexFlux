@@ -4,20 +4,20 @@ import java.io.File;
 
 import org.kohsuke.args4j.Option;
 
-import flexflux.analyses.ConditionComparisonAnalysis;
-import flexflux.analyses.result.conditionComparison.ConditionComparisonResult;
+import flexflux.analyses.BECOAnalysis;
+import flexflux.analyses.result.beco.BECOResult;
 import flexflux.general.ConstraintType;
 import flexflux.general.Vars;
 import flexflux.objective.ListOfObjectives;
 
-public class FlexfluxConditionComparison extends FFApplication {
+public class FlexfluxBECO extends FFApplication {
 	
-	public FlexfluxConditionComparison()
+	public FlexfluxBECO()
 	{
 		super();
 	}
 	
-	public String applicationName = FlexfluxConditionComparison.class
+	public String applicationName = FlexfluxBECO.class
 			.getSimpleName();
 
 	public String message = applicationName
@@ -98,7 +98,7 @@ public class FlexfluxConditionComparison extends FFApplication {
 
 	public static void main(String[] args) {
 
-		FlexfluxConditionComparison f = new FlexfluxConditionComparison();
+		FlexfluxBECO f = new FlexfluxBECO();
 
 		f.parseArguments(args);
 		
@@ -141,7 +141,7 @@ public class FlexfluxConditionComparison extends FFApplication {
 			System.exit(0);
 		}
 
-		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
+		BECOAnalysis a = new BECOAnalysis(null,
 				f.sbmlFile, f.regFile, f.conditionFile, f.constraintFile,
 				objectives, c, f.extended, f.solver,
 				f.metaReactionDataFile, f.metaGeneDataFile,
@@ -153,7 +153,7 @@ public class FlexfluxConditionComparison extends FFApplication {
 			Vars.verbose = true;
 		}
 
-		ConditionComparisonResult r = a.runAnalysis();
+		BECOResult r = a.runAnalysis();
 
 		if (!f.outName.equals("")) {
 			r.writeToFile(f.outName);

@@ -34,12 +34,12 @@
 package flexflux.analyses;
 
 import flexflux.analyses.result.FVAResult;
-import flexflux.analyses.result.TwoReacsAnalysisResult;
+import flexflux.analyses.result.PP3DResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.Vars;
 import flexflux.thread.ResolveThread;
-import flexflux.thread.ThreadTwoReacs;
+import flexflux.thread.ThreadPP3D;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ import parsebionet.biodata.BioEntity;
  * @author lmarmiesse 18 avr. 2013
  * 
  */
-public class TwoReacsAnalysis extends Analysis {
+public class PP3DAnalysis extends Analysis {
 
 	/**
 	 * Names of the varying variables.
@@ -78,7 +78,7 @@ public class TwoReacsAnalysis extends Analysis {
 	 */
 	double deltaF, deltaF2;
 
-	protected List<ThreadTwoReacs> threads = new ArrayList<ThreadTwoReacs>();
+	protected List<ThreadPP3D> threads = new ArrayList<ThreadPP3D>();
 
 	/**
 	 * phenotype phases sorted by shadow-price value.
@@ -105,7 +105,7 @@ public class TwoReacsAnalysis extends Analysis {
 	 */
 	private Map<BioEntity, Double> entities2 = new HashMap<BioEntity, Double>();
 
-	public TwoReacsAnalysis(Bind bind, String reac,
+	public PP3DAnalysis(Bind bind, String reac,
 			Map<BioEntity, Double> entities1, Map<BioEntity, Double> entities2,
 			double init, double end, double deltaF, String reac2, double init2,
 			double end2, double deltaF2, boolean fva) {
@@ -127,7 +127,7 @@ public class TwoReacsAnalysis extends Analysis {
 
 	}
 
-	public TwoReacsAnalysisResult runAnalysis() {
+	public PP3DResult runAnalysis() {
 
 		double startTime = System.currentTimeMillis();
 
@@ -141,7 +141,7 @@ public class TwoReacsAnalysis extends Analysis {
 			}
 		}
 
-		TwoReacsAnalysisResult result = new TwoReacsAnalysisResult(b
+		PP3DResult result = new PP3DResult(b
 				.getObjective().getName(), reacName, reacName2, minGrpsSize,
 				init, end, deltaF, init2, end2, deltaF2);
 
@@ -159,7 +159,7 @@ Bind newBind = null;
 				System.exit(1);
 			}
 			
-			ThreadTwoReacs thread = new ThreadTwoReacs(newBind, fluxesQueue, result, entities1, entities2, b.getObjective());
+			ThreadPP3D thread = new ThreadPP3D(newBind, fluxesQueue, result, entities1, entities2, b.getObjective());
 			
 			threads.add(thread);
 
