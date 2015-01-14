@@ -12,7 +12,7 @@ import parsebionet.io.BioNetwork2CytoscapeFile;
 import parsebionet.io.BioNetworkToAttributeTable;
 import parsebionet.utils.StringUtils;
 
-public class PFBAResult extends AnalysisResult {
+public class ClassificationResult extends AnalysisResult {
 
 	public HashMap<String, BioEntity> essentialReactions;
 	public HashMap<String, BioEntity> zeroFluxReactions;

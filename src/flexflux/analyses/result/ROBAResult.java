@@ -13,7 +13,7 @@ import flexflux.utils.plot.Plot;
 import flexflux.utils.run.Runner;
 import flexflux.utils.web.JsonUtils;
 
-public class ERAResult extends AnalysisResult {
+public class ROBAResult extends AnalysisResult {
 
 	/**
 	 * array indicating for each objective function the number of conditions
@@ -48,7 +48,7 @@ public class ERAResult extends AnalysisResult {
 	/**
 	 * Constructor
 	 */
-	public ERAResult(Set<String> inputs, Set<String> objectiveNames) {
+	public ROBAResult(Set<String> inputs, Set<String> objectiveNames) {
 
 		objCondCount = new HashMap<String, Integer>();
 

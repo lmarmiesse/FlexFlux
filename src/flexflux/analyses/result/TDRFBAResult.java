@@ -68,7 +68,7 @@ import org.jfree.ui.RefineryUtilities;
  * @author lmarmiesse 28 mars 2013
  * 
  */
-public class RFBAResult extends AnalysisResult {
+public class TDRFBAResult extends AnalysisResult {
 
 	/**
 	 * Map with key : time and value : map of entities and their values

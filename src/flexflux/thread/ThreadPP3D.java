@@ -33,7 +33,7 @@
  */
 package flexflux.thread;
 
-import flexflux.analyses.result.TwoReacsAnalysisResult;
+import flexflux.analyses.result.PP3DResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.DoubleResult;
@@ -58,7 +58,7 @@ import parsebionet.biodata.BioEntity;
  * @author lmarmiesse 18 avr. 2013
  * 
  */
-public class ThreadTwoReacs extends ResolveThread {
+public class ThreadPP3D extends ResolveThread {
 
 	/**
 	 * Percentage of the analysis that is completed.
@@ -79,7 +79,7 @@ public class ThreadTwoReacs extends ResolveThread {
 	/**
 	 * The result.
 	 */
-	private TwoReacsAnalysisResult result;
+	private PP3DResult result;
 
 	/**
 	 * Groups of phenotype phases.
@@ -92,8 +92,8 @@ public class ThreadTwoReacs extends ResolveThread {
 	private Map<BioEntity, Double> entities1 = new HashMap<BioEntity, Double>();
 	private Map<BioEntity, Double> entities2 = new HashMap<BioEntity, Double>();
 
-	public ThreadTwoReacs(Bind b, Queue<double[]> fluxesQueue,
-			TwoReacsAnalysisResult result, Map<BioEntity, Double> entities1,
+	public ThreadPP3D(Bind b, Queue<double[]> fluxesQueue,
+			PP3DResult result, Map<BioEntity, Double> entities1,
 			Map<BioEntity, Double> entities2, Objective obj) {
 		super(b, obj);
 

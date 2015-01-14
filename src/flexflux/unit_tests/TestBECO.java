@@ -11,18 +11,18 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import parsebionet.unit_tests.utils.TestUtils;
-import flexflux.analyses.ConditionComparisonAnalysis;
-import flexflux.analyses.result.conditionComparison.ConditionComparisonResult;
-import flexflux.applications.FlexfluxConditionComparison;
+import flexflux.analyses.BECOAnalysis;
+import flexflux.analyses.result.beco.BECOResult;
+import flexflux.applications.FlexfluxBECO;
 import flexflux.general.ConstraintType;
 import flexflux.general.Vars;
 import flexflux.objective.ListOfObjectives;
 
-public class TestConditionComparison extends FFUnitTest{
+public class TestBECO extends FFUnitTest{
 
 	private static boolean verbose = true;
 
-	static FlexfluxConditionComparison f;
+	static FlexfluxBECO f;
 
 	private static File tempSbmlFile = null;
 	private static File tempConditionFile = null;
@@ -89,7 +89,7 @@ public class TestConditionComparison extends FFUnitTest{
 	private static String tmpPath = "/tmp/testConditionComparison";
 	
 	
-	private static ConditionComparisonResult r;
+	private static BECOResult r;
 
 	// The temporary folder will be removed at the end of the test
 	private static File tempDir;
@@ -114,7 +114,7 @@ public class TestConditionComparison extends FFUnitTest{
 			inchlibPath = System.getProperty("inchlibPath");
 		}
 
-		f = new FlexfluxConditionComparison();
+		f = new FlexfluxBECO();
 
 		java.nio.file.Path tmpSbml = null;
 		java.nio.file.Path tmpCondition = null;
@@ -397,7 +397,7 @@ public class TestConditionComparison extends FFUnitTest{
 		}
 		
 		
-		ConditionComparisonAnalysis a = new ConditionComparisonAnalysis(null,
+		BECOAnalysis a = new BECOAnalysis(null,
 				f.sbmlFile, f.regFile, f.conditionFile, f.constraintFile,
 				objectives, ConstraintType.DOUBLE, false, solver,
 				metaDataReactionFile, metaDataGeneFile, metaDataRegulatorFile,

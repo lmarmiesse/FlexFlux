@@ -45,8 +45,8 @@ import parsebionet.biodata.BioNetwork;
 import parsebionet.biodata.BioPhysicalEntity;
 import parsebionet.io.Sbml2Bionetwork;
 import flexflux.analyses.result.KOResult;
-import flexflux.analyses.result.PFBAResult;
-import flexflux.analyses.result.conditionComparison.ConditionComparisonResult;
+import flexflux.analyses.result.ClassificationResult;
+import flexflux.analyses.result.beco.BECOResult;
 import flexflux.condition.Condition;
 import flexflux.condition.ListOfConditions;
 import flexflux.general.Bind;
@@ -60,7 +60,7 @@ import flexflux.general.Vars;
 import flexflux.objective.ListOfObjectives;
 import flexflux.objective.Objective;
 
-public class ConditionComparisonAnalysis extends Analysis {
+public class BECOAnalysis extends Analysis {
 
 	String conditionFile = "";
 	String objectiveFile = "";
@@ -102,7 +102,7 @@ public class ConditionComparisonAnalysis extends Analysis {
 	public Boolean launchGeneAnalysis;
 	public Boolean launchRegulatorAnalysis;
 
-	public ConditionComparisonAnalysis(Bind bind, String sbmlFile,
+	public BECOAnalysis(Bind bind, String sbmlFile,
 			String regulationFile, String conditionFile,
 			String constraintFile, ListOfObjectives objectives,
 			ConstraintType type, Boolean extended, String solver,
@@ -325,9 +325,9 @@ public class ConditionComparisonAnalysis extends Analysis {
 	}
 
 	@Override
-	public ConditionComparisonResult runAnalysis() {
+	public BECOResult runAnalysis() {
 
-		ConditionComparisonResult result = new ConditionComparisonResult(
+		BECOResult result = new BECOResult(
 				conditions, objectives, network, inchlibPath,
 				launchReactionAnalysis, launchGeneAnalysis,
 				launchRegulatorAnalysis);
@@ -382,10 +382,10 @@ public class ConditionComparisonAnalysis extends Analysis {
 								.println("************\nPFBA analysis\n************");
 					}
 
-					PFBAResult resPFBA = null;
+					ClassificationResult resPFBA = null;
 					if (!res.isNaN() && res != 0) {
 						this.init(objName, condition, false);
-						PFBAAnalysis a = new PFBAAnalysis(b, launchGeneAnalysis);
+						ClassificationAnalysis a = new ClassificationAnalysis(b, launchGeneAnalysis);
 						a.addDeadReactions(deadReactions);
 						resPFBA = a.runAnalysis();
 

@@ -12,13 +12,13 @@ import parsebionet.utils.graphe.ScopeCompounds;
 import flexflux.analyses.result.FBAResult;
 import flexflux.analyses.result.FVAResult;
 import flexflux.analyses.result.KOResult;
-import flexflux.analyses.result.PFBAResult;
+import flexflux.analyses.result.ClassificationResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.Vars;
 import flexflux.objective.Objective;
 
-public class PFBAAnalysis extends Analysis {
+public class ClassificationAnalysis extends Analysis {
 
 	private HashMap<String, BioEntity> remainReactions;
 	private HashMap<String, BioEntity> essentialReactions;
@@ -50,7 +50,7 @@ public class PFBAAnalysis extends Analysis {
 
 	Boolean performGeneAnalysis = true;
 
-	public PFBAAnalysis(Bind b, Boolean performGeneAnalysis) {
+	public ClassificationAnalysis(Bind b, Boolean performGeneAnalysis) {
 		super(b);
 
 		this.performGeneAnalysis = performGeneAnalysis;
@@ -87,7 +87,7 @@ public class PFBAAnalysis extends Analysis {
 	}
 
 	@Override
-	public PFBAResult runAnalysis() {
+	public ClassificationResult runAnalysis() {
 
 		for (BioChemicalReaction reaction : b.getDeadReactions()) {
 			this.deadReactions.put(reaction.getId(), reaction);
@@ -141,7 +141,7 @@ public class PFBAAnalysis extends Analysis {
 			}
 		}
 
-		PFBAResult res = new PFBAResult();
+		ClassificationResult res = new ClassificationResult();
 
 		res.concurrentReactions = concurrentReactions;
 		res.eleReactions = eleReactions;

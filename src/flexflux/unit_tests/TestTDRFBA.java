@@ -36,9 +36,9 @@ package flexflux.unit_tests;
 import static org.junit.Assert.fail;
 import flexflux.analyses.Analysis;
 import flexflux.analyses.FBAAnalysis;
-import flexflux.analyses.RFBAAnalysis;
+import flexflux.analyses.TDRFBAAnalysis;
 import flexflux.analyses.result.AnalysisResult;
-import flexflux.analyses.result.RFBAResult;
+import flexflux.analyses.result.TDRFBAResult;
 import flexflux.general.Bind;
 import flexflux.general.CplexBind;
 import flexflux.general.GLPKBind;
@@ -64,7 +64,7 @@ import parsebionet.biodata.BioNetwork;
  * @author lmarmiesse 11 avr. 2013
  * 
  */
-public class TestRFBA extends FFUnitTest{
+public class TestTDRFBA extends FFUnitTest{
 	
 	
 	
@@ -119,10 +119,10 @@ public class TestRFBA extends FFUnitTest{
 		
 		
 
-		RFBAAnalysis rfba = new RFBAAnalysis(bind,
+		TDRFBAAnalysis rfba = new TDRFBAAnalysis(bind,
 				"R_Ec_biomass_iAF1260_core_59p81M", 0.003, 0.1, 150,
 				new ArrayList<String>());
-		RFBAResult result = rfba.runAnalysis();
+		TDRFBAResult result = rfba.runAnalysis();
 		
 //		result.plot();
 //		int a = 1;

@@ -13,8 +13,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import parsebionet.unit_tests.utils.TestUtils;
-import flexflux.analyses.ERAAnalysis;
-import flexflux.analyses.result.ERAResult;
+import flexflux.analyses.ROBAAnalysis;
+import flexflux.analyses.result.ROBAResult;
 import flexflux.condition.ListOfConditions;
 import flexflux.general.Bind;
 import flexflux.general.ConstraintType;
@@ -23,14 +23,14 @@ import flexflux.general.GLPKBind;
 import flexflux.general.Vars;
 import flexflux.objective.ListOfObjectives;
 
-public class TestEra extends FFUnitTest{
+public class TestROBA extends FFUnitTest{
 
 	private static boolean verbose = true;
 	private static boolean plot = true;
 
 	private static String tmpPath = "/tmp/testEra";
 
-	private static ERAResult r;
+	private static ROBAResult r;
 
 	// The temporary folder will be removed at the end of the test
 	private static File tempDir;
@@ -136,7 +136,7 @@ public class TestEra extends FFUnitTest{
 
 		bind.prepareSolver();
 
-		ERAAnalysis a = new ERAAnalysis(bind, objectives,
+		ROBAAnalysis a = new ROBAAnalysis(bind, objectives,
 				conditions);
 
 		r = a.runAnalysis();
