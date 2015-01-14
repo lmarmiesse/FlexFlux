@@ -16,7 +16,7 @@ import org.junit.Test;
 
 import parsebionet.biodata.BioNetwork;
 import parsebionet.io.Sbml2Bionetwork;
-import parsebionet.unit_tests.TestUtils;
+import parsebionet.unit_tests.utils.TestUtils;
 import flexflux.analyses.PFBAAnalysis;
 import flexflux.analyses.result.PFBAResult;
 import flexflux.general.Bind;

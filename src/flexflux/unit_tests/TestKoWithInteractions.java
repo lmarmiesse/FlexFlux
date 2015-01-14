@@ -10,7 +10,7 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 
-import parsebionet.unit_tests.TestUtils;
+import parsebionet.unit_tests.utils.TestUtils;
 import flexflux.analyses.KOAnalysis;
 import flexflux.analyses.result.KOResult;
 import flexflux.general.Bind;

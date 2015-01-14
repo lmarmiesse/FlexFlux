@@ -10,7 +10,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import parsebionet.unit_tests.TestUtils;
+import parsebionet.unit_tests.utils.TestUtils;
 import flexflux.analyses.ConditionComparisonAnalysis;
 import flexflux.analyses.result.conditionComparison.ConditionComparisonResult;
 import flexflux.applications.FlexfluxConditionComparison;

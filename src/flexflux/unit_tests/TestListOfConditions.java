@@ -14,7 +14,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import parsebionet.unit_tests.TestUtils;
+import parsebionet.unit_tests.utils.TestUtils;
 import flexflux.condition.Condition;
 import flexflux.condition.ListOfConditions;
 import flexflux.general.ConstraintType;
