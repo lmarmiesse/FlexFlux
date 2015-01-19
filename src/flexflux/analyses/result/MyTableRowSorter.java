@@ -17,8 +17,8 @@ public class MyTableRowSorter<M extends TableModel> extends TableRowSorter<M> {
 			@Override
 			public int compare(Object arg0, Object arg1) {
 
-				String s1 = (String) arg0;
-				String s2 = (String) arg1;
+				String s1 = String.valueOf(arg0);
+				String s2 = String.valueOf(arg1);
 
 				if (!isDouble(s1)) {
 					if (!isDouble(s2)) {
