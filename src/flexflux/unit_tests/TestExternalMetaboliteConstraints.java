@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import org.junit.Assert;
 import org.junit.Test;
 
-import parsebionet.unit_tests.TestUtils;
+import parsebionet.unit_tests.utils.TestUtils;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.CplexBind;

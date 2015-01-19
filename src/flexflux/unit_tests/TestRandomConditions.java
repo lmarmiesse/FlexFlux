@@ -12,7 +12,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import parsebionet.unit_tests.TestUtils;
+import parsebionet.unit_tests.utils.TestUtils;
 import flexflux.analyses.randomConditions.ListOfInputRandomParameters;
 import flexflux.analyses.randomConditions.RandomConditions;
 import flexflux.analyses.result.RandomConditionsResult;
