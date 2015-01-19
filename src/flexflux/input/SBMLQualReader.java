@@ -278,6 +278,8 @@ public class SBMLQualReader {
 
 		for (BioEntity ent : intNet.getEntityStateConstraintTranslation()
 				.keySet()) {
+			
+			System.out.println(ent);
 
 			Set<Double> thresholds = new HashSet<Double>();
 
