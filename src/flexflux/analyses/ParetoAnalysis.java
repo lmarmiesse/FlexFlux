@@ -35,8 +35,8 @@ package flexflux.analyses;
 
 import flexflux.analyses.result.FBAResult;
 import flexflux.analyses.result.ParetoAnalysisResult;
-import flexflux.analyses.result.ReacAnalysisResult;
-import flexflux.analyses.result.TwoReacsAnalysisResult;
+import flexflux.analyses.result.PP2DResult;
+import flexflux.analyses.result.PP3DResult;
 import flexflux.general.Bind;
 import flexflux.general.Vars;
 import flexflux.objective.Objective;
@@ -101,8 +101,8 @@ public class ParetoAnalysis extends Analysis {
 	public ParetoAnalysisResult runAnalysis() {
 
 		Map<Objective, List<Double>> oneDResults = new HashMap<Objective, List<Double>>();
-		Map<ReacAnalysisResult, Double> twoDResults = new HashMap<ReacAnalysisResult, Double>();
-		Map<TwoReacsAnalysisResult, Double> threeDResults = new HashMap<TwoReacsAnalysisResult, Double>();
+		Map<PP2DResult, Double> twoDResults = new HashMap<PP2DResult, Double>();
+		Map<PP3DResult, Double> threeDResults = new HashMap<PP3DResult, Double>();
 
 		//
 
@@ -181,7 +181,7 @@ public class ParetoAnalysis extends Analysis {
 		List<Objective[]> pairsToTest = makeObjsPairs();
 
 		// to store the scores
-		Entry<ReacAnalysisResult, Double> bestResult2D = new SimpleEntry<ReacAnalysisResult, Double>(
+		Entry<PP2DResult, Double> bestResult2D = new SimpleEntry<PP2DResult, Double>(
 				null, 0.0);
 
 		int nb = 0;
@@ -206,10 +206,10 @@ public class ParetoAnalysis extends Analysis {
 				i++;
 			}
 
-			ReacAnalysis analysis = new ReacAnalysis(b, entitiesValues,
+			PP2DAnalysis analysis = new PP2DAnalysis(b, entitiesValues,
 					toTest[1].getName(), lb, ub, deltaF, false);
 
-			ReacAnalysisResult result = analysis.runAnalysis();
+			PP2DResult result = analysis.runAnalysis();
 
 			// comparison between result and exp values
 
@@ -232,13 +232,13 @@ public class ParetoAnalysis extends Analysis {
 			twoDResults.put(result, result.getScore());
 
 			if (bestResult2D.getKey() == null) {
-				bestResult2D = new SimpleEntry<ReacAnalysisResult, Double>(
+				bestResult2D = new SimpleEntry<PP2DResult, Double>(
 						result, result.getScore());
 			}
 
 			else if (result.getScore() < bestResult2D.getValue()) {
 
-				bestResult2D = new SimpleEntry<ReacAnalysisResult, Double>(
+				bestResult2D = new SimpleEntry<PP2DResult, Double>(
 						result, result.getScore());
 			}
 
@@ -253,7 +253,7 @@ public class ParetoAnalysis extends Analysis {
 		List<Objective[]> tripletsToTest = makeObjsTriplets();
 
 		// to store the scores
-		Entry<TwoReacsAnalysisResult, Double> bestResult3D = new SimpleEntry<TwoReacsAnalysisResult, Double>(
+		Entry<PP3DResult, Double> bestResult3D = new SimpleEntry<PP3DResult, Double>(
 				null, 0.0);
 
 		nb = 0;
@@ -293,11 +293,11 @@ public class ParetoAnalysis extends Analysis {
 				i++;
 			}
 
-			TwoReacsAnalysis analysis = new TwoReacsAnalysis(b,
+			PP3DAnalysis analysis = new PP3DAnalysis(b,
 					toTest[1].getName(), entitiesValues1, entitiesValues2, lb1,
 					ub1, deltaF1, toTest[2].getName(), lb2, ub2, deltaF2, false);
 
-			TwoReacsAnalysisResult result = analysis.runAnalysis();
+			PP3DResult result = analysis.runAnalysis();
 
 			// comparison between result and exp values
 
@@ -322,13 +322,13 @@ public class ParetoAnalysis extends Analysis {
 			threeDResults.put(result, result.getScore());
 
 			if (bestResult3D.getKey() == null) {
-				bestResult3D = new SimpleEntry<TwoReacsAnalysisResult, Double>(
+				bestResult3D = new SimpleEntry<PP3DResult, Double>(
 						result, result.getScore());
 			}
 
 			else if (result.getScore() < bestResult3D.getValue()) {
 
-				bestResult3D = new SimpleEntry<TwoReacsAnalysisResult, Double>(
+				bestResult3D = new SimpleEntry<PP3DResult, Double>(
 						result, result.getScore());
 			}
 		}
@@ -339,12 +339,12 @@ public class ParetoAnalysis extends Analysis {
 					threeDResults);
 		} else {
 
-			Map<ReacAnalysisResult, Double> best2D = new HashMap<ReacAnalysisResult, Double>();
+			Map<PP2DResult, Double> best2D = new HashMap<PP2DResult, Double>();
 			if (bestResult2D.getKey() != null) {
 				best2D.put(bestResult2D.getKey(), bestResult2D.getValue());
 			}
 
-			Map<TwoReacsAnalysisResult, Double> best3D = new HashMap<TwoReacsAnalysisResult, Double>();
+			Map<PP3DResult, Double> best3D = new HashMap<PP3DResult, Double>();
 
 			if (bestResult3D.getKey() != null) {
 				best3D.put(bestResult3D.getKey(), bestResult3D.getValue());

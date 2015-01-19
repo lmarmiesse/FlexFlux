@@ -43,7 +43,7 @@ import java.util.Set;
 
 import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
-import flexflux.analyses.result.RFBAResult;
+import flexflux.analyses.result.TDRFBAResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.DoubleResult;
@@ -56,7 +56,7 @@ import flexflux.general.Vars;
  * @author lmarmiesse 5 avr. 2013
  * 
  */
-public class RFBAAnalysis extends Analysis {
+public class TDRFBAAnalysis extends Analysis {
 
 	/**
 	 * Cell density.
@@ -84,7 +84,7 @@ public class RFBAAnalysis extends Analysis {
 	 */
 	String biomassReac;
 
-	public RFBAAnalysis(Bind b, String biomassReac, double X, double deltaT,
+	public TDRFBAAnalysis(Bind b, String biomassReac, double X, double deltaT,
 			int iterations, List<String> toPlot) {
 		super(b);
 		this.X = X;
@@ -95,7 +95,7 @@ public class RFBAAnalysis extends Analysis {
 		this.biomassReac = biomassReac;
 	}
 
-	public RFBAResult runAnalysis() {
+	public TDRFBAResult runAnalysis() {
 		Map<String, Double> lastSolve = new HashMap<String, Double>();
 
 		// warning list to tell when the model was unfeasible
@@ -136,7 +136,7 @@ public class RFBAAnalysis extends Analysis {
 			timeConstraintMap.put(i, new HashSet<Constraint>());
 		}
 
-		RFBAResult rFBAResult = new RFBAResult();
+		TDRFBAResult rFBAResult = new TDRFBAResult();
 
 		for (int i = 0; i < iterations; i++) {
 

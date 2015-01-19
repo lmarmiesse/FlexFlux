@@ -34,7 +34,7 @@
 package flexflux.applications;
 
 import flexflux.analyses.Analysis;
-import flexflux.analyses.TwoReacsAnalysis;
+import flexflux.analyses.PP2DAnalysis;
 import flexflux.analyses.result.AnalysisResult;
 import flexflux.general.Bind;
 import flexflux.general.CplexBind;
@@ -53,20 +53,20 @@ import parsebionet.biodata.BioEntity;
  * 
  * <p>
  * Computes different FBA analysis given a metabolic network, an objective
- * function and constraints, by making two reactions fluxes change.
+ * function and constraints, by making a reaction flux change.
  * </p>
  * 
  * @author lmarmiesse 6 mars 2013
  * 
  */
-public class FlexfluxTwoReacs extends FFApplication{
+public class FlexfluxPP2D extends FFApplication {
 
-	public static String message = "FlexfluxTwoReacs\n"
+	public static String message = "FlexfluxReac\n"
 
 			+ "Computes different FBA analysis given a metabolic network, an objective function and constraints, "
-			+ "by making two reactions fluxes change.";
+			+ "by making a reaction flux change.";
 
-	public String example = "Example : FlexfluxTwoReacs -s network.xml -cond cond.txt -int int.txt -r R_EX_glc_e_ -init -20 -end 0 -r2 R_EX_o2_e_ _init2 -20 -end2 0 -f2 0.2 -plot -out out.txt";
+	public String example = "Example : FlexfluxReac -s network.xml -cond cond.txt -int int.txt -r R_EX_o2_e_ -init -10 -end 0 -plot -out out.txt";
 
 	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
 	public String sbmlFile = "";
@@ -79,42 +79,30 @@ public class FlexfluxTwoReacs extends FFApplication{
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
 	public String solver = "GLPK";
-	
+
 	@Option(name = "-plot", usage = "[OPTIONAL, default = false]Plots the results")
 	public boolean plot = false;
 
-	@Option(name = "-r", usage = "Name of the first reaction to test", metaVar = "String", required = true)
+	@Option(name = "-r", usage = "Name of the reaction to test", metaVar = "String", required = true)
 	public String reac = "";
-
-	@Option(name = "-r2", usage = "Name of the second reaction to test", metaVar = "String", required = true)
-	public String reac2 = "";
 
 	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
 	public String outName = "";
 
-	@Option(name = "-init", usage = "Initial flux value of the first reaction to test", metaVar = "Double", required = true)
+	@Option(name = "-init", usage = "Initial flux value of the reaction to test", metaVar = "Double", required = true)
 	public double init = 0;
 
-	@Option(name = "-end", usage = "Final flux value of the first reaction to test", metaVar = "Double", required = true)
+	@Option(name = "-end", usage = "Final flux value of the reaction to test", metaVar = "Double", required = true)
 	public double end = 0;
 
-	@Option(name = "-init2", usage = "Initial flux value of the second reaction to test", metaVar = "Double", required = true)
-	public double init2 = 0;
-
-	@Option(name = "-end2", usage = "Final flux value of the second reaction to test", metaVar = "Double", required = true)
-	public double end2 = 0;
-
-	@Option(name = "-f", usage = "[OPTIONAL, default = 0.5]Difference between each FBA for the first reaction flux", metaVar = "Double")
-	public double deltaF = 0.5;
-
-	@Option(name = "-f2", usage = "[OPTIONAL, default = 0.5]Difference between each FBA for the second reaction flux", metaVar = "Double")
-	public double deltaF2 = 0.5;
-
-	@Option(name = "-lib", usage = "[OPTIONAL, default = 0]Percentage of non optimality for new constraints", metaVar = "Double")
-	public double liberty = 0;
+	@Option(name = "-f", usage = "[OPTIONAL, default = 0.1]Difference between each FBA for the reaction flux", metaVar = "Double")
+	public double deltaF = 0.1;
 	
 	@Option(name = "-n", usage = "[OPTIONAL, default = number of available processors]Number of threads", metaVar = "Integer")
 	public int nThreads = Runtime.getRuntime().availableProcessors();
+
+	@Option(name = "-lib", usage = "[OPTIONAL, default = 0]Percentage of non optimality for new constraints", metaVar = "Double")
+	public double liberty = 0;
 
 	@Option(name = "-pre", usage = "[OPTIONAL, default = 6]Number of decimals of precision for calculations and results", metaVar = "Integer")
 	public int precision = 6;
@@ -124,11 +112,11 @@ public class FlexfluxTwoReacs extends FFApplication{
 
 	public static void main(String[] args) {
 
-		FlexfluxTwoReacs f = new FlexfluxTwoReacs();
+		FlexfluxPP2D f = new FlexfluxPP2D();
 
 		f.parseArguments(args);
-		
-		if (f.end < f.init || f.end2 < f.init2) {
+
+		if (f.end < f.init) {
 			System.err
 					.println("The initial value should be less than the final value");
 			f.parser.printUsage(System.err);
@@ -137,7 +125,7 @@ public class FlexfluxTwoReacs extends FFApplication{
 
 		Vars.libertyPercentage = f.liberty;
 		Vars.decimalPrecision = f.precision;
-
+		
 		
 		if (f.nThreads > 0) {
 			Vars.maxThread = f.nThreads;
@@ -192,28 +180,18 @@ public class FlexfluxTwoReacs extends FFApplication{
 		}
 		bind.prepareSolver();
 
+		Map<BioEntity, Double> map = new HashMap<BioEntity, Double>();
+
 		if (bind.getInteractionNetwork().getEntity(f.reac) == null) {
 
 			System.err.println("Error " + f.reac + " is unknown");
 			System.exit(0);
 		}
-		if (bind.getInteractionNetwork().getEntity(f.reac2) == null) {
 
-			System.err.println("Error " + f.reac2 + " is unknown");
-			System.exit(0);
-		}
+		map.put(bind.getInteractionNetwork().getEntity(f.reac), 1.0);
 
-		Map<BioEntity, Double> map1 = new HashMap<BioEntity, Double>();
-
-		map1.put(bind.getInteractionNetwork().getEntity(f.reac), 1.0);
-
-		Map<BioEntity, Double> map2 = new HashMap<BioEntity, Double>();
-
-		map2.put(bind.getInteractionNetwork().getEntity(f.reac2), 1.0);
-
-		Analysis analysis = new TwoReacsAnalysis(bind, f.reac, map1, map2,
-				f.init, f.end, f.deltaF, f.reac2, f.init2, f.end2, f.deltaF2,
-				true);
+		Analysis analysis = new PP2DAnalysis(bind, map, f.reac, f.init, f.end,
+				f.deltaF, true);
 		AnalysisResult result = analysis.runAnalysis();
 
 		if (f.plot) {

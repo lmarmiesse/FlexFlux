@@ -73,7 +73,7 @@ import parsebionet.biodata.BioEntity;
  * @author lmarmiesse 18 avr. 2013
  * 
  */
-public class ReacAnalysisResult extends AnalysisResult {
+public class PP2DResult extends AnalysisResult {
 
 	/**
 	 * Minimal group size to consider it is a phenotype phase.
@@ -128,7 +128,7 @@ public class ReacAnalysisResult extends AnalysisResult {
 
 	private double score;
 
-	public ReacAnalysisResult(String objName, String reacName,
+	public PP2DResult(String objName, String reacName,
 			List<Double> fluxValues, Map<Double, Double> resultValues,
 			int minGrpsSize, double init, double end, double deltaF) {
 		this.fluxValues = fluxValues;

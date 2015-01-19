@@ -34,7 +34,7 @@
 package flexflux.applications;
 
 import flexflux.analyses.Analysis;
-import flexflux.analyses.RFBAAnalysis;
+import flexflux.analyses.TDRFBAAnalysis;
 import flexflux.analyses.result.AnalysisResult;
 import flexflux.general.Bind;
 import flexflux.general.CplexBind;
@@ -70,7 +70,7 @@ import parsebionet.biodata.BioEntity;
  * @author lmarmiesse 6 mars 2013
  * 
  */
-public class FlexfluxRFBA extends FFApplication{
+public class FlexfluxTDRFBA extends FFApplication{
 
 	public static String message = "FlexfluxRFBA\n"
 
@@ -126,7 +126,7 @@ public class FlexfluxRFBA extends FFApplication{
 
 	public static void main(String[] args) {
 
-		FlexfluxRFBA f = new FlexfluxRFBA();
+		FlexfluxTDRFBA f = new FlexfluxTDRFBA();
 
 		f.parseArguments(args);
 
@@ -207,7 +207,7 @@ public class FlexfluxRFBA extends FFApplication{
 			}
 		}
 
-		Analysis analysis = new RFBAAnalysis(bind, f.biomassReac, f.X,
+		Analysis analysis = new TDRFBAAnalysis(bind, f.biomassReac, f.X,
 				f.deltaT, f.iterations, toDisplay);
 		AnalysisResult result = analysis.runAnalysis();
 

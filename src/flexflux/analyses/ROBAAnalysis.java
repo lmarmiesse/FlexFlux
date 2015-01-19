@@ -8,16 +8,16 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import flexflux.analyses.result.ERAResult;
+import flexflux.analyses.result.ROBAResult;
 import flexflux.condition.Condition;
 import flexflux.condition.ListOfConditions;
 import flexflux.general.Bind;
 import flexflux.general.Vars;
 import flexflux.objective.ListOfObjectives;
 import flexflux.thread.ResolveThread;
-import flexflux.thread.ThreadEra;
+import flexflux.thread.ThreadROBA;
 
-public class ERAAnalysis extends Analysis {
+public class ROBAAnalysis extends Analysis {
 
 
 	/**
@@ -47,7 +47,7 @@ public class ERAAnalysis extends Analysis {
 	 * @param b
 	 * @param numberSimulations
 	 */
-	public ERAAnalysis(Bind b, ListOfObjectives objectives, ListOfConditions conditions) {
+	public ROBAAnalysis(Bind b, ListOfObjectives objectives, ListOfConditions conditions) {
 		super(b);
 		this.objectives = objectives;
 		this.conditions = conditions;
@@ -55,11 +55,11 @@ public class ERAAnalysis extends Analysis {
 	
 
 	@Override
-	public ERAResult runAnalysis() {
+	public ROBAResult runAnalysis() {
 
 		double startTime = System.currentTimeMillis();
 
-		ERAResult result = new ERAResult(new HashSet<String>(this.conditions.entities), objectives.objectives.keySet());
+		ROBAResult result = new ROBAResult(new HashSet<String>(this.conditions.entities), objectives.objectives.keySet());
 
 		Queue<Condition> tasks = new LinkedBlockingQueue<Condition>();
 		
@@ -81,7 +81,7 @@ public class ERAAnalysis extends Analysis {
 				System.exit(1);
 			}
 
-			ThreadEra threadEra = new ThreadEra(newBind, tasks, objectives, result);
+			ThreadROBA threadEra = new ThreadROBA(newBind, tasks, objectives, result);
 
 			threads.add(threadEra);
 

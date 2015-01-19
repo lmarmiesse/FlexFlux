@@ -4,8 +4,8 @@ import java.io.File;
 
 import org.kohsuke.args4j.Option;
 
-import flexflux.analyses.ERAAnalysis;
-import flexflux.analyses.result.ERAResult;
+import flexflux.analyses.ROBAAnalysis;
+import flexflux.analyses.result.ROBAResult;
 import flexflux.condition.ListOfConditions;
 import flexflux.general.Bind;
 import flexflux.general.ConstraintType;
@@ -14,9 +14,9 @@ import flexflux.general.GLPKBind;
 import flexflux.general.Vars;
 import flexflux.objective.ListOfObjectives;
 
-public class FlexfluxERA extends FFApplication {
+public class FlexfluxROBA extends FFApplication {
 
-	public String applicationName = FlexfluxConditionComparison.class
+	public String applicationName = FlexfluxBECO.class
 			.getSimpleName();
 
 	public String message = applicationName
@@ -67,7 +67,7 @@ public class FlexfluxERA extends FFApplication {
 	 */
 	public static void main(String[] args) {
 
-		FlexfluxERA f = new FlexfluxERA();
+		FlexfluxROBA f = new FlexfluxROBA();
 
 		f.parseArguments(args);
 
@@ -171,9 +171,9 @@ public class FlexfluxERA extends FFApplication {
 
 		bind.prepareSolver();
 
-		ERAAnalysis a = new ERAAnalysis(bind, objectives, conditions);
+		ROBAAnalysis a = new ROBAAnalysis(bind, objectives, conditions);
 
-		ERAResult r = a.runAnalysis();
+		ROBAResult r = a.runAnalysis();
 
 		r.inchlibPath = f.inchlibPath;
 
