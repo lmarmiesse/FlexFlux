@@ -1,0 +1,2 @@
+maxR_OBJ	MAX(R_OBJ_EX)
+minR_OBJ2	MIN(R_OBJ2_EX)
