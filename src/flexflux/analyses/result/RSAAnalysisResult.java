@@ -39,7 +39,7 @@ import org.jfree.ui.RefineryUtilities;
 import parsebionet.biodata.BioEntity;
 import flexflux.general.Constraint;
 
-public class SteadyStateAnalysisResult extends AnalysisResult {
+public class RSAAnalysisResult extends AnalysisResult {
 
 	/**
 	 * Field to search for entities in the plot.

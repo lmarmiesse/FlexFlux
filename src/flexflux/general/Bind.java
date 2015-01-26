@@ -58,9 +58,9 @@ import parsebionet.biodata.BioPhysicalEntityParticipant;
 import parsebionet.biodata.BioProtein;
 import parsebionet.io.Sbml2Bionetwork;
 import flexflux.analyses.FBAAnalysis;
-import flexflux.analyses.SteadyStateAnalysis;
+import flexflux.analyses.RSAAnalysis;
 import flexflux.analyses.result.FBAResult;
-import flexflux.analyses.result.SteadyStateAnalysisResult;
+import flexflux.analyses.result.RSAAnalysisResult;
 import flexflux.input.SBMLQualReader;
 import flexflux.interaction.And;
 import flexflux.interaction.Interaction;
@@ -326,9 +326,9 @@ public abstract class Bind {
 
 					List<Constraint> intNetSteadyStateConstraints = new ArrayList<Constraint>();
 
-					SteadyStateAnalysis ssa = new SteadyStateAnalysis(this,
+					RSAAnalysis ssa = new RSAAnalysis(this,
 							this.getInteractionNetwork(), simpleConstraints);
-					SteadyStateAnalysisResult res = ssa.runAnalysis();
+					RSAAnalysisResult res = ssa.runAnalysis();
 
 					if (Vars.writeInteractionNetworkStates) {
 						res.writeToFile(statesFileName);

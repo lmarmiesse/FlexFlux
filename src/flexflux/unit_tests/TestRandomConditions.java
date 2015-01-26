@@ -28,9 +28,6 @@ public class TestRandomConditions {
 
 	private static RandomConditionsResult r;
 
-	// The temporary folder will be removed at the end of the test
-	private static File tempDir;
-	
 	static int nbSim = 1000;
 	static double meanGaussian = 10.0;
 	static double stdGaussian = 100.0;
@@ -101,7 +98,6 @@ public class TestRandomConditions {
 	@AfterClass
 	public static void afterTest() {
 
-		 tempDir.delete();
 		if (plot) {
 			r.plot();
 		}

@@ -6,8 +6,8 @@ import java.util.HashMap;
 import org.kohsuke.args4j.Option;
 
 import parsebionet.biodata.BioEntity;
-import flexflux.analyses.SteadyStateAnalysis;
-import flexflux.analyses.result.SteadyStateAnalysisResult;
+import flexflux.analyses.RSAAnalysis;
+import flexflux.analyses.result.RSAAnalysisResult;
 import flexflux.general.Constraint;
 import flexflux.general.Vars;
 import flexflux.input.SBMLQualReader;
@@ -24,7 +24,7 @@ import flexflux.interaction.RelationFactory;
  * 
  */
 
-public class FlexfluxSteadyState extends FFApplication {
+public class FlexfluxRSA extends FFApplication {
 
 	public static boolean requiresSolver = false;
 
@@ -43,7 +43,7 @@ public class FlexfluxSteadyState extends FFApplication {
 	public String outName = "";
 
 	public static void main(String[] args) {
-		FlexfluxSteadyState f = new FlexfluxSteadyState();
+		FlexfluxRSA f = new FlexfluxRSA();
 
 		f.parseArguments(args);
 
@@ -58,10 +58,10 @@ public class FlexfluxSteadyState extends FFApplication {
 		intNet = SBMLQualReader.loadSbmlQual(f.regFile,
 				new InteractionNetwork(), new RelationFactory());
 
-		SteadyStateAnalysis analysis = new SteadyStateAnalysis(null, intNet,
+		RSAAnalysis analysis = new RSAAnalysis(null, intNet,
 				new HashMap<BioEntity, Constraint>());
 
-		SteadyStateAnalysisResult res = analysis.runAnalysis();
+		RSAAnalysisResult res = analysis.runAnalysis();
 
 		if (f.plot) {
 			res.plot();
