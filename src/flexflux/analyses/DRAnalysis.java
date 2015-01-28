@@ -34,7 +34,7 @@
 package flexflux.analyses;
 
 import flexflux.analyses.result.DRResult;
-import flexflux.analyses.result.SteadyStateAnalysisResult;
+import flexflux.analyses.result.RSAAnalysisResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.Vars;
@@ -82,8 +82,8 @@ public class DRAnalysis extends Analysis {
 		// we add the constraints corresponding to the interactions
 
 
-		SteadyStateAnalysis ssa = new SteadyStateAnalysis(b,b.getInteractionNetwork(),b.getSimpleConstraints());
-		SteadyStateAnalysisResult res = ssa.runAnalysis();
+		RSAAnalysis ssa = new RSAAnalysis(b,b.getInteractionNetwork(),b.getSimpleConstraints());
+		RSAAnalysisResult res = ssa.runAnalysis();
 		
 		
 		for (Constraint c : res.getSteadyStateConstraints()) {

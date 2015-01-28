@@ -1,0 +1,5 @@
+ConditionCode	maxR_OBJ	minR_OBJ2
+C1	G8	G7
+C2	G1,G8	G1,G7
+C3	G8	G7
+C4	G1,G8	G1,G7

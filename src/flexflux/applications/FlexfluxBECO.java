@@ -6,7 +6,6 @@ import org.kohsuke.args4j.Option;
 
 import flexflux.analyses.BECOAnalysis;
 import flexflux.analyses.result.beco.BECOResult;
-import flexflux.general.ConstraintType;
 import flexflux.general.Vars;
 import flexflux.objective.ListOfObjectives;
 
@@ -54,9 +53,6 @@ public class FlexfluxBECO extends FFApplication {
 	@Option(name = "-reg", usage = "[OPTIONAL] Regulation file path", metaVar = "File")
 	public String regFile = "";
 
-	@Option(name = "-type", usage = "[OPTIONAL, default=DOUBLE] Type of the condition states", metaVar = "[BINARY,INTEGER,DOUBLE]")
-	public String type = "DOUBLE";
-
 	@Option(name = "-plot", usage = "[OPTIONAL, default = false] Plots the results")
 	public Boolean plot = false;
 
@@ -75,9 +71,6 @@ public class FlexfluxBECO extends FFApplication {
 	@Option(name = "-ext", usage = "[OPTIONAL, default = false] Uses the extended SBML format")
 	public Boolean extended = false;
 
-	@Option(name = "-minFlux", usage = "[OPTIONAL, default = false] Minimize the flux when performing the fva")
-	public Boolean minFlux = false;
-
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
 	public String solver = "GLPK";
 
@@ -93,7 +86,7 @@ public class FlexfluxBECO extends FFApplication {
 	@Option(name = "-noRegulatorAnalysis", usage = "Don't perform regulator essentiality analysis")
 	public Boolean noRegulatorAnalysis = false;
 	
-	@Option(name = "-cytoscape", usage = "Generates cytoscape files")
+	@Option(name = "-cytoscape", usage = "[OPTIONAL] Generates cytoscape files")
 	public Boolean cytoscape = false;
 
 	public static void main(String[] args) {
@@ -123,16 +116,6 @@ public class FlexfluxBECO extends FFApplication {
 			System.exit(0);
 		}
 
-		ConstraintType c;
-		if (f.type == "BINARY") {
-			c = ConstraintType.BINARY;
-		} else if (f.type == "INTEGER") {
-			c = ConstraintType.INTEGER;
-		} else {
-			c = ConstraintType.DOUBLE;
-		}
-
-		
 		ListOfObjectives objectives = new ListOfObjectives();
 		Boolean flag = objectives.loadObjectiveFile(f.objectiveFile);
 		
@@ -143,9 +126,9 @@ public class FlexfluxBECO extends FFApplication {
 
 		BECOAnalysis a = new BECOAnalysis(null,
 				f.sbmlFile, f.regFile, f.conditionFile, f.constraintFile,
-				objectives, c, f.extended, f.solver,
+				objectives, f.extended, f.solver,
 				f.metaReactionDataFile, f.metaGeneDataFile,
-				f.metaRegulatorDataFile, f.mdSep, f.inchlibPath, f.minFlux,
+				f.metaRegulatorDataFile, f.mdSep, f.inchlibPath,
 				f.noReactionAnalysis, f.noGeneAnalysis, f.noRegulatorAnalysis,
 				f.liberty, f.precision);
 

@@ -75,11 +75,8 @@ public class BECOAnalysis extends Analysis {
 
 	Boolean extended = false;
 	String solver = "GLPK";
-	ConstraintType constraintType = null;
 	Boolean flag = true;
 	BioNetwork network = null;
-
-	Boolean minFlux = false;
 
 	HashMap<String, BioEntity> regulators;
 
@@ -105,10 +102,10 @@ public class BECOAnalysis extends Analysis {
 	public BECOAnalysis(Bind bind, String sbmlFile,
 			String regulationFile, String conditionFile,
 			String constraintFile, ListOfObjectives objectives,
-			ConstraintType type, Boolean extended, String solver,
+			Boolean extended, String solver,
 			String reactionMetaDataFile, String geneMetaDataFile,
 			String regulatorMetaDataFile, String mdSep, String inchlibPath,
-			Boolean minFlux, Boolean noReactionAnalysis,
+			Boolean noReactionAnalysis,
 			Boolean noGeneAnalysis, Boolean noRegulatorAnalysis,
 			Double liberty, int precision) {
 
@@ -119,14 +116,12 @@ public class BECOAnalysis extends Analysis {
 		this.solver = solver;
 		this.conditionFile = conditionFile;
 		this.regulationFile = regulationFile;
-		this.constraintType = type;
 		this.constraintFile = constraintFile;
 		this.reactionMetaDataFile = reactionMetaDataFile;
 		this.geneMetaDataFile = geneMetaDataFile;
 		this.regulatorMetaDataFile = regulatorMetaDataFile;
 		this.mdSep = mdSep;
 		this.inchlibPath = inchlibPath;
-		this.minFlux = minFlux;
 		this.launchGeneAnalysis = !noGeneAnalysis;
 		this.launchReactionAnalysis = !noReactionAnalysis;
 		this.launchRegulatorAnalysis = !noRegulatorAnalysis;
@@ -142,7 +137,7 @@ public class BECOAnalysis extends Analysis {
 		/**
 		 * Reads the conditionFile
 		 */
-		Boolean flag = conditions.loadConditionFile(conditionFile, constraintType);
+		Boolean flag = conditions.loadConditionFile(conditionFile, ConstraintType.DOUBLE);
 		if (flag == false) {
 			this.flag = false;
 		} else {
@@ -199,20 +194,6 @@ public class BECOAnalysis extends Analysis {
 
 		b.setLoadObjective(false);
 
-		Boolean integer = false;
-		Boolean binary = false;
-
-		if (constraintType.equals(ConstraintType.BINARY)) {
-			integer = false;
-			binary = true;
-		} else if (constraintType.equals(ConstraintType.INTEGER)) {
-			integer = true;
-			binary = false;
-		} else {
-			integer = false;
-			binary = false;
-		}
-
 		/**
 		 * Loads the metabolic network
 		 */
@@ -235,7 +216,7 @@ public class BECOAnalysis extends Analysis {
 
 				BioEntity bioEntity = new BioEntity(id, id);
 
-				b.addRightEntityType(bioEntity, integer, binary);
+				b.addRightEntityType(bioEntity, false, false);
 
 				// If the entity is neither a gene "GPR" or a metabolite or a
 				// reaction , we put it in the regulator list
@@ -274,22 +255,22 @@ public class BECOAnalysis extends Analysis {
 
 		obj = b.makeObjectiveFromString(objString, maximize, objName);
 
-		if (minimizeFlux == true && this.minFlux == true) {
-			BioEntity fluxSumEnt = b.createFluxesSummation();
-
-			BioEntity fluxSumEntArray[] = { fluxSumEnt };
-			double fluxSumCoeff[] = { 1.0 };
-
-			Objective objMinFluxSum = new Objective(fluxSumEntArray,
-					fluxSumCoeff, "fluxSum", false);
-
-			b.setObjective(objMinFluxSum);
-
-			b.constraintObjectives.add(obj);
-
-		} else {
+//		if (minimizeFlux == true && this.minFlux == true) {
+//			BioEntity fluxSumEnt = b.createFluxesSummation();
+//
+//			BioEntity fluxSumEntArray[] = { fluxSumEnt };
+//			double fluxSumCoeff[] = { 1.0 };
+//
+//			Objective objMinFluxSum = new Objective(fluxSumEntArray,
+//					fluxSumCoeff, "fluxSum", false);
+//
+//			b.setObjective(objMinFluxSum);
+//
+//			b.constraintObjectives.add(obj);
+//
+//		} else {
 			b.setObjective(obj);
-		}
+//		}
 
 		/**
 		 * Build list of constraints depending on the condition

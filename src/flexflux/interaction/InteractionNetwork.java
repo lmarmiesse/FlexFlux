@@ -149,6 +149,12 @@ public class InteractionNetwork {
 
 	}
 
+	/**
+	 * 
+	 * @param ent
+	 * @param value
+	 * @return
+	 */
 	public Integer getStateFromValue(BioEntity ent, double value) {
 
 		int ndState = -1;
