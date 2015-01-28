@@ -72,7 +72,7 @@ public class RSAAnalysis extends Analysis {
 								.getInitialConstraints().get(b).getLb()));
 			} else {
 				try {
-					thisState.put(b, (int) Math.round(intNet.getInitialConstraints()
+					thisState.put(b, defaultQuantitativeToQualitative(intNet.getInitialConstraints()
 							.get(b).getLb()));
 				} catch (Exception e) {
 					System.err
@@ -94,7 +94,7 @@ public class RSAAnalysis extends Analysis {
 								.getInitialConstraints().get(b).getLb()));
 					} else {
 						try {
-							thisState.put(b, (int) Math.round( intNet
+							thisState.put(b, defaultQuantitativeToQualitative( intNet
 									.getInitialConstraints().get(b).getLb()));
 						} catch (Exception e) {
 							System.err
@@ -369,4 +369,30 @@ public class RSAAnalysis extends Analysis {
 		return steadyStateConstraints;
 	}
 
+	/**
+	 * given a double, returns the corresponding integer.
+	 * if double=0.0 -> integer = 0
+	 * if double < 0 -> integer = 1
+	 * if double > 0 -> integer = 1
+	 * @param value
+	 */
+	private int defaultQuantitativeToQualitative(double value) {
+		
+		if(value <= -1 || value >= 1) {
+			return (int) Math.round(value);
+		}
+		
+		if(value < 0 && value > - 1) {
+			return -1;
+		}
+		
+		if(value > 0 && value < 1) {
+			return 1;
+		}
+		
+		return 0;
+		
+	}
+	
+	
 }

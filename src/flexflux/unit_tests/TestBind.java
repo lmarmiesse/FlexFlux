@@ -34,6 +34,10 @@
 package flexflux.unit_tests;
 
 import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
+
+
+
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.CplexBind;
@@ -204,7 +208,7 @@ public class TestBind extends FFUnitTest{
 
 		double res = bind.FBA(new ArrayList<Constraint>(), true, true).result;
 
-		Assert.assertTrue(res == 14.0);
+		Assert.assertEquals("Test FBA", res,14.0, 0.0);
 
 		Assert.assertTrue(Math.abs(bind.getSolvedValue(new BioEntity("d")) - 40.0) < 0.001);
 
