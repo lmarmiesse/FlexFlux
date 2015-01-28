@@ -399,9 +399,9 @@ public class TestBECO extends FFUnitTest{
 		
 		BECOAnalysis a = new BECOAnalysis(null,
 				f.sbmlFile, f.regFile, f.conditionFile, f.constraintFile,
-				objectives, ConstraintType.DOUBLE, false, solver,
+				objectives, false, solver,
 				metaDataReactionFile, metaDataGeneFile, metaDataRegulatorFile,
-				",", inchlibPath, true, false, false, false, 0.0, 6);
+				",", inchlibPath, false, false, false, 0.0, 6);
 
 		r = a.runAnalysis();
 

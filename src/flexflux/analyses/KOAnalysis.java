@@ -34,7 +34,7 @@
 package flexflux.analyses;
 
 import flexflux.analyses.result.KOResult;
-import flexflux.analyses.result.SteadyStateAnalysisResult;
+import flexflux.analyses.result.RSAAnalysisResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.Vars;
@@ -154,8 +154,8 @@ public class KOAnalysis extends Analysis {
 			}
 		}
 		
-		SteadyStateAnalysis ssa = new SteadyStateAnalysis(b,b.getInteractionNetwork(),b.getSimpleConstraints());
-		SteadyStateAnalysisResult res = ssa.runAnalysis();
+		RSAAnalysis ssa = new RSAAnalysis(b,b.getInteractionNetwork(),b.getSimpleConstraints());
+		RSAAnalysisResult res = ssa.runAnalysis();
 
 		List<Constraint> interactionNetworkConstraints = res.getSteadyStateConstraints();
 		// ////////////////

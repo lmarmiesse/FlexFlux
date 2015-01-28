@@ -9,13 +9,13 @@ import java.util.Set;
 
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioPhysicalEntity;
-import flexflux.analyses.result.SteadyStateAnalysisResult;
+import flexflux.analyses.result.RSAAnalysisResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.interaction.Interaction;
 import flexflux.interaction.InteractionNetwork;
 
-public class SteadyStateAnalysis extends Analysis {
+public class RSAAnalysis extends Analysis {
 
 	private InteractionNetwork intNet;
 
@@ -33,7 +33,7 @@ public class SteadyStateAnalysis extends Analysis {
 	 */
 	private int steadyStatesIterations = 100;
 
-	public SteadyStateAnalysis(Bind b, InteractionNetwork intNetwork,
+	public RSAAnalysis(Bind b, InteractionNetwork intNetwork,
 			Map<BioEntity, Constraint> simpleConstraints) {
 		super(b);
 		this.intNet = intNetwork;
@@ -42,9 +42,9 @@ public class SteadyStateAnalysis extends Analysis {
 	}
 
 	@Override
-	public SteadyStateAnalysisResult runAnalysis() {
+	public RSAAnalysisResult runAnalysis() {
 
-		SteadyStateAnalysisResult res = new SteadyStateAnalysisResult();
+		RSAAnalysisResult res = new RSAAnalysisResult();
 
 		if (intNet.getTargetToInteractions().isEmpty()
 				&& intNet.getInitialConstraints().isEmpty()
@@ -72,8 +72,8 @@ public class SteadyStateAnalysis extends Analysis {
 								.getInitialConstraints().get(b).getLb()));
 			} else {
 				try {
-					thisState.put(b, (int) intNet.getInitialConstraints()
-							.get(b).getLb());
+					thisState.put(b, defaultQuantitativeToQualitative(intNet.getInitialConstraints()
+							.get(b).getLb()));
 				} catch (Exception e) {
 					System.err
 							.println("Error : no translation available for variable "
@@ -94,8 +94,8 @@ public class SteadyStateAnalysis extends Analysis {
 								.getInitialConstraints().get(b).getLb()));
 					} else {
 						try {
-							thisState.put(b, (int) intNet
-									.getInitialConstraints().get(b).getLb());
+							thisState.put(b, defaultQuantitativeToQualitative( intNet
+									.getInitialConstraints().get(b).getLb()));
 						} catch (Exception e) {
 							System.err
 									.println("Error : no translation available for variable "
@@ -124,7 +124,7 @@ public class SteadyStateAnalysis extends Analysis {
 				} else {
 					try {
 						thisState
-								.put(b, (int) simpleConstraints.get(b).getLb());
+								.put(b, (int) Math.round( simpleConstraints.get(b).getLb()));
 					} catch (Exception e) {
 						System.err
 								.println("Error : no translation available for variable "
@@ -158,7 +158,7 @@ public class SteadyStateAnalysis extends Analysis {
 			// we update the values
 			for (Constraint c : newtStepConstraints.keySet()) {
 				newState.put((BioEntity) c.getEntities().keySet().toArray()[0],
-						(int) c.getLb());
+						(int) Math.round( c.getLb()));
 			}
 
 			thisState = newState;
@@ -369,4 +369,30 @@ public class SteadyStateAnalysis extends Analysis {
 		return steadyStateConstraints;
 	}
 
+	/**
+	 * given a double, returns the corresponding integer.
+	 * if double=0.0 -> integer = 0
+	 * if double < 0 -> integer = 1
+	 * if double > 0 -> integer = 1
+	 * @param value
+	 */
+	private int defaultQuantitativeToQualitative(double value) {
+		
+		if(value <= -1 || value >= 1) {
+			return (int) Math.round(value);
+		}
+		
+		if(value < 0 && value > - 1) {
+			return -1;
+		}
+		
+		if(value > 0 && value < 1) {
+			return 1;
+		}
+		
+		return 0;
+		
+	}
+	
+	
 }

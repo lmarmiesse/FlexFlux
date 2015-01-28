@@ -1,0 +1,5 @@
+ConditionCode	maxR_OBJ	minR_OBJ2
+C1	R3,R5,R_E_EX,R_F_EX	R3,R5,R_E_EX,R_F_EX
+C2	R5	R5
+C3	R3,R5,R_E_EX,R_F_EX	R3,R5,R_E_EX,R_F_EX
+C4	R5	R5
