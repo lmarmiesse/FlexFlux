@@ -442,8 +442,7 @@ public abstract class Bind {
 
 									if (reac.getRightList().containsKey(
 											metab.getId())
-											&& reac.getRightList().size() == 1
-											&& reac.isReversible() == true) {
+											&& reac.getRightList().size() == 1 ) {
 
 										double lb = 0.0;
 
@@ -643,7 +642,7 @@ public abstract class Bind {
 	public void loadRegulationFile(String path) {
 
 		intNet = SBMLQualReader.loadSbmlQual(path, intNet, relationFactory);
-	
+
 	}
 
 	/**
@@ -674,8 +673,8 @@ public abstract class Bind {
 
 	/**
 	 * 
-	 * Loads the objective, creates variables and constraints from the constraints
-	 * file
+	 * Loads the objective, creates variables and constraints from the
+	 * constraints file
 	 * 
 	 * @param path
 	 *            Path to the constraints file.
@@ -729,9 +728,7 @@ public abstract class Bind {
 					// we create the objective at the end
 				}
 
-				
-				
-				else if (!line.replaceAll("\\s","").equals("")) {
+				else if (!line.replaceAll("\\s", "").equals("")) {
 
 					// when it's not the equations
 					if (!equations) {
@@ -794,9 +791,10 @@ public abstract class Bind {
 						}
 
 						if (fileEntities.contains(entity)) {
-							System.err.println("Error in constraints file line "
-									+ nbLine + ", entity " + expr[0]
-									+ " is set more than once");
+							System.err
+									.println("Error in constraints file line "
+											+ nbLine + ", entity " + expr[0]
+											+ " is set more than once");
 
 							isError = true;
 						}

@@ -100,8 +100,6 @@ public class TestTDRFBA extends FFUnitTest{
 
 		bind.loadConstraintsFile("src/flexflux/unit_tests/data/rfba/condTestRfba");
 
-//		bind.loadInteractionsFile("Data/intTestRfba");
-		
 		bind.loadRegulationFile("src/flexflux/unit_tests/data/rfba/rfba.sbml");
 
 		bind.prepareSolver();

@@ -425,6 +425,7 @@ public class TestBECO extends FFUnitTest{
 
 		FileAssert.assertEquals("Fba results are different from the reference",
 				fileRef, fileTest);
+		
 
 	}
 

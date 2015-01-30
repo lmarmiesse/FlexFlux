@@ -2,15 +2,15 @@
 <sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" xmlns:qual="http://www.sbml.org/sbml/level3/version1/qual/version1" level="3" version="1" qual:required="true">
   <model>
     <listOfCompartments>
-      <compartment id="c" constant="true"/>
+      <compartment id="cyto" constant="true"/>
     </listOfCompartments>
     <qual:listOfQualitativeSpecies>
-      <qual:qualitativeSpecies qual:compartment="c" qual:constant="false" qual:name="a " qual:initialLevel="5" qual:maxLevel="5"/>
-      <qual:qualitativeSpecies qual:id="b" qual:compartment="c" qual:constant="false" qual:name="b" qual:initialLevel="0" qual:maxLevel="5"/>
-      <qual:qualitativeSpecies qual:id="e" qual:compartment="c" qual:constant="false" qual:name="e" qual:initialLevel="0" qual:maxLevel="5"/>
-      <qual:qualitativeSpecies qual:id="d" qual:compartment="c" qual:constant="false" qual:name="d" qual:initialLevel="0" qual:maxLevel="5"/>
-      <qual:qualitativeSpecies qual:id="gene1" qual:compartment="c" qual:constant="false" qual:name="gene1" qual:initialLevel="0" qual:maxLevel="1"/>
-      <qual:qualitativeSpecies qual:compartment="c" qual:constant="false" qual:name="c " qual:initialLevel="0" qual:maxLevel="5"/>
+      <qual:qualitativeSpecies qual:id="a" qual:compartment="cyto" qual:constant="false" qual:name="a " qual:initialLevel="5" qual:maxLevel="5"/>
+      <qual:qualitativeSpecies qual:id="b" qual:compartment="cyto" qual:constant="false" qual:name="b" qual:initialLevel="0" qual:maxLevel="5"/>
+      <qual:qualitativeSpecies qual:id="e" qual:compartment="cyto" qual:constant="false" qual:name="e" qual:initialLevel="0" qual:maxLevel="5"/>
+      <qual:qualitativeSpecies qual:id="d" qual:compartment="cyto" qual:constant="false" qual:name="d" qual:initialLevel="0" qual:maxLevel="5"/>
+      <qual:qualitativeSpecies qual:id="gene1" qual:compartment="cyto" qual:constant="false" qual:name="gene1" qual:initialLevel="0" qual:maxLevel="1"/>
+      <qual:qualitativeSpecies qual:id="c" qual:compartment="cyto" qual:constant="false" qual:name="c " qual:initialLevel="0" qual:maxLevel="5"/>
     </qual:listOfQualitativeSpecies>
     <qual:listOfTransitions>
       <qual:transition qual:id="tr_a">
