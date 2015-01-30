@@ -34,7 +34,7 @@
       <compartment id="cytosol" constant="true" name="cytosol"/>
     </listOfCompartments>
       <qual:listOfQualitativeSpecies xmlns:qual="http://www.sbml.org/sbml/level3/version1/qual/version1">
-      <qual:qualitativeSpecies qual:constant="true" qual:compartment="extracellular" qual:name="Bacteria" qual:id="s_Bacteria"/>
+      <qual:qualitativeSpecies qual:constant="true" qual:compartment="extracellular" qual:name="Bacteria" qual:maxLevel="6" qual:id="s_Bacteria"/>
       <qual:qualitativeSpecies qual:constant="false" qual:compartment="cytosol" qual:maxLevel="3" qual:name="MYB30" qual:initialLevel="3" qual:id="s_MYB30">
        <notes>
           <body xmlns="http://www.w3.org/1999/xhtml">

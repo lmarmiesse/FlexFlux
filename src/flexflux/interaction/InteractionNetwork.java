@@ -36,8 +36,10 @@ package flexflux.interaction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import parsebionet.biodata.BioEntity;
@@ -56,6 +58,12 @@ public class InteractionNetwork {
 	 * List of entities that belong to the interaction network
 	 */
 	private Map<String, BioEntity> interactionNetworkEntities = new HashMap<String, BioEntity>();
+
+	/**
+	 * Minimum and maximum states of the entities that belong to the interaction
+	 * network
+	 */
+	private Map<BioEntity, int[]> interactionNetworkEntitiesStates = new HashMap<BioEntity, int[]>();
 
 	/**
 	 * List of entities with real values.
@@ -123,8 +131,31 @@ public class InteractionNetwork {
 	public void addInteractionNetworkEntity(BioEntity ent) {
 		interactionNetworkEntities.put(ent.getId(), ent);
 	}
+
+	public void setInteractionNetworkEntityState(BioEntity ent, int maxState) {
+
+		interactionNetworkEntitiesStates.put(ent, new int[] { 0, maxState });
+
+	}
+
+	public void updateInteractionNetworkEntityState(BioEntity ent, int state) {
+
+		if (state > interactionNetworkEntitiesStates.get(ent)[1]) {
+			System.err.println("Error : value " + state + " for species "
+					+ ent.getId() + " is greater than maximum state");
+		}
+		if (state < interactionNetworkEntitiesStates.get(ent)[0]) {
+			interactionNetworkEntitiesStates.get(ent)[0] = state;
+		}
+
+	}
+
+	public Map<BioEntity, int[]> getInteractionNetworkEntitiesStates() {
+		return interactionNetworkEntitiesStates;
+	}
+
 	public void setInteractionNetworkEntities(Map<String, BioEntity> a) {
-		interactionNetworkEntities=a;
+		interactionNetworkEntities = a;
 	}
 
 	public boolean canTranslate(BioEntity ent) {
@@ -134,9 +165,9 @@ public class InteractionNetwork {
 	public Map<BioEntity, Integer> getInitialStates() {
 		return initialStates;
 	}
-	
+
 	public void setInitialStates(Map<BioEntity, Integer> states) {
-		initialStates=states;
+		initialStates = states;
 	}
 
 	public Constraint getConstraintFromState(BioEntity ent, Integer state) {
@@ -237,7 +268,7 @@ public class InteractionNetwork {
 
 	public void addTargetConditionalInteraction(BioEntity target,
 			Interaction inter) {
-		
+
 		if (targetToInteractions.get(target) == null) {
 			targetToInteractions.put(target, new FFTransition());
 		}
@@ -346,32 +377,33 @@ public class InteractionNetwork {
 		newInteractionNetwork.setBinaryEntities(this.getBinaryEntities());
 		newInteractionNetwork.setIntEntities(this.getIntEntities());
 		newInteractionNetwork.setNumEntities(this.getNumEntities());
-		
-		for (Interaction gprInt : this.getGPRInteractions())
-		{
+
+		for (Interaction gprInt : this.getGPRInteractions()) {
 			newInteractionNetwork.addGPRIntercation(gprInt);
 		}
 
-		
-		for (BioEntity ent : initialConstraints.keySet()){
-			newInteractionNetwork.addInitialConstraint(ent, initialConstraints.get(ent));
-			
+		for (BioEntity ent : initialConstraints.keySet()) {
+			newInteractionNetwork.addInitialConstraint(ent,
+					initialConstraints.get(ent));
+
 		}
-		
+
 		for (BioEntity ent : initialStates.keySet()) {
 			newInteractionNetwork.addInitialState(ent, initialStates.get(ent));
 		}
 
-		
+		newInteractionNetwork.interactionNetworkEntitiesStates = this.getInteractionNetworkEntitiesStates();
+
 		newInteractionNetwork.setInteractionToConstraints(this
 				.getInteractionToConstraints());
 		newInteractionNetwork.setTargetToInteractions(this
 				.getTargetToInteractions());
-		newInteractionNetwork.setInteractionNetworkEntities(this.getInteractionNetworkEntities());
-		
-		newInteractionNetwork.entityStateConstraintTranslation=this.getEntityStateConstraintTranslation();
-		
-		
+		newInteractionNetwork.setInteractionNetworkEntities(this
+				.getInteractionNetworkEntities());
+
+		newInteractionNetwork.entityStateConstraintTranslation = this
+				.getEntityStateConstraintTranslation();
+
 		return newInteractionNetwork;
 	}
 

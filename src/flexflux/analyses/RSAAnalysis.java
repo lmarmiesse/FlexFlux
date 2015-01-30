@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioPhysicalEntity;
 import flexflux.analyses.result.RSAAnalysisResult;
@@ -52,6 +54,10 @@ public class RSAAnalysis extends Analysis {
 			return res;
 		}
 
+		if (intNet.getInteractionNetworkEntities().isEmpty()) {
+			return res;
+		}
+
 		List<BioEntity> entitiesToCheck = new ArrayList<BioEntity>();
 		entitiesToCheck.addAll(intNet.getTargetToInteractions().keySet());
 
@@ -64,44 +70,83 @@ public class RSAAnalysis extends Analysis {
 
 		for (BioEntity b : intNet.getInitialConstraints().keySet()) {
 
-			// TRANSLATION
-			if (intNet.canTranslate(b)) {
-				thisState.put(
-						b,
-						intNet.getStateFromValue(b, intNet
-								.getInitialConstraints().get(b).getLb()));
-			} else {
-				try {
-					thisState.put(b, defaultQuantitativeToQualitative(intNet.getInitialConstraints()
-							.get(b).getLb()));
-				} catch (Exception e) {
-					System.err
-							.println("Error : no translation available for variable "
-									+ b.getId()
-									+ " and value "
-									+ simpleConstraints.get(b).getLb());
-				}
-			}
-			// if this entity had a simple constraint, but not fix (ub!=lb) we
-			// overwrite it
+			// If the entity is in the regulatory network
+			if (intNet.getInteractionNetworkEntities().containsKey(b.getId())) {
 
-			if (simpleConstraints.containsKey(b)) {
-				if (simpleConstraints.get(b).getLb() != simpleConstraints
-						.get(b).getUb()) {
-
-					if (intNet.canTranslate(b)) {
-						thisState.put(b, intNet.getStateFromValue(b, intNet
-								.getInitialConstraints().get(b).getLb()));
-					} else {
-						try {
-							thisState.put(b, defaultQuantitativeToQualitative( intNet
+				// TRANSLATION
+				if (intNet.canTranslate(b)) {
+					thisState.put(
+							b,
+							intNet.getStateFromValue(b, intNet
 									.getInitialConstraints().get(b).getLb()));
-						} catch (Exception e) {
-							System.err
-									.println("Error : no translation available for variable "
-											+ b.getId()
-											+ " and value "
-											+ simpleConstraints.get(b).getLb());
+				} else {
+
+					int stateMin = intNet.getInteractionNetworkEntitiesStates()
+							.get(b)[0];
+
+					int stateMax = intNet.getInteractionNetworkEntitiesStates()
+							.get(b)[1];
+
+					double value = intNet.getInitialConstraints().get(b)
+							.getLb();
+
+					// If the value is an integer AND is between min and max
+					// states
+					if (value <= stateMax && value >= stateMin
+							&& value == Math.floor(value)) {
+
+						thisState.put(b, (int) value);
+
+					} else {
+						System.err
+								.println("Error : no translation available for variable "
+										+ b.getId() + " and value " + value);
+						System.exit(0);
+					}
+
+				}
+
+				// if this entity had a simple constraint, but not fix (ub!=lb)
+				// we
+				// overwrite it
+
+				if (simpleConstraints.containsKey(b)) {
+					if (simpleConstraints.get(b).getLb() != simpleConstraints
+							.get(b).getUb()) {
+
+						if (intNet.canTranslate(b)) {
+							thisState.put(
+									b,
+									intNet.getStateFromValue(b, intNet
+											.getInitialConstraints().get(b)
+											.getLb()));
+						} else {
+							int stateMin = intNet
+									.getInteractionNetworkEntitiesStates().get(
+											b)[0];
+
+							int stateMax = intNet
+									.getInteractionNetworkEntitiesStates().get(
+											b)[1];
+
+							double value = simpleConstraints.get(b).getLb();
+
+							// If the value is an integer AND is between min and
+							// max
+							// states
+							if (value <= stateMax && value >= stateMin
+									&& value == Math.floor(value)) {
+
+								thisState.put(b, (int) value);
+
+							} else {
+								System.err
+										.println("Error : no translation available for variable "
+												+ b.getId()
+												+ " and value "
+												+ value);
+								System.exit(0);
+							}
 						}
 					}
 				}
@@ -110,32 +155,48 @@ public class RSAAnalysis extends Analysis {
 
 		for (BioEntity b : simpleConstraints.keySet()) {
 
-			// if the entity is already set by a constraint, we remove te
-			// interactions
-			// that have this entity as a target
-			if (simpleConstraints.get(b).getLb() == simpleConstraints.get(b)
-					.getUb()) {
+			// If the entity is in the regulatory network
+			if (intNet.getInteractionNetworkEntities().containsKey(b.getId())) {
 
-				// TRANSLATION
-				if (intNet.canTranslate(b)) {
+				// if the entity is already set by a constraint, we remove te
+				// interactions
+				// that have this entity as a target
+				if (simpleConstraints.get(b).getLb() == simpleConstraints
+						.get(b).getUb()) {
 
-					thisState.put(b, intNet.getStateFromValue(b,
-							simpleConstraints.get(b).getLb()));
-				} else {
-					try {
-						thisState
-								.put(b, (int) Math.round( simpleConstraints.get(b).getLb()));
-					} catch (Exception e) {
-						System.err
-								.println("Error : no translation available for variable "
-										+ b.getId()
-										+ " and value "
-										+ simpleConstraints.get(b).getLb());
+					// TRANSLATION
+					if (intNet.canTranslate(b)) {
+
+						thisState.put(b, intNet.getStateFromValue(b,
+								simpleConstraints.get(b).getLb()));
+					} else {
+						int stateMin = intNet
+								.getInteractionNetworkEntitiesStates().get(b)[0];
+
+						int stateMax = intNet
+								.getInteractionNetworkEntitiesStates().get(b)[1];
+
+						double value = simpleConstraints.get(b).getLb();
+
+						// If the value is an integer AND is between min and
+						// max
+						// states
+						if (value <= stateMax && value >= stateMin
+								&& value == Math.floor(value)) {
+
+							thisState.put(b, (int) value);
+
+						} else {
+							System.err
+									.println("Error : no translation available for variable "
+											+ b.getId() + " and value " + value);
+							System.exit(0);
+						}
 					}
-				}
 
-				if (intNet.getTargetToInteractions().containsKey(b)) {
-					entitiesToCheck.remove(b);
+					if (intNet.getTargetToInteractions().containsKey(b)) {
+						entitiesToCheck.remove(b);
+					}
 				}
 			}
 		}
@@ -158,7 +219,7 @@ public class RSAAnalysis extends Analysis {
 			// we update the values
 			for (Constraint c : newtStepConstraints.keySet()) {
 				newState.put((BioEntity) c.getEntities().keySet().toArray()[0],
-						(int) Math.round( c.getLb()));
+						(int) Math.round(c.getLb()));
 			}
 
 			thisState = newState;
@@ -261,10 +322,11 @@ public class RSAAnalysis extends Analysis {
 				}
 			}
 
-		}
-		else{
-			System.err.println("Warning, no regulatory network attractor was found in "+steadyStatesIterations+ " iterations.");
-			
+		} else {
+			System.err
+					.println("Warning, no regulatory network attractor was found in "
+							+ steadyStatesIterations + " iterations.");
+
 		}
 		res.setStatesList(statesList);
 		res.setatractorStatesList(atractorStatesList);
@@ -369,30 +431,4 @@ public class RSAAnalysis extends Analysis {
 		return steadyStateConstraints;
 	}
 
-	/**
-	 * given a double, returns the corresponding integer.
-	 * if double=0.0 -> integer = 0
-	 * if double < 0 -> integer = 1
-	 * if double > 0 -> integer = 1
-	 * @param value
-	 */
-	private int defaultQuantitativeToQualitative(double value) {
-		
-		if(value <= -1 || value >= 1) {
-			return (int) Math.round(value);
-		}
-		
-		if(value < 0 && value > - 1) {
-			return -1;
-		}
-		
-		if(value > 0 && value < 1) {
-			return 1;
-		}
-		
-		return 0;
-		
-	}
-	
-	
 }
