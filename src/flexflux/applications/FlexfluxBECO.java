@@ -88,6 +88,10 @@ public class FlexfluxBECO extends FFApplication {
 	
 	@Option(name = "-cytoscape", usage = "[OPTIONAL] Generates cytoscape files")
 	public Boolean cytoscape = false;
+	
+	@Option(name = "-fixConditions", usage = "[OPTIONAL] If true, the conditions set in the condition file are fix and can not be updated by the regulation network.")
+	public Boolean fixConditions = false;
+	
 
 	public static void main(String[] args) {
 
@@ -130,7 +134,7 @@ public class FlexfluxBECO extends FFApplication {
 				f.metaReactionDataFile, f.metaGeneDataFile,
 				f.metaRegulatorDataFile, f.mdSep, f.inchlibPath,
 				f.noReactionAnalysis, f.noGeneAnalysis, f.noRegulatorAnalysis,
-				f.liberty, f.precision);
+				f.liberty, f.precision, f.getFixConditions());
 
 		if (f.verbose) {
 			Vars.verbose = true;
@@ -163,6 +167,10 @@ public class FlexfluxBECO extends FFApplication {
 
 	public Boolean getCytoscape() {
 		return cytoscape;
+	}
+
+	public Boolean getFixConditions() {
+		return fixConditions;
 	}
 	
 	
