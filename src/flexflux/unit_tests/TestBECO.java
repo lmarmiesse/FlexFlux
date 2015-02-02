@@ -85,6 +85,7 @@ public class TestBECO extends FFUnitTest{
 	private static String metaDataReactionFile = "";
 
 	private static String basePath = "";
+	private static String basePath2 = "";
 
 	private static String tmpPath = "/tmp/testConditionComparison";
 	
@@ -396,12 +397,12 @@ public class TestBECO extends FFUnitTest{
 			Assert.fail("Error in reading the objective file");
 		}
 		
-		
+		// Conditions are not fixed
 		BECOAnalysis a = new BECOAnalysis(null,
 				f.sbmlFile, f.regFile, f.conditionFile, f.constraintFile,
 				objectives, false, solver,
 				metaDataReactionFile, metaDataGeneFile, metaDataRegulatorFile,
-				",", inchlibPath, false, false, false, 0.0, 6);
+				",", inchlibPath, false, false, false, 0.0, 6, false);
 
 		r = a.runAnalysis();
 
@@ -413,6 +414,28 @@ public class TestBECO extends FFUnitTest{
 		basePath = tmpPath + "/test_";
 
 		r.writeToFile(basePath);
+		
+		r.writeCytoscapeFiles(basePath+"/cytoscape", true);
+		
+		// Conditions are fixed
+		a = new BECOAnalysis(null,
+				f.sbmlFile, f.regFile, f.conditionFile, f.constraintFile,
+				objectives, false, solver,
+				metaDataReactionFile, metaDataGeneFile, metaDataRegulatorFile,
+				",", inchlibPath, false, false, false, 0.0, 6, true);
+
+		r = a.runAnalysis();
+
+		tempDir = new File(tmpPath);
+		if (!tempDir.exists()) {
+			tempDir.mkdir();
+		}
+
+		basePath2 = tmpPath + "/test_fixed";
+
+		r.writeToFile(basePath2);
+		
+		r.writeCytoscapeFiles(basePath2+"/cytoscape", true);
 
 	}
 
@@ -672,10 +695,24 @@ public class TestBECO extends FFUnitTest{
 				fileTest);
 	}
 
+	
+	/**
+	 * Test while fixing conditions
+	 */
+	
 	@Test
-	public void testWriteCytoscapeFiles() {
-		r.writeCytoscapeFiles(basePath+"/cytoscape", true);
+	public void testFba_fixed() {
+
+		String pathFileTest = basePath2 + "/fba_results.csv";
+		File fileTest = new File(pathFileTest);
+		File fileRef = new File(referenceFbaFile);
+
+		FileAssert.assertEquals("Fba results are different from the reference",
+				fileRef, fileTest);
+
 	}
+	
+	
 	
 	@AfterClass
 	public static void afterTest() {
