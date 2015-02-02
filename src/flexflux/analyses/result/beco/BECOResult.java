@@ -155,7 +155,7 @@ public class BECOResult extends AnalysisResult {
 		if (!pfbaAllResults.containsKey(conditionId)) {
 			pfbaAllResults.put(conditionId, new HashMap<String, ClassificationResult>());
 		}
-
+		
 		pfbaAllResults.get(conditionId).put(objId, res);
 	}
 
@@ -1772,11 +1772,14 @@ public class BECOResult extends AnalysisResult {
 				 */
 				ClassificationResult res = this.pfbaAllResults.get(condition).get(obj);
 
+				System.err.println("ObjPath : "+objPath);
+				System.err.println("res : "+res.objectiveValue);
+				
 				Boolean flag = res.writeCytoscapeClassifAttribute(objPath + "/classif.attr", sbmlEncode);
 
 				if (!flag) {
 					System.err
-							.println("[ConditionComparison Error] Problem while creating Cytoscape file for "
+							.println("[BECO Error] Problem while creating Cytoscape file for "
 									+ condition + " -- " + obj);
 					return flag;
 				}

@@ -121,7 +121,7 @@ public class ROBAAnalysis extends Analysis {
 		}
 
 		if (Vars.verbose) {
-			System.err.println("ERA analysis over "
+			System.err.println("ROBA analysis over "
 					+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
 					+ Vars.maxThread + " threads");
 		}

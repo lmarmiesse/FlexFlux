@@ -99,15 +99,16 @@ public class BECOAnalysis extends Analysis {
 	public Boolean launchGeneAnalysis;
 	public Boolean launchRegulatorAnalysis;
 
-	public BECOAnalysis(Bind bind, String sbmlFile,
-			String regulationFile, String conditionFile,
-			String constraintFile, ListOfObjectives objectives,
-			Boolean extended, String solver,
+	public Boolean fixConditions;
+
+	public BECOAnalysis(Bind bind, String sbmlFile, String regulationFile,
+			String conditionFile, String constraintFile,
+			ListOfObjectives objectives, Boolean extended, String solver,
 			String reactionMetaDataFile, String geneMetaDataFile,
 			String regulatorMetaDataFile, String mdSep, String inchlibPath,
-			Boolean noReactionAnalysis,
-			Boolean noGeneAnalysis, Boolean noRegulatorAnalysis,
-			Double liberty, int precision) {
+			Boolean noReactionAnalysis, Boolean noGeneAnalysis,
+			Boolean noRegulatorAnalysis, Double liberty, int precision,
+			Boolean fixConditions) {
 
 		super(bind);
 
@@ -125,25 +126,26 @@ public class BECOAnalysis extends Analysis {
 		this.launchGeneAnalysis = !noGeneAnalysis;
 		this.launchReactionAnalysis = !noReactionAnalysis;
 		this.launchRegulatorAnalysis = !noRegulatorAnalysis;
+		this.fixConditions = fixConditions;
 
 		this.objectives = objectives;
 
 		Vars.libertyPercentage = liberty;
 		Vars.decimalPrecision = precision;
-		
-		
+
 		conditions = new ListOfConditions();
-		
+
 		/**
 		 * Reads the conditionFile
 		 */
-		Boolean flag = conditions.loadConditionFile(conditionFile, ConstraintType.DOUBLE);
+		Boolean flag = conditions.loadConditionFile(conditionFile,
+				ConstraintType.DOUBLE);
 		if (flag == false) {
 			this.flag = false;
 		} else {
-			
+
 			entities = conditions.entities;
-			
+
 			/**
 			 * Reads the SBML file
 			 */
@@ -255,28 +257,27 @@ public class BECOAnalysis extends Analysis {
 
 		obj = b.makeObjectiveFromString(objString, maximize, objName);
 
-//		if (minimizeFlux == true && this.minFlux == true) {
-//			BioEntity fluxSumEnt = b.createFluxesSummation();
-//
-//			BioEntity fluxSumEntArray[] = { fluxSumEnt };
-//			double fluxSumCoeff[] = { 1.0 };
-//
-//			Objective objMinFluxSum = new Objective(fluxSumEntArray,
-//					fluxSumCoeff, "fluxSum", false);
-//
-//			b.setObjective(objMinFluxSum);
-//
-//			b.constraintObjectives.add(obj);
-//
-//		} else {
-			b.setObjective(obj);
-//		}
+		// if (minimizeFlux == true && this.minFlux == true) {
+		// BioEntity fluxSumEnt = b.createFluxesSummation();
+		//
+		// BioEntity fluxSumEntArray[] = { fluxSumEnt };
+		// double fluxSumCoeff[] = { 1.0 };
+		//
+		// Objective objMinFluxSum = new Objective(fluxSumEntArray,
+		// fluxSumCoeff, "fluxSum", false);
+		//
+		// b.setObjective(objMinFluxSum);
+		//
+		// b.constraintObjectives.add(obj);
+		//
+		// } else {
+		b.setObjective(obj);
+		// }
 
 		/**
 		 * Build list of constraints depending on the condition
 		 */
 
-		List<Constraint> constraints = new ArrayList<Constraint>();
 		for (SimplifiedConstraint c : condition.constraints.values()) {
 			String id = c.entityId;
 			BioEntity e = null;
@@ -290,11 +291,15 @@ public class BECOAnalysis extends Analysis {
 			Map<BioEntity, Double> constraintMap = new HashMap<BioEntity, Double>();
 			constraintMap.put(e, 1.0);
 
-			Constraint constraint = new Constraint(constraintMap, c.getValue(), c.getValue());
+			Constraint constraint = new Constraint(constraintMap, c.getValue(),
+					c.getValue());
 
-			constraints.add(constraint);
-
-			b.getInteractionNetwork().addInitialConstraint(e, constraint);
+			if (fixConditions == false) {
+				b.getInteractionNetwork().addInitialConstraint(e, constraint);
+			}
+			else {
+				b.addSimpleConstraint(e, constraint);
+			}
 			// b.getConstraints().add(constraint);
 
 		}
@@ -308,9 +313,8 @@ public class BECOAnalysis extends Analysis {
 	@Override
 	public BECOResult runAnalysis() {
 
-		BECOResult result = new BECOResult(
-				conditions, objectives, network, inchlibPath,
-				launchReactionAnalysis, launchGeneAnalysis,
+		BECOResult result = new BECOResult(conditions, objectives, network,
+				inchlibPath, launchReactionAnalysis, launchGeneAnalysis,
 				launchRegulatorAnalysis);
 
 		ArrayList<String> objectiveNames = new ArrayList<String>(
@@ -366,13 +370,18 @@ public class BECOAnalysis extends Analysis {
 					ClassificationResult resPFBA = null;
 					if (!res.isNaN() && res != 0) {
 						this.init(objName, condition, false);
-						ClassificationAnalysis a = new ClassificationAnalysis(b, launchGeneAnalysis);
+						ClassificationAnalysis a = new ClassificationAnalysis(
+								b, launchGeneAnalysis);
 						a.addDeadReactions(deadReactions);
 						resPFBA = a.runAnalysis();
 
 						b.end();
 					}
-
+					else {
+						resPFBA = new ClassificationResult();
+						resPFBA.objectiveValue=0.0;
+						}
+					
 					result.addPFBAResult(obj, condition, resPFBA);
 				}
 
@@ -434,7 +443,6 @@ public class BECOAnalysis extends Analysis {
 
 		return result;
 	}
-
 
 	/**
 	 * 
