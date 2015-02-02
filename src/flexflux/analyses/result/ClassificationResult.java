@@ -38,6 +38,30 @@ public class ClassificationResult extends AnalysisResult {
 	public BioNetwork network;
 	
 
+	public ClassificationResult() {
+		
+		essentialReactions = new HashMap<String, BioEntity>();
+		zeroFluxReactions = new HashMap<String, BioEntity>();
+		mleReactions = new HashMap<String, BioEntity>();
+		concurrentReactions = new HashMap<String, BioEntity>();
+		eleReactions = new HashMap<String, BioEntity>();
+		objectiveIndependentReactions = new HashMap<String, BioEntity>();
+		optimaReactions = new HashMap<String, BioEntity>();
+		deadReactions = new HashMap<String, BioEntity>();
+
+		essentialGenes = new HashMap<String, BioEntity>();
+		zeroFluxGenes = new HashMap<String, BioEntity>();
+		mleGenes = new HashMap<String, BioEntity>();
+		concurrentGenes = new HashMap<String, BioEntity>();
+		eleGenes = new HashMap<String, BioEntity>();
+		objectiveIndependentGenes = new HashMap<String, BioEntity>();
+		optimaGenes = new HashMap<String, BioEntity>();
+		redundantGenesForEssentialReactions = new HashMap<String, BioEntity>();
+		deadGenes = new HashMap<String, BioEntity>();
+		
+	}
+	
+	
 	@Override
 	public void writeToFile(String path) {
 		// TODO Auto-generated method stub
