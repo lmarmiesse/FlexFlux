@@ -30,6 +30,7 @@ public class TestBECO extends FFUnitTest{
 	private static File tempObjectiveFile = null;
 	private static File tempConstraintFile = null;
 	private static File tempResultFbaFile = null;
+	private static File tempResultFbaFixedFile = null;
 	private static File tempResultEssentialFile = null;
 	private static File tempResultZeroFluxFile = null;
 	private static File tempResultMleFile = null;
@@ -65,6 +66,8 @@ public class TestBECO extends FFUnitTest{
 	private static String referenceIndependentFile = "";
 	private static String referenceOptimaFile = "";
 	private static String referenceDeadFile = "";
+	
+	private static String referenceFbaFixedFile = "";
 
 	private static String referenceEssentialGeneFile = "";
 	private static String referenceZeroFluxGeneFile = "";
@@ -123,6 +126,7 @@ public class TestBECO extends FFUnitTest{
 		java.nio.file.Path tmpObjective = null;
 		java.nio.file.Path tmpConstraint = null;
 		java.nio.file.Path tmpResultFba = null;
+		java.nio.file.Path tmpResultFbaFixed = null;
 		java.nio.file.Path tmpResultEssential = null;
 		java.nio.file.Path tmpResultZeroFlux = null;
 		java.nio.file.Path tmpResultMle = null;
@@ -156,6 +160,7 @@ public class TestBECO extends FFUnitTest{
 			tmpObjective = java.nio.file.Files.createTempFile("test", ".tab");
 			tmpConstraint = java.nio.file.Files.createTempFile("test", ".tab");
 			tmpResultFba = java.nio.file.Files.createTempFile("test", ".tab");
+			tmpResultFbaFixed = java.nio.file.Files.createTempFile("test", ".tab");
 			tmpResultEssential = java.nio.file.Files.createTempFile("test",
 					".tab");
 			tmpResultZeroFlux = java.nio.file.Files.createTempFile("test",
@@ -214,6 +219,7 @@ public class TestBECO extends FFUnitTest{
 		tempConstraintFile = tmpConstraint.toFile();
 
 		tempResultFbaFile = tmpResultFba.toFile();
+		tempResultFbaFixedFile = tmpResultFbaFixed.toFile();
 		tempResultEssentialFile = tmpResultEssential.toFile();
 		tempResultZeroFluxFile = tmpResultZeroFlux.toFile();
 		tempResultMleFile = tmpResultMle.toFile();
@@ -269,6 +275,12 @@ public class TestBECO extends FFUnitTest{
 					.copyProjectResource(
 							"flexflux/unit_tests/data/conditionComparisonTest/resultFBA.tab",
 							tempResultFbaFile);
+			
+			referenceFbaFixedFile = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/conditionComparisonTest/resultFBA_fixed.tab",
+							tempResultFbaFixedFile);
+			
 			referenceEssentialFile = TestUtils
 					.copyProjectResource(
 							"flexflux/unit_tests/data/conditionComparisonTest/resultEssential.tab",
@@ -706,7 +718,7 @@ public class TestBECO extends FFUnitTest{
 
 		String pathFileTest = basePath2 + "/fba_results.csv";
 		File fileTest = new File(pathFileTest);
-		File fileRef = new File(referenceFbaFile);
+		File fileRef = new File(referenceFbaFixedFile);
 
 		FileAssert.assertEquals("Fba results are different from the reference",
 				fileRef, fileTest);
