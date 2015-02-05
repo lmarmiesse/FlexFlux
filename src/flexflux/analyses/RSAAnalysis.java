@@ -54,10 +54,6 @@ public class RSAAnalysis extends Analysis {
 			return res;
 		}
 
-		if (intNet.getInteractionNetworkEntities().isEmpty()) {
-			return res;
-		}
-
 		List<BioEntity> entitiesToCheck = new ArrayList<BioEntity>();
 		entitiesToCheck.addAll(intNet.getTargetToInteractions().keySet());
 
@@ -289,37 +285,34 @@ public class RSAAnalysis extends Analysis {
 					}
 				}
 
-				if (intNet.getTargetToInteractions().containsKey(b)
-						|| isExtMetab) {
+				// if (intNet.getTargetToInteractions().containsKey(b)
+				// || isExtMetab) {
 
-					// We make the average of the values of all states of the
-					// attractor
-					double lb = 0;
-					double ub = 0;
-					for (int nb = 0; nb < atractorStatesList.size(); nb++) {
-						if (intNet.canTranslate(b)) {
-							lb += intNet.getConstraintFromState(b,
-									atractorStatesList.get(nb).get(b)).getLb();
-							ub += intNet.getConstraintFromState(b,
-									atractorStatesList.get(nb).get(b)).getUb();
-						} else {
-							lb += atractorStatesList.get(nb).get(b);
-							ub += atractorStatesList.get(nb).get(b);
-						}
-
+				// We make the average of the values of all states of the
+				// attractor
+				double lb = 0;
+				double ub = 0;
+				for (int nb = 0; nb < atractorStatesList.size(); nb++) {
+					if (intNet.canTranslate(b)) {
+						lb += intNet.getConstraintFromState(b,
+								atractorStatesList.get(nb).get(b)).getLb();
+						ub += intNet.getConstraintFromState(b,
+								atractorStatesList.get(nb).get(b)).getUb();
+					} else {
+						lb += atractorStatesList.get(nb).get(b);
+						ub += atractorStatesList.get(nb).get(b);
 					}
 
-					lb = lb / atractorStatesList.size();
-					ub = ub / atractorStatesList.size();
-
-					Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
-					constMap.put(b, 1.0);
-					finalConstraints.add(new Constraint(constMap, lb, ub));
 				}
 
-				else {
+				lb = lb / atractorStatesList.size();
+				ub = ub / atractorStatesList.size();
 
-				}
+				Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
+				constMap.put(b, 1.0);
+				finalConstraints.add(new Constraint(constMap, lb, ub));
+				// }
+
 			}
 
 		} else {

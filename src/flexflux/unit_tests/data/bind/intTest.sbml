@@ -9,7 +9,7 @@
       <qual:qualitativeSpecies qual:id="c" qual:compartment="c" qual:constant="false" qual:name="c" qual:initialLevel="0" qual:maxLevel="150"/>
       <qual:qualitativeSpecies qual:id="b" qual:compartment="c" qual:constant="false" qual:name="b" qual:initialLevel="0" qual:maxLevel="150"/>
       <qual:qualitativeSpecies qual:id="e" qual:compartment="c" qual:constant="false" qual:name="e" qual:initialLevel="0" qual:maxLevel="150"/>
-      <qual:qualitativeSpecies qual:id="d" qual:compartment="c" qual:constant="false" qual:name="d" qual:initialLevel="0" qual:maxLevel="150"/>
+      <qual:qualitativeSpecies qual:id="d" qual:compartment="c" qual:constant="false" qual:name="d" qual:initialLevel="40" qual:maxLevel="150"/>
    	  <qual:qualitativeSpecies qual:id="g" qual:compartment="c" qual:constant="false" qual:name="g" qual:initialLevel="0" qual:maxLevel="150"/>
       <qual:qualitativeSpecies qual:id="f" qual:compartment="c" qual:constant="false" qual:name="f" qual:initialLevel="0" qual:maxLevel="150"/>
     </qual:listOfQualitativeSpecies>
