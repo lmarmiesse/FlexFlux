@@ -208,7 +208,7 @@ public class TestBind extends FFUnitTest{
 
 		double res = bind.FBA(new ArrayList<Constraint>(), true, true).result;
 
-		Assert.assertEquals("Test FBA", res,14.0, 0.0);
+		Assert.assertEquals("Test FBA", 14.0,res, 0.0);
 
 		Assert.assertTrue(Math.abs(bind.getSolvedValue(new BioEntity("d")) - 40.0) < 0.001);
 
