@@ -327,7 +327,7 @@ public class RSAAnalysis extends Analysis {
 		// ////TRANSLATION
 
 		res.setSteadyStateConstraints(finalConstraints);
-
+		
 		// System.out.println("Attractor size : "+attractorSize);
 
 		return res;

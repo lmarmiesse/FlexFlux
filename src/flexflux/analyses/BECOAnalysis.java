@@ -231,7 +231,7 @@ public class BECOAnalysis extends Analysis {
 				}
 			}
 		}
-
+		
 		/**
 		 * Loads interaction file
 		 */
@@ -278,8 +278,11 @@ public class BECOAnalysis extends Analysis {
 		 * Build list of constraints depending on the condition
 		 */
 
+		
 		for (SimplifiedConstraint c : condition.constraints.values()) {
+			
 			String id = c.entityId;
+			
 			BioEntity e = null;
 
 			if (b.getInteractionNetwork().getEntity(id) == null) {
@@ -295,9 +298,13 @@ public class BECOAnalysis extends Analysis {
 					c.getValue());
 
 			if (fixConditions == false) {
-				b.getInteractionNetwork().addInitialConstraint(e, constraint);
-			}
-			else {
+				if (! b.getInteractionNetwork().getInteractionNetworkEntities().containsKey(id)) {
+					b.addSimpleConstraint(e, constraint);
+				} else {
+					b.getInteractionNetwork().addInitialConstraint(e,
+							constraint);
+				}
+			} else {
 				b.addSimpleConstraint(e, constraint);
 			}
 			// b.getConstraints().add(constraint);
@@ -376,12 +383,11 @@ public class BECOAnalysis extends Analysis {
 						resPFBA = a.runAnalysis();
 
 						b.end();
-					}
-					else {
+					} else {
 						resPFBA = new ClassificationResult();
-						resPFBA.objectiveValue=0.0;
-						}
-					
+						resPFBA.objectiveValue = 0.0;
+					}
+
 					result.addPFBAResult(obj, condition, resPFBA);
 				}
 
