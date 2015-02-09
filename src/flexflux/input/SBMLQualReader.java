@@ -152,12 +152,6 @@ public class SBMLQualReader {
 									if (!ubIncluded) {
 										ub -= Vars.epsilon;
 									}
-
-									if (ent.getId().equals("M_mobd_b")){
-										System.out.println(intervalString);
-										System.out.println(lb);
-										System.out.println(ub);
-									}
 						
 									
 									intNet.addEntityStateConstraintTranslation(
