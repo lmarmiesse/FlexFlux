@@ -90,6 +90,9 @@ public class SBMLQualReader {
 						if (text.startsWith("STATE")) {
 							String stateString = text.split(":")[0];
 							String intervalString = text.split(":")[1];
+							
+							
+							
 
 							intervalString = intervalString.replaceAll(" ", "");
 
@@ -108,6 +111,7 @@ public class SBMLQualReader {
 											.substring(0, 1);
 									String ubIncludedString = intervalString
 											.substring(intervalString.length() - 1);
+									
 
 									boolean lbIncluded = lbIncludedString
 											.equals("[");
@@ -119,6 +123,7 @@ public class SBMLQualReader {
 									intervalString = intervalString.replace(
 											"]", "");
 
+									
 									if (intervalString.split(",")[0]
 											.equals("-inf")) {
 										lb = -Double.MAX_VALUE;
@@ -148,6 +153,13 @@ public class SBMLQualReader {
 										ub -= Vars.epsilon;
 									}
 
+									if (ent.getId().equals("M_mobd_b")){
+										System.out.println(intervalString);
+										System.out.println(lb);
+										System.out.println(ub);
+									}
+						
+									
 									intNet.addEntityStateConstraintTranslation(
 											ent, stateNumber, new Constraint(
 													ent, lb, ub));
@@ -355,7 +367,8 @@ public class SBMLQualReader {
 					if (c == null) {
 						continue;
 					}
-
+					
+					
 					if (val >= c.getLb() && val <= c.getUb()) {
 						if (!belongsToAState) {
 							belongsToAState = true;

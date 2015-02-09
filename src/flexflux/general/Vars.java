@@ -61,10 +61,12 @@ public class Vars {
 	 * Determines if FlexFlux uses epsilon.
 	 */
 	public static boolean cheat = true;
+	
+	
 	/**
 	 * Value used to approximate inequalities.
 	 */
-	public static double epsilon = 0.00001;
+	public static double epsilon = 1e-10;
 
 	/**
 	 * Keyword for the sum of all fluxes.
