@@ -345,7 +345,7 @@ public class PP2DResult extends AnalysisResult {
 
 		JScrollPane fvaScrollPane = new JScrollPane(fvaPanel);
 
-		JFrame frame = new JFrame("Results");
+		JFrame frame = new JFrame("Phenotypic phase analysis results");
 
 		if (groupIndex.size() > 0) {
 

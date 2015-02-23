@@ -33,7 +33,7 @@ public class RSAAnalysis extends Analysis {
 	 * Maximal number of iterations to find a steady state in the regulatory
 	 * network.
 	 */
-	private int steadyStatesIterations = 100;
+	private int steadyStatesIterations = 10000;
 
 	public RSAAnalysis(Bind b, InteractionNetwork intNetwork,
 			Map<BioEntity, Constraint> simpleConstraints) {
@@ -267,6 +267,8 @@ public class RSAAnalysis extends Analysis {
 			}
 
 		}
+		
+		
 
 		statesList.add(thisState);
 
