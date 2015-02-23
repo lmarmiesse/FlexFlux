@@ -208,7 +208,7 @@ public class TDRFBAResult extends AnalysisResult {
 
 		sp.getViewport().setPreferredSize(d);
 
-		JFrame frame = new JFrame("rFBA results");
+		JFrame frame = new JFrame("Time-dependant FBA results");
 
 		frame.add(sp);
 		frame.pack();

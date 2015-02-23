@@ -442,7 +442,7 @@ public class PP3DResult extends AnalysisResult {
 		}
 
 		// put the PlotPanel in a JFrame like a JPanel
-		JFrame frame = new JFrame("Two reactions analysis results");
+		JFrame frame = new JFrame("Phenotypic phase analysis results");
 
 		if (expValues.size() > 0) {
 			frame.setTitle("Pareto analysis");

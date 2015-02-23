@@ -172,6 +172,7 @@ public class InteractionNetwork {
 
 	public Constraint getConstraintFromState(BioEntity ent, Integer state) {
 
+		//if ND
 		if (entityStateConstraintTranslation.get(ent).get(state) == null) {
 			return (new Constraint(ent, -Double.MAX_VALUE, Double.MAX_VALUE));
 		}
