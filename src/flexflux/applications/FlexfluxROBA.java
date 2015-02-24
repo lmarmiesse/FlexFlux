@@ -16,10 +16,10 @@ import flexflux.objective.ListOfObjectives;
 
 public class FlexfluxROBA extends FFApplication {
 
-	public String applicationName = FlexfluxBECO.class
+	public static String applicationName = FlexfluxBECO.class
 			.getSimpleName();
 
-	public String message = applicationName
+	public static String message = applicationName
 			+ "[options...]\n"
 			+ "Computes Robustness of the network among a set of objective functions "
 			+ "in front of random perturbations.";

@@ -16,10 +16,10 @@ public class FlexfluxBECO extends FFApplication {
 		super();
 	}
 	
-	public String applicationName = FlexfluxBECO.class
+	public static String applicationName = FlexfluxBECO.class
 			.getSimpleName();
 
-	public String message = applicationName
+	public static String message = applicationName
 			+ "[options...]\n"
 			+ "Compares the list of essential/usable genes/reactions in several conditions";
 

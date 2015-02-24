@@ -62,7 +62,7 @@ import parsebionet.biodata.BioEntity;
  */
 public class FlexfluxFVA extends FFApplication{
 
-	public String message = "FlexfluxFVA\n"
+	public static String message = "FlexfluxFVA\n"
 
 			+ "Computes an FVA given a metabolic network, an objective function and constraints.\n"
 			+ "Constraints can be obtained with calculated steady-states of a given regulatory network.\n"
@@ -70,7 +70,7 @@ public class FlexfluxFVA extends FFApplication{
 			+ "constraint and, given a list of entities, minimize and maximize their values.\n"
 			+ "If no entity is specified in argument -e, the FVA analysis is performed on all reactions.";
 
-	public String example = "Example 1 : FlexfluxFVA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt\n"
+	public static String example = "Example 1 : FlexfluxFVA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt\n"
 			+ "Example 2 : FlexfluxFVA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -e \"R1 R2 G1 G2\"\n";
 
 	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
