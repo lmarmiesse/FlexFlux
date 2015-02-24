@@ -46,10 +46,10 @@ import flexflux.general.Vars;
  */
 public class FlexfluxRandomConditions extends FFApplication {
 
-	public String applicationName = FlexfluxBECO.class
+	public static String applicationName = FlexfluxBECO.class
 			.getSimpleName();
 
-	public String message = applicationName + " [options...]\n"
+	public static String message = applicationName + " [options...]\n"
 			+ "Generates a file with randomized conditions";
 
 	@Option(name = "-i", usage = "Input random parameter file"
