@@ -88,6 +88,7 @@ public class MainFrame extends JFrame {
 		if (hasSolver == false) {
 			
 			for (Class<?> cl : classes){
+				
 				try {
 					
 					if(!(boolean) cl.getField("requiresSolver").get(null)){

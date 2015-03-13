@@ -3,18 +3,19 @@
  */
 package flexflux.applications.gui;
 
-import flexflux.applications.FlexfluxTest;
-import flexflux.gui.MainFrame;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+
+import flexflux.applications.FlexfluxTest;
+import flexflux.gui.MainFrame;
 
 
 /**
@@ -64,15 +65,17 @@ public class GraphicalFlexflux {
 		String path = packageName.replace('.', '/');
 
 		Enumeration<URL> resources = classLoader.getResources(path);
+		
 
-		List<File> dirs = new ArrayList<File>();
 		while (resources.hasMoreElements()) {
 			URL resource = resources.nextElement();
-
+			
 			try {
 				JarURLConnection urlcon = (JarURLConnection) (resource
 						.openConnection());
 
+				
+				
 				JarFile jar = urlcon.getJarFile();
 
 				Enumeration<JarEntry> entries = jar.entries();
@@ -91,7 +94,9 @@ public class GraphicalFlexflux {
 				}
 			} catch (java.lang.ClassCastException e) {
 
-				classes.addAll(findClasses(new File(resource.getFile()),
+				
+				
+				classes.addAll(findClasses(new File(URLDecoder.decode(resource.getFile(),"UTF-8")),
 						packageName));
 			}
 
@@ -116,12 +121,15 @@ public class GraphicalFlexflux {
 			throws ClassNotFoundException {
 
 		List<Class<?>> classes = new ArrayList<Class<?>>();
+		
+		
 		if (!directory.exists()) {
 			return classes;
 		}
 		File[] files = directory.listFiles();
 		for (File file : files) {
 
+			
 			if (file.isDirectory()) {
 			} else if (file.getName().endsWith(".class") && file.getName().contains("Flexflux")) {
 				
