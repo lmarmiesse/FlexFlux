@@ -28,7 +28,7 @@ public class FlexfluxRSA extends FFApplication {
 
 	public static boolean requiresSolver = false;
 
-	public static String message = "FlexfluxSteadyState [options...]\n"
+	public static String message = "FlexfluxRSA [options...]\n"
 			+ "Find an attractor or the steady state of a given regulatory network with initial values.";
 
 	public String example = "Example : FlexfluxSteadyState -int int.sbml -plot -out out.txt";

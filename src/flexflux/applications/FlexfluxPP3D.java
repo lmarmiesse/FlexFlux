@@ -61,7 +61,7 @@ import parsebionet.biodata.BioEntity;
  */
 public class FlexfluxPP3D extends FFApplication{
 
-	public static String message = "FlexfluxTwoReacs\n"
+	public static String message = "FlexfluxPP3D\n"
 
 			+ "Computes different FBA analysis given a metabolic network, an objective function and constraints, "
 			+ "by making two reactions fluxes change.";

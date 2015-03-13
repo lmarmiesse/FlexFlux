@@ -16,7 +16,7 @@ import flexflux.objective.ListOfObjectives;
 
 public class FlexfluxROBA extends FFApplication {
 
-	public static String applicationName = FlexfluxBECO.class
+	public static String applicationName = FlexfluxROBA.class
 			.getSimpleName();
 
 	public static String message = applicationName
