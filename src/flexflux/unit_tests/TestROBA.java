@@ -26,7 +26,7 @@ import flexflux.objective.ListOfObjectives;
 public class TestROBA extends FFUnitTest{
 
 	private static boolean verbose = true;
-	private static boolean plot = true;
+	private static boolean plot = false;
 
 	private static String tmpPath = "/tmp/testEra";
 
@@ -39,8 +39,9 @@ public class TestROBA extends FFUnitTest{
 
 	@BeforeClass
 	public static void init() throws IOException {
-
 		
+		tmpPath = File.createTempFile("temp-file", "tmp").getParent()+"/testEra";
+
 		Vars.verbose = verbose;
 
 		Vars.writeInteractionNetworkStates = false;

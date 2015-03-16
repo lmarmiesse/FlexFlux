@@ -46,6 +46,14 @@ public class TestClassification extends FFUnitTest {
 			IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException {
 
+		try {
+			tmpDir = File.createTempFile("temp-file", "tmp").getParent()+"/testPfba";
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+		
 		String solver = "GLPK";
 		if (System.getProperties().containsKey("solver")) {
 			solver = System.getProperty("solver");

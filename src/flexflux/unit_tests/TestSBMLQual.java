@@ -3,9 +3,13 @@ package flexflux.unit_tests;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.junit.Test;
 
 import parsebionet.biodata.BioEntity;
+import parsebionet.unit_tests.utils.TestUtils;
 import flexflux.general.Bind;
 import flexflux.general.CplexBind;
 import flexflux.general.GLPKBind;
@@ -13,18 +17,46 @@ import flexflux.input.SBMLQualReader;
 import flexflux.interaction.RelationFactory;
 import flexflux.interaction.Unique;
 
-public class TestSBMLQual extends FFUnitTest{
+public class TestSBMLQual extends FFUnitTest {
+
+	static String coliFileString = "";
+	static String condFileString = "";
+	static String qualString = "";
 
 	@Test
 	public void test() {
-		
-		Bind bind=null;
+
+		File file;
+		try {
+			file = java.nio.file.Files.createTempFile("coli", ".xml").toFile();
+
+			coliFileString = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/SBMLQual/coli_core.xml", file);
+
+			file = java.nio.file.Files.createTempFile("cond", ".txt").toFile();
+
+			condFileString = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/SBMLQual/conditionsFBA.txt",
+							file);
+
+			file = java.nio.file.Files.createTempFile("qual", ".xml").toFile();
+
+			qualString = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/SBMLQual/test_myb30.xml", file);
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		Bind bind = null;
 
 		String solver = "GLPK";
 		if (System.getProperties().containsKey("solver")) {
 			solver = System.getProperty("solver");
 		}
-		
+
 		try {
 			if (solver.equals("CPLEX")) {
 				bind = new CplexBind();
@@ -36,13 +68,11 @@ public class TestSBMLQual extends FFUnitTest{
 			fail("Solver error");
 		}
 
-		bind.loadSbmlNetwork(
-				"src/flexflux/unit_tests/data/SBMLQual/coli_core.xml", false);
+		bind.loadSbmlNetwork(coliFileString, false);
 
-		bind.loadConstraintsFile("src/flexflux/unit_tests/data/SBMLQual/conditionsFBA.txt");
+		bind.loadConstraintsFile(condFileString);
 
-		SBMLQualReader.loadSbmlQual(
-				"src/flexflux/unit_tests/data/SBMLQual/test_myb30.xml", bind.getInteractionNetwork(),
+		SBMLQualReader.loadSbmlQual(qualString, bind.getInteractionNetwork(),
 				new RelationFactory());
 
 		BioEntity entity1 = bind.getInteractionNetwork().getEntity("s_MYB30");
@@ -51,8 +81,6 @@ public class TestSBMLQual extends FFUnitTest{
 		BioEntity entity4 = bind.getInteractionNetwork()
 				.getEntity("s_Bacteria");
 
-		
-		
 		assertTrue(bind.getInteractionNetwork().getInitialState(entity1) == 3);
 
 		assertTrue(bind.getInteractionNetwork().getInitialState(entity2) == 1);
@@ -62,36 +90,35 @@ public class TestSBMLQual extends FFUnitTest{
 		// /interactions
 
 		assertTrue(bind.getInteractionNetwork().getTargetToInteractions()
-				.get(entity1).getConditionalInteractions().get(0).getCondition().getInvolvedEntities().get(0)
-				.getId().equals("s_Bacteria"));
-		
-		
-	
-		
+				.get(entity1).getConditionalInteractions().get(0)
+				.getCondition().getInvolvedEntities().get(0).getId()
+				.equals("s_Bacteria"));
 
-		assertTrue(((Unique) bind.getInteractionNetwork().getTargetToInteractions()
-				.get(entity1).getConditionalInteractions().get(0).getCondition())
-				.getValue() == 6);
+		assertTrue(((Unique) bind.getInteractionNetwork()
+				.getTargetToInteractions().get(entity1)
+				.getConditionalInteractions().get(0).getCondition()).getValue() == 6);
 
 		assertTrue(bind.getInteractionNetwork().getTargetToInteractions()
-				.get(entity1).getConditionalInteractions().get(0).getConsequence().getEntity() == entity1);
-
-		
-		assertTrue(bind.getInteractionNetwork().getTargetToInteractions()
-				.get(entity1).getConditionalInteractions().get(0).getConsequence().getValue() == 1);
+				.get(entity1).getConditionalInteractions().get(0)
+				.getConsequence().getEntity() == entity1);
 
 		assertTrue(bind.getInteractionNetwork().getTargetToInteractions()
-				.get(entity1).getdefaultInteraction().getConsequence().getValue() == 0);
+				.get(entity1).getConditionalInteractions().get(0)
+				.getConsequence().getValue() == 1);
 
-		
-		assertTrue(bind.getInteractionNetwork().getConstraintFromState(entity1, 0).getLb()==0.0);
-		assertTrue(bind.getInteractionNetwork().getConstraintFromState(entity1, 0).getUb()==0.5);
-		
-		assertTrue(bind.getInteractionNetwork().getStateFromValue(entity1, 0.7)==1);
-		
-		
-//		System.out.println(bind.getInteractionNetwork().getTargetToInteractions()
-//				.get(entity2).getConditionalInteractions().get(0));
+		assertTrue(bind.getInteractionNetwork().getTargetToInteractions()
+				.get(entity1).getdefaultInteraction().getConsequence()
+				.getValue() == 0);
+
+		assertTrue(bind.getInteractionNetwork()
+				.getConstraintFromState(entity1, 0).getLb() == 0.0);
+		assertTrue(bind.getInteractionNetwork()
+				.getConstraintFromState(entity1, 0).getUb() == 0.5);
+
+		assertTrue(bind.getInteractionNetwork().getStateFromValue(entity1, 0.7) == 1);
+
+		// System.out.println(bind.getInteractionNetwork().getTargetToInteractions()
+		// .get(entity2).getConditionalInteractions().get(0));
 
 	}
 
