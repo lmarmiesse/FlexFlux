@@ -29,7 +29,10 @@ public class GraphicalFlexflux {
 
 	public static void main(String[] args) {
 
+		
+		FlexfluxTest.doUnitTests = false;
 		FlexfluxTest.main(args);
+		
 
 		try {
 			new MainFrame(FlexfluxTest.okSolvers,

@@ -57,10 +57,10 @@ public class RSAAnalysis extends Analysis {
 		List<BioEntity> entitiesToCheck = new ArrayList<BioEntity>();
 		entitiesToCheck.addAll(intNet.getTargetToInteractions().keySet());
 
-		for (BioEntity ent : entitiesToCheck) {
+		for (BioEntity ent : intNet.getInitialStates().keySet()) {
 			res.addResultEntity(ent);
 		}
-
+		
 		// we set the values for the variables in the first state
 		Map<BioEntity, Integer> thisState = intNet.getInitialStates();
 
@@ -154,9 +154,8 @@ public class RSAAnalysis extends Analysis {
 			// If the entity is in the regulatory network
 			if (intNet.getInteractionNetworkEntities().containsKey(b.getId())) {
 
-				// if the entity is already set by a constraint, we remove te
-				// interactions
-				// that have this entity as a target
+				// if the entity is already set by a constraint, we remove the
+				// interactions that have this entity as a target
 				if (simpleConstraints.get(b).getLb() == simpleConstraints
 						.get(b).getUb()) {
 

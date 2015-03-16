@@ -46,6 +46,7 @@ import flexflux.general.Vars;
 import flexflux.interaction.InteractionNetwork;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -59,28 +60,59 @@ import org.junit.Test;
 
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
+import parsebionet.unit_tests.utils.TestUtils;
 
 /**
  * @author lmarmiesse 11 avr. 2013
  * 
  */
-public class TestTDRFBA extends FFUnitTest{
-	
-	
-	
+public class TestTDRFBA extends FFUnitTest {
+
 	static Bind bind;
 
 	static BioNetwork n;
 	static InteractionNetwork i;
 
+	static String coliFileString = "";
+	static String condTestString = "";
+	static String regulString = "";
+	static String resString = "";
+
 	@BeforeClass
 	public static void init() {
-		
+
+		File file;
+		try {
+			file = java.nio.file.Files.createTempFile("coli", ".xml").toFile();
+
+			coliFileString = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/rfba/coli.xml", file);
+
+			file = java.nio.file.Files.createTempFile("cond", ".txt").toFile();
+
+			condTestString = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/rfba/condTestRfba", file);
+
+			file = java.nio.file.Files.createTempFile("rfba", ".sbml").toFile();
+
+			regulString = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/rfba/rfba.sbml", file);
+
+			file = java.nio.file.Files.createTempFile("res", ".txt").toFile();
+
+			resString = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/rfba/rFBATest", file);
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		String solver = "GLPK";
 		if (System.getProperties().containsKey("solver")) {
 			solver = System.getProperty("solver");
 		}
-		
+
 		try {
 			if (solver.equals("CPLEX")) {
 				bind = new CplexBind();
@@ -94,13 +126,13 @@ public class TestTDRFBA extends FFUnitTest{
 
 		Vars.maxThread = 1;
 
-		bind.loadSbmlNetwork("src/flexflux/unit_tests/data/rfba/coli.xml", false);
+		bind.loadSbmlNetwork(coliFileString, false);
 		n = bind.getBioNetwork();
 		i = bind.getInteractionNetwork();
 
-		bind.loadConstraintsFile("src/flexflux/unit_tests/data/rfba/condTestRfba");
+		bind.loadConstraintsFile(condTestString);
 
-		bind.loadRegulationFile("src/flexflux/unit_tests/data/rfba/rfba.sbml");
+		bind.loadRegulationFile(regulString);
 
 		bind.prepareSolver();
 
@@ -108,30 +140,27 @@ public class TestTDRFBA extends FFUnitTest{
 
 	@Test
 	public void test() {
-		
+
 		go();
-	
+
 	}
 
 	public void go() {
-		
-		
 
 		TDRFBAAnalysis rfba = new TDRFBAAnalysis(bind,
 				"R_Ec_biomass_iAF1260_core_59p81M", 0.003, 0.1, 150,
 				new ArrayList<String>());
 		TDRFBAResult result = rfba.runAnalysis();
-		
-//		result.plot();
-//		int a = 1;
-//
-//		while (a == 1) {
-//
-//		}
-		
+
+		// result.plot();
+		// int a = 1;
+		//
+		// while (a == 1) {
+		//
+		// }
+
 		try {
-			BufferedReader in = new BufferedReader(new FileReader(
-					"src/flexflux/unit_tests/data/rfba/rFBATest"));
+			BufferedReader in = new BufferedReader(new FileReader(resString));
 
 			String line = in.readLine();
 
@@ -149,16 +178,16 @@ public class TestTDRFBA extends FFUnitTest{
 
 				double time = Double.parseDouble(splittedLine[0].replaceAll(
 						"\\s+", ""));
-				
+
 				Map<String, Double> values = result.getValuesforTime(time);
-				
+
 				for (int i = 1; i < splittedLine.length; i++) {
 
 					double trueResult = Double.parseDouble(splittedLine[i]
 							.replaceAll("\\s+", ""));
-					
+
 					double resultToTest = values.get(entities.get(i - 1));
-					
+
 					Assert.assertTrue(Math.abs(trueResult - resultToTest) < 0.001);
 
 				}

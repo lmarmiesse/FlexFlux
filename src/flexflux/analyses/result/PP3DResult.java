@@ -445,7 +445,7 @@ public class PP3DResult extends AnalysisResult {
 		JFrame frame = new JFrame("Phenotypic phase analysis results");
 
 		if (expValues.size() > 0) {
-			frame.setTitle("Pareto analysis");
+			frame.setTitle("Pareto analysis three dimensions results");
 		}
 
 		JPanel mainPanel = new JPanel();

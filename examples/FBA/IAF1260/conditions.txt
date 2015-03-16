@@ -1,2 +1,0 @@
-#maximize biomass production
-obj : MAX(R_Ec_biomass_iAF1260_core_59p81M)

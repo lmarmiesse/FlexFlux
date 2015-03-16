@@ -167,7 +167,7 @@ public class ParetoAnalysisResult extends AnalysisResult {
 		// create the chart...
 
 		final JFreeChart chart = ChartFactory.createXYLineChart(
-				"One dimension results", // chart title
+				"", // chart title
 				"Objectives", // x axis label
 				"Values", // y axis label
 				dataset, // data
@@ -193,7 +193,7 @@ public class ParetoAnalysisResult extends AnalysisResult {
 		NumberAxis rangeAxis = (NumberAxis) plot.getDomainAxis();
 		rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
-		JFrame frame = new JFrame();
+		JFrame frame = new JFrame("Pareto analysis one dimension results");
 		frame.add(chartPanel);
 
 		frame.pack();

@@ -36,6 +36,8 @@ package flexflux.unit_tests;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import flexflux.analyses.Analysis;
@@ -60,6 +62,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import parsebionet.biodata.BioEntity;
+import parsebionet.unit_tests.utils.TestUtils;
 
 /**
  * @author lmarmiesse 8 mars 2013
@@ -73,9 +76,60 @@ public class TestInteraction extends FFUnitTest{
 	static BioEntity d;
 	static BioEntity e;
 	static BioEntity f;
+	
+	static String sbmlString = "";
+	static String cond1String = "";
+	static String int1String = "";
+	static String cond2String = "";
+	static String int2String = "";
 
 	@BeforeClass
 	public static void init() {
+		
+		
+		File file;
+		try {
+			file = java.nio.file.Files.createTempFile("test", ".xml")
+					.toFile();
+
+			sbmlString = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/testInteraction/test.xml", file);
+
+			file = java.nio.file.Files.createTempFile("cond1", ".txt")
+					.toFile();
+
+			cond1String = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/testInteraction/condElseTest.txt", file);
+			
+			file = java.nio.file.Files.createTempFile("int1", ".txt")
+					.toFile();
+
+			int1String = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/testInteraction/intElseTest.sbml", file);
+			
+			file = java.nio.file.Files.createTempFile("cond2", ".txt")
+					.toFile();
+
+			cond2String = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/testInteraction/condExtMetab.txt", file);
+			
+			
+			file = java.nio.file.Files.createTempFile("int2", ".txt")
+					.toFile();
+
+			int2String = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/testInteraction/intExtMetab.sbml", file);
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		
+		
+		
+		
 		a = new BioEntity("a");
 		b = new BioEntity("b");
 		c = new BioEntity("c");
@@ -155,10 +209,10 @@ public class TestInteraction extends FFUnitTest{
 
 	private void fbaTest(Bind bind) {
 
-		bind.loadSbmlNetwork("src/flexflux/unit_tests/data/testInteraction/test.xml", false);
+		bind.loadSbmlNetwork(sbmlString, false);
 
-		bind.loadConstraintsFile("src/flexflux/unit_tests/data/testInteraction/condElseTest.txt");
-		bind.loadRegulationFile("src/flexflux/unit_tests/data/testInteraction/intElseTest.sbml");
+		bind.loadConstraintsFile(cond1String);
+		bind.loadRegulationFile(int1String);
 
 		bind.prepareSolver();
 
@@ -204,10 +258,10 @@ public class TestInteraction extends FFUnitTest{
 
 	private void extMetabTest(Bind bind) {
 
-		bind.loadSbmlNetwork("src/flexflux/unit_tests/data/testInteraction/test.xml", false);
-		bind.loadConstraintsFile("src/flexflux/unit_tests/data/testInteraction/condExtMetab.txt");
+		bind.loadSbmlNetwork(sbmlString, false);
+		bind.loadConstraintsFile(cond2String);
 
-		bind.loadRegulationFile("src/flexflux/unit_tests/data/testInteraction/intExtMetab.sbml");
+		bind.loadRegulationFile(int2String);
 
 		bind.prepareSolver();
 

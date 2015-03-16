@@ -149,11 +149,11 @@ body {
 					
 				<p>Concerning the regulatory network analysis, FlexFlux supports multistate qualitative regulatory networks.
 				This regulatory network is composed of components of different natures (genes, mRNAs, proteins, metabolites ...),
-				that interact with each other in	different ways and can have an effect on the metabolic network. 
+				that interact with each other in different ways and can have an effect on the metabolic network. 
 				FlexFlux performs synchronous updates of the regulatory network state from provided initial values.
 				Once a steady-state of this regulatory network is reached, the states are translated into continuous intervals (see the regulation file section)
 				used as constraints for the FBA.			
-				
+				We named this pipeline Regulatory Steady-state Analysis (RSA).
 				</p>
 					
 					
@@ -173,12 +173,11 @@ body {
 					</ul>
 
 					<div>
-						<img src="img/General2.png" width="520"></img>
-					</div>
 					<p style="text-align: center">
-						<strong>Overview of FlexFlux.</strong>
+						<h4 id="overview">Overview of FlexFlux</h4>
 					</p>
-
+						<img src="img/General3.png" width="610"></img>
+					</div>
 
 					<h3 id="network">File describing the network</h3>
 					From this file, FlexFlux performs a few actions:
@@ -296,7 +295,27 @@ b 1
 </pre>
 					mean : a is a boolean and can be equal to 0 or 1 and b is a boolean
 					equal to 1.
+				
+					<h4>Starting points</h4>
 
+					In the constraint file, you can also specify starting points that will be used for the Regulatory Steady-state Analysis (RSA) (<a href="#overview">overview</a>).
+					They must be provided under the line :
+					
+										<pre class="prettyprint">
+STARTING POINT
+</pre>
+					
+					Example : 
+
+					<pre class="prettyprint">
+STARTING POINT
+
+allolactose	0
+P_lacI	0
+</pre>
+
+					These starting points must be written after the other constraints but before the equations.
+					
 
 					<h4>Equations</h4>
 
@@ -362,6 +381,11 @@ R_EX_lcts_e_ -3 999999
 INTEGER
 
 BINARY
+
+STARTING POINT
+
+allolactose	0
+P_lacI	0
 
 EQUATIONS
 d = 2*a + 3*c
@@ -460,6 +484,7 @@ d = 2*a + 3*c
 					<ul>
 						<li>-reg String : Regulation file path
 						<li>-out String : [OPTIONAL]Output file name
+						<li>-cons String : [OPTIONAL]Constraint file path 
 						<li>-plot : [OPTIONAL, default = false]Plots the results
 					</ul>
 
@@ -648,7 +673,7 @@ R_DXPRIi	0.001415
 					For this example, we used :
 					<ul>
 						<li>the SBML file <a target="_blank" href="results/coli_core.xml">coli_core.xml,</a></li>
-						<li>the constraints file <a target="_blank" href="results/constraintsFBA.txt">constraintsFBA.txt,</a></li>
+						<li>the constraint file <a target="_blank" href="results/constraintsFBA.txt">constraintsFBA.txt,</a></li>
 						<li>the command line : <pre class="prettyprint">FlexfluxFVA -s coli_core.xml -cons constraintsFBA.txt -out FVA_result.txt -lib 10 -plot</pre></li>
 					</ul>
 
@@ -694,8 +719,8 @@ R_EX_akg_e	0.0	1.430083
 					<h4>Command-line arguments</h4>
 					<ul>
 						<li>-s String : Sbml file path</li>
-						<li>-cons String : Constraints file path
-						<li>-cons2 String : Second constraints file path
+						<li>-cons String : Constraint file path
+						<li>-cons2 String : Second constraint file path
 						<li>-reg String : [OPTIONAL]Regulation file path
 						<li>-e String : [OPTIONAL]Biological entities to perform the
 							FVA analyses on (Space-separated list of entities, example : "R1
@@ -866,12 +891,12 @@ R_EX_o2_e	-23.709518	-19.895962	-45.644797	-37.831242
 						density, a time step and a number of iterations, this analysis
 						returns the value of each metabolite and cell density for each
 						time. Initial metabolite concentrations must be written in the
-						constraints file.</p>
+						constraint file.</p>
 
 					<h4>Command-line arguments</h4>
 					<ul>
 						<li>-s String : Sbml file path</li>
-						<li>-cons String : Constraints file path
+						<li>-cons String : Constraint file path
 						<li>-reg String : [OPTIONAL]Regulation file path
 						<li>-e String : [OPTIONAL]Biological entities included in the
 							results. If empty, only concerned metabolites and cell density
@@ -986,7 +1011,7 @@ Time	M_lcts_b	lacZ	X	M_glc_D_b
 					<h4>Command-line arguments</h4>
 					<ul>
 						<li>-s String : Sbml file path</li>
-						<li>-cons String : Constraints file path
+						<li>-cons String : Constraint file path
 						<li>-reg String : [OPTIONAL]Regulation file path
 						<li>-r String : Name of the reaction to test
 						<li>-init Double : Initial flux value of the reaction to test</li>
@@ -1017,7 +1042,7 @@ Time	M_lcts_b	lacZ	X	M_glc_D_b
 					<ul>
 						<li>the SBML file <a target="_blank" href="results/coli_core.xml">coli_core.xml</a>,
 						</li>
-						<li>the constraints file <a target="_blank" href="results/constraintsFBA.txt">constraintsFBA.txt</a>,
+						<li>the constraint file <a target="_blank" href="results/constraintsFBA.txt">constraintsFBA.txt</a>,
 						</li>
 						<li>the command line : <pre class="prettyprint">FlexfluxPP2D -s coli_core.xml -cons constraintsFBA.txt -out PP2D_result.txt -r R_EX_o2_e -init -20 -end 0 -f 0.05 -plot</pre>
 						</li>
@@ -1070,7 +1095,7 @@ Flux	Objective
 					<h4>Command-line arguments</h4>
 					<ul>
 						<li>-s String : Sbml file path</li>
-						<li>-cons String : Constraints file path
+						<li>-cons String : Constraint file path
 						<li>-reg String : [OPTIONAL]Regulation file path
 						<li>-r String : Name of the first reaction to test
 						<li>-r2 String : Name of the second reaction to test
@@ -1109,7 +1134,7 @@ Flux	Objective
 					For this example, we used :
 					<ul>
 						<li>The SBML file <a target="_blank" href="results/coli_core.xml">coli_core.xml</a></li>
-						<li>The constraints file <a target="_blank" href="results/constraintsFBA.txt">constraintsFBA.txt</a></li>
+						<li>The constraint file <a target="_blank" href="results/constraintsFBA.txt">constraintsFBA.txt</a></li>
 						<li>The command line : <pre class="prettyprint">FlexfluxPP3D -s coli_core.xml -cons constraintsFBA.txt -out PP3D_result.txt -r R_EX_glc_e -init -20 -end 0 -f 0.5 -r2 R_EX_o2_e -init2 -20 -end2 0 -f2 0.05 -plot</pre></li>
 					</ul>
 
@@ -1199,7 +1224,7 @@ Flux1	Flux2	Objective
 					<h4>Command-line arguments</h4>
 					<ul>
 						<li>-s String : Sbml file path</li>
-						<li>-cons String : Constraints file path
+						<li>-cons String : Constraint file path
 						<li>-reg String : [OPTIONAL]Regulation file path
 						<li>-exp String : Path of file containing objective functions
 							and experimental values
@@ -1287,7 +1312,7 @@ Flux1	Flux2	Objective
 					<h4>Command-line arguments</h4>
 					<ul>
 						<li>-s String : Sbml file path</li>
-						<li>-cons String : [OPTIONAL]Constraints file path
+						<li>-cons String : [OPTIONAL]Constraint file path
 						<li>-reg String : [OPTIONAL]Regulation file path
 						<li>-d Double : [OPTIONAL, default = 0.000001]Maximal
 							distance of the reaction flux from 0 to be considered as dead

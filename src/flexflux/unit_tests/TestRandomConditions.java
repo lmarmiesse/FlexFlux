@@ -22,7 +22,7 @@ import flexflux.general.Vars;
 public class TestRandomConditions {
 
 	private static boolean verbose = true;
-	private static boolean plot = true;
+	private static boolean plot = false;
 
 	private static String tmpPath = "/tmp/testRandom";
 

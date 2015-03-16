@@ -1,0 +1,50 @@
+
+#obj : MAX(atpYield)
+
+
+obj : MAX(R_Biomass_Ecoli_core_w_GAM)
+#obj : MIN(FluxSum)
+#obj : MAX(R_ATPM)
+#obj : MIN(summ)
+#obj : MAX(R_PYK + -1*R_PPCK + R_PTAr)
+#obj : MAX(R_Biomass_Ecoli_core_w_GAM)
+
+A 0
+B 0 10
+C 0 10
+D 0 10
+
+t1 -10
+t2 -10 10
+
+a 0 10
+b 5
+
+#R_EX_glc_e 8
+#R_EX_glc_e -100
+#R_EX_o2_e -25.7
+
+#R_EX_glc_e -20 0
+#R_EX_o2_e -45 0
+
+#FluxesSummation 0 1507
+
+#R_ATPM 0 999999
+
+#R_Biomass_Ecoli_core_w_GAM 0
+
+atpYield 0 999999
+
+sum 0 2800
+
+INTEGER
+
+g 0 10
+
+EQUATIONS
+
+R_PYK + -1*R_PPCK + R_PTAr = atpYield
+
+#R_ATPM=atpYield
+
+-1*R_EX_glc_e + R_G6PDH2r + R_GND + R_PGI + R_PFK + R_FBA + R_TKT1 + R_TKT2 + R_TALA + R_GAPD + -1*R_PGK + -1*R_PGM + R_ENO + R_PYK + R_PDH + R_CS + R_ICDHyr + -1*R_SUCOAS + R_FUM + R_MDH + R_ME1 + R_PPCK + R_PPC + R_PTAr + -1*R_ACKr + R_NADTRHD = sum

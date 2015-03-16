@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import junit.framework.Assert;
+import junitx.framework.FileAssert;
 
 import org.junit.Test;
 
@@ -24,58 +25,57 @@ public class TestListOfConditions {
 
 	@Test
 	public void testLoadConditionFile() {
-		
+
 		String fileRef;
-		
+
 		try {
-			fileRef = TestUtils.copyProjectResource(
-					"flexflux/unit_tests/data/listOfConditions/conditions.tab",
-					java.nio.file.Files.createTempFile("test", ".txt").toFile());
-			
+			fileRef = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/listOfConditions/conditions.tab",
+							java.nio.file.Files.createTempFile("test", ".txt")
+									.toFile());
+
 			ListOfConditions conditions = new ListOfConditions();
 			conditions.loadConditionFile(fileRef, ConstraintType.DOUBLE);
-			
-			for(Condition condition : conditions) {
-				
+
+			for (Condition condition : conditions) {
+
 				System.err.println(condition.code);
-				for(SimplifiedConstraint c : condition.constraints.values()) {
+				for (SimplifiedConstraint c : condition.constraints.values()) {
 					System.err.println(c);
 				}
-				
+
 			}
 			assertEquals("Bad number of conditions", 2, conditions.size());
-			
+
 			ArrayList<String> entitiesRef = new ArrayList<String>();
-			
+
 			entitiesRef.add("b");
 			entitiesRef.add("b2");
 			entitiesRef.add("b3");
-			
+
 			assertEquals("Bad entities", conditions.entities, entitiesRef);
-			
+
 			Condition c = new Condition("1", "1");
 			c.addConstraint("b", 10.0, ConstraintType.DOUBLE);
 			c.addConstraint("b2", 10.0, ConstraintType.DOUBLE);
 			c.addConstraint("b3", 0.0, ConstraintType.DOUBLE);
-			
+
 			assertTrue("contains c", conditions.contains(c));
-			
+
 			Condition c2 = new Condition("2", "2");
 			c2.addConstraint("b", 10.0, ConstraintType.DOUBLE);
 			c2.addConstraint("b2", 10.0, ConstraintType.DOUBLE);
 			c2.addConstraint("b3", 10.0, ConstraintType.DOUBLE);
-			
+
 			assertTrue("contains c2", conditions.contains(c2));
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("Impossible to get the reference file");
 		}
-		
-		
-		
-		
+
 	}
 
 	@Test
@@ -182,19 +182,28 @@ public class TestListOfConditions {
 	public void testWrite() {
 
 		String fileRef = "";
-		
+
 		try {
-			fileRef = TestUtils.copyProjectResource(
-					"flexflux/unit_tests/data/listOfConditions/conditions.tab",
-					java.nio.file.Files.createTempFile("test", ".txt").toFile());
+			fileRef = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/listOfConditions/conditions.tab",
+							java.nio.file.Files.createTempFile("test", ".txt")
+									.toFile());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("Impossible to get the reference file");
 		}
-		
-		
+
 		String dir = "/tmp/testListOfConditions";
+
+		try {
+			dir = File.createTempFile("temp-file", "tmp").getParent()
+					+ "/testListOfConditions";
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 
 		File DIR = new File(dir);
 		if (!DIR.exists()) {
@@ -223,14 +232,8 @@ public class TestListOfConditions {
 		conditions.add(c2);
 
 		conditions.writeConditionFile(fileTest);
-		
-		try {
-			Assert.assertTrue(org.apache.commons.io.FileUtils.contentEquals(new File(fileRef), new File(fileTest)));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			fail("Comparison between the two files impossible");
-		}
+
+		FileAssert.assertEquals("", new File(fileRef), new File(fileTest));
 
 	}
 

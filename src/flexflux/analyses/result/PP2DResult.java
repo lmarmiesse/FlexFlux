@@ -346,6 +346,10 @@ public class PP2DResult extends AnalysisResult {
 		JScrollPane fvaScrollPane = new JScrollPane(fvaPanel);
 
 		JFrame frame = new JFrame("Phenotypic phase analysis results");
+		
+		if (expValues.size() > 0) {
+			frame.setTitle("Pareto analysis two dimensions results");
+		}
 
 		if (groupIndex.size() > 0) {
 

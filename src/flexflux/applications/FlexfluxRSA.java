@@ -2,6 +2,7 @@ package flexflux.applications;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.kohsuke.args4j.Option;
 
@@ -9,7 +10,7 @@ import parsebionet.biodata.BioEntity;
 import flexflux.analyses.RSAAnalysis;
 import flexflux.analyses.result.RSAAnalysisResult;
 import flexflux.general.Constraint;
-import flexflux.general.Vars;
+import flexflux.input.ConstraintsFileReader;
 import flexflux.input.SBMLQualReader;
 import flexflux.interaction.InteractionNetwork;
 import flexflux.interaction.RelationFactory;
@@ -36,6 +37,9 @@ public class FlexfluxRSA extends FFApplication {
 	@Option(name = "-reg", usage = "Regulation file path", metaVar = "File", required = true)
 	public String regFile = "";
 
+	@Option(name = "-cons", usage = "[OPTIONAL]Constraints file path", metaVar = "File", required = false)
+	public String consFile = "";
+
 	@Option(name = "-plot", usage = "[OPTIONAL, default = false]Plots the results")
 	public boolean plot = false;
 
@@ -47,7 +51,6 @@ public class FlexfluxRSA extends FFApplication {
 
 		f.parseArguments(args);
 
-
 		if (!new File(f.regFile).isFile()) {
 			System.err.println("Error : file " + f.regFile + " not found");
 			System.exit(0);
@@ -58,8 +61,19 @@ public class FlexfluxRSA extends FFApplication {
 		intNet = SBMLQualReader.loadSbmlQual(f.regFile,
 				new InteractionNetwork(), new RelationFactory());
 
-		RSAAnalysis analysis = new RSAAnalysis(null, intNet,
-				new HashMap<BioEntity, Constraint>());
+		Map<BioEntity, Constraint> simpleConstraints = new HashMap<BioEntity, Constraint>();
+
+		if (f.consFile != "") {
+
+			ConstraintsFileReader r = new ConstraintsFileReader(f.consFile,
+					intNet);
+			r.readConstraintsFile();
+
+			simpleConstraints = r.simpleConstraints;
+
+		}
+
+		RSAAnalysis analysis = new RSAAnalysis(null, intNet, simpleConstraints);
 
 		RSAAnalysisResult res = analysis.runAnalysis();
 

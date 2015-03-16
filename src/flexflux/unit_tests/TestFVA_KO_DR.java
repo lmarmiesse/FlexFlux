@@ -47,6 +47,7 @@ import flexflux.general.Vars;
 import flexflux.interaction.InteractionNetwork;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -62,6 +63,7 @@ import org.junit.Test;
 import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
+import parsebionet.unit_tests.utils.TestUtils;
 
 /**
  * @author lmarmiesse 13 mars 2013
@@ -73,9 +75,54 @@ public class TestFVA_KO_DR extends FFUnitTest{
 
 	static BioNetwork n;
 	static InteractionNetwork i;
+	
+	static String coliFileString = "";
+	static String condFileString = "";
+	static String metFVAformatedFileString = "";
+	static String metKOformatedFileString = "";
+	static String KOgenesFileString = "";
 
 	@BeforeClass
 	public static void init() {
+		
+		
+		File file;
+		try {
+			file = java.nio.file.Files.createTempFile("coli", ".xml")
+					.toFile();
+
+			coliFileString = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/FVA_KO_DR/coli_core.xml", file);
+
+			file = java.nio.file.Files.createTempFile("condFileString", ".txt")
+					.toFile();
+
+			condFileString = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/FVA_KO_DR/condColiTest", file);
+			
+			file = java.nio.file.Files.createTempFile("metFVAformatedFileString", ".txt")
+					.toFile();
+
+			metFVAformatedFileString = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/FVA_KO_DR/metFVAformated", file);
+			
+			file = java.nio.file.Files.createTempFile("metKOformatedFileString", ".txt")
+					.toFile();
+
+			metKOformatedFileString = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/FVA_KO_DR/metKOformated", file);
+			
+			
+			file = java.nio.file.Files.createTempFile("KOgenesFileString", ".txt")
+					.toFile();
+
+			KOgenesFileString = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/FVA_KO_DR/KOgenes", file);
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		String solver = "GLPK";
 		if (System.getProperties().containsKey("solver")) {
@@ -95,13 +142,11 @@ public class TestFVA_KO_DR extends FFUnitTest{
 
 		Vars.maxThread = 1;
 
-		bind.loadSbmlNetwork("Data/coli_core.xml", false);
+		bind.loadSbmlNetwork(coliFileString, false);
 		n = bind.getBioNetwork();
 		i = bind.getInteractionNetwork();
 
-		bind.loadConstraintsFile("Data/condColiTest");
-
-		// bind.loadInteractionsFile("Data/intColiTest");
+		bind.loadConstraintsFile(condFileString);
 
 		bind.prepareSolver();
 
@@ -136,7 +181,7 @@ public class TestFVA_KO_DR extends FFUnitTest{
 		FVAResult result = fva.runAnalysis();
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(
-					"Data/metFVAformated"));
+					metFVAformatedFileString));
 
 			String line;
 			while ((line = in.readLine()) != null) {
@@ -170,7 +215,7 @@ public class TestFVA_KO_DR extends FFUnitTest{
 
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(
-					"Data/metKOformated"));
+					metKOformatedFileString));
 
 			String line;
 			while ((line = in.readLine()) != null) {
@@ -200,7 +245,7 @@ public class TestFVA_KO_DR extends FFUnitTest{
 
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(
-					"Data/KOgenes"));
+					KOgenesFileString));
 
 			String line;
 			while ((line = in.readLine()) != null) {

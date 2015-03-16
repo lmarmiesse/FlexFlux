@@ -34,20 +34,9 @@
 package flexflux.unit_tests;
 
 import static org.junit.Assert.fail;
-import static org.junit.Assert.assertEquals;
 
-
-
-import flexflux.general.Bind;
-import flexflux.general.Constraint;
-import flexflux.general.CplexBind;
-import flexflux.general.GLPKBind;
-import flexflux.interaction.And;
-import flexflux.interaction.Interaction;
-import flexflux.interaction.InteractionNetwork;
-import flexflux.interaction.Relation;
-import flexflux.interaction.Unique;
-
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -60,26 +49,71 @@ import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.biodata.BioPhysicalEntity;
 import parsebionet.io.Sbml2Bionetwork;
+import parsebionet.unit_tests.utils.TestUtils;
+import flexflux.general.Bind;
+import flexflux.general.Constraint;
+import flexflux.general.CplexBind;
+import flexflux.general.GLPKBind;
+import flexflux.interaction.And;
+import flexflux.interaction.Interaction;
+import flexflux.interaction.InteractionNetwork;
+import flexflux.interaction.Relation;
+import flexflux.interaction.Unique;
 
 /**
  * @author lmarmiesse 8 mars 2013
  * 
  */
-public class TestBind extends FFUnitTest{
+public class TestBind extends FFUnitTest {
 
 	static Bind bind;
 	static BioNetwork n;
 	static InteractionNetwork i;
 
+	static String coliFileString = "";
+	static String testFileString = "";
+	static String condTestString = "";
+	static String intTestString = "";
+
 	@BeforeClass
 	public static void init() {
-		
-		
+
+		File file;
+		try {
+			file = java.nio.file.Files.createTempFile("coli", ".xml")
+					.toFile();
+
+			coliFileString = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/bind/coli.xml", file);
+
+			file = java.nio.file.Files.createTempFile("test", ".xml")
+					.toFile();
+
+			testFileString = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/bind/test.xml", file);
+			
+			file = java.nio.file.Files.createTempFile("condTest", ".txt")
+					.toFile();
+
+			condTestString = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/bind/condTest", file);
+			
+			file = java.nio.file.Files.createTempFile("intTest", ".sbml")
+					.toFile();
+
+			intTestString = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/bind/intTest.sbml", file);
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		String solver = "GLPK";
 		if (System.getProperties().containsKey("solver")) {
 			solver = System.getProperty("solver");
 		}
-		
+
 		try {
 			if (solver.equals("CPLEX")) {
 				bind = new CplexBind();
@@ -91,7 +125,7 @@ public class TestBind extends FFUnitTest{
 			fail("Solver error");
 		}
 
-		bind.loadSbmlNetwork("Data/coli.xml", false);
+		bind.loadSbmlNetwork(coliFileString, false);
 		n = bind.getBioNetwork();
 		i = bind.getInteractionNetwork();
 	}
@@ -190,7 +224,7 @@ public class TestBind extends FFUnitTest{
 		}
 		Assert.assertTrue(gpr);
 
-		Sbml2Bionetwork parser = new Sbml2Bionetwork("src/flexflux/unit_tests/data/bind/test.xml", false);
+		Sbml2Bionetwork parser = new Sbml2Bionetwork(testFileString, false);
 
 		BioNetwork network = parser.getBioNetwork();
 		bind.setNetworkAndConstraints(network);
@@ -200,30 +234,29 @@ public class TestBind extends FFUnitTest{
 
 		// starting tests on analysis and parsing files
 
-		bind.loadConstraintsFile("src/flexflux/unit_tests/data/bind/condTest");
-		bind.loadRegulationFile("src/flexflux/unit_tests/data/bind/intTest.sbml");
+		bind.loadConstraintsFile(condTestString);
+		bind.loadRegulationFile(intTestString);
 
 		bind.prepareSolver();
 		Assert.assertTrue(bind.isMIP());
 
 		double res = bind.FBA(new ArrayList<Constraint>(), true, true).result;
 
-		Assert.assertEquals("Test FBA", 14.0,res, 0.0);
+		Assert.assertEquals("Test FBA", 14.0, res, 0.0);
 
 		Assert.assertTrue(Math.abs(bind.getSolvedValue(new BioEntity("d")) - 40.0) < 0.001);
 
-//		Assert.assertTrue(bind.getSolvedValue(new BioEntity("e")) == 5.0);
+		// Assert.assertTrue(bind.getSolvedValue(new BioEntity("e")) == 5.0);
 
-//		Assert.assertTrue(bind.getSolvedValue(new BioEntity("f")) == 122.0);
+		// Assert.assertTrue(bind.getSolvedValue(new BioEntity("f")) == 122.0);
 		Assert.assertTrue(bind.getSolvedValue(new BioEntity("g")) == 58.0);
 
-		
-		Bind bind2=null;
+		Bind bind2 = null;
 		String solver = "GLPK";
 		if (System.getProperties().containsKey("solver")) {
 			solver = System.getProperty("solver");
 		}
-		
+
 		try {
 			if (solver.equals("CPLEX")) {
 				bind2 = new CplexBind();
@@ -239,8 +272,8 @@ public class TestBind extends FFUnitTest{
 		Assert.assertTrue(bind2.getConstraints().size() == 13);
 		Assert.assertTrue(bind2.getInteractionNetwork().getNumEntities().size() == 17);
 
-		bind2.loadConstraintsFile("src/flexflux/unit_tests/data/bind/condTest");
-		bind2.loadRegulationFile("src/flexflux/unit_tests/data/bind/intTest.sbml");
+		bind2.loadConstraintsFile(condTestString);
+		bind2.loadRegulationFile(intTestString);
 
 		bind2.prepareSolver();
 
