@@ -84,7 +84,7 @@ public class GraphicalFlexflux {
 				Enumeration<JarEntry> entries = jar.entries();
 				while (entries.hasMoreElements()) {
 					String entry = entries.nextElement().getName();
-
+					
 					if (entry
 							.contains("applications/Flex")) {
 
@@ -133,8 +133,10 @@ public class GraphicalFlexflux {
 		for (File file : files) {
 
 			
+			
 			if (file.isDirectory()) {
 			} else if (file.getName().endsWith(".class") && file.getName().contains("Flexflux")) {
+				
 				
 				classes.add(Class.forName(packageName
 						+ '.'

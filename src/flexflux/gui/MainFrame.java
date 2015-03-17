@@ -113,6 +113,15 @@ public class MainFrame extends JFrame {
 			this.executableClasses = classes;
 		}
 		
+		//removes classes with no simpleName
+		List<Class> toRemove = new ArrayList<Class>();
+		for (Class c : executableClasses){
+			if (c.getSimpleName().equals("")){
+				toRemove.add(c);
+			}
+		}
+		
+		executableClasses.removeAll(toRemove);
 		
 		fillExecList();
 
