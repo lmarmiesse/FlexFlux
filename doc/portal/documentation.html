@@ -498,7 +498,8 @@ d = 2*a + 3*c
 					For this example, we used :
 					<ul>
 						<li>the regulation file <a target="_blank" href="results/lacOperon.sbml">lacOperon.sbml</a>,</li>
-						<li>the command line : <pre class="prettyprint">FlexfluxRSA -reg lacOperon.sbml -out steady_states_result.txt -plot</pre></li>
+						<li>the constraints file <a target="_blank" href="results/ConstraintsRSA.txt">ConstraintsRSA.txt</a>,</li>
+						<li>the command line : <pre class="prettyprint">FlexfluxRSA -reg lacOperon.sbml -cons ConstraintsRSA.txt -out steady_states_result.txt -plot</pre></li>
 					</ul>
 					
 										Here is the text result file <a
@@ -506,17 +507,22 @@ d = 2*a + 3*c
 					<pre class="prettyprint">
 Steady state analysis result
 
-betaGal	0	0	0	1	1
-permease	0	0	0	0	0
-P_lacI	1	0	0	0	0
-AMPc	0	1	1	1	1
-lacZ	0	0	1	1	1
-EIIAGlc	1	1	1	1	1
-R_LCTStpp	0	0	0	0	0
-R_LACZ	0	0	0	0	0
-lacY	0	0	1	1	1
-allolactose	1	1	1	1	1
-EIIAGlc_p	0	0	0	0	0
+Entity name	State 1	State 2	State 3	State 4	State 5(Attractor)	Final constraint lower bound	Final constraint upper bound	
+EIIAGlc_p	0	0	0	0	0	0.0	0.0	
+lacI	1	1	1	1	1	1.0	1.0	
+M_lcts_b	3	3	3	3	3	5.8	5.8	
+M_glc_D_b	3	3	3	3	3	1.6	1.6	
+AMPc	0	1	1	1	1	1.0	1.0	
+permease	0	0	0	0	0	0.0	0.0	
+lacZ	0	1	0	1	1	1.0	1.0	
+CAP	1	1	1	1	1	1.0	1.0	
+lacY	0	1	0	1	1	1.0	1.0	
+P_lacI	0	1	0	0	0	0.0	0.0	
+R_LCTStpp	0	0	0	0	0	0.0	0.0	
+EIIAGlc	1	1	1	1	1	1.0	1.0	
+betaGal	0	0	1	0	1	1.0	1.0	
+R_LACZ	0	0	0	0	0	0.0	0.0	
+allolactose	0	1	1	1	1	1.0	1.0
 </pre>
 
 

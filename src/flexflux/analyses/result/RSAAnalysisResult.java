@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -87,10 +88,25 @@ public class RSAAnalysisResult extends AnalysisResult {
 			PrintWriter out = new PrintWriter(new File(path));
 			out.println("Steady state analysis result\n");
 
+			out.print("Entity name\t");
+			for (int j = 0; j < statesList.size() - 1; j++) {
+
+				int limit = statesList.size() - atractorStatesList.size();
+				if (j+1 >= limit) {
+					out.print("State " + (j + 1) + "(Attractor)\t");
+				} else
+				{
+					out.print("State " + (j + 1) + "\t");
+				}
+			}
+			out.print("Final constraint lower bound\t");
+			out.print("Final constraint upper bound\t");
+			out.print("\n");
+
 			for (BioEntity ent : resultEntities) {
 
 				out.print(ent.getId());
-				for (int j = 0; j < statesList.size(); j++) {
+				for (int j = 0; j < statesList.size() - 1; j++) {
 
 					if (statesList.get(j).containsKey(ent)) {
 
@@ -100,6 +116,17 @@ public class RSAAnalysisResult extends AnalysisResult {
 					}
 
 				}
+
+				out.print("\t");
+
+				for (Constraint c : finalConstraints) {
+					if (c.getEntities().keySet().contains(ent)) {
+						out.print(c.getLb() + "\t");
+						out.print(c.getUb() + "\t");
+						break;
+					}
+				}
+
 				out.print("\n");
 
 			}
@@ -121,20 +148,23 @@ public class RSAAnalysisResult extends AnalysisResult {
 		resultTable.getTableHeader().setDefaultRenderer(
 				new DefaultTableHeaderCellRenderer());
 
-		String[] columnNames = new String[statesList.size()];
+		String[] columnNames = new String[statesList.size() + 2];
 
-		columnNames[0] = "Entity name";
+		columnNames[0] = "<html><center>Entity<br/>name</center></html>";
 
 		for (int i = 1; i <= statesList.size() - 1; i++) {
 			columnNames[i] = String.valueOf(i);
 		}
+
+		columnNames[statesList.size()] = "<html><center>Final constraint<br/>lower bound</center></html>";
+		columnNames[statesList.size() + 1] = "<html><center>Final constraint<br/>upper bound</center></html>";
 
 		Object[][] data = new Object[resultEntities.size()][columnNames.length];
 
 		int i = 0;
 		for (BioEntity ent : resultEntities) {
 
-			Object[] entValues = new Object[statesList.size()];
+			Object[] entValues = new Object[statesList.size() + 2];
 
 			entValues[0] = ent.getId();
 			for (int j = 0; j < statesList.size() - 1; j++) {
@@ -147,6 +177,14 @@ public class RSAAnalysisResult extends AnalysisResult {
 
 			}
 
+			for (Constraint c : finalConstraints) {
+				if (c.getEntities().keySet().contains(ent)) {
+					entValues[statesList.size()] = c.getLb();
+					entValues[statesList.size() + 1] = c.getUb();
+					break;
+				}
+			}
+
 			data[i] = entValues;
 			i++;
 
@@ -155,10 +193,18 @@ public class RSAAnalysisResult extends AnalysisResult {
 		DefaultTableModel model = new MyTableModel(data, columnNames);
 		resultTable.setModel(model);
 
+		resultTable.getColumnModel().getColumn(statesList.size())
+				.setPreferredWidth(130);
+		resultTable.getColumnModel().getColumn(statesList.size() + 1)
+				.setPreferredWidth(130);
+
 		final MyTableRowSorter<TableModel> sorter = new MyTableRowSorter<TableModel>(
 				resultTable.getModel());
 
 		resultTable.setRowSorter(sorter);
+
+		resultTable.setPreferredScrollableViewportSize(resultTable
+				.getPreferredSize());
 
 		JPanel searchPanel = new JPanel(new FlowLayout());
 
@@ -196,6 +242,7 @@ public class RSAAnalysisResult extends AnalysisResult {
 		RefineryUtilities.centerFrameOnScreen(frame);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+
 	}
 
 	/**
@@ -271,14 +318,15 @@ public class RSAAnalysisResult extends AnalysisResult {
 			setIcon(getIcon(table, column));
 			setBorder(UIManager.getBorder("TableHeader.cellBorder"));
 
-			
 			int limit = statesList.size() - atractorStatesList.size();
-			if (column >= limit) {
+			if (column >= limit && column < statesList.size()) {
 				c.setBackground(Color.GREEN);
-			}else{
-				c.setBackground(new Color(230,230,230));
+			} else {
+				c.setBackground(new Color(230, 230, 230));
 			}
-
+			if (column >= statesList.size()) {
+				c.setFont(new Font("Arial", Font.BOLD, 13));
+			}
 			return c;
 		}
 
