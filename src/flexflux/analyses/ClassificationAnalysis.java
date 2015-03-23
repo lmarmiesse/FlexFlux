@@ -109,6 +109,7 @@ public class ClassificationAnalysis extends Analysis {
 			if (performGeneAnalysis) {
 				this.geneKoAnalysis();
 			}
+			
 			this.reactionDeletionAnalysis();
 
 			this.fvaWithNoConstraint();
@@ -197,7 +198,10 @@ public class ClassificationAnalysis extends Analysis {
 		KOResult koResult = koAnalysis.runAnalysis();
 
 		essentialReactions = koResult.getEssentialEntities();
-
+		
+		if (Vars.verbose) {
+			System.err.println("essential Reactions : "+essentialReactions);
+		}
 		// We remove the reactions from the remain reactions
 		for (String id : essentialReactions.keySet()) {
 			remainReactions.remove(id);
