@@ -154,6 +154,8 @@ public class KOAnalysis extends Analysis {
 			}
 		}
 		
+		
+		
 		RSAAnalysis ssa = new RSAAnalysis(b,b.getInteractionNetwork(),b.getSimpleConstraints());
 		RSAAnalysisResult res = ssa.runAnalysis();
 
@@ -172,6 +174,7 @@ public class KOAnalysis extends Analysis {
 			
 			try {
 				newBind = b.copy();
+				
 			} catch (ClassNotFoundException | NoSuchMethodException
 					| SecurityException | InstantiationException
 					| IllegalAccessException | IllegalArgumentException

@@ -730,7 +730,7 @@ public class TestBECO extends FFUnitTest{
 	@AfterClass
 	public static void afterTest() {
 
-		 tempDir.delete();
+//		 tempDir.delete();
 
 	}
 
