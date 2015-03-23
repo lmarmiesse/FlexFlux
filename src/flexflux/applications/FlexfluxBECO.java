@@ -89,7 +89,7 @@ public class FlexfluxBECO extends FFApplication {
 	@Option(name = "-cytoscape", usage = "[OPTIONAL] Generates cytoscape files")
 	public Boolean cytoscape = false;
 	
-	@Option(name = "-fixConditions", usage = "[OPTIONAL] If true, the conditions set in the condition file are fix and can not be updated by the regulation network.")
+	@Option(name = "-fixConditions", usage = "[OPTIONAL] If true, the conditions set in the condition file are fixed and can not be updated by the regulation network.")
 	public Boolean fixConditions = false;
 	
 
