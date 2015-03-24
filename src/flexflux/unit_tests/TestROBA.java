@@ -29,11 +29,15 @@ public class TestROBA extends FFUnitTest{
 	private static boolean plot = true;
 
 	private static String tmpPath = "/tmp/testEra";
+	
+	private static String tmpPath2 = "/tmp/testEraFixed";
 
 	private static ROBAResult r;
+	private static ROBAResult rFixed;
 
 	// The temporary folder will be removed at the end of the test
 	private static File tempDir;
+	private static File tempDir2;
 
 	static int nbSim = 100;
 
@@ -136,8 +140,9 @@ public class TestROBA extends FFUnitTest{
 
 		bind.prepareSolver();
 
+		// conditions not fixed
 		ROBAAnalysis a = new ROBAAnalysis(bind, objectives,
-				conditions);
+				conditions, false);
 
 		r = a.runAnalysis();
 
@@ -145,10 +150,27 @@ public class TestROBA extends FFUnitTest{
 		if (!tempDir.exists()) {
 			tempDir.mkdir();
 		}
+		
 
 		r.inchlibPath = inchlibPath;
 
 		r.writeToFile(tmpPath);
+		
+		// conditions fixed
+		a = new ROBAAnalysis(bind, objectives,
+				conditions, true);
+
+		rFixed = a.runAnalysis();
+
+		tempDir2 = new File(tmpPath2);
+		if (!tempDir2.exists()) {
+			tempDir2.mkdir();
+		}
+
+		rFixed.inchlibPath = inchlibPath;
+
+		rFixed.writeToFile(tmpPath2);
+		
 
 	}
 
@@ -167,14 +189,14 @@ public class TestROBA extends FFUnitTest{
 	
 	@Test
 	public void testObjInputMatrix() {
-		assertEquals("test G1 maxR_OBJ", new Integer(4), r.getObjInputMatrix().get("G1").get("maxR_OBJ"));
-		assertEquals("test G1 minR_OBJ2", new Integer(4), r.getObjInputMatrix().get("G1").get("minR_OBJ2"));
+		assertEquals("test G1 maxR_OBJ", new Integer(3), r.getObjInputMatrix().get("G1").get("maxR_OBJ"));
+		assertEquals("test G1 minR_OBJ2", new Integer(3), r.getObjInputMatrix().get("G1").get("minR_OBJ2"));
 		
-		assertEquals("test G2 maxR_OBJ", new Integer(4), r.getObjInputMatrix().get("G2").get("maxR_OBJ"));
-		assertEquals("test G2 minR_OBJ2", new Integer(4), r.getObjInputMatrix().get("G2").get("minR_OBJ2"));
+		assertEquals("test G2 maxR_OBJ", new Integer(3), r.getObjInputMatrix().get("G2").get("maxR_OBJ"));
+		assertEquals("test G2 minR_OBJ2", new Integer(3), r.getObjInputMatrix().get("G2").get("minR_OBJ2"));
 		
-		assertEquals("test G3 maxR_OBJ", new Integer(4), r.getObjInputMatrix().get("G3").get("maxR_OBJ"));
-		assertEquals("test G3 minR_OBJ2", new Integer(5), r.getObjInputMatrix().get("G3").get("minR_OBJ2"));
+		assertEquals("test G3 maxR_OBJ", new Integer(3), r.getObjInputMatrix().get("G3").get("maxR_OBJ"));
+		assertEquals("test G3 minR_OBJ2", new Integer(4), r.getObjInputMatrix().get("G3").get("minR_OBJ2"));
 		
 		assertEquals("test G8 maxR_OBJ", new Integer(4), r.getObjInputMatrix().get("G8").get("maxR_OBJ"));
 		assertEquals("test G8 minR_OBJ2", new Integer(4), r.getObjInputMatrix().get("G8").get("minR_OBJ2"));
@@ -187,11 +209,25 @@ public class TestROBA extends FFUnitTest{
 	}
 	
 	
+	@Test
+	public void testObjCondCountFixed() throws IOException {
+		
+		 String refFile = TestUtils.copyProjectResource(
+					"flexflux/unit_tests/data/era/resultsActivatedObjectivesFixed.txt",
+					java.nio.file.Files.createTempFile("test", ".txt").toFile());
+		 
+		 String testFile = tmpPath2+"/activatedObjectives.tsv";
+		 
+		 FileAssert.assertEquals("activated objective files are different", new File(refFile), new File(testFile));
+		 
+	}
+	
 	
 	@AfterClass
 	public static void afterTest() {
 
 		// tempDir.delete();
+//		tempDir2.delete();
 		if (plot) {
 			r.plot();
 		}

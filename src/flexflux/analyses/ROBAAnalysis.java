@@ -39,7 +39,11 @@ public class ROBAAnalysis extends Analysis {
 	 * List containing the threads that will solve each step of simulation
 	 */
 	protected List<ResolveThread> threads = new ArrayList<ResolveThread>();
-
+	
+	/**
+	 * If true, the conditions set in the condition file are fixed and can not be updated by the regulation network
+	 */
+	Boolean fixConditions=false;
 
 	/**
 	 * Constructor
@@ -47,10 +51,11 @@ public class ROBAAnalysis extends Analysis {
 	 * @param b
 	 * @param numberSimulations
 	 */
-	public ROBAAnalysis(Bind b, ListOfObjectives objectives, ListOfConditions conditions) {
+	public ROBAAnalysis(Bind b, ListOfObjectives objectives, ListOfConditions conditions, Boolean fixConditions) {
 		super(b);
 		this.objectives = objectives;
 		this.conditions = conditions;
+		this.fixConditions = fixConditions;
 	}
 	
 
@@ -81,7 +86,7 @@ public class ROBAAnalysis extends Analysis {
 				System.exit(1);
 			}
 
-			ThreadROBA threadEra = new ThreadROBA(newBind, tasks, objectives, result);
+			ThreadROBA threadEra = new ThreadROBA(newBind, tasks, objectives, result, fixConditions);
 
 			threads.add(threadEra);
 
