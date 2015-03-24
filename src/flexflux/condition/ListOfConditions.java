@@ -37,7 +37,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Iterator;
 
 import flexflux.general.ConstraintType;
@@ -47,11 +47,10 @@ public class ListOfConditions implements Iterable<Condition> {
 
 	public ArrayList<Condition> conditions;
 	public ArrayList<String> entities;
-	
+
 	public static final String fileFormat = "This must a tabulated network giving the state of each actor "
 			+ "(0,1) in each condition: 1st column : the name of the condition 2nd column :"
 			+ " the code of the condition following columns : the state of the actors (their names are in the header)";
-	
 
 	/**
 	 * Constructor
@@ -163,30 +162,34 @@ public class ListOfConditions implements Iterable<Condition> {
 
 						String valueStr = tab[i];
 
-						Double value = null;
+						if (valueStr.compareTo("NA") != 0) {
 
-						try {
-							value = Double.parseDouble(valueStr);
+							Double value = null;
 
-						} catch (NumberFormatException e) {
-							System.err.println("Error in condition file line "
-									+ nbLine
-									+ " : the state value is not a number");
-							return false;
-						}
+							try {
+								value = Double.parseDouble(valueStr);
 
-						if (constraintType.equals(ConstraintType.BINARY)) {
-
-							if (value != 1 && value != 0) {
+							} catch (NumberFormatException e) {
 								System.err
 										.println("Error in condition file line "
 												+ nbLine
-												+ " : the state value is different than 0 or 1");
+												+ " : the state value is not a number or NA");
 								return false;
 							}
+
+							if (constraintType.equals(ConstraintType.BINARY)) {
+
+								if (value != 1 && value != 0) {
+									System.err
+											.println("Error in condition file line "
+													+ nbLine
+													+ " : the state value is different than 0 or 1");
+									return false;
+								}
+							}
+							condition.addConstraint(entityId, value,
+									constraintType);
 						}
-						condition.addConstraint(entityId, value,
-								constraintType);
 
 					}
 
@@ -269,46 +272,53 @@ public class ListOfConditions implements Iterable<Condition> {
 
 	}
 
-	
 	/**
 	 * Write conditions in a file
+	 * 
 	 * @param fileName
 	 * @return
 	 */
 	public Boolean writeConditionFile(String fileName) {
 
 		FileWriter fw = null;
-		
+
 		try {
 			fw = new FileWriter(new File(fileName));
+
+			/**
+			 * To facilitate tests and reading
+			 */
+			Collections.sort(this.entities);
 			
 			// Header
 			fw.write("conditionId\tconditionName");
-			
-			for(String entityId : this.entities) {
-				fw.write("\t"+entityId);
+
+			for (String entityId : this.entities) {
+				fw.write("\t" + entityId);
 			}
-			
+
 			fw.write("\n");
-			
+
 			// prints each condition
-			for(Condition condition : this.conditions) {
-				fw.write(condition.code+"\t"+condition.name);
+			for (Condition condition : this.conditions) {
+				fw.write(condition.code + "\t" + condition.name);
 				
-				for(String entityId : this.entities)
-				{
-					Double value = 0.0;
-					if(condition.containsConstraint(entityId)) {
-						value = condition.getConstraint(entityId).getValue();
+				for (String entityId : this.entities) {
+					String value = "0.0";
+					if (condition.containsConstraint(entityId)) {
+						value = condition.getConstraint(entityId).getValue()
+								.toString();
+					} else {
+						value = "NA";
 					}
-					
-					fw.write("\t"+value);
+
+					fw.write("\t" + value);
 				}
-				
+
 				fw.write("\n");
-				
+
 			}
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.err
@@ -316,14 +326,15 @@ public class ListOfConditions implements Iterable<Condition> {
 							+ fileName);
 			return false;
 		}
-		
+
 		finally {
-			if(fw != null) {
+			if (fw != null) {
 				try {
 					fw.close();
 				} catch (IOException e) {
 					e.printStackTrace();
-					System.err.println("Problem while closing the file "+fileName);
+					System.err.println("Problem while closing the file "
+							+ fileName);
 					return false;
 				}
 			}

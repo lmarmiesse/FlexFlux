@@ -60,6 +60,9 @@ public class FlexfluxROBA extends FFApplication {
 	@Option(name = "-inchlibPath", usage = "[default=/usr/local/inchlib_clust/inchlib_clust.py]", metaVar = "String")
 	public String inchlibPath = "/usr/local/inchlib_clust/inchlib_clust.py";
 
+	@Option(name = "-fixConditions", usage = "[OPTIONAL] If true, the conditions set in the condition file are fixed and can not be updated by the regulation network.")
+	public Boolean fixConditions = false;
+	
 	/**
 	 * Main
 	 * 
@@ -171,7 +174,7 @@ public class FlexfluxROBA extends FFApplication {
 
 		bind.prepareSolver();
 
-		ROBAAnalysis a = new ROBAAnalysis(bind, objectives, conditions);
+		ROBAAnalysis a = new ROBAAnalysis(bind, objectives, conditions, f.fixConditions);
 
 		ROBAResult r = a.runAnalysis();
 
