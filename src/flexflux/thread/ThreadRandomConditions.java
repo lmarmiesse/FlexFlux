@@ -168,13 +168,25 @@ public class ThreadRandomConditions extends Thread {
 					//
 					// Constraint constraint = null;
 
-					Double value;
+					String valueStr;
 					if (activatedInputs.contains(input.getId())) {
-						value = input.getActivationValue();
+						valueStr = input.getActivationValue();
 					} else {
-						value = input.getInhibitionValue();
+						valueStr = input.getInhibitionValue();
 					}
 
+					if(valueStr.compareTo("NA") != 0)
+					{
+						Double value = null;
+						try {
+							value = Double
+									.parseDouble(valueStr);
+						} catch (NumberFormatException e) {
+							System.err
+									.println("Activation or inhibition value must be a double or NA");
+							System.exit(1);
+						}
+					
 					// constraint = new Constraint(constraintMap, value, value);
 
 					if (value > 0) {
@@ -183,6 +195,8 @@ public class ThreadRandomConditions extends Thread {
 
 					condition.addConstraint(input.getId(), value,
 							this.type);
+					
+					}
 
 					// bind.addSimpleConstraint(e, constraint);
 				}

@@ -27,15 +27,15 @@ public class InputRandomParameters {
 	/**
 	 * Value corresponding to the activation of the entity
 	 */
-	Double activationValue;
+	String activationValue;
 
 	/**
 	 * Value corresponding to the inhibition of the entity
 	 */
-	Double inhibitionValue;
+	String inhibitionValue;
 
-	public InputRandomParameters(String id, double inhibitionValue,
-			double activationValue, int weight) {
+	public InputRandomParameters(String id, String inhibitionValue,
+			String activationValue, int weight) {
 
 		this.id = id;
 		this.inhibitionValue = inhibitionValue;
@@ -60,19 +60,19 @@ public class InputRandomParameters {
 		this.weight = weight;
 	}
 
-	public Double getActivationValue() {
+	public String getActivationValue() {
 		return activationValue;
 	}
 
-	public void setActivationValue(Double activationValue) {
+	public void setActivationValue(String activationValue) {
 		this.activationValue = activationValue;
 	}
 
-	public Double getInhibitionValue() {
+	public String getInhibitionValue() {
 		return inhibitionValue;
 	}
 
-	public void setInhibitionValue(Double inhibitionValue) {
+	public void setInhibitionValue(String inhibitionValue) {
 		this.inhibitionValue = inhibitionValue;
 	}
 
