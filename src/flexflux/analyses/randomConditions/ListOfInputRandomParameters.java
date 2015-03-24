@@ -7,18 +7,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+public class ListOfInputRandomParameters implements
+		Iterable<InputRandomParameters> {
 
-public class ListOfInputRandomParameters implements Iterable<InputRandomParameters>{
-
-	
 	public ArrayList<InputRandomParameters> inputRandomParameterList;
-	
-	public ListOfInputRandomParameters () {
+
+	public ListOfInputRandomParameters() {
 		inputRandomParameterList = new ArrayList<InputRandomParameters>();
 	}
-	
-	
-	
+
 	/**
 	 * Reads the file containing for each input its value of inhibition, of
 	 * activation and its weight during the selection of the activated inputs
@@ -27,8 +24,7 @@ public class ListOfInputRandomParameters implements Iterable<InputRandomParamete
 	 * @param inputFile
 	 * @return true or false if problem
 	 */
-	public Boolean loadInputRandomParameterFile(
-			String inputFile) {
+	public Boolean loadInputRandomParameterFile(String inputFile) {
 
 		ArrayList<InputRandomParameters> list = new ArrayList<InputRandomParameters>();
 
@@ -46,9 +42,9 @@ public class ListOfInputRandomParameters implements Iterable<InputRandomParamete
 					nbLine++;
 					continue;
 				}
-				
+
 				nbLine++;
-				
+
 				String tab[] = line.split("\t");
 
 				if (tab.length != 4) {
@@ -66,20 +62,28 @@ public class ListOfInputRandomParameters implements Iterable<InputRandomParamete
 				double activationValue;
 				int weight;
 
-				try {
-					inhibitionValue = Double.parseDouble(inhibitionValueStr);
-				} catch (NumberFormatException e) {
-					System.err.println("Inhibition value badly formatted line "
-							+ nbLine);
-					return false;
+				if (inhibitionValueStr.compareTo("NA") != 0) {
+					try {
+						inhibitionValue = Double
+								.parseDouble(inhibitionValueStr);
+					} catch (NumberFormatException e) {
+						System.err
+								.println("Inhibition value badly formatted line "
+										+ nbLine);
+						return false;
+					}
 				}
 
-				try {
-					activationValue = Double.parseDouble(activationValueStr);
-				} catch (NumberFormatException e) {
-					System.err.println("Activation value badly formatted line "
-							+ nbLine);
-					return false;
+				if (activationValueStr.compareTo("NA") != 0) {
+					try {
+						activationValue = Double
+								.parseDouble(activationValueStr);
+					} catch (NumberFormatException e) {
+						System.err
+								.println("Activation value badly formatted line "
+										+ nbLine);
+						return false;
+					}
 				}
 
 				try {
@@ -91,10 +95,9 @@ public class ListOfInputRandomParameters implements Iterable<InputRandomParamete
 				}
 
 				InputRandomParameters inputRandomParameters = new InputRandomParameters(
-						inputId, inhibitionValue, activationValue, weight);
+						inputId, inhibitionValueStr, activationValueStr, weight);
 
 				list.add(inputRandomParameters);
-				
 
 			}
 		} catch (FileNotFoundException e) {
@@ -120,12 +123,11 @@ public class ListOfInputRandomParameters implements Iterable<InputRandomParamete
 		}
 
 		inputRandomParameterList = list;
-		
-		
+
 		return true;
 
 	}
-	
+
 	/**
 	 * 
 	 * @return the number of inputRandomParameters
@@ -133,10 +135,10 @@ public class ListOfInputRandomParameters implements Iterable<InputRandomParamete
 	public int size() {
 		return this.inputRandomParameterList.size();
 	}
-	
+
 	@Override
 	public Iterator<InputRandomParameters> iterator() {
 		return inputRandomParameterList.iterator();
 	}
-	
+
 }
