@@ -80,6 +80,12 @@ public class RSAAnalysisResult extends AnalysisResult {
 		return finalConstraints;
 
 	}
+	
+	public List<Map<BioEntity, Integer>> getStatesList() {
+
+		return statesList;
+
+	}
 
 	@Override
 	public void writeToFile(String path) {

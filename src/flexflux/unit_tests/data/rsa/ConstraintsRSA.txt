@@ -1,0 +1,4 @@
+STARTING POINT
+
+allolactose	0
+P_lacI	0
