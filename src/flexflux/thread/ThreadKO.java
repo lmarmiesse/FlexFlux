@@ -38,7 +38,6 @@ import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.DoubleResult;
 import flexflux.general.Vars;
-import flexflux.interaction.Interaction;
 import flexflux.objective.Objective;
 
 import java.util.ArrayList;
@@ -121,6 +120,11 @@ public class ThreadKO extends ResolveThread {
 
 			DoubleResult value = bind.FBA(constraintsToAdd, false, true);
 
+			if(Vars.verbose)
+			{
+				System.err.println("Entity : "+entity.getId()+"\tValue : "+value.result);
+			}
+			
 			result.addLine(entity, value.result);
 
 			bind.checkInteractionNetwork = true;

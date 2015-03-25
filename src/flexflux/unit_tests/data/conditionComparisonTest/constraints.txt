@@ -1,3 +1,2 @@
-obj : MAX(R_OBJ_EX)
 
 R_A_EX 0 10

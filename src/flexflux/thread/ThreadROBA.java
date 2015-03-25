@@ -75,16 +75,22 @@ public class ThreadROBA extends ResolveThread {
 	 * 
 	 */
 	private static long percentage = 0;
+	
+	/**
+	 * If true, the conditions set in the condition file are fixed and can not be updated by the regulation network
+	 */
+	Boolean fixConditions=false;
 
 	public ThreadROBA(Bind b, Queue<Condition> conditions,
 			ListOfObjectives objectives,
-			ROBAResult result) {
+			ROBAResult result, Boolean fixConditions) {
 
 		super(b);
 		this.todo = conditions.size();
 		this.conditions = conditions;
 		this.result = result;
 		this.objectives = objectives;
+		this.fixConditions = fixConditions;
 		percentage = 0;
 		
 	}
@@ -125,7 +131,20 @@ public class ThreadROBA extends ResolveThread {
 				
 				constraint = new Constraint(constraintMap, value, value);
 				
-				bind.addSimpleConstraint(e, constraint);
+				
+				if (fixConditions == false) {
+					if (! bind.getInteractionNetwork().getInteractionNetworkEntities().containsKey(entityId)) {
+						System.err.println("Add simple constraint "+constraint);
+						bind.addSimpleConstraint(e, constraint);
+					} else {
+						System.err.println("Add initial constraint "+constraint);
+						bind.getInteractionNetwork().addInitialConstraint(e,
+								constraint);
+					}
+				} else {
+					System.err.println("Add simple constraint (! fixCondtions) "+constraint);
+					bind.addSimpleConstraint(e, constraint);
+				}
 			}
 			
 			bind.prepareSolver();
