@@ -1,347 +1,5609 @@
 FBA result
 
-obj : 0.873922
-M_acon_C_c	0.0
-b3956	1.0
-R_GLUSy	0.0
-M_acald_e	0.0
-M_actp_c	0.0
-M_acald_c	0.0
-R_GLUDy	-4.541857
-M_acald_b	0.0
-b1817_and_b1818_and_b1819_and_b2415_and_b2416	0.0
-M_pi_e	0.0
-b2914	1.0
-R_GLUt2r	0.0
-R_EX_glc_e	-10.0
-R_EX_o2_e	-21.799493
-b3952	1.0
-b3951	1.0
-R_EX_mal_L_e	0.0
-R_EX_for_e	0.0
-M_pi_b	0.0
-R_EX_h2o_e	29.175827
-M_pi_c	0.0
-b4025	1.0
-R_EX_fru_e	0.0
-M_co2_c	0.0
-M_co2_e	0.0
-R_GLNabc	0.0
-R_PGI	4.860861
-b4301	1.0
-R_PGK	-16.023526
-R_PGM	-14.71614
-b0902_and_b0903	0.0
-R_PGL	4.959985
-b2925	1.0
-b2926	1.0
-b3386	1.0
-R_EX_acald_e	0.0
-M_6pgc_c	0.0
-M_co2_b	0.0
-b2417	1.0
-b2416	1.0
-M_amp_c	0.0
-b2415	1.0
-M_accoa_c	0.0
-b1676	1.0
-b4015	1.0
-b4014	1.0
-b4122	1.0
-M_fum_c	0.0
-b3212_and_b3213	0.0
-b1817	1.0
-b2935	1.0
-M_fum_e	0.0
-R_NADTRHD	0.0
-R_PFL	0.0
-b1812	1.0
-R_PFK	7.477382
-M_ac_b	0.0
-M_oaa_c	0.0
-b1818	1.0
-b1819	1.0
-M_fum_b	0.0
-M_pyr_e	0.0
-R_EX_h_e	17.530865
-R_D_LACt2	0.0
-M_s7p_c	0.0
-M_ac_c	0.0
-M_pyr_c	0.0
-M_pyr_b	0.0
-M_ac_e	0.0
-M_icit_c	0.0
-R_ENO	14.71614
-b3925	1.0
-b4232	1.0
-b2276_and_b2277_and_b2278_and_b2279_and_b2280_and_b2281_and_b2282_and_b2283_and_b2284_and_b2285_and_b2286_and_b2287_and_b2288	0.0
-M_nad_c	0.0
+obj : 0.592258
+b2309_and_b2307_and_b2306_and_b2308	Not Constrained
+b4031	Not Constrained
+b4032	Not Constrained
+b4033	Not Constrained
+b4034	Not Constrained
+R_PANTS	3.41E-4
+M_actp_c	Not Constrained
+R_G6Ptex	0.0
+R_12DGR141tipp	0.0
+M_thex2eACP_c	Not Constrained
+R_ASCBptspp	0.0
+M_tym_p	Not Constrained
+R_DXPRIi	0.001415
+b2429	Not Constrained
+M_quln_c	Not Constrained
+b2421	Not Constrained
+b4025	Not Constrained
+b2423	Not Constrained
+b2422	Not Constrained
+b4024	Not Constrained
+b2422_and_b2424_and_b2423_and_b3917	Not Constrained
+b2425	Not Constrained
+b2424	Not Constrained
+R_GALCTNLt2pp	0.0
+R_CU1abcpp (Dead)	0.0
+R_PSERtex	0.0
+R_CLPNS120pp	0.0
+M_g3pg_p	Not Constrained
+b2418	Not Constrained
+b2417	Not Constrained
+b2416	Not Constrained
+b2415	Not Constrained
+b1329_and_b1244_and_b1245_and_b1246_and_b1247	Not Constrained
+M_ascb_L_p	Not Constrained
+R_DHAPT	0.921548
+b4019	Not Constrained
+M_12dgr160_p	Not Constrained
+b2414	Not Constrained
+b4015	Not Constrained
+R_CDPMEK	0.001415
+R_PAPA160pp	0.0
+b4014	Not Constrained
+b4013	Not Constrained
+b2411	Not Constrained
+R_EX_alltn_e_	0.0
+R_OXGDC2	0.0
+R_PROtex	0.0
+M_ascb_L_b	Not Constrained
+R_GLYCtex	0.0
+b4053	Not Constrained
+b4054	Not Constrained
+M_ascb_L_e	Not Constrained
+R_MALtex	0.0
+b4055	Not Constrained
+M_hisp_c	Not Constrained
+M_12dgr160_c	Not Constrained
+M_feoxam_p	Not Constrained
+M_clpn120_p	Not Constrained
+M_feoxam_b	Not Constrained
+R_SHSL1	0.091162
+R_EX_psclys_e_	0.0
+M_feoxam_c	Not Constrained
+R_EX_tma_e_	0.0
+R_GLYCLTt2rpp	-999999.0
+R_2DGLCNRx (Dead)	0.0
+R_MSO3abcpp	0.0
+R_EX_acgam1p_e_	0.0
+M_4ppan_c	Not Constrained
+M_feoxam_e	Not Constrained
+R_EX_g3ps_e_	0.0
+b2407	Not Constrained
+b2406	Not Constrained
+R_GLCURt2rpp	0.0
+R_HKNDDH	0.0
+b2400	Not Constrained
+R_EX_ac_e_	0.0
+M_tdeACP_c	Not Constrained
+R_SERTRS (Dead)	0.0
+b4040	Not Constrained
+b4041	Not Constrained
+b4042	Not Constrained
+M_nicrnt_c	Not Constrained
+M_uacmam_c	Not Constrained
+b2276_and_b2277_and_b2278_and_b2279_and_b2280_and_b2281_and_b2282_and_b2283_and_b2284_and_b2285_and_b2286_and_b2287_and_b2288	Not Constrained
+R_EX_galt_e_	0.0
+R_EX_glyb_e_ (Dead)	0.0
+R_METSOXR2	0.0
+R_METSOXR1	0.0
+R_FE3DCITabcpp	0.0
+R_DAPtex	0.0
+M_odecoa_c	Not Constrained
+b4036	Not Constrained
+b4035	Not Constrained
+M_ppcoa_c	Not Constrained
+R_SHCHD2	1.32E-4
+R_EX_fe3dcit_e_	0.0
+b4039	Not Constrained
+b4070	Not Constrained
+R_GALCTt2rpp	0.0
+M_14glucan_p	Not Constrained
+R_GLXCL	0.0
+M_rmn_e	Not Constrained
+M_rmn_c	Not Constrained
+b4077	Not Constrained
+M_rmn_b	Not Constrained
+R_PHETRS (Dead)	0.0
+b4072	Not Constrained
+M_pe180_p	Not Constrained
+b4071	Not Constrained
+R_NACtex	0.0
+b2472	Not Constrained
+b4073	Not Constrained
+R_G3PEabcpp	0.0
+R_14GLUCANabcpp	0.0
+b2463	Not Constrained
+R_DNTPPA	3.96E-4
+b2464	Not Constrained
+betaGal	1.0
+b2465	Not Constrained
+b2467	Not Constrained
+b4069	Not Constrained
+M_pe180_c	Not Constrained
+R_GLUTRS	0.002113
+R_CDAPPA140	0.0
+M_q8h2_c	Not Constrained
+R_GLUTRR	0.002113
+M_rmn_p	Not Constrained
+b0894_and_b0895_and_b0896	Not Constrained
+M_gtspmd_c	Not Constrained
+R_RBP4E	0.0
+R_COBALT2tpp	0.00187
+R_CDAPPA141	0.0
+R_NO3R1bpp	0.0
+b4067	Not Constrained
+R_MECDPDH2	0.001415
+R_EX_acnam_e_	0.0
+M_thmpp_c	Not Constrained
+R_EX_lipa_e_	0.0
+b2458	Not Constrained
+R_DDPA	0.220175
+M_14glucan_b	Not Constrained
+M_14glucan_c	Not Constrained
+M_14glucan_e	Not Constrained
+R_G6PDH2r	2.740987
+R_MDH3	0.0
+R_MDH2	0.0
+M_acgam1p_b	Not Constrained
+R_ADEt2rpp	0.0
+M_acgam1p_c	Not Constrained
+b4090	Not Constrained
+M_acgam1p_e	Not Constrained
+b4094	Not Constrained
+R_GTPDPDP	0.0
+R_CYSDabcpp	0.0
+M_acgam1p_p	Not Constrained
+R_AMPtex	0.0
+M_unagamu_c	Not Constrained
+b2440	Not Constrained
+R_AGM4PCPpp	0.0
+AMPc	1.0
+b2441	Not Constrained
+M_orot_e	Not Constrained
+R_AGM4PCP	0.0
+R_PPPNt2rpp	0.0
+b2762_and_b3781	Not Constrained
+M_4mpetz_c	Not Constrained
+M_orot_p	Not Constrained
+R_CDAPPA120	0.0
+R_G3PItex	0.0
+R_EX_12ppd_R_e_	0.0
+b4085	Not Constrained
+R_EX_adn_e_	0.0
+b4084	Not Constrained
+M_orot_b	Not Constrained
+M_2pg_c	Not Constrained
+M_orot_c	Not Constrained
+b4088	Not Constrained
+b4087	Not Constrained
+b4086	Not Constrained
+R_NAt3_2pp	0.0
+b2435	Not Constrained
+b2436	Not Constrained
+b4079	Not Constrained
+R_FUMt2_2pp	0.0
+R_EAR141x	0.089087
+b0733_and_b0734	Not Constrained
+R_ALAALAabcpp	0.0
+R_EAR141y	0.0
+R_AMAOTr (Dead)	0.0
+M_dpcoa_c	Not Constrained
+R_EX_for_e_	0.0
+R_CDAPPA181	0.0
+M_1tdec7eg3p_c	Not Constrained
+R_MTRI	0.0
+R_MTRK	0.0
+M_23dhdp_c	Not Constrained
+R_CDAPPA180	0.0
+R_GLYCtpp	0.0
+R_CBIuabcpp (Dead)	0.0
+R_EAR140y	0.0
+R_OMMBLHX	0.0
+R_EAR140x	0.075584
+R_EX_cpgn_un_e_	0.0
+b1377	Not Constrained
+M_dhpt_c	Not Constrained
+R_EX_h_e_	-0.609708
+M_3dhq_c	Not Constrained
+R_LPLIPAL1G140pp	0.0
+M_1tdec7eg3p_p	Not Constrained
+R_PLIPA1A180pp	0.0
+b1380	Not Constrained
+b0615_and_b0616_and_b0617_and_b0614	Not Constrained
+R_APRAUR	2.64E-4
+M_pg161_c	Not Constrained
+R_NADS1	0.001349
+M_udpgal_b	Not Constrained
+M_udpgal_c	Not Constrained
+M_12ppd_S_b	Not Constrained
+M_12ppd_S_c	Not Constrained
+M_udpgal_e	Not Constrained
+M_12ppd_S_e	Not Constrained
+b1363	Not Constrained
+R_AKGtex	0.0
+M_pg161_p	Not Constrained
+R_L_LACt2rpp	0.0
+R_EAR40y	0.0
+R_EAR40x	0.210749
+M_udpgal_p	Not Constrained
+R_GPDDA2	0.0
+M_12ppd_S_p	Not Constrained
+M_dhcinnm_c	Not Constrained
+R_UPPRT	0.0
+R_GPDDA3	0.0
+R_GPDDA4	0.0
+R_XANt2pp	0.0
+M_oxur_c	Not Constrained
+R_TAUDO	0.0
+M_3ocpalm9eACP_c	Not Constrained
+R_CDAPPA160	0.0
+R_FA140ACPHi	0.0
+R_CU2tpp	0.00187
+b0805_and_b1252_and_b3005_and_b3006	Not Constrained
+M_2mcacn_c	Not Constrained
+R_CDAPPA161	0.0
+M_3hcinnm_e	Not Constrained
+R_OPHHX	1.32E-4
+M_3hcinnm_c	Not Constrained
+M_3hcinnm_b	Not Constrained
+M_cechddd_c	Not Constrained
+M_sucbz_c	Not Constrained
+R_EX_uacgam_e_	0.0
+M_glutrna_c	Not Constrained
+M_3hcinnm_p	Not Constrained
+R_CRNt7pp (Dead)	0.0
+R_TDSK	0.011519
+M_myrsACP_c	Not Constrained
+M_pg140_c	Not Constrained
+R_LPLIPAL2ATG160 (Dead)	0.0
+M_glucys_c	Not Constrained
+R_MLDCP1App	0.0
+M_lcts_p	Not Constrained
+R_TMPK	1.32E-4
+R_ASO3tex (Dead)	0.0
+M_hlipa_c	Not Constrained
+R_EX_gbbtn_e_ (Dead)	0.0
+R_GLDBRAN2	0.0
+M_lcts_b	5.8
+M_pg140_p	Not Constrained
+M_lcts_e	Not Constrained
+R_EX_butso3_e_	0.0
+M_lcts_c	Not Constrained
+R_F6PP	0.0
+b1325	Not Constrained
+R_THRt2pp	0.0
+R_HDCOAI	0.0
+b1329	Not Constrained
+R_EX_glyald_e_	0.0
+M_3oddecACP_c	Not Constrained
+b1326	Not Constrained
+M_galct_D_b	Not Constrained
+R_FEOXAMabcpp	0.0
+M_galct_D_c	Not Constrained
+M_galct_D_e	Not Constrained
+M_lald_D_c	Not Constrained
+R_F6PA	0.921548
+R_EX_eca4colipa_e_	0.0
+b4005	Not Constrained
+R_5DGLCNR	0.0
+R_METDtex (Dead)	0.0
+M_gsn_p	Not Constrained
+b4006	Not Constrained
+M_galct_D_p	Not Constrained
+b1319	Not Constrained
+M_g3pg_e	Not Constrained
+M_g3pg_c	Not Constrained
+M_g3pg_b	Not Constrained
+M_aspsa_c	Not Constrained
+R_ALATRS (Dead)	0.0
+R_HXCT	0.0
+R_UACGALPpp	0.0
+b3726_and_b3725_and_b3727_and_b3728	Not Constrained
+M_allul6p_c	Not Constrained
+R_GLYALDtex	0.0
+b1302	Not Constrained
+M_2agpg180_c	Not Constrained
+b1301	Not Constrained
+b1300	Not Constrained
+R_USHD	0.011519
+b1308	Not Constrained
+R_EX_ca2_e_	-0.002806
+M_2agpg180_p	Not Constrained
+b4219_and_b3781	Not Constrained
+R_ABUTt2pp	0.0
+R_EX_cpgn_e_	0.0
+R_NACODA	0.0
+M_galt_p	Not Constrained
+M_pyam5p_c	Not Constrained
+M_pgp181_p	Not Constrained
+M_gsn_e	Not Constrained
+R_AGM3PH	0.0
+M_gsn_c	Not Constrained
+M_gsn_b	Not Constrained
+R_DKMPPD	0.0
+R_AGM3PA	0.0
+R_LYSt3pp	0.0
+M_pgp181_c	Not Constrained
+R_AGM3PApp	0.0
+R_TARTRtex	0.0
+R_RHCCE	2.64E-4
+b2979_and_b4467_and_b4468	Not Constrained
+R_EX_gam_e_	0.0
+M_maltpt_p	Not Constrained
+M_3hhcoa_c	Not Constrained
+R_CLPNH120pp	0.0
+b1200_and_b1199_and_b1198_and_b2415_and_b2416	Not Constrained
+R_ARGabcpp	0.0
+R_CPPPGO2	0.0
+R_GPDDA2pp	0.0
+R_MEPCT	0.001415
+R_THRA2i	0.0
+R_ETOHtex	0.0
+R_PLIPA2A181pp	0.0
+M_uppg3_c	Not Constrained
+M_pydx_c	Not Constrained
+R_EX_but_e_	0.0
+R_EX_val_L_e_	0.0
+M_maltpt_e	Not Constrained
+R_PAPSR2	0.145874
+R_EX_co2_e_	14.747109
+R_EX_cmp_e_	0.0
+R_ENTCS	0.0
+M_maltpt_c	Not Constrained
+R_23DAPPAtex	0.0
+M_s7p_c	Not Constrained
+R_INDOLEt2rpp	0.0
+M_maltpt_b	Not Constrained
+R_2AGPE120tipp	0.0
+M_icit_c	Not Constrained
+M_1tdecg3p_p	Not Constrained
+M_mmcoa_R_c	Not Constrained
+R_ARGtex	0.0
+R_GLYALDtpp	0.0
+M_spmd_e	Not Constrained
+M_spmd_c	Not Constrained
+M_spmd_b	Not Constrained
+R_ACGAMK	0.0
+R_PPCDC	3.41E-4
+R_3PEPTtex	0.0
+R_NACtpp	0.0
+M_spmd_p	Not Constrained
+M_23ddhb_c	Not Constrained
+b4136_and_b3781	Not Constrained
+R_12PPDStpp	0.0
 R_ACALD	0.0
-R_MALS	0.0
-R_RPI	-2.281503
-M_o2_c	0.0
-M_o2_b	0.0
-M_o2_e	0.0
-R_PYK	1.758177
-R_RPE	2.678482
-R_TALA	1.496984
-b0811	0.0
-b0810	0.0
-M_nadp_c	0.0
-R_ADK1	0.0
-M_glu_L_e	0.0
-M_fdp_c	0.0
-M_e4p_c	0.0
-R_FUM	5.064376
-b0809	0.0
-b4077	1.0
-R_PDH	9.282533
-M_r5p_c	0.0
-b3212	1.0
-b3213	1.0
-b3916	1.0
-b2463	1.0
-b0114	1.0
-b2464	1.0
-b0115	1.0
-b2465	1.0
-b3919	1.0
-b0902	1.0
-M_q8h2_c	0.0
-b0902_and_b0903_and_b2579	0.0
-b0903	1.0
-R_SUCDi	5.064376
-b0904	1.0
-b0116	1.0
-M_glu_L_c	0.0
-R_FRD7	0.0
-M_glu_L_b	0.0
-b0118	1.0
-M_ru5p_D_c	0.0
-R_ATPM	8.39
-M_g3p_c	0.0
-R_Biomass_Ecoli_core_w_GAM	0.873922
-R_MALt2_2	0.0
-R_ACALDt	0.0
-R_H2Ot	-29.175827
-b3493	1.0
-b0114_and_b0115_and_b0116	0.0
-M_glc_D_b	0.0
-M_glc_D_e	0.0
-M_atp_c	0.0
-R_EX_glu_L_e	0.0
-b3951_and_b3952	0.0
-R_ETOHt2r	0.0
-b2458	1.0
-b1297	1.0
-R_GAPD	16.023526
-R_G6PDH2r	4.959985
-R_EX_gln_L_e	0.0
-R_O2t	21.799493
-b0722	1.0
-b2976	1.0
-b2097	1.0
-b0721	1.0
-b0724	1.0
-R_FRUpts2	0.0
-R_FBA	7.477382
-b0723	1.0
-b1602_and_b1603	0.0
-b0726	1.0
-b4090	1.0
-b0728	1.0
-b0727	1.0
-R_AKGDH	5.064376
-b3236	1.0
-M_6pgl_c	0.0
-M_etoh_e	0.0
-M_coa_c	0.0
-b0720	1.0
-b2975	1.0
-R_TKT1	1.496984
-R_TKT2	1.181498
-R_EX_ac_e	0.0
-b0729	1.0
-R_GLNS	0.223462
-b2587	1.0
-M_fru_e	0.0
-b2987	1.0
-M_fru_b	0.0
-R_NH4t	4.765319
-M_lac_D_c	0.0
-M_lac_D_b	0.0
-b2779	1.0
-M_akg_b	0.0
-M_2pg_c	0.0
-M_lac_D_e	0.0
-R_LDH_D	0.0
-M_akg_c	0.0
-b1276	1.0
-M_etoh_c	0.0
-M_etoh_b	0.0
-b0733_and_b0734	0.0
-b0008	1.0
-M_akg_e	0.0
-b2579	1.0
-R_FBP	0.0
-b1478	1.0
-b1479	1.0
-M_succoa_c	0.0
-M_nadph_c	0.0
-R_ICDHyr	6.00725
-R_PYRt2r	0.0
-b1380	1.0
-R_EX_pyr_e	0.0
-b0978_and_b0979	0.0
-s0001	1.0
-b0733	1.0
-b1761	1.0
-b0734	1.0
-R_NADH16	38.53461
-M_adp_c	0.0
-R_TPI	7.477382
-b0356	1.0
-b0351	1.0
-b0116_and_b0726_and_b0727	0.0
-b4395	1.0
-R_ATPS4r	45.51401
-b2417_and_b1101_and_b2415_and_b2416	0.0
-b1779	1.0
-b3114	1.0
-b3115	1.0
-M_for_b	0.0
-b0811_and_b0810_and_b0809	0.0
-M_for_c	0.0
-M_3pg_c	0.0
-R_FUMt2_2	0.0
-R_ICL	0.0
-b1773	1.0
-b2492	1.0
-M_for_e	0.0
-b3731	1.0
-M_succ_b	0.0
-b1602	1.0
-b3732	1.0
-R_FORti	0.0
-R_ACONTa	6.00725
-b1603	1.0
-b3733	1.0
-b3734	1.0
-R_ACONTb	6.00725
-b3870	1.0
-b3739	1.0
-b3603	1.0
-R_PPC	2.504309
-b3735	1.0
-b3736	1.0
-M_succ_e	0.0
-b3737	1.0
-b3738	1.0
-M_succ_c	0.0
-R_ACt2r	0.0
-R_GLCpts	10.0
-R_SUCCt2_2	0.0
-M_13dpg_c	0.0
-b0755	1.0
-R_EX_lac_D_e	0.0
-b3403	1.0
-R_GND	4.959985
-b2417_and_b1621_and_b2415_and_b2416	0.0
-b0902_and_b3114	0.0
-b0721_and_b0722_and_b0723_and_b0724	0.0
-M_mal_L_e	0.0
-b1612	1.0
-b3612	1.0
-R_ME1	0.0
-R_ME2	0.0
-R_CS	6.00725
-M_dhap_c	0.0
-R_MDH	5.064376
-b1611	1.0
-M_mal_L_b	0.0
-M_mal_L_c	0.0
-R_THD2	0.0
-b2133	1.0
-R_AKGt2r	0.0
-M_nadh_c	0.0
-R_CYTBD	43.598985
+R_URIC	0.0
+R_OPHHX3	0.0
+R_ACGAMT	0.0
+b0068_and_b0067_and_b0066	Not Constrained
+R_IPPS	0.266812
+R_URIH	0.0
+R_PYK	0.0
+R_EX_tyrp_e_	0.0
+R_PTA2	2.851185
+b0522	Not Constrained
+b0521	Not Constrained
+R_FMNRx2	0.0
+R_EX_tcynt_e_	0.0
+M_cdpdtdec7eg_c	Not Constrained
+M_hpyr_c	Not Constrained
+R_GPDDA5 (Dead)	0.0
+b0529	Not Constrained
+R_NO3R2bpp	0.0
+R_GTHRDabcpp	0.0
+b0524	Not Constrained
+b0523	Not Constrained
+b0526	Not Constrained
+b1291	Not Constrained
+R_DHDPRy	0.219716
+R_AM4PA	0.0
+R_GMHEPAT	0.0
+b1288	Not Constrained
+R_PDX5PO2	1.32E-4
+R_EX_ins_e_	0.0
+M_ser_D_p	Not Constrained
+R_OXAMTC	0.0
+b0511	Not Constrained
+R_SSALx	0.0
+R_BUTSO3abcpp	0.0
+R_SSALy	0.0
+R_MDDCP1pp	0.0
+b4219_and_b2582	Not Constrained
+M_ser_D_e	Not Constrained
+b0517	Not Constrained
+b0516	Not Constrained
+R_FE3DHBZSabcpp	0.0
+M_ser_D_b	Not Constrained
+b0514	Not Constrained
+R_PLIPA2A160pp	0.0
+M_ser_D_c	Not Constrained
+b0512	Not Constrained
+R_MLTGY3pp	0.0
+R_NADK	2.65E-4
+R_EX_cu2_e_	-0.00187
+M_gmhep7p_c	Not Constrained
+b1298	Not Constrained
+R_GGGABAH	0.0
+b1297	Not Constrained
+b1296	Not Constrained
+R_DINSt2pp	0.0
+R_AGDC	0.0
+R_NADN	0.0
+R_CU2abcpp	0.0
+R_KDOPS	0.023039
+R_UPP3S	2.64E-4
+M_gicolipa_c	Not Constrained
+b1602_and_b1603	Not Constrained
+R_FRUpts2pp	0.0
+R_KDOPP	0.023039
+R_PDX5POi	0.0
+M_dc2coa_c	Not Constrained
+b1270	Not Constrained
+b0505	Not Constrained
+R_THD2pp	0.0
+b0508	Not Constrained
+R_EX_so4_e_	-0.148212
+b0507	Not Constrained
+b1264	Not Constrained
+b0509	Not Constrained
+b1263	Not Constrained
+R_NADPPPS	0.0
+R_HSK	0.322307
+R_EX_glyclt_e_	0.0
+R_FACOAL180t2pp	0.0
+M_23dhmp_c	Not Constrained
+R_HG2t3pp (Dead)	0.0
+M_gam_e	Not Constrained
+M_gam_b	Not Constrained
+R_URIK2	0.0
+R_LPLIPAL1G141pp	0.0
+M_dttp_c	Not Constrained
+b1281	Not Constrained
+b1277	Not Constrained
+b1276	Not Constrained
+M_gam_p	Not Constrained
+M_galt_e	Not Constrained
+b1278	Not Constrained
+R_PAPA181pp	0.0
+M_galt_b	Not Constrained
+M_dtdpglu_c	Not Constrained
+R_EX_g3pe_e_	0.0
+EIIAGlc_p	0.0
+R_PEAMNtex	0.0
+b2378	Not Constrained
+R_EX_isetac_e_	0.0
+R_PPAt4pp	0.0
+M_dcaACP_c	Not Constrained
+b2310_and_b2307_and_b2306_and_b2308	Not Constrained
+R_EX_dha_e_	0.0
+R_UAAGDS	0.016453
+M_3hcddec5eACP_c	Not Constrained
+R_ECAP2pp	0.0
+b2155_and_b1252_and_b3005_and_b3006	Not Constrained
+R_EX_duri_e_	0.0
+R_DMPPS	0.0
+M_hdd2coa_c	Not Constrained
+R_GP4GH (Dead)	0.0
+M_gam6p_p	Not Constrained
+R_PE160abcpp	0.024567
+R_EX_kdo2lipid4_e_	0.0
+M_cdpdodec11eg_c	Not Constrained
+M_ichor_c	Not Constrained
+M_phom_c	Not Constrained
+R_GLYCLTtex	0.0
+b2388	Not Constrained
+R_HCYSMT2	0.0
+b0996_and_b0997	Not Constrained
+R_PHEMEtiex	0.0
+M_gam6p_e	Not Constrained
+b2392	Not Constrained
+R_METDabcpp (Dead)	0.0
+b2393	Not Constrained
+R_TMDS	0.015499
+R_PRAIS	0.264697
+R_UPPDC1	1.32E-4
+R_EX_ser_L_e_	0.0
+R_FALDH2	0.0
+R_XYLtex	0.0
+R_CA2t3pp	999998.997194
+M_murein3px3p_p	Not Constrained
+M_cgly_p	Not Constrained
+b2417_and_b2415_and_b2416_and_b4240	Not Constrained
+R_PPC	1.752843
+R_PPA	0.0
+R_CINNDO (Dead)	0.0
+R_PLIPA2G160pp	0.0
+R_CPGNtonex	0.0
+R_EX_dgsn_e_	0.0
+R_POX	0.0
+M_gam6p_b	Not Constrained
+M_cgly_b	Not Constrained
+M_cgly_c	Not Constrained
+M_gam6p_c	Not Constrained
+M_cgly_e	Not Constrained
+R_PRAIi	0.033664
+R_EX_asn_L_e_	0.0
+R_3NTD7pp	0.0
+M_2omph_c	Not Constrained
+R_SERtex	0.0
+R_GLYC3Pabcpp	0.0
+R_SHKK	0.220175
+R_CBLAT	0.0
+b2366	Not Constrained
+R_DPCOAK	3.41E-4
+M_ascb6p_c	Not Constrained
+R_EX_akg_e_	0.0
+M_galctn_D_p	Not Constrained
+M_murein3px4p_p	Not Constrained
+M_galctn_D_e	Not Constrained
+M_galctn_D_b	Not Constrained
+R_ECAP3pp	0.0
 R_PPS	0.0
-b0767	1.0
-b1524	1.0
-R_EX_succ_e	0.0
-b1621	1.0
-b0875	1.0
-R_FORt2	0.0
-b3528	1.0
-b0978	1.0
-b0979	1.0
-b3736_and_b3737_and_b3738_and_b3731_and_b3732_and_b3733_and_b3734_and_b3735_and_b3739	0.0
-b2029	1.0
+M_galctn_D_c	Not Constrained
+R_TRSARr	0.0
+R_PPM	-999999.000264
+M_clpn141_p	Not Constrained
+b0592_and_b0588_and_b0590_and_b0589	Not Constrained
+R_PLIPA1A161pp	0.0
+R_MANGLYCtex	0.0
+M_duri_c	Not Constrained
+M_duri_b	Not Constrained
+M_acnam_p	Not Constrained
+M_mql8_c	Not Constrained
+R_GLYCLTt4pp	999999.0
+M_acnam_b	Not Constrained
+M_acnam_c	Not Constrained
+M_acnam_e	Not Constrained
+M_sheme_c	Not Constrained
+R_IPMD	0.266812
+R_UDPGALPpp	0.0
+R_NTD1pp	0.0
+R_TMAOR2pp	0.0
+R_AGPAT141	0.0
+R_PTAr	-0.344103
+R_AGPAT140	0.0
+R_GLCtexi	999999.0
+b3577_and_b3578_and_b3579	Not Constrained
+M_duri_e	Not Constrained
+b0596	Not Constrained
+R_TAURtex	0.0
+M_ahcys_c	Not Constrained
+R_EX_so2_e_ (Dead)	0.0
+b0593	Not Constrained
+b0592	Not Constrained
+b0595	Not Constrained
+R_12PPDStex	0.0
+b0594	Not Constrained
+R_TRPS3	0.033664
+R_PPPGO3	1.32E-4
+R_TRPS2	0.0
+M_duri_p	Not Constrained
+R_TRPS1	0.0
+R_MOAT3C	0.0
+R_ACM6PH	0.0
+M_tym_b	Not Constrained
+M_g6p_p	Not Constrained
+b0590	Not Constrained
+b0591	Not Constrained
+M_tym_e	Not Constrained
+M_gmhep1p_c	Not Constrained
+b0584	Not Constrained
+b0583	Not Constrained
+b0588	Not Constrained
+M_23dappa_e	Not Constrained
+b0586	Not Constrained
+M_23dappa_b	Not Constrained
+b0585	Not Constrained
+M_23dappa_c	Not Constrained
+M_tddec2eACP_c	Not Constrained
+R_CRNDt2rpp	0.0
+b0589	Not Constrained
+R_NADPHQR4	0.0
+R_NADPHQR3	0.0
+b2221_and_b2222	Not Constrained
+R_NADPHQR2	0.0
+R_PLIPA2G181pp	0.0
+M_uamr_c	Not Constrained
+M_o2s_e	Not Constrained
+R_EX_sucr_e_	0.0
+M_23dappa_p	Not Constrained
+M_methf_c	Not Constrained
+M_tag6p_D_c	Not Constrained
+R_X5PL3E	0.0
+M_o2s_c	Not Constrained
+R_AGPAT120	0.0
+R_EX_dcmp_e_	0.0
+M_o2s_b	Not Constrained
+R_NAtex	0.0
+M_o2s_p	Not Constrained
+M_gdpmann_c	Not Constrained
+b3793_and_b3785	Not Constrained
+b0573	Not Constrained
+R_NTD9pp	0.0
+M_hmbil_c	Not Constrained
+b0572	Not Constrained
+M_glycogen_c	Not Constrained
+b0575	Not Constrained
+b0574	Not Constrained
+R_TDSR1 (Dead)	0.0
+R_AACTOOR	0.0
+b0576	Not Constrained
+M_g6p_b	Not Constrained
+M_g6p_c	Not Constrained
+M_26dap_LL_c	Not Constrained
+R_4PCP	0.0
+M_g6p_e	Not Constrained
+R_CLtex	0.002806
+R_PLIPA2A120pp	0.0
+R_EX_26dap_M_e_	0.0
+R_UDPGD	0.0
+R_GLYCK	0.0
+M_Sfglutth_c	Not Constrained
+b2521	Not Constrained
+b2523	Not Constrained
+R_GLYCL	0.031968
+R_MLDCP1Bpp	0.0
+R_GTPtex	0.0
+b2762_and_b2582	Not Constrained
+b2530_and_b3992_and_b3990_and_b3991_and_b0423_and_b4407	Not Constrained
+R_PGI	3.759013
+R_AGMH	0.0
+R_UAMAGS	0.016453
+R_PGK	-10.669732
+R_MMM2	0.0
+R_PGM	-9.654232
+R_PGL	2.740987
+R_UGLCURPpp	0.0
+M_cyan_p	Not Constrained
+R_NTD10pp	0.0
+R_PAPA161pp	0.0
+R_EX_malt_e_	0.0
+R_NO3t7pp	0.0
+R_AGMT	0.0
+M_ppbng_c	Not Constrained
+M_12dgr161_p	Not Constrained
+b2519	Not Constrained
+b2518	Not Constrained
+R_PIt2rpp	0.569347
+R_PSP_L	1.015501
+b2515	Not Constrained
+R_EX_damp_e_	0.0
+b2514	Not Constrained
+R_R1PK	999999.0
+M_5aprbu_c	Not Constrained
+M_1hdec9eg3p_c	Not Constrained
+R_PFL	0.0
+R_PFK	4.1517
+b2540	Not Constrained
+b2542	Not Constrained
+b2541	Not Constrained
+R_MNtex	0.00187
+M_uacmamu_c	Not Constrained
+R_PLIPA2G180pp	0.0
+b2895_and_b3924_and_b4238_and_b4237	Not Constrained
+R_AGPR	-0.17519
+M_hxan_p	Not Constrained
+b1415	Not Constrained
+R_GLYAT	0.0
+M_1hdec9eg3p_p	Not Constrained
+M_nac_e	Not Constrained
+M_dtdprmn_c	Not Constrained
+M_nac_b	Not Constrained
+M_1agpe161_p	Not Constrained
+M_utp_c	Not Constrained
+M_nac_c	Not Constrained
+R_GALabcpp	0.0
+M_hxan_b	Not Constrained
+M_hxan_c	Not Constrained
+M_nac_p	Not Constrained
+R_PPK2r	0.0
+M_hxan_e	Not Constrained
+b2530	Not Constrained
+R_3HAD40	0.210749
+R_TAURabcpp	0.0
+R_FRULYStex	0.0
+b2533	Not Constrained
+b2539	Not Constrained
+b2538	Not Constrained
+R_CAt6pp	-999999.0
+b2536	Not Constrained
+R_3HAD60	0.210749
+R_PLIPA1A181pp	0.0
+M_prfp_c	Not Constrained
+R_PPAKr	2.851185
+M_td2coa_c	Not Constrained
+M_1agpe140_p	Not Constrained
+M_pe181_p	Not Constrained
+R_LYSDC	0.0
+R_PDH	5.738956
+R_OMPHHX3	0.0
+R_ACMUMtex	0.0
+M_arbtn_fe3_e	Not Constrained
+M_arbtn_fe3_c	Not Constrained
+M_pe181_c	Not Constrained
+M_arbtn_fe3_b	Not Constrained
+M_arbtn_fe3_p	Not Constrained
+R_2AGPA141tipp	0.0
+b2563	Not Constrained
+b2564	Not Constrained
+R_FECRMUtex	0.0
+R_LCARR	0.0
+R_ETHSO3tex	0.0
+R_LCARS	0.0
+R_SPMDtex	0.0
+R_R15BPK	999999.0
+R_EX_adocbl_e_	0.0
+R_EX_xyl_D_e_	0.0
+R_CHLabcpp (Dead)	0.0
+b2557	Not Constrained
+R_GMHEPPA	0.0
+b2552	Not Constrained
+b2551	Not Constrained
+R_EX_23cgmp_e_	0.0
+M_ala_B_c	Not Constrained
+M_ala_B_b	Not Constrained
+R_EX_fuc_L_e_	0.0
+R_EX_etoh_e_	0.0
+M_3hpppn_e	Not Constrained
+R_NDPK8	0.015499
+R_ATPS4rpp	43.15898
+R_NDPK7	0.0
+M_3hpppn_c	Not Constrained
+M_ala_B_e	Not Constrained
+R_3HAD80	0.210749
+R_NDPK6	0.0
+M_3hpppn_b	Not Constrained
+R_NDPK5	0.0
+R_NDPK4	0.015499
+R_NDPK3	0.107131
+R_NDPK2	0.236358
+R_NDPK1	-999998.533451
+R_G5SADs	0.130948
+M_ala_B_p	Not Constrained
+M_cdpdtdecg_c	Not Constrained
+M_2dmmql8_c	Not Constrained
+R_DDGLK	0.0
+M_3hpppn_p	Not Constrained
+R_MECDPS	0.001415
+M_pser_L_e	Not Constrained
+b2585	Not Constrained
+M_pser_L_c	Not Constrained
+M_cyan_b	Not Constrained
+b2587	Not Constrained
+M_pser_L_b	Not Constrained
+R_NADH18pp	0.0
+R_HISt2rpp	0.0
+M_cyan_e	Not Constrained
+R_EX_lipa_cold_e_	0.0
+R_CD2tex	0.0
+M_ppap_c	Not Constrained
+b2582	Not Constrained
+R_TRPTRS (Dead)	0.0
+R_SGDS	0.0
+R_FEENTERtex	0.0
+M_sucorn_c	Not Constrained
+M_3hbcoa_c	Not Constrained
+M_pser_L_p	Not Constrained
+M_lyx_L_p	Not Constrained
+R_EX_34dhpac_e_	0.0
+R_PROGLYabcpp	0.0
+M_lyx_L_c	Not Constrained
+R_SERt2rpp	0.0
+M_lyx_L_b	Not Constrained
+M_lyx_L_e	Not Constrained
+b2574	Not Constrained
+R_LPLIPAL2ATG140 (Dead)	0.0
+b2578	Not Constrained
+b2579	Not Constrained
+R_FECRMtonex	0.0
+b1476	Not Constrained
+R_BUTtex	0.0
+M_pg141_c	Not Constrained
+R_2MAHMP	0.0
+b1478	Not Constrained
+b1479	Not Constrained
+R_QULNS	0.001349
+b1474	Not Constrained
+R_GLUCYS	0.0
+b1475	Not Constrained
+b4070_and_b4071_and_b4072_and_b4073	Not Constrained
+R_EX_thymd_e_	0.0
+M_pnto_R_e	Not Constrained
+R_EX_frulys_e_	0.0
+b2762_and_b3610	Not Constrained
+b0198_and_b0199_and_b0197	Not Constrained
+M_pnto_R_b	Not Constrained
+M_pnto_R_c	Not Constrained
+R_DSERt2pp	0.0
+R_EX_lys_L_e_	0.0
+R_CFAS160G (Dead)	0.0
+M_pnto_R_p	Not Constrained
+M_pg141_p	Not Constrained
+R_ASNS2	0.142793
+R_ASNS1	0.0
+R_IMPtex	0.0
+b1467	Not Constrained
+R_TRE6PH	0.0
+b1468	Not Constrained
+b1465	Not Constrained
+b1466	Not Constrained
+M_phphhlipa_c	Not Constrained
+R_ACMUMptspp	0.0
+b1463	Not Constrained
+R_TARTRt7pp	0.0
+M_3ocmrs7eACP_c	Not Constrained
+R_TRE6PP	0.0
+R_TRE6PS	0.0
+M_pg160_c	Not Constrained
+b1469	Not Constrained
+R_PLIPA1G161pp	0.0
+M_pg160_p	Not Constrained
+M_3pg_c	Not Constrained
+b2895_and_b3924	Not Constrained
+R_EX_xan_e_	0.0
+R_ACONTa	3.798928
+R_PLIPA1E180pp	0.0
+M_2cpr5p_c	Not Constrained
+R_PE120abcpp	0.0
+R_ACONTb	3.798928
+R_CRNBTCT (Dead)	0.0
+M_acg5sa_c	Not Constrained
+R_DSERDHr	0.0
+R_FEENTERtpp	0.0
+R_EX_o2_e_	-15.0
+R_UDPG4E	0.0
+R_Ktex	0.105185
+R_METOX1s	0.0
+b1485	Not Constrained
+b1486	Not Constrained
+b1260_and_b1261	Not Constrained
+b1483	Not Constrained
+R_SERD_L	0.0
+b1484	Not Constrained
+b1489	Not Constrained
+M_na1_c	Not Constrained
+b1487	Not Constrained
+M_na1_e	Not Constrained
+M_gagicolipa_c	Not Constrained
+b1488	Not Constrained
+M_na1_p	Not Constrained
+M_dhap_c	Not Constrained
+R_GALCTND	0.0
+R_SERD_D	0.0
+R_EX_f6p_e_	0.0
+R_CYStex	0.0
+R_ACONMT (Dead)	0.0
+R_AAMYL	0.0
+M_3ocvac11eACP_c	Not Constrained
+R_GALURt2rpp	0.0
+M_na1_b	Not Constrained
+b1493	Not Constrained
+b1492	Not Constrained
+M_fmn_c	Not Constrained
+R_METOX2s	0.0
+R_MLTG1	0.0
+R_GLCURtex	0.0
+R_MLTG2	0.0
+R_MLTG3	0.0
+R_MLTG4	0.0
+R_MLTG5	0.0
+R_ARGAGMt7pp	0.0
+R_TDECOAI	0.0
+M_dtdp4addg_c	Not Constrained
+R_FMNAT	1.32E-4
+R_DSBAO2 (Dead)	0.0
+R_HYD3pp	0.0
+M_2hdec9eg3p_p	Not Constrained
+M_2hdec9eg3p_c	Not Constrained
+R_LPLIPAL1E141pp	0.0
+R_TSULabcpp (Dead)	0.0
+M_gmp_e	Not Constrained
+M_gmp_c	Not Constrained
+M_12ppd_R_b	Not Constrained
+M_gmp_b	Not Constrained
+R_AGMtex	0.0
+R_PA120abcpp	0.0
+R_IPPMIb	-0.266812
+R_IPPMIa	-0.266812
+M_12ppd_R_c	Not Constrained
+M_nh4_p	Not Constrained
+M_3hpalmACP_c	Not Constrained
+R_FACOAL80t2pp	0.0
+M_12ppd_R_e	Not Constrained
+R_FE3HOXR2	0.0
+M_12ppd_R_p	Not Constrained
+R_FE3HOXR3	0.0
+R_GALCTLO	0.0
+M_but2eACP_c	Not Constrained
+R_FE3HOXR1	0.0
+M_nh4_e	Not Constrained
+M_nh4_c	Not Constrained
+R_GUR1PPpp	0.0
+M_2mahmp_c	Not Constrained
+M_nh4_b	Not Constrained
+R_MANptspp	0.0
+R_AMANAPEr	0.0
+b2507	Not Constrained
+b2508	Not Constrained
+b1291_and_b3290_and_b3849	Not Constrained
+b1453	Not Constrained
+R_NAt3_1p5pp	0.0
+b2501	Not Constrained
+b2502	Not Constrained
+b2500	Not Constrained
+M_gmp_p	Not Constrained
+R_LYXt2pp	0.0
+R_EX_glcur_e_	0.0
+M_LalaDgluMdap_p	Not Constrained
+R_FALGTHLs	0.0
+M_tagur_c	Not Constrained
+b2710_and_b2711	Not Constrained
+M_LalaDgluMdap_e	Not Constrained
+R_EX_r5p_e_	0.0
+b1014	Not Constrained
+M_LalaDgluMdap_b	Not Constrained
+b1015	Not Constrained
+M_LalaDgluMdap_c	Not Constrained
+M_12dgr161_c	Not Constrained
+R_5DGLCNt2rpp	0.0
+M_2agpg181_p	Not Constrained
+b0052_and_b2564	Not Constrained
+M_ncam_c	Not Constrained
+M_man6p_e	Not Constrained
+R_CBIAT (Dead)	0.0
+b1442	Not Constrained
+b1441	Not Constrained
+R_ARBt3ipp	0.0
+b1440	Not Constrained
+M_man6p_c	Not Constrained
+M_man6p_b	Not Constrained
+b1444	Not Constrained
+b4034_and_b4033_and_b4032_and_b4035	Not Constrained
+M_2agpg181_c	Not Constrained
+b1443	Not Constrained
+M_5apru_c	Not Constrained
+R_EX_gln_L_e_	0.0
+R_TDPAGTA	0.0
+M_man6p_p	Not Constrained
+b1002	Not Constrained
+R_NNDPR	0.001349
+b1006	Not Constrained
+R_XMPtex	0.0
+b0420	Not Constrained
+b0421	Not Constrained
+M_1hdecg3p_p	Not Constrained
+R_CBMKr	0.371103
+b0423	Not Constrained
+b1817_and_b1818_and_b1819_and_b2415_and_b2416	Not Constrained
+R_GLYC3Ptex	0.0
+b0425	Not Constrained
+b0428	Not Constrained
+R_EX_ile_L_e_	0.0
+b0429	Not Constrained
+R_ALDD19x (Dead)	0.0
+M_dad_2_p	Not Constrained
+M_fldox_c	Not Constrained
+R_NNATr	0.001349
+R_RMNtex	0.0
+R_LCADi	0.0
+R_EX_nmn_e_	0.0
+M_3ohdcoa_c	Not Constrained
+M_1hdecg3p_c	Not Constrained
+R_DMStex	0.0
+M_dad_2_e	Not Constrained
+M_dad_2_c	Not Constrained
+M_dad_2_b	Not Constrained
+R_MLDCP3App	0.0
+R_CITL	0.0
+b0411	Not Constrained
+b0415	Not Constrained
+b0414	Not Constrained
+b0417	Not Constrained
+R_PGAMT	-0.055945
+b0418	Not Constrained
+R_MCITL2	0.0
+R_EX_arbtn_fe3_e_	0.0
+R_RBFK	1.32E-4
+R_MANGLYCptspp	0.0
+R_EX_o16a4colipa_e_ (Dead)	0.0
+M_2hdecg3p_p	Not Constrained
+R_CHRPL	1.32E-4
+R_GPDDA3pp	0.0
+M_psclys_p	Not Constrained
+b2203_and_b2206_and_b2202	Not Constrained
+R_EX_ade_e_	0.0
+M_h2mb4p_c	Not Constrained
+b0446	Not Constrained
+R_NADTRHD	0.0
+M_2hdecg3p_c	Not Constrained
+R_EX_ocdca_e_	0.0
+R_BSORx (Dead)	0.0
+M_5aop_c	Not Constrained
+b0433	Not Constrained
+b0431	Not Constrained
+b0432	Not Constrained
+R_EX_ala_B_e_	0.0
+R_TYRt2rpp	0.0
+b0430	Not Constrained
+M_mmcoa_S_c	Not Constrained
+M_inost_p	Not Constrained
+R_HYD2pp	0.0
+M_um4p_c	Not Constrained
+R_OCDCAtexi	0.0
+R_DM_OXAM	0.0
+M_psclys_b	Not Constrained
+R_OP4ENH	0.0
+M_psclys_e	Not Constrained
+b4231_and_b4227_and_b4485_and_b4230	Not Constrained
+M_psclys_c	Not Constrained
+M_nadp_c	Not Constrained
+M_man_b	Not Constrained
+R_NADDP	0.0
+M_man_c	Not Constrained
+R_TDPGDH	0.0
+M_man_e	Not Constrained
+R_ASPt2_3pp	0.0
+R_CYTDt2rpp	0.0
+M_pgp180_p	Not Constrained
+R_AGM4PH	0.0
+M_thmmp_c	Not Constrained
+b1243_and_b1244_and_b1245_and_b1246_and_b1247	Not Constrained
+M_man_p	Not Constrained
+R_LEUt2rpp	0.0
+R_XANtex	0.0
+R_CYTBD2pp	0.0
+R_AGM4PA	0.0
+b1385	Not Constrained
+R_EX_2ddglcn_e_	0.0
+R_CUtex	0.0
+b1386	Not Constrained
+M_pgp180_c	Not Constrained
+R_EX_acgam_e_	0.0
+R_DURIPP	0.0
+M_dha_e	Not Constrained
+M_dhna_c	Not Constrained
+R_DADNtex	0.0
+R_PTHRpp	0.0
+R_ACOLIPAtex	0.0
+R_EX_etha_e_	0.0
+M_dha_p	Not Constrained
+R_THMabcpp	0.0
+R_EX_arg_L_e_	0.0
+R_GLCTR1	0.0
+R_GLCTR2	0.0
+M_atp_c	Not Constrained
+R_3GMPtex	0.0
+R_ACHBS	0.172051
+R_EX_23camp_e_	0.0
+R_GLCTR3	0.0
+b1398	Not Constrained
+R_PE161abcpp	0.028955
+M_dha_c	Not Constrained
+R_EX_ptrc_e_	0.0
+M_dha_b	Not Constrained
+R_S7PI	0.0
+R_MLTGY2pp	0.0
+b0403	Not Constrained
+R_ALTRH	0.0
+M_etoh_p	Not Constrained
+b0404	Not Constrained
+b0401	Not Constrained
+M_citr_L_c	Not Constrained
+M_etoh_e	Not Constrained
+M_malt_p	Not Constrained
+R_EX_ppt_e_	0.0
+M_ditp_c	Not Constrained
+R_DCTPD	0.0
+M_23ccmp_e	Not Constrained
+M_malt_e	Not Constrained
+M_malt_c	Not Constrained
+M_malt_b	Not Constrained
+M_23ccmp_b	Not Constrained
+R_HDCAtexi	0.0
+R_NADH5	0.0
+M_23ccmp_p	Not Constrained
+R_CYSS	0.145874
+M_3odecACP_c	Not Constrained
+R_NADH9	0.0
+R_RMPA	0.0
+M_gal_e	Not Constrained
+R_EX_uri_e_	0.0
+M_gal_c	Not Constrained
+R_LEUTRS (Dead)	0.0
+M_gal_b	Not Constrained
+R_FE3tex	-6.045005
+M_etoh_c	Not Constrained
+M_etoh_b	Not Constrained
+R_CYTD	0.0
+R_PHYTSpp	0.0
+M_gal_p	Not Constrained
+R_NO2t2rpp	0.0
+b2476	Not Constrained
+b2478	Not Constrained
+R_UAGCVT	0.016453
+M_gal_bD_p	Not Constrained
+R_ETHSO3abcpp	0.0
+R_ACGAM1PPpp	0.0
+R_SFGTHi	0.0
+M_nadph_c	Not Constrained
+R_ALAALAr	0.016453
+M_uagmda_c	Not Constrained
+M_gal_bD_b	Not Constrained
+M_gal_bD_e	Not Constrained
+R_PLIPA2E141pp	0.0
+R_FA160ACPHi	0.0
+R_NTD2pp	0.0
+R_EX_mn2_e_	-0.00187
+b2480	Not Constrained
+b2481	Not Constrained
+M_hkntd_c	Not Constrained
+b2482	Not Constrained
+R_4PEPTabcpp	0.0
+b2483	Not Constrained
+R_UPLA4FNF	0.0
+b2487	Not Constrained
+M_cu2_c	Not Constrained
+M_adp_c	Not Constrained
+b2486	Not Constrained
+M_cu2_b	Not Constrained
+b2485	Not Constrained
+R_EX_galctn_D_e_	0.0
+b2484	Not Constrained
+M_dtmp_p	Not Constrained
+b2489	Not Constrained
+M_cu2_e	Not Constrained
+b2488	Not Constrained
+R_LYXI	0.0
+M_pgp120_p	Not Constrained
+R_ETHAAL	0.0
+M_cu2_p	Not Constrained
+M_acolipa_b	Not Constrained
+M_acolipa_e	Not Constrained
+R_MMCD	0.0
+R_PRASCSi	0.264564
+b0494	Not Constrained
+R_GBBTNtex (Dead)	0.0
+R_UPLA4FNT	0.0
+b2480_and_b2582	Not Constrained
+R_DHAtex	0.0
+R_ACALDtex	0.0
+R_EX_dimp_e_	0.0
+R_VPAMT	0.0
+M_for_b	Not Constrained
+M_dtmp_c	Not Constrained
+M_dtmp_b	Not Constrained
+M_for_c	Not Constrained
+b2490	Not Constrained
+M_dtmp_e	Not Constrained
+M_acolipa_p	Not Constrained
+M_glyald_e	Not Constrained
+M_glyald_c	Not Constrained
+M_glyald_b	Not Constrained
+R_EX_anhgm_e_	0.0
+R_FEROpp	1.512303
+M_for_e	Not Constrained
+M_pgp120_c	Not Constrained
+b2492	Not Constrained
+b3132_and_b3137	Not Constrained
+R_PLIPA2G161pp	0.0
+R_EX_arbtn_e_	0.0
+b2499	Not Constrained
+R_IDONtex	0.0
+b2498	Not Constrained
+b2497	Not Constrained
+M_glyald_p	Not Constrained
+R_TREtex	0.0
+R_THDPS	0.219716
+R_2AGPE140tipp	0.0
+M_murein4p4p_p	Not Constrained
+R_LEUabcpp	0.0
+M_rbl_L_c	Not Constrained
+R_ALAALAD	0.0
+M_actACP_c	Not Constrained
+R_EX_metsox_S_L_e_	0.0
+M_mal_L_p	Not Constrained
+b3365_and_b3366	Not Constrained
+R_GND	2.740987
+M_mal_L_e	Not Constrained
+M_pheme_e	Not Constrained
+R_SHCHF	1.32E-4
+M_4hbz_c	Not Constrained
+M_pa180_c	Not Constrained
+R_GNK	0.0
+R_EX_tyr_L_e_	0.0
+M_stcoa_c	Not Constrained
+M_gam1p_c	Not Constrained
+M_pheme_b	Not Constrained
+M_mal_L_b	Not Constrained
+R_HXPRT	0.0
+M_mal_L_c	Not Constrained
+M_pheme_c	Not Constrained
+R_THMtex	0.0
+M_acgal1p_p	Not Constrained
+M_acmanap_c	Not Constrained
+R_UM4PL	0.0
+M_mobd_p	Not Constrained
+M_sl2a6o_c	Not Constrained
+R_GLCRt2rpp	0.0
+M_acgal1p_b	Not Constrained
+M_acgal1p_e	Not Constrained
+M_pa180_p	Not Constrained
+b3670_and_b3671	Not Constrained
+M_inost_e	Not Constrained
+M_inost_b	Not Constrained
+R_PLIPA1A160pp	0.0
+M_mobd_b	Not Constrained
+M_mobd_c	Not Constrained
+M_mobd_e	Not Constrained
 R_ALCD2x	0.0
-R_EX_co2_e	22.809833
-b1723	1.0
-b1136	1.0
-M_cit_c	0.0
-R_PTAr	0.0
-M_h2o_e	0.0
+R_FORtppi	0.0
+M_pheme_p	Not Constrained
+b0469	Not Constrained
+R_PLIPA2A140pp	0.0
+R_MTHFR2	0.091426
+R_ECAP1pp	0.0
+R_4PEPTtex	0.0
+M_4hba_b	Not Constrained
+M_4hba_c	Not Constrained
+R_CLIPAtex	0.0
+R_DHAD2	0.172051
+R_GLYOX	0.0
+R_23DAPPAt2pp	0.0
+R_MDDEP4pp	0.0
+R_DHAD1	0.517797
+R_IPDPS	0.001415
+b0459	Not Constrained
+b0452	Not Constrained
+b0451	Not Constrained
+R_EX_tartr_L_e_	0.0
+R_RMNtpp	0.0
+M_maltttr_b	Not Constrained
+R_DMQMT	0.0
+M_dcyt_b	Not Constrained
+R_FECRMUtpp	0.0
+R_DSBDR (Dead)	0.0
+R_ALCD19	0.0
+M_glu5sa_c	Not Constrained
+M_maltttr_e	Not Constrained
+M_maltttr_c	Not Constrained
+R_LPADSS	0.011519
+M_maltttr_p	Not Constrained
+R_GTHRDtex	0.0
+R_XANtpp	0.0
+M_dcyt_p	Not Constrained
+M_dcyt_e	Not Constrained
+R_GK1	0.144058
+M_dcyt_c	Not Constrained
+R_MCOATA	1.429165
+b0485	Not Constrained
+b0484	Not Constrained
+M_rhcys_c	Not Constrained
+M_alltn_c	Not Constrained
+M_alltn_b	Not Constrained
+M_alltn_e	Not Constrained
+b0480	Not Constrained
+b4151_and_b4152_and_b4153_and_b4154	Not Constrained
+R_AMALT4	0.0
+R_AMALT2	0.0
+R_AMALT3	0.0
+R_AMALT1	0.0
+R_EX_trp_L_e_	0.0
+R_CYStpp	0.0
+R_GLYtex	0.0
+M_alltn_p	Not Constrained
+b0475	Not Constrained
+R_DURIK1	0.0
+b0477	Not Constrained
+M_crncoa_c	Not Constrained
+R_FMNRx	0.0
+b0474	Not Constrained
+R_AOBUTDs	0.0
+b3189	Not Constrained
+M_tma_p	Not Constrained
+R_DTMPK	0.015499
+R_H2SO	0.0
+b0185_and_b2316_and_b3255_and_b3256	Not Constrained
+M_lald_L_c	Not Constrained
+M_ugmd_c	Not Constrained
+M_2ahbut_c	Not Constrained
+M_3haACP_c	Not Constrained
+R_XYLK2	0.0
+M_2dh3dgal_c	Not Constrained
+M_2agpe141_c	Not Constrained
+R_HKNTDH	0.0
+R_DRPA	0.0
+M_trp_L_p	Not Constrained
+M_trp_L_c	Not Constrained
+M_trp_L_b	Not Constrained
+M_trp_L_e	Not Constrained
+M_dctp_c	Not Constrained
+b3196	Not Constrained
+R_ISETACabcpp	0.0
+b3197	Not Constrained
+b3198	Not Constrained
+R_D_LACtex	0.0
+M_2agpe141_p	Not Constrained
+R_EX_gmp_e_	0.0
+b2697	Not Constrained
+M_ac_p	Not Constrained
+R_2AGPGAT120	0.0
+R_UACGAMtex	0.0
+b1901_and_b1900_and_b4460	Not Constrained
+R_SERASr	0.0
+R_GALUi	0.0
+M_g3pe_p	Not Constrained
+R_EAR60x	0.210749
+R_EX_dgmp_e_	0.0
+R_EAR60y	0.0
+R_GLYBt2pp (Dead)	0.0
+M_3hhdcoa_c	Not Constrained
+R_DINStex	0.0
+R_2AGPG141tipp	0.0
+b2687	Not Constrained
+b2688	Not Constrained
+M_pacald_p	Not Constrained
+b3749_and_b3751_and_b3750_and_b3748	Not Constrained
+M_26dap_M_b	Not Constrained
+M_26dap_M_c	Not Constrained
+R_DHQTi	0.220175
+M_acac_e	Not Constrained
+M_fe3dcit_b	Not Constrained
+R_LPLIPAL2ATG120 (Dead)	0.0
+M_acac_c	Not Constrained
+M_acac_b	Not Constrained
+R_OCDCEAtexi	0.0
+R_ENTERES	0.0
+M_fe3dcit_e	Not Constrained
+R_SUCRtex	0.0
+R_MANtex	0.0
+R_D_LACt2pp	0.0
+M_ac_b	Not Constrained
+M_3oodcoa_c	Not Constrained
+R_XYLI2	0.0
+R_XYLI1	0.0
+R_FEENTERtonex	0.0
+M_26dap_M_e	Not Constrained
+b2690	Not Constrained
+R_O16AUNDtpp (Dead)	0.0
+R_TTDCEAtexi	0.0
+M_2odecg3p_p	Not Constrained
+M_26dap_M_p	Not Constrained
+b3176	Not Constrained
+M_ac_c	Not Constrained
+M_fe3dcit_p	Not Constrained
+M_ac_e	Not Constrained
+b3172	Not Constrained
+b2677	Not Constrained
+b2678	Not Constrained
+b2675	Not Constrained
+b2676	Not Constrained
+R_PPCSCT	999996.148815
+M_orot5p_c	Not Constrained
+R_O16GLCT1 (Dead)	0.0
+R_PPPNDO	0.0
+b3177	Not Constrained
+R_AHCYSNS	2.64E-4
+M_t3c9palmeACP_c	Not Constrained
+R_2AGPGAT141	0.0
+b2679	Not Constrained
+R_2AGPGAT140	0.0
+M_tyr_L_p	Not Constrained
+M_2odecg3p_c	Not Constrained
+M_pacald_b	Not Constrained
+M_nad_c	Not Constrained
+M_pacald_e	Not Constrained
+R_SHK3Dr	0.220175
+M_acac_p	Not Constrained
+R_LALGP	0.0
+R_EX_h2o_e_	33.372388
+R_EX_hdca_e_	0.0
+M_tyr_L_e	Not Constrained
+b3187	Not Constrained
+M_tyr_L_c	Not Constrained
+M_sucglu_c	Not Constrained
+M_tyr_L_b	Not Constrained
+b3182	Not Constrained
+R_EX_o2s_e_	0.0
+R_12PPDRtpp	0.0
+R_ADK1	1.340861
+R_IDOND2	0.0
+b2661	Not Constrained
+R_GUAtpp	0.0
+b2663	Not Constrained
+b1094_and_b1091	Not Constrained
+R_EX_xtsn_e_	0.0
+b2662	Not Constrained
+b1094_and_b1092	Not Constrained
+R_ADK4	0.0
+R_ADK3	-999999.0
+R_ORNtex	0.0
+M_3ump_e	Not Constrained
+R_DHPTDCs	2.64E-4
+R_LPLIPAL2A181	0.0
+R_LPLIPAL2A180	0.0
+M_3ump_b	Not Constrained
+R_SELCYSS (Dead)	0.0
+R_O16AP2pp (Dead)	0.0
+R_ASNt2rpp	0.0
+R_NO2tex	0.0
+R_EX_feoxam_un_e_	0.0
+M_3ump_p	Not Constrained
+R_DB4PS	5.28E-4
+R_EX_rmn_e_	0.0
+M_arbtn_p	Not Constrained
+R_N2Otex	0.0
+R_3NTD4pp	0.0
+R_PACCOAL (Dead)	0.0
+R_ASPtex	0.0
+R_GALS3	0.0
+R_FBA	4.1517
+M_fe2_p	Not Constrained
+M_arbtn_e	Not Constrained
+M_g3pe_e	Not Constrained
+R_PNTOtex	0.0
+M_arbtn_c	Not Constrained
+R_LPLIPAL2A161	0.0
+M_arbtn_b	Not Constrained
+R_INDOLEtex	0.0
+R_EX_thr_L_e_	0.0
+M_g3pe_b	Not Constrained
+b1064_and_b2675_and_b2676	Not Constrained
+M_g3pe_c	Not Constrained
+M_10fthf_c	Not Constrained
+R_NTPP10	0.0
+R_NTPP11	0.0
+R_IPDDI	1.65E-4
+M_tcynt_p	Not Constrained
+M_fe2_b	Not Constrained
+M_fe2_c	Not Constrained
+M_fe2_e	Not Constrained
+M_tcynt_e	Not Constrained
+R_ALAALAtex	0.0
+R_LPLIPAL2A160	0.0
+M_tcynt_b	Not Constrained
+R_FLVR	0.0
+R_G3PGtex	0.0
+R_EX_amp_e_	0.0
+R_CYANST (Dead)	0.0
+R_GALT1	0.0
+R_MNNH	0.0
+M_adphep_LD_c	Not Constrained
+R_FCI	0.0
+M_butACP_c	Not Constrained
+R_MAN1PT2	0.0
+M_tma_b	Not Constrained
+R_OCTDPS	1.32E-4
+M_tma_e	Not Constrained
+M_4ampm_c	Not Constrained
+M_1agpe160_p	Not Constrained
+R_DHCINDO	0.0
+R_FBP	0.0
+R_KAT3	0.0
+R_KAT4	0.0
+R_KAT1	0.0
+R_KAT2	0.0
+R_KAT7	0.0
+R_KAT8	0.0
+R_KAT5	0.0
+R_KAT6	0.0
+M_thymd_b	Not Constrained
+R_NI2tex	0.0
+R_PYDXPP	0.0
+M_thymd_c	Not Constrained
+M_phe_L_p	Not Constrained
+R_EAR160x	0.075584
+R_EAR160y	0.0
+R_ADPRDP	0.0
+M_thymd_e	Not Constrained
+M_hhlipa_c	Not Constrained
+R_FA161ACPHi	0.0
+M_phe_L_c	Not Constrained
+M_phe_L_e	Not Constrained
+M_icolipa_c	Not Constrained
+M_phe_L_b	Not Constrained
+R_ATPHs	0.0
+M_thymd_p	Not Constrained
+R_HPPK2	3.96E-4
+b0116_and_b0726_and_b0727	Not Constrained
+R_LPLIPAL2ATG161 (Dead)	0.0
+M_murein3p3p_p	Not Constrained
+R_PROGLYtex	0.0
+b3114	Not Constrained
+b3116	Not Constrained
+b3115	Not Constrained
+b3117	Not Constrained
+b2615	Not Constrained
+R_SO3tex	0.0
+M_udpLa4o_c	Not Constrained
+R_AM4PCP	0.0
+R_PA180abcpp	0.0
+M_glcur_p	Not Constrained
+M_dcamp_c	Not Constrained
+R_AP4AH (Dead)	0.0
+R_PGLYCP (Dead)	0.0
+b3966_and_b1252_and_b3005_and_b3006	Not Constrained
+M_2agpg161_p	Not Constrained
+M_f1p_c	Not Constrained
+R_EX_ni2_e_	0.0
+R_EX_urea_e_	0.0
+b2600	Not Constrained
+R_PLIPA1E181pp	0.0
+b2601	Not Constrained
+M_glcur_b	Not Constrained
+M_toctd2eACP_c	Not Constrained
+M_glcur_c	Not Constrained
+R_DM_HMFURN	2.64E-4
+M_glcur_e	Not Constrained
+M_fldrd_c	Not Constrained
+R_MALTATr (Dead)	0.0
+M_mnl_p	Not Constrained
+b2234_and_b2235_and_b3781	Not Constrained
+R_EX_indole_e_	0.0
+M_mg2_c	Not Constrained
+R_ADSK	0.145874
+R_MCTP1Bpp	0.0
+M_mg2_b	Not Constrained
+R_EX_feoxam_e_	0.0
+M_mg2_e	Not Constrained
+R_3PEPTabcpp	0.0
+M_mnl_e	Not Constrained
+M_3ooctdACP_c	Not Constrained
+M_mnl_b	Not Constrained
+R_UACMAMO	0.0
+R_ACALDtpp	0.0
+R_ADSS	0.176617
+R_LPLIPAL1G120pp	0.0
+R_CLPNH141pp	0.0
+M_2agpg161_c	Not Constrained
+M_mg2_p	Not Constrained
+R_ACACT1r	0.0
+R_DCYTtex	0.0
+R_CYTBO3_4pp	26.974997
+R_GSPMDS	0.0
+R_BALAt2pp	0.0
+M_lipa_cold_p	Not Constrained
+b1907	Not Constrained
+R_EX_spmd_e_	0.0
+M_glyc2p_b	Not Constrained
+R_SUCCt2_2pp	0.0
+M_glyc2p_e	Not Constrained
+R_EX_inost_e_	0.0
+b1900	Not Constrained
+b1901	Not Constrained
+M_met_L_p	Not Constrained
+M_2dmmq8_c	Not Constrained
+M_lipa_cold_b	Not Constrained
+M_lipa_cold_c	Not Constrained
+M_cys_L_p	Not Constrained
+b1131	Not Constrained
+M_glyc2p_p	Not Constrained
+b1134	Not Constrained
+M_lipa_cold_e	Not Constrained
+R_OPHBDC	1.32E-4
+b1136	Not Constrained
+b3161	Not Constrained
+M_met_L_b	Not Constrained
+M_met_L_c	Not Constrained
+R_TSULtex	0.0
+M_met_L_e	Not Constrained
+M_fprica_c	Not Constrained
+M_feenter_e	Not Constrained
+b1778_and_b3781	Not Constrained
+b1919	Not Constrained
+M_fe3hox_un_e	Not Constrained
+M_fe3hox_un_b	Not Constrained
+M_fe3hox_un_c	Not Constrained
+R_CHORS	0.220175
+M_pg180_p	Not Constrained
+R_CHORM	0.185983
+M_feenter_c	Not Constrained
+M_feenter_b	Not Constrained
+b1912	Not Constrained
+R_EX_23ccmp_e_	0.0
+R_FEOXAMexs	0.0
+M_ps140_c	Not Constrained
+R_G6PP	0.0
+b1123	Not Constrained
+M_pg180_c	Not Constrained
+b1126	Not Constrained
+M_feenter_p	Not Constrained
+M_fe3hox_un_p	Not Constrained
+b1124	Not Constrained
+R_2AGPGAT160	0.0
+b1125	Not Constrained
+R_2AGPGAT161	0.0
+b3132	Not Constrained
+M_melib_p	Not Constrained
+M_2agpg140_p	Not Constrained
+R_PYDXNK	0.0
+M_kdo8p_c	Not Constrained
+M_melib_e	Not Constrained
+M_uLa4fn_c	Not Constrained
+R_DUMPtex	0.0
+R_MTRPOX (Dead)	0.0
+b1927	Not Constrained
+M_tartr_L_e	Not Constrained
+M_q8_c	Not Constrained
+M_tartr_L_c	Not Constrained
+b1119	Not Constrained
+M_tartr_L_b	Not Constrained
+R_ADPT	0.0
+b3128	Not Constrained
+M_tartr_L_p	Not Constrained
+M_thr_L_b	Not Constrained
+b2866_and_b2867_and_b2868	Not Constrained
+M_thr_L_c	Not Constrained
+b3126	Not Constrained
+b3127	Not Constrained
+M_thr_L_e	Not Constrained
+R_UDPGPpp	0.0
+b3124	Not Constrained
+b3125	Not Constrained
+M_23dhb_c	Not Constrained
+M_cys_L_b	Not Constrained
+R_CFAS160E (Dead)	0.0
+M_cys_L_c	Not Constrained
+M_cys_L_e	Not Constrained
+R_EX_acmum_e_	0.0
+R_UAGAAT	0.023039
+R_SULRi	0.145874
+R_INStex	0.0
+R_GSPMDA	0.0
+M_melib_b	Not Constrained
+M_melib_c	Not Constrained
+M_2agpg140_c	Not Constrained
+b1109	Not Constrained
+b1106	Not Constrained
+R_PROD2	0.0
+b1107	Not Constrained
+R_FEOXAMtonex	0.0
+b3137	Not Constrained
+R_PAPSR	0.0
+R_2AGPGAT180	0.0
+R_2AGPGAT181	0.0
+b1102	Not Constrained
+R_FACOAL140t2pp	0.0
+b1101	Not Constrained
+R_EAR161y	0.0
+R_EAR161x	0.089087
+M_anhm4p_c	Not Constrained
+b0936_and_b0933_and_b0934	Not Constrained
+M_pant_R_c	Not Constrained
+M_man1p_c	Not Constrained
+R_TGBPA	0.0
+M_glcn_p	Not Constrained
+R_ASPt2pp	0.0
+R_EX_lcts_e_	0.0
+M_tsul_p	Not Constrained
+R_FCLPA	0.0
+M_n2o_e	Not Constrained
+M_pa120_p	Not Constrained
+M_n2o_c	Not Constrained
+M_glcn_e	Not Constrained
+M_n2o_b	Not Constrained
+R_ASPt2_2pp	0.0
+M_eca2und_p	Not Constrained
+R_GLCRtex	0.0
+M_ggagicolipa_c	Not Constrained
+M_tsul_e	Not Constrained
+R_DDGALK	0.0
+M_glcn_c	Not Constrained
+M_tsul_b	Not Constrained
+M_malcoa_c	Not Constrained
+M_pa120_c	Not Constrained
+M_glcn_b	Not Constrained
+M_cbasp_c	Not Constrained
+b1059	Not Constrained
+R_ALLPI	0.0
+M_n2o_p	Not Constrained
+b1054	Not Constrained
+R_THRTRS (Dead)	0.0
+M_pyr_p	Not Constrained
+M_6hmhpt_c	Not Constrained
+b1064	Not Constrained
+b1062	Not Constrained
+R_CHLt2pp (Dead)	0.0
+R_EX_sbt_D_e_	0.0
+R_G3PGabcpp	0.0
+R_LPLIPAL2G120	0.0
+R_PGPP120pp	0.0
+R_DDCAtexi	0.0
+R_GPDDA4pp	0.0
+R_M1PD	0.0
+R_DSBCGT (Dead)	0.0
+R_TMPPP	1.32E-4
+R_MN6PP	0.0
+M_pyr_e	Not Constrained
+R_CYSabc2pp	0.0
+R_ASNabcpp	0.0
+M_pyr_c	Not Constrained
+M_pyr_b	Not Constrained
+R_PRMICI	0.05611
+b0698_and_b0697_and_b0696	Not Constrained
+b1033	Not Constrained
+R_VALTA	-0.250643
+M_fad_c	Not Constrained
+R_PRFGS	0.264697
+R_DOPAtex	0.0
+R_TYRTA	-0.081804
+M_1agpg141_p	Not Constrained
+R_EX_cbi_e_ (Dead)	0.0
+R_HOMtex	0.0
+R_12PPDRtex	0.0
+M_galt1p_c	Not Constrained
+R_CPGNabcpp	0.0
+b1713_and_b1714	Not Constrained
+R_CD2abcpp	0.0
+R_AMPMS2	1.32E-4
+M_2agpe120_p	Not Constrained
+b1993	Not Constrained
+R_FECRMabcpp	0.0
+R_EX_fe2_e_	-6.053686
+R_FUM	3.778435
+b0679_and_b2415_and_b2416	Not Constrained
+b1991	Not Constrained
+b1992	Not Constrained
+b1095	Not Constrained
+b1094	Not Constrained
+R_CYANSTpp	0.0
+b1096	Not Constrained
+b1091	Not Constrained
+b1093	Not Constrained
+b1092	Not Constrained
+b0323	Not Constrained
+R_COBALT2abcpp	0.0
+M_3oocoa_c	Not Constrained
+R_MLTGY1pp	0.0
+R_ALLTN	0.0
+R_UMPtex	0.0
+b1982	Not Constrained
+b1981	Not Constrained
+M_xylu_L_e	Not Constrained
+b1098	Not Constrained
+M_xylu_L_b	Not Constrained
+M_xylu_L_c	Not Constrained
+b0314	Not Constrained
+M_uamag_c	Not Constrained
+b0312	Not Constrained
+M_xylu_L_p	Not Constrained
+M_cl_b	Not Constrained
+M_2agpe120_c	Not Constrained
+M_cl_c	Not Constrained
+M_dgmp_p	Not Constrained
+R_UDPGLCURtex	0.0
+R_MG2tpp	0.0
+M_cl_e	Not Constrained
+R_AIRC2	0.264564
+R_AIRC3	-0.264564
+M_hdcea_p	Not Constrained
+R_ALAGLUE	0.0
+M_cl_p	Not Constrained
+M_3hcpalm9eACP_c	Not Constrained
+M_rib_D_p	Not Constrained
+M_rib_D_c	Not Constrained
+M_rib_D_b	Not Constrained
+R_EX_csn_e_	0.0
+b4291_and_b1252_and_b3005_and_b3006	Not Constrained
+R_EX_fecrm_e_	0.0
+M_rib_D_e	Not Constrained
+R_EX_minohp_e_	0.0
+R_PAPA141pp	0.0
+R_MALDt2_2pp	0.0
+R_LYStex	0.0
+b3265_and_b3266	Not Constrained
+M_3hddcoa_c	Not Constrained
+R_LDH_D	0.0
+R_LPLIPAL1A180pp	0.0
+R_EX_gal1p_e_	0.0
+R_EX_aso3_e_ (Dead)	0.0
+R_DKGLCNR2y (Dead)	0.0
+R_PYDXK	0.0
+R_HYD1pp	0.0
+R_ENTERES2	0.0
+R_12DGR161tipp	0.0
+R_ARBTNabcpp	0.0
+R_ASCBPL	0.0
+R_DNMPPA	3.96E-4
+R_UDCPDPpp	0.0
+b0368	Not Constrained
+R_EX_so3_e_	0.0
+b0367	Not Constrained
+R_EX_man6p_e_	0.0
+b0366	Not Constrained
+b0365	Not Constrained
+M_octdp_c	Not Constrained
+M_alltt_c	Not Constrained
+R_CPGNR2	0.0
+R_CPGNR1	0.0
+R_CPGNR3	0.0
+R_MALTabcpp	0.0
+M_mmet_c	Not Constrained
+M_mmet_b	Not Constrained
+R_BUTt2rpp	0.0
+M_mmet_e	Not Constrained
+b0369	Not Constrained
+M_3ophb_c	Not Constrained
+M_phhlipa_c	Not Constrained
+M_mmet_p	Not Constrained
+R_THRAi	0.0
+b0355	Not Constrained
+M_cynt_p	Not Constrained
+M_hdcea_b	Not Constrained
+M_hdcea_c	Not Constrained
+b0356	Not Constrained
+M_hdcea_e	Not Constrained
+M_fe3_e	Not Constrained
+b0351	Not Constrained
+b2422_and_b2425_and_b2424_and_b2423	Not Constrained
+b0350	Not Constrained
+b0353	Not Constrained
+b0352	Not Constrained
+M_cynt_e	Not Constrained
+M_cynt_c	Not Constrained
+M_fe3_c	Not Constrained
+M_cynt_b	Not Constrained
+M_fe3_b	Not Constrained
+R_GLCATr (Dead)	0.0
+R_LPLIPAL1A140pp	0.0
+R_MDDEP3pp	0.0
+R_GALKr	0.0
+M_3ocddec5eACP_c	Not Constrained
+M_idp_c	Not Constrained
+R_EX_fru_e_	0.0
+R_GDMANE (Dead)	0.0
+R_EX_hom_L_e_	0.0
+M_prlp_c	Not Constrained
+M_fe3_p	Not Constrained
+R_FHL	0.0
+R_LPLIPAL2A140	0.0
+R_LPLIPAL2A141	0.0
+M_lipidA_c	Not Constrained
+R_GDPDPK	0.0
+b0341	Not Constrained
+b0340	Not Constrained
+b0344	Not Constrained
+b0343	Not Constrained
+b0349	Not Constrained
+b0348	Not Constrained
+b0347	Not Constrained
+R_PGP120abcpp	0.0
+M_tre_p	Not Constrained
+R_EX_malttr_e_	0.0
+M_itp_c	Not Constrained
+R_EX_galct_D_e_	0.0
+M_3hmrsACP_c	Not Constrained
+M_cdpdhdec9eg_c	Not Constrained
+R_PG120abcpp	0.0
+R_G3PAT120	0.0
+b3452_and_b3453_and_b3450_and_b3451	Not Constrained
+b0849_and_b2675_and_b2676	Not Constrained
+M_4pasp_c	Not Constrained
+R_CD2tpp	0.0
+b0331	Not Constrained
+b0333	Not Constrained
+R_CTBTCAL2	0.0
+b0335	Not Constrained
+M_kdo2lipid4p_c	Not Constrained
+b0334	Not Constrained
+R_ARGDC	0.0
+b0337	Not Constrained
+R_PPTHpp	0.0
+R_LYSTRS (Dead)	0.0
+permease	0.0
+b0336	Not Constrained
+b0339	Not Constrained
+R_UM3PL	0.0
+M_pg120_p	Not Constrained
+M_tre_e	Not Constrained
+M_pg120_c	Not Constrained
+M_tre_b	Not Constrained
+R_FTHFD	0.0
+M_tre_c	Not Constrained
+M_nadh_c	Not Constrained
+R_NTP10	0.0
+R_THRtex	0.0
+R_LPLIPAL2A120	0.0
+M_5dglcn_c	Not Constrained
+M_5dglcn_b	Not Constrained
+M_5dglcn_e	Not Constrained
+R_NTD3pp	0.0
+R_EX_dump_e_	0.0
+R_2DGULRx (Dead)	0.0
+b3736_and_b3737_and_b3738_and_b3731_and_b3732_and_b3733_and_b3734_and_b3735_and_b3739	Not Constrained
+R_EX_pacald_e_	0.0
+R_GDPMNH	0.0
+R_XTSNt2rpp	0.0
+R_UDPGDC	0.0
+R_GDPMNP	0.0
+R_LGTHL	0.0
+R_EX_idon_L_e_	0.0
+b3544_and_b3543_and_b3542_and_b3541_and_b3540	Not Constrained
+b0394	Not Constrained
+R_FE3HOXUtex	0.0
+R_ZN2t3pp	0.0
+M_colipa_b	Not Constrained
+M_colipa_c	Not Constrained
+b2201_and_b2200_and_b2199	Not Constrained
+M_colipa_e	Not Constrained
+R_PGPP180pp	0.0
+R_G3PD2	-0.082336
+R_EX_tungs_e_ (Dead)	0.0
+R_G3PD7	0.0
+R_G3PD6	0.0
+R_FE3DHBZStonex	0.0
+R_G3PD5	0.0
+R_O16AP3pp (Dead)	0.0
+M_colipa_p	Not Constrained
+R_PE140abcpp	0.0
+M_gln_L_c	Not Constrained
+M_23dhba_c	Not Constrained
+R_LCTStex	0.0
+M_gln_L_e	Not Constrained
+b0386	Not Constrained
+M_sucarg_c	Not Constrained
+b0383	Not Constrained
+M_gln_L_b	Not Constrained
+b0388	Not Constrained
+R_DHNAOT4	0.0
+R_N2Otpp	0.0
+M_gln_L_p	Not Constrained
+b2599	Not Constrained
+M_2odec11eg3p_p	Not Constrained
+R_LIPAHT2ex	0.0
+R_SULFACtex	0.0
+M_pep_c	Not Constrained
+M_pe160_p	Not Constrained
+R_DDPGALA	0.0
+R_EX_dopa_e_	0.0
+R_G3PSabcpp	0.0
+M_xu5p_D_c	Not Constrained
+M_5dglcn_p	Not Constrained
+b0381	Not Constrained
+M_1agpg120_p	Not Constrained
+R_PG181abcpp	0.0
+M_pe160_c	Not Constrained
+M_3mob_c	Not Constrained
+M_acon_C_c	Not Constrained
+b0181	Not Constrained
+M_murein5p3p_p	Not Constrained
+b0182	Not Constrained
+b0180	Not Constrained
+R_E4PD	1.32E-4
+R_UDPGALtex	0.0
+b3052	Not Constrained
+M_pppn_e	Not Constrained
+R_NOtpp	0.0
+M_pppn_c	Not Constrained
+M_pppn_b	Not Constrained
+R_GLNtex	0.0
+M_din_e	Not Constrained
+R_AOXSr (Dead)	0.0
+b0179	Not Constrained
+R_ACGALtex	0.0
+b0175	Not Constrained
+M_din_b	Not Constrained
+b0174	Not Constrained
+M_din_c	Not Constrained
+R_ADSL1r	0.176617
+b0194	Not Constrained
+M_pppn_p	Not Constrained
+R_EX_g3pg_e_	0.0
+M_udpacgal_b	Not Constrained
+R_MALTTTRtexi	0.0
+b0902_and_b0903	Not Constrained
+b2799	Not Constrained
+b2796	Not Constrained
+R_MG2tex	0.004676
+b2797	Not Constrained
+M_udpacgal_e	Not Constrained
+R_DADNt2pp	0.0
+R_AB6PGH (Dead)	0.0
+b3058	Not Constrained
+R_EX_tre_e_	0.0
+b3057	Not Constrained
+M_pg181_c	Not Constrained
+M_3hdecACP_c	Not Constrained
+R_EX_cl_e_	-0.002806
+b3063	Not Constrained
+b3061	Not Constrained
+R_PYRt2rpp	0.0
+b3062	Not Constrained
+R_NTD4pp	0.0
+R_MN2t3pp	0.0
+M_pg181_p	Not Constrained
+b0186	Not Constrained
+b0185	Not Constrained
+R_NMNDA	0.0
+M_3hhexACP_c	Not Constrained
+M_udpacgal_p	Not Constrained
+M_dtdp4d6dm_c	Not Constrained
+R_4HTHRS (Dead)	0.0
+R_ANHGMtex	0.0
+M_thrp_p	Not Constrained
+M_thrp_e	Not Constrained
+b3073	Not Constrained
+R_G3PAT180	0.0
+b0199	Not Constrained
+R_TYRtex	0.0
+R_G5SD	0.130948
+b0198	Not Constrained
+M_2odec11eg3p_c	Not Constrained
+b0197	Not Constrained
+M_thrp_b	Not Constrained
+R_42A12BOOXpp	0.0
+R_EX_enter_e_	0.0
+M_clpn180_p	Not Constrained
+R_OHPHM	0.0
+R_EX_g6p_e_	0.0
+R_GUAPRT	0.0
+M_din_p	Not Constrained
+R_G3PAT181	0.0
+R_ALLtex	0.0
+M_r15bp_c	Not Constrained
+R_FUMt2_3pp	0.0
+R_NMNAT	0.0
+M_occoa_c	Not Constrained
+R_G1Ptex	0.0
+M_dnad_c	Not Constrained
+R_ADSL2r	0.264564
+R_DBTS (Dead)	0.0
+b2764	Not Constrained
+b2763	Not Constrained
+R_AGPAT161	0.044544
+R_FADRx2	0.0
+R_MALTPTtexi	0.0
+b3089	Not Constrained
+R_PA181abcpp	0.0
+b2762	Not Constrained
+R_AGPAT160	0.037792
+R_2AGPG180tipp	0.0
+R_EX_23cump_e_	0.0
+b3091	Not Constrained
+R_G3PIabcpp (Dead)	0.0
+R_SUCDi	3.16246
+b3093	Not Constrained
+b3092	Not Constrained
+R_EX_k_e_	-0.105185
+R_H2Otex	-33.372388
+R_FE3HOXUtpp	0.0
+b2752	Not Constrained
+R_DAPE	0.219716
+b2751	Not Constrained
+R_G3PAT161	0.044544
+b2750	Not Constrained
+R_GLCUR1Ptex	0.0
+R_G3PAT160	0.037792
+R_TRPtex	0.0
+R_TUNGStex (Dead)	0.0
+M_dca_p	Not Constrained
+R_ARBTNR1	0.0
+R_ARBTNR3	0.0
+R_ARBTNR2	0.0
+R_FE3abcpp	0.004209
+R_ARBt2rpp	0.0
+R_PA161abcpp	0.0
+M_ssaltpp_c	Not Constrained
+M_3hcmrs7eACP_c	Not Constrained
+R_ACGAL1Ptex	0.0
+R_EX_gthox_e_ (Dead)	0.0
+M_dca_e	Not Constrained
+R_AGPAT180	0.0
+b2781	Not Constrained
+b2784	Not Constrained
+M_dca_c	Not Constrained
+R_ACMANAtex	0.0
+R_AGPAT181	0.0
+M_dca_b	Not Constrained
+R_CYNTAH	0.0
+b2788	Not Constrained
+b2677_and_b2678_and_b2679	Not Constrained
+b2787	Not Constrained
+R_PA141abcpp	0.0
+b2789	Not Constrained
+R_ASCBtex	0.0
+R_LEUtex	0.0
+M_fruur_p	Not Constrained
+R_DHBSH	0.0
+R_G3PAT140	0.0
+R_UDCPDPS	3.3E-5
+R_G3PAT141	0.0
+R_EX_fald_e_	0.0
+R_MCTP1App	0.008226
+R_AMPN	0.0
+R_EX_nh4_e_	-6.38693
+b2779	Not Constrained
+R_5DGLCNtex	0.0
+R_EX_3hpppn_e_	0.0
+R_H2St1pp	0.0
+R_PGP140abcpp	0.0
+b2780	Not Constrained
+R_EX_ala_D_e_	0.0
+R_EX_na1_e_	0.0
+R_PSCLYStex	0.0
+M_pro_L_p	Not Constrained
+M_no_e	Not Constrained
+M_5mthf_c	Not Constrained
+M_alaala_p	Not Constrained
+R_EX_ump_e_	0.0
+M_2me4p_c	Not Constrained
+b1291_and_b3290_and_b1363	Not Constrained
+M_no_b	Not Constrained
+M_no_c	Not Constrained
+M_pro_L_b	Not Constrained
+M_pro_L_c	Not Constrained
+b2723	Not Constrained
+M_pro_L_e	Not Constrained
+b2724	Not Constrained
+b2721	Not Constrained
+b2722	Not Constrained
+R_METS	0.091426
+M_minohp_b	Not Constrained
+b2720	Not Constrained
+b2095_and_b2096	Not Constrained
+M_minohp_e	Not Constrained
+R_MALTTTRabcpp	0.0
+M_dhpmp_c	Not Constrained
+R_2AGPE160tipp	0.0
+R_12DGR160tipp	0.0
+R_FEOXAMUtex	0.0
+b2417_and_b1101_and_b2415_and_b2416	Not Constrained
+M_alaala_b	Not Constrained
+M_udpLa4n_c	Not Constrained
+b2719	Not Constrained
+M_alaala_c	Not Constrained
+M_dgmp_c	Not Constrained
+R_MAN6PI	0.0
+b0811_and_b0810_and_b0809	Not Constrained
+b2710	Not Constrained
+M_dgmp_e	Not Constrained
+R_SULFACabcpp	0.0
+b2711	Not Constrained
+M_alaala_e	Not Constrained
+R_EX_pser_L_e_	0.0
+M_no_p	Not Constrained
+M_dgmp_b	Not Constrained
+M_r1p_c	Not Constrained
+R_EX_xylu_L_e_	0.0
+R_CYNTt2pp	0.0
+M_udpLa4fn_c	Not Constrained
+R_TUNGSabcpp (Dead)	0.0
+b2747	Not Constrained
+b0150_and_b1252_and_b3005_and_b3006	Not Constrained
+b1216	Not Constrained
+b2746	Not Constrained
+R_METtex	0.0
+b2415_and_b2416_and_b4195_and_b4194_and_b4193	Not Constrained
+R_EX_glyc_e_	0.0
+b1210	Not Constrained
+b2744	Not Constrained
+R_PACALDt2rpp (Dead)	0.0
+b1215	Not Constrained
+R_EX_maltttr_e_	0.0
+R_SPODM	0.0
+R_METSOX2tex	0.0
+R_14GLUCANtexi	0.0
+R_URIDK2r	-0.015499
+R_ACGAptspp	0.0
+b1208	Not Constrained
+b1207	Not Constrained
+M_pydam_c	Not Constrained
+R_ATPPRT	0.05611
+b2738	Not Constrained
+R_CLPNH140pp	0.0
+R_LPLIPAL2G180	0.0
+M_1tdecg3p_c	Not Constrained
+b0572_and_b0573_and_b0574_and_b0575	Not Constrained
+b1200	Not Constrained
+R_TTDCAtexi	0.0
+R_NOtex	0.0
+R_LPLIPAL2G181	0.0
+R_TDPADGAT	0.0
+b1224_and_b1225_and_b1226_and_b1227	Not Constrained
+R_DURItex	0.0
+M_pa140_p	Not Constrained
+M_dcdp_c	Not Constrained
+M_uLa4n_p	Not Constrained
+R_GLYCAtex	0.0
+R_HMBS	2.64E-4
+R_MPTG2	0.0
+R_EX_his_L_e_	0.0
+R_EX_skm_e_	0.0
+R_NTP12 (Dead)	0.0
+b3008	Not Constrained
+b1236	Not Constrained
+b3005	Not Constrained
+b3006	Not Constrained
+M_pa140_c	Not Constrained
+R_EX_galur_e_	0.0
+b1232	Not Constrained
+b3001	Not Constrained
+R_KARA2	0.172051
+b1238	Not Constrained
+R_XYLt2pp	0.0
+R_IDOND	0.0
+R_THYMtex	0.0
+R_KARA1	-0.517797
+R_ADNt2rpp	0.0
+M_chor_c	Not Constrained
+b1225	Not Constrained
+b1226	Not Constrained
+b3018	Not Constrained
+b1223	Not Constrained
+R_G1PTT	0.0
+b2023_and_b2025	Not Constrained
+b1224	Not Constrained
+b3012	Not Constrained
+R_LPLIPAL2G160	0.0
+R_LPLIPAL2G161	0.0
+M_ps141_c	Not Constrained
+M_fuc_L_p	Not Constrained
+R_EX_fum_e_	0.0
+b1227	Not Constrained
+M_4ppcys_c	Not Constrained
+M_5mdru1p_c	Not Constrained
+b1487_and_b1486_and_b1485_and_b1484_and_b1483	Not Constrained
+M_3dhsk_c	Not Constrained
+R_NPHS	0.0
+R_DMSOR2 (Dead)	0.0
+R_LPLIPAL2ATE161 (Dead)	0.0
+b1260	Not Constrained
+b1262	Not Constrained
+b1261	Not Constrained
+b1252	Not Constrained
+R_NMNPtpp	0.0
+b3029	Not Constrained
+R_VALabcpp	0.0
+b3028	Not Constrained
+R_MELIBtex	0.0
+b2704	Not Constrained
+b2703	Not Constrained
+b2702	Not Constrained
+b2701	Not Constrained
+b2708	Not Constrained
+b2705	Not Constrained
+M_halipa_e	Not Constrained
+M_halipa_b	Not Constrained
+R_RBK_L1	0.0
+M_minohp_p	Not Constrained
+R_EX_udpgal_e_	0.0
+b3040	Not Constrained
+M_gmhep17bp_c	Not Constrained
+b3041	Not Constrained
+b1250	Not Constrained
+b1243	Not Constrained
+R_FEENTERabcpp	0.0
+b1244	Not Constrained
+b1241	Not Constrained
+M_2agpg160_p	Not Constrained
+R_LPLIPAL2G140	0.0
+R_CYTDK2	0.0
+b1247	Not Constrained
+R_LPLIPAL2G141	0.0
+R_EX_ttdcea_e_	0.0
+b1245	Not Constrained
+b1246	Not Constrained
+R_CYSSADS (Dead)	0.0
+b1249	Not Constrained
+R_EX_cd2_e_	0.0
+R_PNTOt4pp	0.0
+M_2agpg160_c	Not Constrained
+b0763_and_b0764_and_b0765	Not Constrained
+R_2AGPA161tipp	0.0
+M_cd2_p	Not Constrained
+R_PROt4pp	0.0
+R_DHCIND (Dead)	0.0
+M_malthp_c	Not Constrained
+R_PPALtpp	0.0
+R_MNLtex	0.0
+M_malthx_b	Not Constrained
+M_cd2_e	Not Constrained
+M_malthx_c	Not Constrained
+M_cbp_c	Not Constrained
+M_cd2_c	Not Constrained
+M_malthx_e	Not Constrained
+M_cd2_b	Not Constrained
+R_FACOAL181t2pp	0.0
+R_UACGAMPpp	0.0
+R_RNDR2b	0.0
+R_ALDD2y	0.0
+R_ALDD2x	0.0
+M_malthx_p	Not Constrained
+R_THYMt3pp	0.0
+R_PGPP181pp	0.0
+M_xmp_e	Not Constrained
+R_GUAtex	0.0
+R_PGP180abcpp	0.0
+b3860_and_b1185	Not Constrained
+M_xmp_c	Not Constrained
+M_xmp_b	Not Constrained
+R_ANHMK	0.0
+M_xmp_p	Not Constrained
+b3566_and_b3567_and_b3568	Not Constrained
+R_RIBabcpp	0.0
+R_FEOXAMR1	0.0
+R_FEOXAMR2	0.0
+R_FEOXAMR3	0.0
+R_RNDR3b	0.0
+M_phpyr_c	Not Constrained
+R_UDPGtex	0.0
+R_MNt2pp	0.0
+R_EX_LalaDgluMdap_e_	0.0
+R_AGM3Pt2pp	0.0
+M_uLa4n_c	Not Constrained
+R_EX_lyx_L_e_	0.0
+R_EX_no2_e_	0.0
+R_HG2tex (Dead)	0.0
+M_glyclt_e	Not Constrained
+M_glyclt_b	Not Constrained
+M_glyclt_c	Not Constrained
+M_b2coa_c	Not Constrained
+M_db4p_c	Not Constrained
+b1102_and_b1252_and_b3005_and_b3006	Not Constrained
+R_ALLULPE	0.0
+M_acglu_c	Not Constrained
+R_FACOAL60t2pp	0.0
+M_uama_c	Not Constrained
+R_GPDDA5pp	0.0
+M_glyclt_p	Not Constrained
+R_PG161abcpp	0.0
+M_thr_L_p	Not Constrained
+R_ENO	9.654232
+R_MME	0.0
+R_SKMtex	0.0
+R_H2Otpp	-30.347782
+R_EX_manglyc_e_	0.0
+R_GALM2pp	0.0
+M_ptrc_p	Not Constrained
+M_pe161_c	Not Constrained
+R_CRNt8pp	0.0
+M_fuc_L_b	Not Constrained
+R_ECOAH5	0.0
+b1185	Not Constrained
+M_fuc_L_c	Not Constrained
+R_RNDR1b	0.0
+R_ECOAH6	0.0
+R_ECOAH3	0.0
+R_ALAabcpp	0.0
+M_pe161_p	Not Constrained
+R_EX_3hcinnm_e_	0.0
+R_ECOAH4	0.0
+R_ECOAH7	0.0
+M_fuc_L_e	Not Constrained
+R_ECOAH8	0.0
+M_ptrc_e	Not Constrained
+M_LalaDglu_c	Not Constrained
+R_MALTtexi	0.0
+R_CBL1abcpp	0.0
+R_ECOAH1	0.0
+R_ECOAH2	0.0
+R_ALDD3y	0.0
+M_ptrc_c	Not Constrained
+M_ptrc_b	Not Constrained
+b1186	Not Constrained
+b1189	Not Constrained
+M_kdo2lipid4L_c	Not Constrained
+M_progly_e	Not Constrained
+M_progly_c	Not Constrained
+M_progly_b	Not Constrained
+M_LalaLglu_c	Not Constrained
+M_xylu_D_c	Not Constrained
+R_EX_glcr_e_	0.0
+M_murein5p5p_p	Not Constrained
+R_GALTtex	0.0
+M_isetac_e	Not Constrained
+M_2shchc_c	Not Constrained
+M_isetac_c	Not Constrained
+M_isetac_b	Not Constrained
+M_cdp_c	Not Constrained
+b1190	Not Constrained
+b1192	Not Constrained
+b1193	Not Constrained
+M_isetac_p	Not Constrained
+b1199	Not Constrained
+b3061_and_b3062	Not Constrained
+b1197	Not Constrained
+M_2tdec7eg3p_p	Not Constrained
+b1198	Not Constrained
+M_cu_e	Not Constrained
+R_MDDEP2pp	0.0
+R_TREptspp	0.0
+M_cu_b	Not Constrained
+R_GLCNt2rpp	0.0
+R_DAMPtex	0.0
+M_2tdec7eg3p_c	Not Constrained
+M_cu_p	Not Constrained
+R_PLIPA2A161pp	0.0
+M_taur_p	Not Constrained
+R_DMATT	1.65E-4
+M_mal_D_p	Not Constrained
+M_34dhpac_b	Not Constrained
+M_pydxn_c	Not Constrained
+R_NI2tpp	0.0
+R_SO2tpp (Dead)	0.0
+M_mal_D_e	Not Constrained
+M_taur_c	Not Constrained
+M_taur_e	Not Constrained
+R_SO4tex	0.148212
+b0200	Not Constrained
+R_O16GALFT (Dead)	0.0
+R_ALAt4pp	0.0
+M_mal_D_c	Not Constrained
+M_mal_D_b	Not Constrained
+R_RNDR4b	0.0
+R_EX_galctn_L_e_	0.0
+R_FACOAL161t2pp	0.0
+R_FLDR	0.032006
+b0207	Not Constrained
+M_anhgm4p_p	Not Constrained
+b2415_and_b2416_and_b2702_and_b2704_and_b2703	Not Constrained
+R_COBALT2tex	0.00187
+R_GMHEPK	0.0
+M_taur_b	Not Constrained
+R_HPYRRy	0.0
+R_LPLIPAL2ATE140 (Dead)	0.0
+R_HPYRRx	0.0
+M_1agpe180_p	Not Constrained
+M_anhgm4p_c	Not Constrained
+R_EX_arab_L_e_	0.0
+R_F6Ptex	0.0
+M_progly_p	Not Constrained
+R_SERTRS2 (Dead)	0.0
+M_4h2opntn_c	Not Constrained
+R_NTPP7	0.0
+R_NTPP8	0.0
+b1711_and_b1709_and_b0158	Not Constrained
+M_enter_e	Not Constrained
+R_NTPP9	0.0
+M_cpgn_un_e	Not Constrained
+M_enter_c	Not Constrained
+R_NTPP3	0.0
+R_NTPP4	0.0
+R_NTPP5	0.0
+R_CU2tex	0.00187
+M_enter_b	Not Constrained
+R_NTPP6	0.0
+b0221	Not Constrained
+R_AMMQLT8	0.0
+R_23PDE7pp	0.0
+R_AGt3 (Dead)	0.0
+M_cpgn_un_c	Not Constrained
+M_cpgn_un_b	Not Constrained
+b0222	Not Constrained
+M_indole_c	Not Constrained
+M_23dhbzs_c	Not Constrained
+M_indole_b	Not Constrained
+R_EX_dms_e_	0.0
+M_fruur_b	Not Constrained
+M_enter_p	Not Constrained
+M_fruur_c	Not Constrained
+M_fruur_e	Not Constrained
+R_EX_leu_L_e_	0.0
+M_34dhpac_e	Not Constrained
+R_EX_hdcea_e_	0.0
+M_34dhpac_p	Not Constrained
+b0212	Not Constrained
+R_EX_glyc3p_e_	0.0
+R_DXYLK (Dead)	0.0
+M_3ohcoa_c	Not Constrained
+R_EDD	0.0
+R_23CCMPtex	0.0
+R_EDA	0.0
+M_cpgn_un_p	Not Constrained
+R_OMPDC	0.195913
+R_H2O2tex	0.0
+R_CFAS180E (Dead)	0.0
+R_ECA4OALpp	0.0
+R_NI2abcpp	0.0
+R_EX_glu_L_e_	0.0
+R_DAAD	0.0
+b0243	Not Constrained
+M_pdx5p_c	Not Constrained
+R_PG140abcpp	0.0
+b0242	Not Constrained
+b0241	Not Constrained
+M_2ddg6p_c	Not Constrained
+M_2dhp_c	Not Constrained
+R_EX_udpacgal_e_	0.0
+R_GPDDA1 (Dead)	0.0
+R_MDRPD	0.0
+R_MOAT	0.011519
+b0902_and_b3114	Not Constrained
+R_ICHORT	0.0
+R_KAS14	0.0
+R_TMAOR1 (Dead)	0.0
+b0238	Not Constrained
+M_indole_p	Not Constrained
+M_udpglcur_b	Not Constrained
+R_ME1	0.0
+R_EX_melib_e_	0.0
+b0237	Not Constrained
+R_ME2	0.0
+R_KAS15	0.210749
+R_HCINNMt2rpp	0.0
+R_PROabcpp	0.0
+M_indole_e	Not Constrained
+M_xtp_c	Not Constrained
+R_MDH	3.778831
+M_3c3hmp_c	Not Constrained
+R_PAPA140pp	0.0
+M_dmso_e	Not Constrained
+R_DM_5DRIB	0.0
+R_EX_h2_e_	0.0
+M_murein5px3p_p	Not Constrained
+M_dmso_b	Not Constrained
+M_udpglcur_p	Not Constrained
+M_udpglcur_e	Not Constrained
+R_GALCTNLtex	0.0
+M_udpglcur_c	Not Constrained
+R_VALt2rpp	0.0
+R_ICHORS	0.0
+M_3hodcoa_c	Not Constrained
+M_skm5p_c	Not Constrained
+M_kdo2lipid4_b	Not Constrained
+R_TDPDRR	0.0
+R_EX_tym_e_	0.0
+M_kdo2lipid4_e	Not Constrained
+M_dmso_p	Not Constrained
+R_UM4PCP	0.0
+R_GALt2pp	0.0
+M_kdo2lipid4_c	Not Constrained
+R_EX_mal_L_e_	0.0
+R_ACACtex	0.0
+M_agm_b	Not Constrained
+R_TDPDRE	0.0
+M_agm_c	Not Constrained
+R_PGP141abcpp	0.0
+M_agm_e	Not Constrained
+R_URIt2pp	999999.0
+M_h2o_p	Not Constrained
+M_f6p_e	Not Constrained
+M_h2o_e	Not Constrained
+R_EX_gdp_e_	0.0
+M_f6p_b	Not Constrained
+M_f6p_c	Not Constrained
+M_tmao_p	Not Constrained
+M_f6p_p	Not Constrained
+R_HISabcpp	0.0
+M_h2o_c	Not Constrained
+M_2ddecg3p_p	Not Constrained
+M_h2o_b	Not Constrained
+R_URIt2rpp	-999999.0
+M_2ddecg3p_c	Not Constrained
+M_cpppg3_c	Not Constrained
+R_PLIPA1E160pp	0.0
+R_TMAOR1pp	0.0
+R_O16A4COLIPAtex (Dead)	0.0
+M_kdo2lipid4_p	Not Constrained
+b0261	Not Constrained
+b0260	Not Constrained
+R_PRAGSr	0.264697
+R_PROTRS (Dead)	0.0
+R_HEMEOS (Dead)	0.0
+R_ACt4pp	0.0
+R_THIORDXi	0.0
+R_ILETRS (Dead)	0.0
+R_GLCNtex	0.0
+R_EX_halipa_e_	0.0
+M_tmao_e	Not Constrained
+M_ppgpp_c	Not Constrained
+M_tmao_b	Not Constrained
+R_FECRMexs	0.0
+M_tdecoa_c	Not Constrained
+M_ppp9_c	Not Constrained
+b0273	Not Constrained
+M_skm_p	Not Constrained
+M_agm_p	Not Constrained
+R_DADA	0.0
+M_fgam_c	Not Constrained
+R_SUCCtex	0.0
+R_EX_gsn_e_	0.0
+R_EX_3gmp_e_	0.0
+M_4per_c	Not Constrained
+R_ZNabcpp	0.0
+R_NTPP1	0.0
+R_FEOXAMUtpp	0.0
+M_skm_e	Not Constrained
+R_NTPP2	0.0
+R_EX_ttdca_e_	0.0
+M_hxcoa_c	Not Constrained
+M_skm_b	Not Constrained
+M_skm_c	Not Constrained
+R_UGLT	0.0
+R_DADK	0.0
+b2813	Not Constrained
+M_hco3_c	Not Constrained
+R_PTRCabcpp	0.0
+M_murein5p4p_p	Not Constrained
+R_PGSA161	0.0
+b2817	Not Constrained
+R_PGSA160	0.0
+b2818	Not Constrained
+R_GLUDy	-5.056991
+b3397	Not Constrained
+R_3CMPtex	0.0
+R_PPND	0.081804
+R_URItex	0.0
+b2810	Not Constrained
+b4244_and_b4245	Not Constrained
+M_2dr1p_c	Not Constrained
+M_peamn_p	Not Constrained
+R_CAT	0.0
+M_peamn_e	Not Constrained
+R_PGPP120	0.0
+R_GAMtex	0.0
+M_peamn_b	Not Constrained
+M_15dap_p	Not Constrained
+b2827	Not Constrained
+b3389	Not Constrained
+M_15dap_e	Not Constrained
+M_15dap_c	Not Constrained
+b3386	Not Constrained
+M_15dap_b	Not Constrained
+R_MTHFC	0.584051
+R_K2L4Aabcpp	0.011519
+R_MTHFD	0.584051
+M_pa141_c	Not Constrained
+R_THRD_L	0.172051
+b3390	Not Constrained
+M_dhf_c	Not Constrained
+b3396	Not Constrained
+R_2DGULRy (Dead)	0.0
+M_5mta_c	Not Constrained
+M_pa141_p	Not Constrained
+R_EX_g1p_e_	0.0
+M_glu_D_c	Not Constrained
+R_HEPT2	0.0
+R_TYMtex	0.0
+R_HEPT3	0.0
+R_PGMT	0.0
+R_HEPT4	0.0
+M_4hoxpacd_p	Not Constrained
+R_PGSA181	0.0
+R_PItex	0.569347
+R_ACNAMtex	0.0
+R_CYTK1	0.107131
+R_HEPT1	0.0
+R_CYTK2	0.0
+R_DHPPDA2	2.64E-4
+R_PGSA180	0.0
+R_PLIPA1E161pp	0.0
+b3384	Not Constrained
+b3385	Not Constrained
+M_4hoxpacd_b	Not Constrained
+b3380	Not Constrained
+M_4hoxpacd_e	Not Constrained
+b2802	Not Constrained
+b2803	Not Constrained
+R_PGPP141	0.0
+b2800	Not Constrained
+R_PGPP140	0.0
+b2801	Not Constrained
+R_PLIPA1E141pp	0.0
+R_PEAMNOpp	0.0
+R_CLPNH160pp	0.0
+b3368	Not Constrained
+b3367	Not Constrained
+b3366	Not Constrained
+M_g3ps_p	Not Constrained
+b3365	Not Constrained
+b3374	Not Constrained
+b3371	Not Constrained
+b3370	Not Constrained
+b2895_and_b4238	Not Constrained
+R_IGPS	0.033664
+M_g3ps_e	Not Constrained
+R_SULabcpp	0.148212
+M_g3ps_b	Not Constrained
+M_g3ps_c	Not Constrained
+R_PTPATi	3.41E-4
+M_oc2coa_c	Not Constrained
+R_EX_met_L_e_	0.0
+R_MPTG	0.008226
+R_EX_fecrm_un_e_	0.0
+b1465_and_b1466_and_b1467_and_b1468	Not Constrained
+M_glu_L_e	Not Constrained
+R_EX_pyr_e_	0.0
+M_ribflv_c	Not Constrained
+b3359	Not Constrained
+R_ADNK1	2.64E-4
+M_1agpg181_p	Not Constrained
+M_e4p_c	Not Constrained
+M_dimp_e	Not Constrained
+R_PLIPA2E160pp	0.0
+M_dimp_p	Not Constrained
+M_altrn_c	Not Constrained
+M_murein4px4p_p	Not Constrained
+M_glu_L_p	Not Constrained
+b1126_and_b1125_and_b1124_and_b1123	Not Constrained
+R_PPALtex	0.0
+R_ACACt2pp	0.0
+R_LPLIPAL1E160pp	0.0
+M_2agpe160_c	Not Constrained
+M_dmpp_c	Not Constrained
+R_O16GLCT2 (Dead)	0.0
+R_ALAt2pp	0.0
+M_3opalmACP_c	Not Constrained
+M_glu_L_c	Not Constrained
+b3360	Not Constrained
+M_glu_L_b	Not Constrained
+M_glu1sa_c	Not Constrained
+R_MCITS	0.0
+b0829_and_b0830_and_b0831_and_b0832	Not Constrained
+R_ATPM	8.39
+M_2agpe160_p	Not Constrained
+R_ALR2	0.0
+b2868	Not Constrained
+b2867	Not Constrained
+b2866	Not Constrained
+M_g3pc_p	Not Constrained
+R_GLUPRT	0.264697
+M_sbzcoa_c	Not Constrained
+b3350	Not Constrained
+R_EAR181x	0.0
+R_RIBtex	0.0
+b1781	Not Constrained
+b2838	Not Constrained
+R_LYXtex	0.0
+R_EAR181y	0.0
+M_damp_p	Not Constrained
+b2836	Not Constrained
+R_AGM4PApp	0.0
+b2835	Not Constrained
+R_PPM2	0.0
+M_idon_L_p	Not Constrained
+R_CPGNUtex	0.0
+R_MDDCP2pp	0.0
+R_PPKr	-1.845907
+R_PTRCt2pp	0.0
+R_EX_octa_e_	0.0
+b2841	Not Constrained
+R_METSOX1abcpp	0.0
+M_idon_L_b	Not Constrained
+M_idon_L_c	Not Constrained
+R_EX_cgly_e_	0.0
+M_idon_L_e	Not Constrained
+M_thm_e	Not Constrained
+M_thm_b	Not Constrained
+M_3amp_p	Not Constrained
+R_SELNPS (Dead)	0.0
+M_galctn_L_b	Not Constrained
+M_thm_c	Not Constrained
+M_galctn_L_c	Not Constrained
+R_PLIPA1G141pp	0.0
+M_3amp_e	Not Constrained
+M_galctn_L_e	Not Constrained
+R_GLUDC	0.0
+R_FACOAL160t2pp	0.0
+M_galctn_L_p	Not Constrained
+R_2AGPG160tipp	0.0
+M_3amp_b	Not Constrained
+M_thm_p	Not Constrained
+R_EAR80x	0.210749
+R_PUNP3	0.0
+R_PUNP2	0.0
+R_PUNP1	-2.64E-4
+R_EAR80y	0.0
+R_EX_fe3hox_un_e_	0.0
+b1767	Not Constrained
+M_fe3dhbzs_e	Not Constrained
+M_fe3dhbzs_b	Not Constrained
+b1768	Not Constrained
+M_fe3dhbzs_c	Not Constrained
+R_EX_imp_e_	0.0
+M_fadh2_c	Not Constrained
+b2893	Not Constrained
+b2264	Not Constrained
+M_3psme_c	Not Constrained
+b2265	Not Constrained
+b1761	Not Constrained
+b2895	Not Constrained
+b1764	Not Constrained
+R_CA2tex	0.002806
+R_ASNtex	0.0
+R_NNAM	0.0
+M_damp_b	Not Constrained
+M_damp_c	Not Constrained
+M_gua_p	Not Constrained
+M_ethso3_p	Not Constrained
+M_dadp_c	Not Constrained
+b2262	Not Constrained
+M_lys_L_e	Not Constrained
+b2261	Not Constrained
+R_COBALT2t3pp	0.0
+M_lys_L_b	Not Constrained
+b2260	Not Constrained
+R_PPTtex	0.0
+M_lys_L_c	Not Constrained
+R_FA120ACPHi	0.0
+R_UAGDP	0.055945
+M_damp_e	Not Constrained
+M_op4en_c	Not Constrained
+M_fe3dhbzs_p	Not Constrained
+b1779	Not Constrained
+M_lys_L_p	Not Constrained
+b2836_and_b1094	Not Constrained
+b1778	Not Constrained
+M_gcald_c	Not Constrained
+R_PUNP4	0.0
+M_gua_c	Not Constrained
+M_pmtcoa_c	Not Constrained
+R_PUNP5	0.0
+M_gua_b	Not Constrained
+R_PUNP6	0.0
+M_gua_e	Not Constrained
+R_PUNP7	0.0
+b2255	Not Constrained
+R_EX_15dap_e_	0.0
+M_ttdca_b	Not Constrained
+M_murein4px4px4p_p	Not Constrained
+b2253	Not Constrained
+M_12dgr120_c	Not Constrained
+R_LPLIPAL2ATE141 (Dead)	0.0
+R_MI1PP (Dead)	0.0
+b2254	Not Constrained
+M_ttdca_e	Not Constrained
+b2257	Not Constrained
+M_ttdca_c	Not Constrained
+M_dkmpp_c	Not Constrained
+b1773	Not Constrained
+R_MCPST (Dead)	0.0
+R_23CAMPtex	0.0
+R_LPLIPAL2ATE181 (Dead)	0.0
+b2251	Not Constrained
+M_btcoa_c	Not Constrained
+R_LPLIPAL2ATG181 (Dead)	0.0
+R_INSTtex	0.0
+R_EX_metsox_R_L_e_	0.0
+R_O2Stex	0.0
+M_ttdca_p	Not Constrained
+M_12dgr120_p	Not Constrained
+R_MCITD	0.0
+M_prbamp_c	Not Constrained
+b1748	Not Constrained
+M_ethso3_c	Not Constrained
+M_ethso3_e	Not Constrained
+b1745	Not Constrained
+R_ALLK	0.0
+b1744	Not Constrained
+b1747	Not Constrained
+M_ethso3_b	Not Constrained
+b1746	Not Constrained
+b1740	Not Constrained
+R_PPNDH	0.104178
+b2874	Not Constrained
+b2242	Not Constrained
+b2871	Not Constrained
+b2243	Not Constrained
+R_HXAND	0.0
+M_imacp_c	Not Constrained
+b2241	Not Constrained
+R_EX_hacolipa_e_	0.0
+b2240	Not Constrained
+b2890	Not Constrained
+M_dimp_c	Not Constrained
+M_dimp_b	Not Constrained
+b0099	Not Constrained
+R_TYROXDApp	0.0
+b1759	Not Constrained
+R_SUCBZL	0.0
+R_SUCBZS	0.0
+R_BTS4 (Dead)	0.0
+b2889	Not Constrained
+b2239	Not Constrained
+b2235	Not Constrained
+M_u23ga_c	Not Constrained
+b2234	Not Constrained
+R_G1PPpp	0.0
+b2883	Not Constrained
+b2232	Not Constrained
+b0086	Not Constrained
+b0087	Not Constrained
+b0088	Not Constrained
+R_26DAHtex	0.0
+R_3NTD2pp	0.0
+M_feoxam_un_p	Not Constrained
+b0972	Not Constrained
+b0973	Not Constrained
+b0974	Not Constrained
+b0978	Not Constrained
+b0979	Not Constrained
+R_NTD5pp	0.0
+R_EX_thm_e_	0.0
+R_PGCD	1.015501
+R_ALLTAMH	0.0
+R_ARGDCpp	0.0
+R_DAGK140	0.0
+M_cit_p	Not Constrained
+b0090	Not Constrained
+b1723	Not Constrained
+R_PGSA120	0.0
+b0092	Not Constrained
+b0091	Not Constrained
+M_cit_e	Not Constrained
+R_EX_ag_e_ (Dead)	0.0
+b0096	Not Constrained
+R_MAN6Pt6_2pp	0.0
+M_cit_c	Not Constrained
+CAP	1.0
+R_ACONIs (Dead)	0.0
+b0077	Not Constrained
+b0078	Not Constrained
+b0980	Not Constrained
 R_PPCK	0.0
-R_EX_nh4_e	-4.765319
-M_f6p_c	0.0
-M_h2o_c	0.0
-R_EX_fum_e	0.0
-M_h2o_b	0.0
-R_EX_pi_e	-3.214895
-b2297	1.0
-R_SUCOAS	-5.064376
-M_nh4_e	0.0
-b4154	1.0
-b4153	1.0
-M_nh4_c	0.0
-b4152	1.0
-b0451	1.0
-b4151	1.0
-R_CO2t	-22.809833
-M_nh4_b	0.0
-M_gln_L_c	0.0
-M_gln_L_e	0.0
-M_gln_L_b	0.0
-b2296	1.0
-R_EX_etoh_e	0.0
+R_LPLIPAL2ATE180 (Dead)	0.0
+R_4PCPpp	0.0
+M_tagdp_D_c	Not Constrained
+R_ALATA_L	-0.345243
+R_COLIPAtex	0.0
+R_DAGK120	0.0
+b2994_and_b2997	Not Constrained
+M_feoxam_un_b	Not Constrained
+b4136_and_b2582	Not Constrained
+b2297	Not Constrained
+R_GAL1Ptex	0.0
+R_GLCt2pp	0.0
+M_feoxam_un_c	Not Constrained
+b1732	Not Constrained
+M_4abz_c	Not Constrained
+b0085	Not Constrained
+b0084	Not Constrained
+M_feoxam_un_e	Not Constrained
+b0068	Not Constrained
+R_GALURtex	0.0
+R_TYRTRS (Dead)	0.0
+b1709	Not Constrained
+b0066	Not Constrained
+b0067	Not Constrained
+M_gtp_e	Not Constrained
+M_gtp_b	Not Constrained
+b2296	Not Constrained
+R_LYSabcpp	0.0
+M_gtp_c	Not Constrained
+b0996	Not Constrained
+R_FE3HOXtonex	0.0
+b0997	Not Constrained
+R_GTHS	0.0
+b2291	Not Constrained
+R_ARBTNtex	0.0
+M_2dr5p_c	Not Constrained
+b2287	Not Constrained
+b2286	Not Constrained
+R_DAGK160	0.0
+R_TRPt2rpp	0.0
+R_DAGK161	0.0
+b2288	Not Constrained
+b0072	Not Constrained
+b1704	Not Constrained
+R_CYTBDpp	0.0
+R_ALLabcpp	0.0
+b0071	Not Constrained
+b0074	Not Constrained
+b0073	Not Constrained
+R_PGSA140	0.0
+R_PGSA141	0.0
+b1701	Not Constrained
+b0070	Not Constrained
+b1702	Not Constrained
+R_ACGAL1PPpp	0.0
+M_clpn181_p	Not Constrained
+R_ADNtex	0.0
+M_gly_c	Not Constrained
+M_gly_b	Not Constrained
+M_2omhmbl_c	Not Constrained
+R_CRNCBCT	0.0
+R_ACt2rpp	0.0
+M_cit_b	Not Constrained
+b1719	Not Constrained
+R_FEENTERexs	0.0
+M_t3c5ddeceACP_c	Not Constrained
+b2284	Not Constrained
+b2285	Not Constrained
+R_GLCDpp	0.0
+b2282	Not Constrained
+b2283	Not Constrained
+R_DAGK141	0.0
+R_GLYt2pp	0.0
+b2280	Not Constrained
+R_THRabcpp	0.0
+R_FECRMR3	0.0
+b2281	Not Constrained
+R_FECRMR2	0.0
+R_FECRMR1	0.0
+M_gly_e	Not Constrained
+R_HXAtex	0.0
+M_clpn140_p	Not Constrained
+b2279	Not Constrained
+b2278	Not Constrained
+b2277	Not Constrained
+M_gly_p	Not Constrained
+b2276	Not Constrained
+b0063	Not Constrained
+b0062	Not Constrained
+b0061	Not Constrained
+R_CMPN	0.0
+R_DHORTS	-0.195913
+b1713	Not Constrained
+b1714	Not Constrained
+b1711	Not Constrained
+M_gtp_p	Not Constrained
+b3958	Not Constrained
+M_1ddecg3p_p	Not Constrained
+b3957	Not Constrained
+b0160	Not Constrained
+b3956	Not Constrained
+M_glcr_p	Not Constrained
+M_pi_p	Not Constrained
+M_rbflvrd_c	Not Constrained
+b3959	Not Constrained
+M_pi_e	Not Constrained
+R_EX_ura_e_	0.0
+M_urdglyc_c	Not Constrained
+M_2tdecg3p_p	Not Constrained
+b3952	Not Constrained
+b3951	Not Constrained
+b0945	Not Constrained
+M_dopa_b	Not Constrained
+M_1ddecg3p_c	Not Constrained
+R_HCINNMtex	0.0
+R_CPPPGO	1.32E-4
+M_dopa_e	Not Constrained
+M_pi_b	Not Constrained
+M_pi_c	Not Constrained
+M_glcr_c	Not Constrained
+b0159	Not Constrained
+M_glcr_b	Not Constrained
+b0158	Not Constrained
+R_EX_tsul_e_	0.0
+b0153	Not Constrained
+b0152	Not Constrained
+b0155	Not Constrained
+M_glcr_e	Not Constrained
+M_dopa_p	Not Constrained
+b0154	Not Constrained
+b3945	Not Constrained
+R_NMNt7pp	0.0
+R_PGPP160pp	0.0
+b0173	Not Constrained
+R_GLU5K	0.130948
+b2309	Not Constrained
+b0171	Not Constrained
+b3946	Not Constrained
+b2307	Not Constrained
+b2308	Not Constrained
+M_ca2_p	Not Constrained
+b2306	Not Constrained
+R_BETALDHx (Dead)	0.0
+R_DAGK180	0.0
+b2303	Not Constrained
+M_cdpdhdecg_c	Not Constrained
+b3941	Not Constrained
+b3940	Not Constrained
+R_DAGK181	0.0
+b3942	Not Constrained
+M_cddec5eACP_c	Not Constrained
+b0937	Not Constrained
+M_ca2_b	Not Constrained
+b0936	Not Constrained
+M_ca2_c	Not Constrained
+b0935	Not Constrained
+R_DXPS	0.001679
+b0934	Not Constrained
+M_cobalt2_e	Not Constrained
+b0933	Not Constrained
+M_2tdecg3p_c	Not Constrained
+b0932	Not Constrained
+M_cobalt2_c	Not Constrained
+b0931	Not Constrained
+M_cobalt2_b	Not Constrained
+R_FUCtpp	0.0
+R_EX_maltpt_e_	0.0
+b0930	Not Constrained
+M_cobalt2_p	Not Constrained
+M_ca2_e	Not Constrained
+R_EX_progly_e_	0.0
+b0166	Not Constrained
+M_acetol_c	Not Constrained
+R_GALTptspp	0.0
+R_EX_mg2_e_	-0.004676
+b2480_and_b3781	Not Constrained
+b3939	Not Constrained
+M_23dhmb_c	Not Constrained
+R_23PDE2pp	0.0
+R_UREAtex	0.0
+M_3ohexACP_c	Not Constrained
+M_val_L_b	Not Constrained
+R_EX_lac_L_e_	0.0
+R_METAT	3.96E-4
+M_all_D_p	Not Constrained
+b3930	Not Constrained
+b3212_and_b3213	Not Constrained
+R_SPMDAT2 (Dead)	0.0
+R_FRUURtex	0.0
+b0963	Not Constrained
+M_oaa_c	Not Constrained
+M_eca4colipa_p	Not Constrained
+b0131	Not Constrained
+M_eca4colipa_e	Not Constrained
+R_NI2t3pp	0.0
+M_eca4colipa_b	Not Constrained
+b0133	Not Constrained
+R_F6Pt6_2pp	0.0
+R_PAPA120pp	0.0
+b0134	Not Constrained
+R_CLPNH180pp	0.0
+b3927	Not Constrained
+b3926	Not Constrained
+M_anhgm3p_c	Not Constrained
+R_FCLT	1.32E-4
+b0150	Not Constrained
+b3476_and_b3477_and_b3478_and_b3479_and_b3480	Not Constrained
+b0151	Not Constrained
+M_acmum6p_c	Not Constrained
+R_MALt2_2pp	0.0
+b3925	Not Constrained
+R_ADNUC	0.0
+b3924	Not Constrained
+R_T2DECAI	0.089087
+R_TMAtex	0.0
+R_UNK3	0.0
+M_anhgm3p_p	Not Constrained
+R_PPA2	0.0
+b0954	Not Constrained
+b0149	Not Constrained
+M_val_L_c	Not Constrained
+M_all_D_e	Not Constrained
+M_val_L_e	Not Constrained
+R_R5PP	0.0
+b0957	Not Constrained
+M_all_D_c	Not Constrained
+M_all_D_b	Not Constrained
+M_val_L_p	Not Constrained
+R_FCLK	0.0
+R_ORPT	-0.195913
+b0142	Not Constrained
+R_EX_man_e_	0.0
+b4478	Not Constrained
+b4477	Not Constrained
+R_DMSOR2pp	0.0
+b4476	Not Constrained
+b0908	Not Constrained
+b0907	Not Constrained
+R_PRAMPC	0.05611
+M_2agpg141_c	Not Constrained
+M_fcl_L_c	Not Constrained
+R_EX_acac_e_	0.0
+R_MLDCP2App	0.0
+b3917	Not Constrained
+b3918	Not Constrained
+R_EX_ser_D_e_	0.0
+b3915	Not Constrained
+b3916	Not Constrained
+R_CTBTt2rpp	0.0
+b0112	Not Constrained
+R_HCYSMT	0.0
+b0114	Not Constrained
+b3919	Not Constrained
+b0115	Not Constrained
+M_his_L_c	Not Constrained
+M_3hoctACP_c	Not Constrained
+M_23cgmp_e	Not Constrained
+M_his_L_b	Not Constrained
+M_his_L_e	Not Constrained
+b0110	Not Constrained
+R_PSP_Lpp	0.0
+b0902	Not Constrained
+b4481	Not Constrained
+b0903	Not Constrained
+M_his_L_p	Not Constrained
+b0904	Not Constrained
+b0116	Not Constrained
+b4485	Not Constrained
+M_23cgmp_p	Not Constrained
+R_12DGR180tipp	0.0
+b0118	Not Constrained
+b3892_and_b3893_and_b3894	Not Constrained
+M_metsox_R_L_p	Not Constrained
+M_dhnpt_c	Not Constrained
+M_ru5p_D_c	Not Constrained
+b0584_and_b1252_and_b3005_and_b3006	Not Constrained
+R_GLTPD	0.0
+b2344	Not Constrained
+M_t3c7mrseACP_c	Not Constrained
+M_xtsn_p	Not Constrained
+b2342	Not Constrained
+b2341	Not Constrained
+b3902	Not Constrained
+M_23cgmp_b	Not Constrained
+b3903	Not Constrained
+R_MCTP2App	0.0
+b3904	Not Constrained
+b0114_and_b0115_and_b0116	Not Constrained
+b3907	Not Constrained
+R_ALAR	0.024679
+b3909	Not Constrained
+b0125	Not Constrained
+M_xtsn_e	Not Constrained
+b3908	Not Constrained
+b0126	Not Constrained
+M_xtsn_b	Not Constrained
+b0123	Not Constrained
+M_xtsn_c	Not Constrained
+R_ORNDC	0.0
+b0124	Not Constrained
+b0121	Not Constrained
+M_suchms_c	Not Constrained
+b0120	Not Constrained
+R_GLUtex	0.0
+R_EX_n2o_e_	0.0
+R_CSNtex	0.0
+R_SPMDAT1 (Dead)	0.0
+M_2agpg141_p	Not Constrained
+R_MINOHPtexi	0.0
+R_ARBTNtpp	0.0
+R_DGSNtex	0.0
+b0928	Not Constrained
+R_GLCP	0.0
+b2311	Not Constrained
+b2310	Not Constrained
+b0929	Not Constrained
+M_3cmp_p	Not Constrained
+M_fecrm_e	Not Constrained
+R_UPP3MT	1.32E-4
+b2312	Not Constrained
+M_k_p	Not Constrained
+M_fecrm_c	Not Constrained
+b2315	Not Constrained
+M_fecrm_b	Not Constrained
+M_fecrm_p	Not Constrained
+b2316	Not Constrained
+R_BETALDHy (Dead)	0.0
+M_2ommbl_c	Not Constrained
+R_FRUK	0.0
+R_EX_pheme_e_	0.0
+M_metsox_R_L_b	Not Constrained
+M_metsox_R_L_c	Not Constrained
+M_h2_b	Not Constrained
+M_1agpe181_p	Not Constrained
+M_eca4und_p	Not Constrained
+M_3cmp_e	Not Constrained
+b4460	Not Constrained
+M_3cmp_b	Not Constrained
+M_metsox_R_L_e	Not Constrained
+M_trdrd_c	Not Constrained
+R_GALCTD	0.0
+M_xu5p_L_c	Not Constrained
+b4468	Not Constrained
+b0918	Not Constrained
+b2320	Not Constrained
+M_h2_p	Not Constrained
+b4467	Not Constrained
+R_LPLIPAL1A160pp	0.0
+b2323	Not Constrained
+R_DHQS	0.220175
+b2329	Not Constrained
+b2328	Not Constrained
+M_man6pglyc_c	Not Constrained
+M_h2_e	Not Constrained
+M_h2_c	Not Constrained
+M_cbl1_p	Not Constrained
+R_OROTt2_2pp	0.0
+M_k_e	Not Constrained
+M_12dgr181_c	Not Constrained
+R_GGGABADr	0.0
+M_k_c	Not Constrained
+R_ETHAtex	0.0
+M_k_b	Not Constrained
+b0103	Not Constrained
+b0104	Not Constrained
+R_ALAtex	0.0
+b4471	Not Constrained
+b0910	Not Constrained
+b4474	Not Constrained
+M_12dgr181_p	Not Constrained
+b0914	Not Constrained
+R_HETZK (Dead)	0.0
+R_EX_mobd_e_	-0.00187
+b0915	Not Constrained
+R_METSOX1tex	0.0
+b0109	Not Constrained
+M_3c2hmp_c	Not Constrained
+R_HEXt2rpp	0.0
+R_3AMPtex	0.0
+R_G6PDA	0.0
+b0886_and_b0887	Not Constrained
+M_lac_L_e	Not Constrained
+M_cbl1_e	Not Constrained
+R_Kabcpp	0.0
+M_lac_L_c	Not Constrained
+b1872_and_b1873	Not Constrained
+M_3mop_c	Not Constrained
+M_lac_L_b	Not Constrained
+M_cbl1_b	Not Constrained
+M_cbl1_c	Not Constrained
+M_uri_b	Not Constrained
+R_CLPNS140pp	0.0
+R_SKMt2pp	0.0
+M_uri_c	Not Constrained
+b3428	Not Constrained
+R_MDDEP1pp	0.0
+b3429	Not Constrained
+R_EX_3ump_e_	0.0
+R_METabcpp	0.0
+b3426	Not Constrained
+b3425	Not Constrained
+M_lac_L_p	Not Constrained
+M_all6p_c	Not Constrained
+R_L_LACD2	0.0
+M_1odec11eg3p_c	Not Constrained
+R_L_LACD3	0.0
+R_OMPHHX	0.0
+R_UREAtpp	0.0
+R_NNDMBRT (Dead)	0.0
+M_uri_p	Not Constrained
+M_3omrsACP_c	Not Constrained
+R_IG3PS	0.05611
+R_EX_dtmp_e_	0.0
+M_uri_e	Not Constrained
+R_DHPTPE (Dead)	0.0
+M_ocACP_c	Not Constrained
+M_acmana_e	Not Constrained
+R_GMPtex	0.0
+R_CYTDH	0.0
+b3437	Not Constrained
+R_3OAR40	0.210749
+b3433	Not Constrained
+b3432	Not Constrained
+M_3odcoa_c	Not Constrained
+b3431	Not Constrained
+M_acmana_p	Not Constrained
+b3430	Not Constrained
+M_succ_b	Not Constrained
+M_glyc_p	Not Constrained
+M_glyc_R_p	Not Constrained
+M_acmana_b	Not Constrained
+M_acmana_c	Not Constrained
+M_succ_e	Not Constrained
+M_succ_c	Not Constrained
+b1440_and_b1441_and_b1442_and_b1443	Not Constrained
+R_EX_phe_L_e_	0.0
+M_5mdr1p_c	Not Constrained
+M_glyc_b	Not Constrained
+M_glyc_c	Not Constrained
+R_CD2t3pp	0.0
+b3409	Not Constrained
+M_glyc_e	Not Constrained
+R_HEPK1	0.0
+R_HEPK2	0.0
+b3403	Not Constrained
+M_ppt_b	Not Constrained
+M_histd_c	Not Constrained
+M_ppt_e	Not Constrained
+M_succ_p	Not Constrained
+M_glyc_R_b	Not Constrained
+b3417	Not Constrained
+M_murein5px4p_p	Not Constrained
+b3416	Not Constrained
+R_O16AP1pp (Dead)	0.0
+R_UAG2E	0.0
+M_ppt_p	Not Constrained
+R_2AGPEAT180	0.0
+R_FMETTRS (Dead)	0.0
+M_2mecdp_c	Not Constrained
+R_2AGPEAT181	0.0
+M_1agpg180_p	Not Constrained
+b3415	Not Constrained
+M_glyc_R_c	Not Constrained
+R_ABTA	0.0
+R_PLIPA2E161pp	0.0
+M_glyc_R_e	Not Constrained
+R_2AGPE141tipp	0.0
+R_FRULYSDG	0.0
+M_ura_p	Not Constrained
+R_GPDDA1pp	0.0
+R_MICITD	0.0
+R_DHFS	3.96E-4
+b3991	Not Constrained
+R_CPGNUtpp	0.0
+b3992	Not Constrained
+R_PLIPA1E140pp	0.0
+b3993	Not Constrained
+R_DHFR	0.015896
+R_PGPP160	0.0
+b3994	Not Constrained
+M_crn_D_p	Not Constrained
+b3996	Not Constrained
+R_TPRDCOAS (Dead)	0.0
+b3997	Not Constrained
+R_ACANTHAT (Dead)	0.0
+R_EX_thrp_e_	0.0
+R_HSST	0.091162
+R_PGPP161	0.0
+R_2DGLCNRy (Dead)	0.0
+M_crn_D_c	Not Constrained
+R_FDH5pp	0.0
+M_dudp_c	Not Constrained
+R_MNLptspp	0.0
+b3990	Not Constrained
+M_ura_c	Not Constrained
+M_ura_b	Not Constrained
+R_3OAR80	0.210749
+R_CLPNS161pp	0.0
+b1654_and_b2675_and_b2676	Not Constrained
+M_ura_e	Not Constrained
+M_zn2_p	Not Constrained
+R_G3PEtex	0.0
+R_DHORD5	0.0
+R_EX_no_e_	0.0
+M_zn2_c	Not Constrained
+M_uaagmda_c	Not Constrained
+M_zn2_e	Not Constrained
+R_DHORD2	0.195913
+M_sl26da_c	Not Constrained
+M_chol_p	Not Constrained
+b3974	Not Constrained
+M_cdec3eACP_c	Not Constrained
+M_zn2_b	Not Constrained
+R_PGPP180	0.0
+R_PGPP181	0.0
+b3972	Not Constrained
+M_iasp_c	Not Constrained
+R_EX_h2o2_e_	0.0
+R_PE180abcpp	0.0
+R_EX_asp_L_e_	0.0
+M_chol_b	Not Constrained
+R_CU1Opp	0.0
+R_THRt2rpp	0.0
+M_1odec11eg3p_p	Not Constrained
+R_DKGLCNR2x (Dead)	0.0
+R_ALLTNtex	0.0
+M_chol_e	Not Constrained
+b3962	Not Constrained
+b3960	Not Constrained
+R_3OAR60	0.210749
+b3966	Not Constrained
+b3967	Not Constrained
+b3258	Not Constrained
+b3255	Not Constrained
+b3256	Not Constrained
+b2914	Not Constrained
+M_dmlz_c	Not Constrained
+b2917	Not Constrained
+R_XTSNtex	0.0
+R_EX_tmao_e_	0.0
+b2913	Not Constrained
+M_pan4p_c	Not Constrained
+b2919	Not Constrained
+R_EX_met_D_e_ (Dead)	0.0
+R_FDH4pp	0.0
+R_3OAR160	0.075584
+R_MALDDH	0.0
+R_2AGPG161tipp	0.0
+R_OAADC	0.0
+M_grxox_c	Not Constrained
+R_3OAR161	0.089087
+R_BUTSO3tex	0.0
+R_URAt2rpp	0.0
+b2920	Not Constrained
+b2199	Not Constrained
+R_AAMYLpp	0.0
+b2927	Not Constrained
+b2925	Not Constrained
+R_EX_g3pi_e_	0.0
+b2926	Not Constrained
+b2923	Not Constrained
+M_aps_c	Not Constrained
+R_FE3HOXexs	0.0
+M_accoa_c	Not Constrained
+b4136_and_b0604	Not Constrained
+R_SPMDabcpp	0.0
+R_FACOAE181	0.0
+R_BIOMASS	0.592258
+R_FACOAE180	0.0
+R_UGMDDS	0.016453
+R_2AGPEAT120	0.0
+b2935	Not Constrained
+R_LPLIPAL2ATG141 (Dead)	0.0
+M_asp_L_e	Not Constrained
+b2937	Not Constrained
+M_so4_p	Not Constrained
+M_asp_L_c	Not Constrained
+R_MAN6Ptex	0.0
+b2938	Not Constrained
+M_amet_c	Not Constrained
+M_asp_L_b	Not Constrained
+M_so4_b	Not Constrained
+M_so4_c	Not Constrained
+M_so4_e	Not Constrained
+R_CBL1tonex	0.0
+R_DHBS	0.0
+R_3OAR140	0.121662
+b3281	Not Constrained
+R_LPLIPAL1A120pp	0.0
+R_3OAR141	0.089087
+R_ASPT	0.0
+R_DMSOtex	0.0
+b3266	Not Constrained
+b3265	Not Constrained
+b2942	Not Constrained
+b0657_and_b1677	Not Constrained
+R_PTRCORNt7pp	0.0
+R_O2tex	15.0
+R_DHBD	0.0
+R_GSNK	0.0
+b2943	Not Constrained
+b2947	Not Constrained
+R_SARCOX (Dead)	0.0
+M_glyc3p_b	Not Constrained
+R_VALtex	0.0
+R_MG2t3_2pp	0.004676
+M_glyc3p_c	Not Constrained
+M_glyc3p_e	Not Constrained
+R_MGSA	0.0
+R_ADMDC	0.0
+M_dxyl5p_c	Not Constrained
+M_hexACP_c	Not Constrained
+M_glyc3p_p	Not Constrained
+R_2AGPEAT141	0.0
+R_2AGPEAT140	0.0
+R_EX_gthrd_e_	0.0
+b2954	Not Constrained
+b2957	Not Constrained
+R_FACOAL141t2pp	0.0
+R_FACOAE160	0.0
+R_PFK_2	0.0
+b3212	Not Constrained
+R_FACOAE161	0.0
+b3213	Not Constrained
+b3360_and_b1812	Not Constrained
+R_3OAR120	0.121662
+R_3OAR121	0.089087
+R_ILETA	-0.172051
+R_SBTPD	0.0
+R_FRD2	0.0
+R_ALATA_L2	0.0
+M_orn_c	Not Constrained
+M_orn_b	Not Constrained
+R_FRD3	0.0
+M_orn_e	Not Constrained
+b0902_and_b0903_and_b2579	Not Constrained
+M_btal_c	Not Constrained
+R_FUCtex	0.0
+M_dscl_c	Not Constrained
+b2965	Not Constrained
+R_ASPK	0.633184
+b2964	Not Constrained
+R_PLIPA1A120pp	0.0
+b2963	Not Constrained
+R_TDP	0.0
+M_orn_p	Not Constrained
+R_NO3tex	0.0
+R_ASR (Dead)	0.0
+R_LPLIPAL2ATE160 (Dead)	0.0
+R_UGLYCH	0.0
+R_FE3DHBZR	0.0
+M_xyl_D_e	Not Constrained
+b3951_and_b3952	Not Constrained
+M_xyl_D_c	Not Constrained
+M_xyl_D_b	Not Constrained
+R_Htex	0.609708
+M_xyl_D_p	Not Constrained
+R_HPPPNt2rpp	0.0
+R_FORtex	0.0
+R_EX_glyc_R_e_	0.0
+R_GLUNpp	0.0
+R_COLIPAabcpp	0.0
+b2976	Not Constrained
+b2979	Not Constrained
+M_enlipa_p	Not Constrained
+R_UAPGR	0.016453
+R_DALAt2pp	0.008226
+R_2AGPEAT161	0.0
+M_fpram_c	Not Constrained
+R_2AGPEAT160	0.0
+R_NTRIR4pp	0.0
+R_FACOAE141	0.0
+R_FACOAE140	0.0
+b3236	Not Constrained
+M_dhptd_c	Not Constrained
+b2975	Not Constrained
+M_enlipa_e	Not Constrained
+R_ARGORNt7pp	0.0
+M_udp_c	Not Constrained
+M_enlipa_b	Not Constrained
+R_EX_12ppd_S_e_	0.0
+M_ppal_c	Not Constrained
+M_ppal_b	Not Constrained
+R_EX_cyan_e_	0.0
+R_EX_dad_2_e_	0.0
+M_ppal_e	Not Constrained
+R_3OAR100	0.210749
+M_ppal_p	Not Constrained
+R_EX_agm_e_	0.0
+R_Zn2tex	0.00187
+M_nmn_b	Not Constrained
+R_MG2uabcpp	0.0
+R_CLPNH161pp	0.0
+M_nmn_c	Not Constrained
+M_4abut_b	Not Constrained
+R_MALTHXtexi	0.0
+M_4abut_c	Not Constrained
+b2988	Not Constrained
+M_nmn_e	Not Constrained
+b2987	Not Constrained
+b3223	Not Constrained
+M_dgtp_c	Not Constrained
+R_ECA4COLIPAtex	0.0
+R_ASNN	0.0
+b3224	Not Constrained
+M_akg_b	Not Constrained
+R_DMSOR1 (Dead)	0.0
+M_akg_c	Not Constrained
+b3222	Not Constrained
+M_4abut_e	Not Constrained
+R_3KGK (Dead)	0.0
+M_nmn_p	Not Constrained
+b3225	Not Constrained
+R_EX_udpg_e_	0.0
+R_HCO3E	1.69373
+M_akg_e	Not Constrained
+M_4abut_p	Not Constrained
+M_akg_p	Not Constrained
+b0972_and_b0973_and_b0974	Not Constrained
+allolactose	1.0
+M_udpg_e	Not Constrained
+M_udpg_c	Not Constrained
+b2131	Not Constrained
+R_NTD6pp	0.0
+R_EX_glc_e_	-6.5
+b2130	Not Constrained
+M_udpg_b	Not Constrained
+R_IGPDH	0.05611
+M_lipidAds_c	Not Constrained
+M_2agpe140_p	Not Constrained
+R_GCALDD	3.96E-4
+b2997	Not Constrained
+M_crnDcoa_c	Not Constrained
+b2994	Not Constrained
+M_grxrd_c	Not Constrained
+b2128	Not Constrained
+M_2ippm_c	Not Constrained
+R_LPLIPAL1A181pp	0.0
+R_G3PT	0.0
+R_PTRCTA	0.0
+M_3hdcoa_c	Not Constrained
+b2129	Not Constrained
+b1866	Not Constrained
+R_UMPK	0.223885
+b1865	Not Constrained
+M_mqn8_c	Not Constrained
+M_fecrm_un_b	Not Constrained
+R_CYSDtex	0.0
+M_but_e	Not Constrained
+M_fecrm_un_c	Not Constrained
+M_air_c	Not Constrained
+R_TPI	4.989563
+R_EX_cbl1_e_	0.0
+R_PSSA181	0.0
+R_PSSA180	0.0
+R_CGLYabcpp	0.0
+M_2agpe140_c	Not Constrained
+M_but_b	Not Constrained
+M_but_c	Not Constrained
+R_MANAO	0.0
+b2114	Not Constrained
+b1873	Not Constrained
+M_fecrm_un_p	Not Constrained
+b1872	Not Constrained
+M_clpn161_p	Not Constrained
+R_SUCCt3pp	0.0
+R_ZN2abcpp	0.0
+b0731_and_b2415_and_b2416	Not Constrained
+M_udpg_p	Not Constrained
+M_fecrm_un_e	Not Constrained
+M_ps120_c	Not Constrained
+R_GLYCDx	0.0
+R_H2tex	0.0
+b1876	Not Constrained
+M_thym_c	Not Constrained
+R_TMK	0.0
+M_thym_b	Not Constrained
+b0894	Not Constrained
+b0893	Not Constrained
+R_ARGSS	0.17519
+b0896	Not Constrained
+b0895	Not Constrained
+M_dtdp_c	Not Constrained
+R_ARGSL	0.17519
+b2150	Not Constrained
+b2153	Not Constrained
+R_LPLIPAL2ATE120 (Dead)	0.0
+b2143	Not Constrained
+M_but_p	Not Constrained
+R_ACGS	0.17519
+b2148	Not Constrained
+b2149	Not Constrained
+R_UDCPPtppi	0.0
+R_METSOX2abcpp	0.0
+R_2AGPG140tipp	0.0
+R_ACGK	0.17519
+R_3NTD9pp	0.0
+R_ASPabcpp	0.0
+R_FORt2pp	0.0
+R_PSSA161	0.044544
+R_PSSA160	0.037792
+R_HMPK1 (Dead)	0.0
+R_DKGLCNR1 (Dead)	0.0
+R_PACALDtex	0.0
+R_CSNt2pp	0.0
+R_PPNCL2	3.41E-4
+b2134	Not Constrained
+b2132	Not Constrained
+b2133	Not Constrained
+b3503_and_b1064	Not Constrained
+b1897	Not Constrained
+b1896	Not Constrained
+M_thym_p	Not Constrained
+R_CRNDabcpp	0.0
+M_mnl1p_c	Not Constrained
+M_3ooctACP_c	Not Constrained
+R_THRS	0.322307
+M_thym_e	Not Constrained
+M_sucsal_c	Not Constrained
+R_GGPTRCS	0.0
+b0875	Not Constrained
+M_glcur1p_p	Not Constrained
+R_THRD	0.0
+b2170	Not Constrained
+b0871	Not Constrained
+R_CYSTL	0.091162
+b0870	Not Constrained
+M_hmgth_c	Not Constrained
+M_glcur1p_e	Not Constrained
+R_CRNtex	0.0
+M_glcur1p_b	Not Constrained
+b2169	Not Constrained
+R_DHPS2	3.96E-4
+R_GGPTRCO	0.0
+M_etha_b	Not Constrained
+M_etha_c	Not Constrained
+b2168	Not Constrained
+b2167	Not Constrained
+b2162	Not Constrained
+R_DGMPtex	0.0
+b0888	Not Constrained
+M_adpglc_c	Not Constrained
+b3290	Not Constrained
+b0886	Not Constrained
+b0887	Not Constrained
+R_PSSA140	0.0
+R_SUCCt2_3pp	0.0
+R_EX_malthx_e_	0.0
+R_DCYTt2pp	0.0
+R_PSSA141	0.0
+R_ACBIPGT (Dead)	0.0
+M_camp_c	Not Constrained
+b2156	Not Constrained
+b3288	Not Constrained
+b2155	Not Constrained
+R_LIPAHTex	0.0
+b2154	Not Constrained
+R_UDCPDP	0.016453
+b0854	Not Constrained
+R_3OAR181	0.0
+R_GLYCK2	0.0
+b0855	Not Constrained
+R_ISETACtex	0.0
+b0856	Not Constrained
+b0857	Not Constrained
+R_FA141ACPHi	0.0
+R_OMMBLHX3	0.0
+R_URAtex	0.0
+R_LCTStpp	0.0
+R_DHPPD	0.0
+R_DPR	3.41E-4
+R_AMANK	0.0
+R_2AGPA180tipp	0.0
+R_G6Pt6_2pp	0.0
+b4407	Not Constrained
+b1849	Not Constrained
+R_MLDEP1pp	0.0
+R_3OAR180	0.0
+M_3php_c	Not Constrained
+b0077_and_b0078	Not Constrained
+R_TAGURr	0.0
+b0864	Not Constrained
+R_PMDPHT	2.64E-4
+b0862	Not Constrained
+R_DAPabcpp	0.0
+b0863	Not Constrained
+M_glx_c	Not Constrained
+b0860	Not Constrained
+R_AMPTASECG	0.0
+b0861	Not Constrained
+R_GALCTNt2pp	0.0
+b1857	Not Constrained
+R_PSSA120	0.0
+b1854	Not Constrained
+R_ACLS	0.517797
+R_ACKr	0.344103
+b1855	Not Constrained
+R_FALDtpp	0.0
+R_GMAND (Dead)	0.0
+b1858	Not Constrained
+b1859	Not Constrained
+M_3oddcoa_c	Not Constrained
+b1852	Not Constrained
+b1850	Not Constrained
+b1851	Not Constrained
+R_PTRCtex	0.0
+M_ppi_c	Not Constrained
+R_LPLIPAL2E180	0.0
+R_LPLIPAL2E181	0.0
+R_EX_succ_e_	0.0
+R_PIuabcpp	0.0
+R_FE2t2pp	0.0
+M_4mop_c	Not Constrained
+b0841	Not Constrained
+R_GTPDPK	0.0
+b0842	Not Constrained
+b0019	Not Constrained
+R_PLIPA1G120pp	0.0
+b0849	Not Constrained
+R_XTSNH	0.0
+R_PGPP161pp	0.0
+b0839	Not Constrained
+M_2dh3dgal6p_c	Not Constrained
+b4301	Not Constrained
+b0365_and_b0366_and_b0367	Not Constrained
+b0030	Not Constrained
+R_EX_nac_e_	0.0
+R_FE2abcpp	0.0
+M_cys_D_c	Not Constrained
+M_amp_b	Not Constrained
+R_DSERtex	0.0
+R_23PDE9pp	0.0
+M_amp_c	Not Constrained
+M_cys_D_e	Not Constrained
+b0830	Not Constrained
+b2128_and_b2129_and_b2130_and_b2131	Not Constrained
+b0026	Not Constrained
+b0025	Not Constrained
+M_cys_D_b	Not Constrained
+R_EX_4hoxpacd_e_	0.0
+b0029	Not Constrained
+b0832	Not Constrained
+R_PG141abcpp	0.0
+b0831	Not Constrained
+M_amp_e	Not Constrained
+b0837	Not Constrained
+b2440_and_b2441	Not Constrained
+R_O16AT (Dead)	0.0
+M_amp_p	Not Constrained
+R_SUCFUMtpp	0.0
+R_ECAtpp	0.0
+M_cys_D_p	Not Constrained
+R_TYRPtex	0.0
+R_EX_fe3_e_	6.045005
+R_LPLIPAL2E160	0.0
+b4311	Not Constrained
+R_LPLIPAL2E161	0.0
+b0828	Not Constrained
+R_SADT2	0.145874
+b0829	Not Constrained
+R_XAND	0.0
+M_hx2coa_c	Not Constrained
+b1814	Not Constrained
+R_GSNt2pp	0.0
+b0040	Not Constrained
+b1817	Not Constrained
+R_GAM6Pt6_2pp	0.0
+b1812	Not Constrained
+b2762_and_b1064	Not Constrained
+b0036	Not Constrained
+R_PSCVT	0.220175
+R_EX_cynt_e_	0.0
+b0038	Not Constrained
+R_FDMO	0.0
+b0037	Not Constrained
+b0032	Not Constrained
+b1818	Not Constrained
+R_PMANM	0.0
+R_NAMNPP	0.0
+b1819	Not Constrained
+b0031	Not Constrained
+b0033	Not Constrained
+b2094_and_b2093_and_b2092_and_b2415_and_b2416	Not Constrained
+b0825	Not Constrained
+R_AP5AH (Dead)	0.0
+M_ppa_p	Not Constrained
+b0822	Not Constrained
+M_ipdp_c	Not Constrained
+b4321	Not Constrained
+b4322	Not Constrained
+b4323	Not Constrained
+R_AMPTASEPG	0.0
+M_hdcoa_c	Not Constrained
+b0052	Not Constrained
+b1805	Not Constrained
+b2234_and_b2235_and_b2582	Not Constrained
+M_ppa_e	Not Constrained
+M_ppa_b	Not Constrained
+M_ppa_c	Not Constrained
+b1801	Not Constrained
+R_PPGPPDP	0.0
+b1800	Not Constrained
+b0049	Not Constrained
+b0048	Not Constrained
+M_trnaglu_c	Not Constrained
+b0047	Not Constrained
+R_GARFT	0.263244
+M_5drib_b	Not Constrained
+M_dtdp4d6dg_c	Not Constrained
+M_5drib_c	Not Constrained
+M_o2_c	Not Constrained
+M_o2_b	Not Constrained
+M_o2_e	Not Constrained
+b0813	Not Constrained
+R_PG160abcpp	0.0
+b0811	Not Constrained
+b0810	Not Constrained
+M_tpalm2eACP_c	Not Constrained
+R_LPLIPAL2E140	0.0
+R_BALAtex	0.0
+R_PHETA1	-0.104178
+M_o2_p	Not Constrained
+b0809	Not Constrained
+R_LPLIPAL2E141	0.0
+M_aact_c	Not Constrained
+R_DMSOR1pp	0.0
+R_ACACCT	0.0
+R_NHFRBO	0.0
+b2167_and_b2169_and_b2415_and_b2416	Not Constrained
+R_RNTR1c	0.0
+M_imp_e	Not Constrained
+R_LPLIPAL1A141pp	0.0
+R_HISTP	0.05611
+M_hacolipa_b	Not Constrained
+R_ADCS	3.96E-4
+M_hacolipa_e	Not Constrained
+M_dhpppn_c	Not Constrained
+b0805	Not Constrained
+M_2oph_c	Not Constrained
+M_3otdcoa_c	Not Constrained
+M_imp_p	Not Constrained
+R_GLYTRS (Dead)	0.0
+R_FRULYSE	0.0
+R_PLIPA1G180pp	0.0
+R_ACOAD2f	0.0
+R_GAMAN6Ptex	0.0
+b2751_and_b2752	Not Constrained
+b2206	Not Constrained
+M_LalaDgluMdapDala_p	Not Constrained
+b2201	Not Constrained
+b2200	Not Constrained
+R_ADCL	3.96E-4
+b2205	Not Constrained
+R_PPPNtex	0.0
+b2204	Not Constrained
+b2203	Not Constrained
+R_ACPS1 (Dead)	0.0
+b2202	Not Constrained
+R_ETHAt2pp	0.0
+R_23CUMPtex	0.0
+M_LalaDgluMdapDala_c	Not Constrained
+R_RNTR2c	0.016003
+R_CYNTtex	0.0
+M_LalaDgluMdapDala_e	Not Constrained
+R_CTPS2	0.095069
+R_NTRIR2x	0.0
+M_LalaDgluMdapDala_b	Not Constrained
+M_dutp_c	Not Constrained
+M_ru5p_L_c	Not Constrained
+R_ACOAD3f	0.0
+R_ENLIPAtex	0.0
+R_HG2abcpp (Dead)	0.0
+M_ara5p_c	Not Constrained
+b4356	Not Constrained
+b2215	Not Constrained
+M_6pgl_c	Not Constrained
+b2210	Not Constrained
+M_coa_c	Not Constrained
+R_LPLIPAL2E120	0.0
+R_GTPCI	3.96E-4
+R_AGM4Pt2pp	0.0
+b4358	Not Constrained
+R_GLCtex	-999992.5
+R_LDH_D2	0.0
+R_INSt2rpp	-999999.0
+b1778_and_b2582	Not Constrained
+R_RNTR3c	0.016003
+R_EX_hxa_e_	0.0
+R_ARBTNexs	0.0
+R_MALt2_3pp	0.0
+M_u3hga_c	Not Constrained
+R_HISTD	0.05611
+R_FRULYSK	0.0
+M_imp_b	Not Constrained
+M_pa161_c	Not Constrained
+M_imp_c	Not Constrained
+b2224	Not Constrained
+b2223	Not Constrained
+b2222	Not Constrained
+b2221	Not Constrained
+M_12dgr180_p	Not Constrained
+R_ACOAD1f	0.0
+R_FRUptspp	0.0
+b0008	Not Constrained
+R_FACOAL100t2pp	0.0
+b4374	Not Constrained
+M_fc1p_c	Not Constrained
+b0007	Not Constrained
+R_RNTR4c	0.0
+b0004	Not Constrained
+M_1odecg3p_c	Not Constrained
+b0002	Not Constrained
+b0003	Not Constrained
+b2762_and_b0849	Not Constrained
+M_12dgr180_c	Not Constrained
+M_pa161_p	Not Constrained
+R_INSH	0.0
+R_ACOAD6f	0.0
+M_xan_c	Not Constrained
+M_xan_b	Not Constrained
+R_PG180abcpp	0.0
+b4384	Not Constrained
+b4383	Not Constrained
+M_xan_e	Not Constrained
+R_INSK	0.0
+b4382	Not Constrained
+R_ARBabcpp	0.0
+R_FALDtex	0.0
+b4381	Not Constrained
+R_GTHRDabc2pp	0.0
+R_ULA4NFT	0.0
+M_1odecg3p_p	Not Constrained
+R_EX_crn_e_	0.0
+R_EX_fruur_e_	0.0
+R_DGK1	0.0
+M_seramp_c	Not Constrained
+R_ACOAD7f	0.0
+M_aacoa_c	Not Constrained
+R_GF6PTA	0.055945
+M_frdp_c	Not Constrained
+R_NADH10	0.0
+b4395	Not Constrained
+b4394	Not Constrained
+b4392	Not Constrained
+b4390	Not Constrained
+M_xan_p	Not Constrained
+R_FACOAE120	0.0
+R_EX_fe3dhbzs_e_	0.0
+R_EX_cys_D_e_	0.0
+R_FE3Ri	0.0
+M_g3pc_e	Not Constrained
+R_PNTK	3.41E-4
+M_g3pc_b	Not Constrained
+b4388	Not Constrained
+R_LACZ	0.0
+M_mthgxl_c	Not Constrained
+b2035_and_b2027	Not Constrained
+R_NO3R2pp	0.0
+R_GALtex	0.0
+R_Kt3pp	0.0
+R_ACOAD4f	0.0
+R_NTP11 (Dead)	0.0
+R_ADEtex	0.0
+R_FRUtex	0.0
+M_pphn_c	Not Constrained
+b3454_and_b3455_and_b3457_and_b3458_and_b3456	Not Constrained
+M_acorn_c	Not Constrained
+M_pppg9_c	Not Constrained
+R_GRTT	1.65E-4
+R_PRPPS	-999998.448267
+R_ACMAMUT	0.0
+M_hmfurn_b	Not Constrained
+M_hmfurn_c	Not Constrained
+R_EAR180x	0.0
+R_EAR180y	0.0
+R_GSNtex	0.0
+b2893_and_b4136	Not Constrained
+R_EX_zn2_e_	-0.00187
+R_A5PISO	0.023039
+R_HSTPT	0.05611
+R_MDDCP3pp	0.0
+R_MALTHXabcpp	0.0
+R_ACOAD5f	0.0
+M_pran_c	Not Constrained
+R_CS	3.798928
+M_gdp_c	Not Constrained
+M_gdp_b	Not Constrained
+M_gdp_e	Not Constrained
+R_ASPTRS (Dead)	0.0
+R_THMDt2pp	999999.0
+R_BPNT	0.145874
+R_3OAS60	0.210749
+M_5mtr_c	Not Constrained
+R_FA80ACPHi	0.0
+R_FACOAE100	0.0
+R_NMNN	0.0
+R_MANPGH	0.0
+R_CGLYtex	0.0
+M_gdp_p	Not Constrained
+R_HEX4	0.0
+M_asp_L_p	Not Constrained
+R_HEX1	0.0
+R_ALDD4	0.0
+R_HEX7	0.0
+R_ARBtex	0.0
+R_CLPNS141pp	0.0
+R_EX_cit_e_	0.0
+R_XYLUtex	0.0
+R_PSCLYSt2pp	0.0
+R_O2tpp	13.487697
+R_EX_glcn_e_	0.0
+R_CLPNS160pp	0.0
+R_ALATA_D2	0.0
+R_CYSDS	0.0
+R_3OAS80	0.210749
+R_GLCptspp	6.5
+R_2AGPE181tipp	0.0
+M_udcpp_p	Not Constrained
+R_UAGPT3	0.016453
+R_EX_gam6p_e_	0.0
+b2907	Not Constrained
+R_ACOAD8f	0.0
+b2904	Not Constrained
+R_GRXR	0.145874
+b2903	Not Constrained
+M_1agpg140_p	Not Constrained
+R_DHDPS	0.219716
+b2905	Not Constrained
+M_udcpp_c	Not Constrained
+b2901	Not Constrained
+R_H2tpp	0.0
+M_trdox_c	Not Constrained
+R_GTPHs	0.0
+M_murein4px4p4p_p	Not Constrained
+M_malttr_p	Not Constrained
+M_malttr_e	Not Constrained
+M_malttr_c	Not Constrained
+b2904_and_b2903_and_b2905_and_b0116	Not Constrained
+R_EX_orn_e_	0.0
+R_URDGLYCD	0.0
+R_OHPBAT	1.32E-4
+R_HPYRI	0.0
+M_1agpg161_p	Not Constrained
+M_malttr_b	Not Constrained
+R_RBFSa	5.28E-4
+R_PA140abcpp	0.0
+R_EAR100x	0.121662
+R_RBFSb	2.64E-4
+R_EAR100y	0.0
+b0863_and_b0860_and_b0861_and_b0864_and_b0862	Not Constrained
+b2241_and_b2242_and_b2243	Not Constrained
+R_HACD8i	0.0
+R_IMPC	-0.320675
+R_IMPD	0.144058
+R_MALTTRabcpp	0.0
+M_23camp_b	Not Constrained
+R_ASPCT	0.195913
+M_23camp_e	Not Constrained
+M_manglyc_e	Not Constrained
+M_eig3p_c	Not Constrained
+M_g3pi_p	Not Constrained
+R_PPAtex	0.0
+M_fe3hox_b	Not Constrained
+R_LPLIPAL1G180pp	0.0
+M_fe3hox_c	Not Constrained
+M_fe3hox_e	Not Constrained
+M_manglyc_b	Not Constrained
+M_adprib_c	Not Constrained
+M_phthr_c	Not Constrained
+b4087_and_b4088_and_b4086	Not Constrained
+R_NMNtex	0.0
+b3599	Not Constrained
+R_UAMAS	0.016453
+M_gggagicolipa_c	Not Constrained
+M_3gmp_e	Not Constrained
+R_EX_3cmp_e_	0.0
+M_3gmp_b	Not Constrained
+M_cdpdddecg_c	Not Constrained
+R_EX_gly_e_	0.0
+M_gal1p_p	Not Constrained
+R_LPLIPAL1E140pp	0.0
+b3591	Not Constrained
+M_asn_L_c	Not Constrained
+M_asn_L_b	Not Constrained
+M_gal1p_e	Not Constrained
+M_3gmp_p	Not Constrained
+M_23camp_p	Not Constrained
+M_gal1p_b	Not Constrained
+M_asn_L_e	Not Constrained
+M_pppi_c	Not Constrained
+b3588	Not Constrained
+M_gal1p_c	Not Constrained
+R_RZ5PP (Dead)	0.0
+M_fe3hox_p	Not Constrained
+R_MALTptspp (Dead)	0.0
+R_PLIPA1A140pp	0.0
+R_CRNt2rpp	0.0
+R_EDTXS4	0.0
+R_EDTXS3	0.0
+b2538_and_b2539_and_b2540_and_b2542	Not Constrained
+M_2dda7p_c	Not Constrained
+R_HACD6i	0.0
+M_fum_p	Not Constrained
+b3581	Not Constrained
+M_fum_c	Not Constrained
+b3580	Not Constrained
+b3583	Not Constrained
+R_AACPS9	0.0
+M_fum_e	Not Constrained
+R_CITtex	0.0
+b3691	Not Constrained
+b3693	Not Constrained
+R_12DGR120tipp	0.0
+M_ctbtcoa_c	Not Constrained
+b3577	Not Constrained
+R_DM_4HBA	1.32E-4
+b3578	Not Constrained
+M_gdptp_c	Not Constrained
+b3579	Not Constrained
+M_hphhlipa_c	Not Constrained
+M_murein5px4px4p_p	Not Constrained
+M_u3aga_c	Not Constrained
+b3575	Not Constrained
+M_fum_b	Not Constrained
+M_bglycogen_c	Not Constrained
+R_EDTXS1	0.0
+R_EDTXS2	0.0
+M_adphep_DD_c	Not Constrained
+R_HACD7i	0.0
+b3572	Not Constrained
+M_toct2eACP_c	Not Constrained
+b3571	Not Constrained
+R_AACPS1	0.0
+b3568	Not Constrained
+R_AACPS2	0.0
+R_AACPS3	0.0
+b3566	Not Constrained
+R_AACPS4	0.0
+R_LPLIPAL1E180pp	0.0
+b3567	Not Constrained
+R_AACPS5	0.0
+b3564	Not Constrained
+R_AACPS6	0.0
+b3565	Not Constrained
+R_AACPS7	0.0
+R_AACPS8	0.0
+R_GLYCLTDy	0.0
+R_GLYCLTDx	0.0
+b0854_and_b0855_and_b0856_and_b0857	Not Constrained
+M_manglyc_p	Not Constrained
+M_micit_c	Not Constrained
+M_cytd_e	Not Constrained
+M_cytd_c	Not Constrained
+R_EX_glyc2p_e_	0.0
+M_cytd_b	Not Constrained
+R_DGSNt2pp	0.0
+M_uacgam_e	Not Constrained
+R_GMPR	0.0
+M_crn_p	Not Constrained
+M_uacgam_b	Not Constrained
+M_uacgam_c	Not Constrained
+R_PYRtex	0.0
+R_2AGPA181tipp	0.0
+M_glc_D_p	Not Constrained
+M_uacgam_p	Not Constrained
+R_EX_din_e_	0.0
+M_crn_c	Not Constrained
+M_crn_b	Not Constrained
+M_crn_e	Not Constrained
+M_aicar_c	Not Constrained
+M_g3p_c	Not Constrained
+M_ttdcea_b	Not Constrained
+M_ttdcea_c	Not Constrained
+R_LALDO2x	0.0
+R_EX_all_D_e_	0.0
+M_ttdcea_e	Not Constrained
+R_G3PCtex	0.0
+M_ttdcea_p	Not Constrained
+R_FE2tex	6.053686
+R_PROt2rpp	0.0
+R_HIStex	0.0
+M_glc_D_c	Not Constrained
+M_glc_D_b	1.6
+M_glc_D_e	Not Constrained
+R_EX_acgal1p_e_	0.0
+R_KDOCT2	0.023039
+R_EX_14glucan_e_	0.0
+R_SO2tex (Dead)	0.0
+R_TYRPpp	0.0
+R_ICHORSi	0.0
+b1592	Not Constrained
+b2097	Not Constrained
+M_4c2me_c	Not Constrained
+b2096	Not Constrained
+M_csn_b	Not Constrained
+b2095	Not Constrained
+b1590	Not Constrained
+b2094	Not Constrained
+b2093	Not Constrained
+b2092	Not Constrained
+R_AKGDH	3.162063
+b2091	Not Constrained
+R_ALPATG160pp (Dead)	0.0
+R_MN2tpp	0.00187
+R_EX_23dappa_e_	0.0
+M_csn_p	Not Constrained
+R_CLPNS181pp	0.0
+R_EX_dcyt_e_	0.0
+R_TKT1	0.795243
+R_TKT2	0.574936
+R_HPPPNtex	0.0
+b1589	Not Constrained
+R_P5CR	0.130948
+b1588	Not Constrained
+b1587	Not Constrained
+b1474_and_b1475_and_b1476	Not Constrained
+R_EX_5dglcn_e_	0.0
+R_EX_acser_e_	0.0
+M_csn_c	Not Constrained
+b1584	Not Constrained
+M_csn_e	Not Constrained
+M_2aobut_c	Not Constrained
+R_FDMO3	0.0
+R_FDMO4	0.0
+R_FDMO2	0.0
+M_grdp_c	Not Constrained
+R_P5CD	0.0
+R_EX_orot_e_	0.0
+EIIAGlc	1.0
+R_FDMO6	0.0
+M_2agpe180_p	Not Constrained
+M_g3pi_e	Not Constrained
+R_XYLabcpp	0.0
+M_g3pi_b	Not Constrained
+R_LYSt2pp	0.0
+R_HOMt2pp	0.0
+M_2amsa_c	Not Constrained
+M_2agpe180_c	Not Constrained
+b2066	Not Constrained
+R_O16A4Lpp (Dead)	0.0
+R_DHAtpp	0.0
+M_succoa_c	Not Constrained
+R_EX_g3pc_e_	0.0
+R_TDSR2 (Dead)	0.0
+R_MOBDabcpp	0.00187
+R_GTHRDHpp	0.0
+b0731	Not Constrained
+b0732	Not Constrained
+b0733	Not Constrained
+b0734	Not Constrained
+R_SOTA	0.0
+M_2agpg120_c	Not Constrained
+R_LPLIPAL1G160pp	0.0
+R_MMETt2pp	0.0
+R_AICART	0.320675
+M_12dgr140_p	Not Constrained
+M_clpn160_p	Not Constrained
+R_RNDR4	0.015499
+R_RNDR3	0.0
+M_2agpg120_p	Not Constrained
+R_RNDR2	0.0
+R_RNDR1	0.015499
+R_EX_peamn_e_	0.0
+b0684_and_b3924	Not Constrained
+R_MALDtex	0.0
+R_SBTtex	0.0
+R_CYANtex	0.0
+b2065	Not Constrained
+R_DKMPPD3	0.0
+R_DCMPtex	0.0
+b2049	Not Constrained
+R_MLDEP2pp	0.0
+b2048	Not Constrained
+M_3dhgulnp_c	Not Constrained
+b2045	Not Constrained
+M_so3_p	Not Constrained
+R_EX_thym_e_	0.0
+R_23CGMPtex	0.0
+M_ps180_c	Not Constrained
+R_DCAtex	0.0
+b0750	Not Constrained
+b0751	Not Constrained
+b0752	Not Constrained
+R_ACMANAptspp	0.0
+M_so3_e	Not Constrained
+M_so3_c	Not Constrained
+M_so3_b	Not Constrained
+R_EX_udpglcur_e_	0.0
+b0758	Not Constrained
+b2051	Not Constrained
+b0759	Not Constrained
+b2052	Not Constrained
+b2053	Not Constrained
+M_ade_p	Not Constrained
+M_prpp_c	Not Constrained
+M_mlthf_c	Not Constrained
+b0754	Not Constrained
+b0755	Not Constrained
+b0756	Not Constrained
+R_ACtex	0.0
+b0757	Not Constrained
+M_unagamuf_c	Not Constrained
+R_NADH17pp	0.0
+b2039	Not Constrained
+b2038	Not Constrained
+R_CPGNexs	0.0
+R_GTPCII2	2.64E-4
+b2037	Not Constrained
+R_EX_hg2_e_ (Dead)	0.0
+R_MELIBt3ipp	0.0
+b2036	Not Constrained
+R_TMDPP	0.0
+b2035	Not Constrained
+b2034	Not Constrained
+R_GAMptspp	0.0
+b2033	Not Constrained
+R_EX_feenter_e_	0.0
+M_ade_b	Not Constrained
+R_MOAT2	0.011519
+M_unagamuf_p	Not Constrained
+M_ade_c	Not Constrained
+M_ps161_c	Not Constrained
+R_NAt3pp	999999.0
+M_ade_e	Not Constrained
+b0763	Not Constrained
+b0764	Not Constrained
+R_23PDE4pp	0.0
+b2040	Not Constrained
+b2041	Not Constrained
+b0767	Not Constrained
+R_EX_gal_bD_e_	0.0
+R_CTBTabcpp	0.0
+b0765	Not Constrained
+R_ACSERtex	0.0
+b1524	Not Constrained
+b1528	Not Constrained
+M_dgsn_e	Not Constrained
+b2022	Not Constrained
+b2023	Not Constrained
+M_dgsn_c	Not Constrained
+b2024	Not Constrained
+b2025	Not Constrained
+b1521	Not Constrained
+b2026	Not Constrained
+M_dgsn_b	Not Constrained
+b2027	Not Constrained
+b2028	Not Constrained
+b2029	Not Constrained
+R_FE3HOXabcpp	0.0
+M_ggbutal_c	Not Constrained
+b0776	Not Constrained
+M_prbatp_c	Not Constrained
+b0778	Not Constrained
+R_EX_xmp_e_	0.0
+R_NTD7pp	0.0
+b2032	Not Constrained
+b2719_and_b2720_and_b2721_and_b2722_and_b2723_and_b2724	Not Constrained
+b0775	Not Constrained
+b0774	Not Constrained
+R_CYSabcpp	0.0
+R_FEENTERR1	0.0
+b2019	Not Constrained
+R_FEENTERR3	0.0
+R_FEENTERR2	0.0
+M_pgp160_c	Not Constrained
+M_scl_c	Not Constrained
+b1539	Not Constrained
+R_EX_rib_D_e_	0.0
+b1533	Not Constrained
+M_dhor_S_c	Not Constrained
+b0789	Not Constrained
+b2021	Not Constrained
+b2020	Not Constrained
+R_SUCOAS	-999999.0
+R_G1SAT	0.002113
+M_pgp160_p	Not Constrained
+M_acgal_p	Not Constrained
+R_NTRIR3pp	0.0
+R_ADA	0.0
+M_acgal_b	Not Constrained
+R_ADD	0.0
+R_PLIPA1E120pp	0.0
+R_TCYNTtex	0.0
+M_adn_e	Not Constrained
+b0153_and_b0151_and_b0152	Not Constrained
+R_DATPHs	0.0
+M_adn_b	Not Constrained
+M_acgal_e	Not Constrained
+M_acmum_p	Not Constrained
+M_adn_c	Not Constrained
+b2010	Not Constrained
+R_TMDK1	0.0
+R_ASO3t8pp (Dead)	0.0
+R_ACS	0.0
+M_12dgr140_c	Not Constrained
+R_MMETtex	0.0
+M_asn_L_p	Not Constrained
+b1519	Not Constrained
+R_EX_ocdcea_e_	0.0
+R_PPPGO	0.0
+M_anhm3p_c	Not Constrained
+R_GLYt4pp	0.0
+R_FE2tpp	0.004473
+R_LIPAabcpp	0.0
+M_dgsn_p	Not Constrained
+M_acmum_e	Not Constrained
+M_acmum_b	Not Constrained
+M_adn_p	Not Constrained
+R_PLIPA1G181pp	0.0
+M_acald_e	Not Constrained
+M_acald_c	Not Constrained
+M_acald_b	Not Constrained
+R_ETOHt2rpp	0.0
+R_3HAD121	0.089087
+M_ctbt_c	Not Constrained
+R_3HAD120	0.121662
+b4242	Not Constrained
+b4240	Not Constrained
+R_EX_dca_e_	0.0
+b4233	Not Constrained
+M_3hcvac11eACP_c	Not Constrained
+b4239	Not Constrained
+b4238	Not Constrained
+b4237	Not Constrained
+M_acald_p	Not Constrained
+M_frulys_b	Not Constrained
+R_FE2t3pp	0.0
+M_frulys_c	Not Constrained
+R_ASPTA	-1.732746
+M_frulys_e	Not Constrained
+R_EX_ppal_e_	0.0
+R_DCYTD	0.0
+R_PSD161	0.044544
+R_RMK	0.0
+M_5aizc_c	Not Constrained
+R_RMI	0.0
+R_EX_gtp_e_	0.0
+M_ugmda_c	Not Constrained
+M_frulys_p	Not Constrained
+R_PLIPA2A141pp	0.0
+M_6pgc_c	Not Constrained
+R_PSD160	0.037792
+b4254	Not Constrained
+b4245	Not Constrained
+b4244	Not Constrained
+R_ARBTNtonex	0.0
+b2104	Not Constrained
+b2103	Not Constrained
+M_ctbt_p	Not Constrained
+M_hcys_L_c	Not Constrained
+R_EX_acald_e_	0.0
+R_EX_pnto_R_e_	0.0
+R_NO3R1pp	0.0
+R_LIPAtex	0.0
+R_12DGR181tipp	0.0
+R_3HAD100	0.210749
+R_EX_mso3_e_	0.0
+R_CYTDtex	0.0
+R_ADOCBLS (Dead)	0.0
+b4213	Not Constrained
+M_cdpdodecg_c	Not Constrained
+b4290_and_b4289_and_b4288_and_b4287	Not Constrained
+M_uaccg_c	Not Constrained
+b4219	Not Constrained
+R_EX_gua_e_	0.0
+R_PSD140	0.0
+R_R5Ptex	0.0
+R_PSD141	0.0
+R_EX_acgal_e_	0.0
+b4230	Not Constrained
+b4231	Not Constrained
+R_BSORy (Dead)	0.0
+R_EX_acmana_e_	0.0
+b4232	Not Constrained
+b4227	Not Constrained
+b4226	Not Constrained
+M_thdp_c	Not Constrained
+R_PLIPA2G120pp	0.0
+R_RPI	-1.34724
+R_CHLtex	0.0
+R_GMPS2	0.144058
+R_ARGt3pp	0.0
+R_RPE	1.370179
+R_METTRS (Dead)	0.0
+R_ASAD	-0.633184
+M_etha_e	Not Constrained
+M_fdp_c	Not Constrained
+M_fald_p	Not Constrained
+M_lipa_e	Not Constrained
+M_lipa_c	Not Constrained
+M_etha_p	Not Constrained
+M_murein4p3p_p	Not Constrained
+M_r5p_b	Not Constrained
+R_2AGPE180tipp	0.0
+M_lipa_b	Not Constrained
+M_r5p_c	Not Constrained
+M_pe140_c	Not Constrained
+M_pe140_p	Not Constrained
+R_EX_ppa_e_	0.0
+R_EX_cys_L_e_	0.0
+R_LEUTAi	0.266812
+M_fald_e	Not Constrained
+R_AADDGT	0.0
+M_fald_b	Not Constrained
+M_fald_c	Not Constrained
+M_lipa_p	Not Constrained
+R_ILEtex	0.0
+R_PE181abcpp	0.0
+R_PLIPA2E140pp	0.0
+R_PSD120	0.0
+M_ni2_c	Not Constrained
+M_ni2_b	Not Constrained
+M_ni2_e	Not Constrained
+b4208	Not Constrained
+M_ni2_p	Not Constrained
+b3709	Not Constrained
+b3708	Not Constrained
+R_XPPT	0.0
+R_GAPD	10.669732
+b0722	Not Constrained
+b0721	Not Constrained
+R_GLYCTO3	0.0
+b0724	Not Constrained
+R_GLYCTO4	0.0
+b0723	Not Constrained
+b0726	Not Constrained
+R_GLYCTO2	3.96E-4
+R_GLUABUTt7pp	0.0
+b0728	Not Constrained
+M_6hmhptpp_c	Not Constrained
+b0727	Not Constrained
+R_EX_glcur1p_e_	0.0
+M_ump_e	Not Constrained
+M_ump_c	Not Constrained
+R_GART	0.001453
+M_ump_b	Not Constrained
+b0720	Not Constrained
+R_PGPP141pp	0.0
+M_ump_p	Not Constrained
+M_arg_L_p	Not Constrained
+b0729	Not Constrained
+R_CMPtex	0.0
+M_acser_c	Not Constrained
+M_acser_e	Not Constrained
+R_2AGPG181tipp	0.0
+M_arg_L_b	Not Constrained
+M_arg_L_c	Not Constrained
+R_ASP1DC	3.41E-4
+M_arg_L_e	Not Constrained
+R_ADNCYC	0.0
+b0071_and_b0072	Not Constrained
+M_pa160_p	Not Constrained
+R_CBPS	0.0
+M_acser_p	Not Constrained
+R_ALPATE160pp (Dead)	0.0
+R_PLIPA2G141pp	0.0
+M_aacald_b	Not Constrained
+M_t3c11vaceACP_c	Not Constrained
+M_kdo_c	Not Constrained
+M_pa160_c	Not Constrained
+M_acser_b	Not Constrained
+M_aacald_c	Not Constrained
+b3621	Not Constrained
+b3750	Not Constrained
+b3622	Not Constrained
+M_udcpdp_c	Not Constrained
+b3751	Not Constrained
+b3623	Not Constrained
+b3752	Not Constrained
+b3624	Not Constrained
+R_CLt3_2pp	0.001403
+M_2agpe181_c	Not Constrained
+R_QMO2	0.0
+R_QMO3	0.0
+b3620	Not Constrained
+b3629	Not Constrained
+b3454_and_b3455_and_b3457_and_b3460_and_b3456	Not Constrained
+b3625	Not Constrained
+b3626	Not Constrained
+b3627	Not Constrained
+R_THMDt2rpp	-999999.0
+b3628	Not Constrained
+R_HYPOE	0.0
+R_SDPDS	0.219716
+M_kdolipid4_c	Not Constrained
+R_SPODMpp	0.0
+b0655_and_b0654_and_b0653_and_b0652	Not Constrained
+b3634	Not Constrained
+b3632	Not Constrained
+b3633	Not Constrained
+b3744	Not Constrained
+b3630	Not Constrained
+b3631	Not Constrained
+R_MOBDtex	0.00187
+M_pgp141_p	Not Constrained
+b3748	Not Constrained
+b3749	Not Constrained
+b3747	Not Constrained
+R_ACOTA	-0.17519
+M_dad_5_c	Not Constrained
+b3639	Not Constrained
+R_PLIPA1G160pp	0.0
+M_udcpdp_p	Not Constrained
+M_2agpe181_p	Not Constrained
+M_ckdo_c	Not Constrained
+M_pgp141_c	Not Constrained
+b3731	Not Constrained
+b3732	Not Constrained
+b3733	Not Constrained
+b3734	Not Constrained
+b3600	Not Constrained
+b3730	Not Constrained
+R_G2PPpp	0.0
+b3739	Not Constrained
+b3603	Not Constrained
+b3605	Not Constrained
+b3607	Not Constrained
+b3735	Not Constrained
+b3736	Not Constrained
+b3608	Not Constrained
+b3737	Not Constrained
+b3738	Not Constrained
+R_3HAD181	0.0
+R_3HAD180	0.0
+b2203_and_b2206_and_b2202_and_b2205_and_b2204	Not Constrained
+M_ocdca_p	Not Constrained
+R_DURIt2pp	0.0
+M_ocdca_e	Not Constrained
+R_NTD11pp	0.0
+M_ocdca_c	Not Constrained
+R_2AGPA160tipp	0.0
+M_13dpg_c	Not Constrained
+R_ASPO5	0.0
+R_ASPO4	0.0
+R_ASPO3	0.001349
+M_r5p_p	Not Constrained
+b3612	Not Constrained
+M_ocdca_b	Not Constrained
+b3610	Not Constrained
+R_THMDtex	0.0
+b3616	Not Constrained
+b2763_and_b2764	Not Constrained
+b3617	Not Constrained
+b3728	Not Constrained
+b3729	Not Constrained
+M_3c4mop_c	Not Constrained
+b3726	Not Constrained
+b3727	Not Constrained
+R_PETNT161pp	0.0
+R_ASPO6	0.0
+M_r5p_e	Not Constrained
+b3725	Not Constrained
+b3619	Not Constrained
+R_PHEMEabcpp	0.0
+R_PHEt2rpp	0.0
+b2149_and_b2150_and_b2148	Not Constrained
+M_urea_e	Not Constrained
+M_leu_L_p	Not Constrained
+M_no2_e	Not Constrained
+M_no2_c	Not Constrained
+M_no2_b	Not Constrained
+b4079_and_b2719_and_b2720_and_b2721_and_b2722_and_b2723_and_b2724	Not Constrained
+R_LPLIPAL2ATG180 (Dead)	0.0
+b3794	Not Constrained
+b3666	Not Constrained
+b3665	Not Constrained
+b3793	Not Constrained
+M_hom_L_b	Not Constrained
+M_hom_L_c	Not Constrained
+R_PYDAMK	0.0
+R_MSO3tex	0.0
+M_urea_p	Not Constrained
+M_hom_L_e	Not Constrained
+M_hkndd_c	Not Constrained
+b1263_and_b1264	Not Constrained
+R_TREHpp	0.0
+b3670	Not Constrained
+b3671	Not Constrained
+M_no2_p	Not Constrained
+M_sbt6p_c	Not Constrained
+b4287	Not Constrained
+M_hom_L_p	Not Constrained
+R_3HAD160	0.075584
+R_2AGPE161tipp	0.0
+M_urea_b	Not Constrained
+R_3HAD161	0.089087
+R_ABUTtex	0.0
+M_urea_c	Not Constrained
+R_DOGULNR (Dead)	0.0
+R_Kt2pp	0.105185
+R_G3PCabcpp (Dead)	0.0
+R_EX_chol_e_	0.0
+b1587_and_b1588_and_b1589_and_b1590	Not Constrained
+R_GLCRAL	0.0
+b3785	Not Constrained
+b3679	Not Constrained
+R_GLUabcpp	0.0
+b3784	Not Constrained
+b4288	Not Constrained
+b4289	Not Constrained
+b3789	Not Constrained
+R_PMPK	1.32E-4
+b3788	Not Constrained
+b3787	Not Constrained
+b3786	Not Constrained
+M_acACP_c	Not Constrained
+M_leu_L_c	Not Constrained
+M_leu_L_b	Not Constrained
+b4291	Not Constrained
+M_leu_L_e	Not Constrained
+b3791	Not Constrained
+b3792	Not Constrained
+b3790	Not Constrained
+M_dms_b	Not Constrained
+M_argsuc_c	Not Constrained
+M_dms_e	Not Constrained
+b4290	Not Constrained
+R_GLYC3Pt6pp	0.0
+b3648	Not Constrained
+b3779	Not Constrained
+R_TARTD	0.0
+b3640	Not Constrained
+R_EX_hxan_e_	0.0
+b3642	Not Constrained
+R_EX_pro_L_e_	0.0
+R_PRATPP	0.05611
+b3772	Not Constrained
+b3771	Not Constrained
+b3774	Not Constrained
+R_EX_h2s_e_	0.0
+b4258	Not Constrained
+R_THRt4pp	0.0
+b4265	Not Constrained
+b3781	Not Constrained
+R_3HAD140	0.075584
+R_3HAD141	0.089087
+M_ametam_c	Not Constrained
+b4260	Not Constrained
+R_FRUURt2rpp	0.0
+M_1agpg160_p	Not Constrained
+R_DUTPDP	0.0
+R_PLIPA2E180pp	0.0
+M_pap_c	Not Constrained
+b3653	Not Constrained
+b3650	Not Constrained
+b4268	Not Constrained
+b4266	Not Constrained
+b3654	Not Constrained
+b4267	Not Constrained
+M_1agpe141_p	Not Constrained
+R_PSD181	0.0
+b3770	Not Constrained
+R_PSD180	0.0
+M_frulysp_c	Not Constrained
+M_rml1p_c	Not Constrained
+M_rml_c	Not Constrained
+R_PERD	1.32E-4
+R_2AGPG120tipp	0.0
+M_pram_c	Not Constrained
+R_MDDCP4pp	0.0
+b3781_and_b0888_and_b0888	Not Constrained
+M_4adcho_c	Not Constrained
+b3460	Not Constrained
+R_ADOCBLabcpp	0.0
+R_NTD8pp	0.0
+M_ddca_p	Not Constrained
+M_ins_e	Not Constrained
+M_ins_c	Not Constrained
+M_2agpe161_c	Not Constrained
+M_ins_p	Not Constrained
+M_pa181_p	Not Constrained
+R_PYAM5PO	0.0
+R_2AGPA120tipp	0.0
+R_FRULYSt2pp	0.0
+R_ODECOAI	0.0
+R_EX_pppn_e_	0.0
+M_3hddecACP_c	Not Constrained
+M_5caiz_c	Not Constrained
+b3456	Not Constrained
+R_EX_ascb_L_e_	0.0
+M_pa181_c	Not Constrained
+b3457	Not Constrained
+b3458	Not Constrained
+b1661	Not Constrained
+b3452	Not Constrained
+b1662	Not Constrained
+b3453	Not Constrained
+b3454	Not Constrained
+b3455	Not Constrained
+b3451	Not Constrained
+b3450	Not Constrained
+R_PLIPA2E120pp	0.0
+R_MALTPTabcpp	0.0
+R_FUMtex	0.0
+R_ADOCBIK (Dead)	0.0
+R_PPBNGS	0.001057
+b3449	Not Constrained
+b3447	Not Constrained
+b1676	Not Constrained
+M_ins_b	Not Constrained
+M_dms_p	Not Constrained
+b1677	Not Constrained
+M_2agpe161_p	Not Constrained
+M_eca3und_p	Not Constrained
+R_SPMS	0.0
+b3480	Not Constrained
+M_paps_c	Not Constrained
+R_PGP160abcpp	0.0
+b0693	Not Constrained
+R_EX_pi_e_	-0.569347
+R_TRPAS2	-0.033664
+M_pe120_c	Not Constrained
+M_anth_c	Not Constrained
+R_34dhpactex	0.0
+b0692	Not Constrained
+b0697	Not Constrained
+b0698	Not Constrained
+R_OCBT	0.17519
+M_4r5au_c	Not Constrained
+b0696	Not Constrained
+R_ADOCBLtonex	0.0
+M_galur_e	Not Constrained
+M_galur_b	Not Constrained
+M_galur_c	Not Constrained
+M_galur_p	Not Constrained
+b3475	Not Constrained
+b3476	Not Constrained
+b3477	Not Constrained
+b3478	Not Constrained
+M_acgam6p_c	Not Constrained
+M_pe120_p	Not Constrained
+M_thf_c	Not Constrained
+b3479	Not Constrained
+R_EX_gal_e_	0.0
+R_12DGR140tipp	0.0
+R_EX_taur_e_	0.0
+R_MLTP1	0.0
+R_PLIPA1G140pp	0.0
+R_MLTP3	0.0
+R_MLTP2	0.0
+R_PDE1	0.0
+R_PGP161abcpp	0.0
+R_K2L4Atex	0.011519
+R_DM_AACALD	0.0
+b1692	Not Constrained
+R_PHEtex	0.0
+b1693	Not Constrained
+R_3UMPtex	0.0
+R_TALA	0.795243
+b3469	Not Constrained
+R_LPLIPAL1E181pp	0.0
+R_RHAT1	0.0
+R_LPLIPAL1E161pp	0.0
+R_PDX5PS	1.32E-4
+M_sbt_D_b	Not Constrained
+M_sbt_D_e	Not Constrained
+M_sucr_p	Not Constrained
+R_LPLIPAL1G181pp	0.0
+M_sucr_e	Not Constrained
+R_MTAN	0.0
+R_EX_mmet_e_	0.0
+M_sucr_b	Not Constrained
+R_ASNNpp	0.0
+M_2mcit_c	Not Constrained
+R_IDONt2rpp	0.0
+R_PAPA181	0.0
+M_ocdcaACP_c	Not Constrained
+M_ocdcea_e	Not Constrained
+R_PAPA180	0.0
+R_ADNt2pp	0.0
+M_ocdcea_c	Not Constrained
+M_ocdcea_b	Not Constrained
+b3493	Not Constrained
+R_CADVtpp	0.0
+R_SUCptspp	0.0
+R_EX_dmso_e_	0.0
+R_THZPSN	1.32E-4
+M_urate_c	Not Constrained
+R_PLIPA1A141pp	0.0
+R_GTHOr	0.145874
+M_ocdcea_p	Not Constrained
+R_LSERDHr	0.0
+R_CRNCDH	0.0
+b0684_and_b4238	Not Constrained
+M_3hocoa_c	Not Constrained
+R_FLVRx	0.0
+M_suc6p_c	Not Constrained
+M_lgt_S_c	Not Constrained
+R_ANPRT	0.033664
+R_AKGt2rpp	0.0
+R_CRNCAL2	0.0
+R_MLTGY4pp	0.0
+M_tyrp_e	Not Constrained
+M_tyrp_b	Not Constrained
+M_fru_p	Not Constrained
+R_GLNS	1.070518
+R_UDPKAAT	0.0
+R_DALAtex	0.0
+R_GALCTNtex	0.0
+R_EX_ala_L_e_	0.0
+M_hdca_e	Not Constrained
+M_fru_e	Not Constrained
+M_hdca_c	Not Constrained
+R_ACOATA	0.0
+R_NTPTP2	0.0
+M_fru_b	Not Constrained
+R_NTPTP1	0.0
+M_fru_c	Not Constrained
+R_HISTRS (Dead)	0.0
+R_MOHMT	3.41E-4
+R_RBK	0.0
+M_tyrp_p	Not Constrained
+R_CRNCAR	0.0
+M_23cump_p	Not Constrained
+M_hdca_p	Not Constrained
+M_lipidX_c	Not Constrained
+M_ddca_c	Not Constrained
+M_ddca_e	Not Constrained
+M_23cump_e	Not Constrained
+M_hdca_b	Not Constrained
+R_FACOAL120t2pp	0.0
+M_ddca_b	Not Constrained
+M_23cump_b	Not Constrained
+R_LCTSt3ipp	0.0
+R_EX_cytd_e_	0.0
+M_1pyr5c_c	Not Constrained
+M_malACP_c	Not Constrained
+R_OROTtex	0.0
+b1857_and_b1859_and_b1858	Not Constrained
+R_DIMPtex	0.0
+M_2ddglcn_b	Not Constrained
+M_2kmb_c	Not Constrained
+M_1agpe120_p	Not Constrained
+R_GLYBabcpp (Dead)	0.0
+b0638	Not Constrained
+R_LPLIPAL1G161pp	0.0
+R_ICDHyr	3.798928
+M_gthrd_b	Not Constrained
+b0639	Not Constrained
+M_gthrd_c	Not Constrained
+M_2ddglcn_e	Not Constrained
+b0635	Not Constrained
+M_2ddglcn_c	Not Constrained
+s0001	Not Constrained
+R_FACOAE60	0.0
+b0632	Not Constrained
+b2762_and_b1654	Not Constrained
+M_ggptrc_c	Not Constrained
+R_SDPTA	-0.219716
+R_OCTAtex	0.0
+R_INOSTt4pp (Dead)	0.0
+R_NH4tpp	6.38693
+R_PDXPP	0.0
+M_dgdp_c	Not Constrained
+M_glu5p_c	Not Constrained
+R_EX_enlipa_e_	0.0
+R_CBItonex (Dead)	0.0
+R_FE3DCITtonex	0.0
+M_ctp_c	Not Constrained
+M_murein5p5p5p_p	Not Constrained
+R_ILEabcpp	0.0
+R_NTP3pp	0.0
+R_PAPA140	0.0
+R_PAPA141	0.0
+b0642	Not Constrained
+R_GLUt4pp	999999.0
+R_ICL	0.0
+R_EX_4abut_e_	0.0
+M_mana_c	Not Constrained
+M_ps181_c	Not Constrained
+b1602	Not Constrained
+R_ARGTRS (Dead)	0.0
+b1603	Not Constrained
+R_EX_no3_e_	0.0
+M_octa_b	Not Constrained
+b1605	Not Constrained
+R_UDPGALM (Dead)	0.0
+M_octa_c	Not Constrained
+b1606	Not Constrained
+R_CLPNS180pp	0.0
+M_octa_e	Not Constrained
+R_ACODA	0.17519
+b0612	Not Constrained
+b0613	Not Constrained
+b0614	Not Constrained
+M_dcmp_c	Not Constrained
+b0615	Not Constrained
+b0616	Not Constrained
+M_dcmp_e	Not Constrained
+b0617	Not Constrained
+R_EX_sulfac_e_	0.0
+M_dcmp_b	Not Constrained
+R_FACOAE80	0.0
+M_ddcacoa_c	Not Constrained
+M_gg4abut_c	Not Constrained
+b0721_and_b0722_and_b0723_and_b0724	Not Constrained
+b1612	Not Constrained
+b1613	Not Constrained
+R_2AGPA140tipp	0.0
+M_2ddglcn_p	Not Constrained
+M_gthrd_p	Not Constrained
+R_CUt3 (Dead)	0.0
+R_EX_cu_e_	0.0
+M_gthrd_e	Not Constrained
+b1611	Not Constrained
+b4079_and_b2481_and_b2482_and_b2483_and_b2484_and_b2485_and_b2486_and_b2487_and_b2488_and_b2489_and_b2490	Not Constrained
+R_BUTCT	0.0
+R_PAPA160	0.0
+R_ACNAMt2pp	0.0
+R_PAPA161	0.0
+M_25drapp_c	Not Constrained
+b0622	Not Constrained
+M_octa_p	Not Constrained
+R_UHGADA	0.023039
+R_FA100ACPHi	0.0
+R_EX_ethso3_e_	0.0
+R_CFAS180G (Dead)	0.0
+b0621	Not Constrained
+R_ILEt2rpp	0.0
+b1622	Not Constrained
+b1621	Not Constrained
+R_MALTTRtexi	0.0
+M_tdec2eACP_c	Not Constrained
+b1623	Not Constrained
+b0674	Not Constrained
+R_SADH	0.0
+M_4abutn_c	Not Constrained
+M_ala_L_p	Not Constrained
+R_GLBRAN2	0.0
+R_ASNTRS (Dead)	0.0
+M_datp_c	Not Constrained
+b0678	Not Constrained
+b0677	Not Constrained
+b0679	Not Constrained
+M_12dgr141_p	Not Constrained
+M_ala_L_e	Not Constrained
+M_ala_L_c	Not Constrained
+M_ala_L_b	Not Constrained
+M_oxam_b	Not Constrained
+R_R5PPpp	0.0
+M_oxam_c	Not Constrained
+R_OBTFL	0.0
+R_G3PStex	0.0
+M_ahdt_c	Not Constrained
+M_pgp161_c	Not Constrained
+M_butso3_p	Not Constrained
+b1638	Not Constrained
+b1637	Not Constrained
+b1636	Not Constrained
+R_AGMHE	0.0
+b0684	Not Constrained
+R_GLGC	0.0
+R_PLIPA2A180pp	0.0
+M_pgp161_p	Not Constrained
+b0680	Not Constrained
+M_butso3_b	Not Constrained
+R_ACCOAC	1.429165
+M_acg5p_c	Not Constrained
+M_butso3_e	Not Constrained
+R_KG6PDC	0.0
+M_butso3_c	Not Constrained
+b0688	Not Constrained
+b1640	Not Constrained
+M_acgam_e	Not Constrained
+M_acgam_b	Not Constrained
+R_ACCOAL	999999.0
+R_CITt7pp	0.0
+M_acgam_c	Not Constrained
+R_PAPA120	0.0
+R_URAt2pp	0.0
+b1646	Not Constrained
+M_5dh4dglc_c	Not Constrained
+R_CSND	0.0
+b2417_and_b2429_and_b2415_and_b2416	Not Constrained
+M_ala_D_p	Not Constrained
+R_GLYC2Ptex	0.0
+R_U23GAAT	0.023039
+M_12dgr141_c	Not Constrained
+b0650	Not Constrained
+b0652	Not Constrained
+R_SERt4pp	0.0
+b0651	Not Constrained
+b0654	Not Constrained
+M_acgam_p	Not Constrained
+b0653	Not Constrained
+R_HSDy	-0.413469
+R_GUI2	0.0
+b0655	Not Constrained
+M_sulfac_b	Not Constrained
+b0657	Not Constrained
+M_ala_D_b	Not Constrained
+M_ala_D_c	Not Constrained
+M_sulfac_c	Not Constrained
+R_GUI1	0.0
+M_ala_D_e	Not Constrained
+M_sulfac_e	Not Constrained
+R_AM3PA	0.0
+b1651	Not Constrained
+R_GALBDtex	0.0
+b1654	Not Constrained
+R_CO2tex	-14.747109
+b3736_and_b3737_and_b3738_and_b3731_and_b3732_and_b3733_and_b3734_and_b3735	Not Constrained
+M_ps160_c	Not Constrained
+M_sulfac_p	Not Constrained
+b1656	Not Constrained
+R_NTD10	0.0
+R_NTD11	0.0
+R_NTD12	0.0
+R_EX_mnl_e_	0.0
+R_SGSAD	0.0
+b0728_and_b0729	Not Constrained
+R_GLNabcpp	0.0
+R_GLCabcpp	0.0
+b0662	Not Constrained
+R_UDPACGALtex	0.0
+R_GLUSy	0.0
+M_cyst_L_c	Not Constrained
+b0429_and_b0430_and_b0431_and_b0432	Not Constrained
+b3599_and_b2415_and_b2416	Not Constrained
+R_ALR4x	0.0
+M_ACP_c	Not Constrained
+M_od2coa_c	Not Constrained
+R_HOPNTAL	0.0
+R_SHCHCS2	0.0
+R_TREH	0.0
+b0032_and_b0033	Not Constrained
+M_co2_c	Not Constrained
+M_cmp_c	Not Constrained
+M_co2_e	Not Constrained
+M_cmp_e	Not Constrained
+M_2h3oppan_c	Not Constrained
+b4111	Not Constrained
+R_EX_alaala_e_	0.0
+R_ORNabcpp	0.0
+R_TRDR	0.030999
+R_CYSTRS (Dead)	0.0
+R_NODOx	0.0
+R_3OAS100	0.210749
+M_co2_b	Not Constrained
+M_cmp_b	Not Constrained
+M_anhgm_p	Not Constrained
+R_DASYN120	0.0
+R_GAL1PPpp	0.0
+R_OMBZLM	0.0
+R_EX_LalaDgluMdapDala_e_	0.0
+R_VALTRS (Dead)	0.0
+R_4HOXPACDtex	0.0
+M_sucgsa_c	Not Constrained
+M_anhgm_e	Not Constrained
+R_HBZOPT	1.32E-4
+R_EX_acolipa_e_	0.0
+R_DHNPA2	3.96E-4
+b4122	Not Constrained
+R_CRNabcpp	0.0
+M_anhgm_c	Not Constrained
+M_anhgm_b	Not Constrained
+b4120	Not Constrained
+R_SERAT	0.145874
+M_gthox_c	Not Constrained
+P_lacI	0.0
+R_NODOy	0.0
+R_NTD9	0.0
+R_PGPP140pp	0.0
+R_NTD7	0.0
+b4115	Not Constrained
+R_NTD8	0.0
+R_NTD5	0.0
+M_co2_p	Not Constrained
+M_cmp_p	Not Constrained
+R_L_LACtex	0.0
+R_NTD6	0.0
+R_AST	0.0
+R_NTD3	0.0
+b4119	Not Constrained
+R_NTD4	0.0
+R_NTD1	0.0
+b4117	Not Constrained
+R_NTD2	0.0
+R_XYLK	0.0
+R_INSt2pp	999999.0
+b4131	Not Constrained
+R_GHMT2r	0.659482
+b4132	Not Constrained
+R_3OAS121	0.089087
+R_3OAS120	0.121662
+R_EX_3amp_e_	0.0
+R_DASYN140	0.0
+R_MACPD	0.0
+R_DSBAO1 (Dead)	0.0
+R_MELIBt2pp	0.0
+R_DASYN141	0.0
+R_PLIPA2G140pp	0.0
+R_GDPtex	0.0
+R_MALS	3.96E-4
+R_TMAOR2 (Dead)	0.0
+R_GTHOXtex (Dead)	0.0
+b4123	Not Constrained
+R_ZN2tpp	0.00187
+M_dcacoa_c	Not Constrained
+b4129	Not Constrained
+R_HYXNtpp	0.0
+R_CO2tpp	-14.747109
+M_pe141_c	Not Constrained
+M_2ombzl_c	Not Constrained
+R_INDOLEt2pp	0.0
+R_ARAI	0.0
+R_GLYBtex (Dead)	0.0
+M_34hpp_c	Not Constrained
+b0604	Not Constrained
+R_GLUt2rpp	-999999.0
+R_PA160abcpp	0.0
+R_PE141abcpp	0.0
+M_dcmp_p	Not Constrained
+M_pe141_p	Not Constrained
+M_alac_S_c	Not Constrained
+R_NI2uabcpp	0.0
+R_MLDCP2Bpp	0.0
+b3816	Not Constrained
+b3610_and_b2675_and_b2676	Not Constrained
+R_LIPACabcpp	0.0
+M_ohpb_c	Not Constrained
+M_25aics_c	Not Constrained
+b3809	Not Constrained
+M_pgp140_c	Not Constrained
+M_tdcoa_c	Not Constrained
+R_GLNTRS (Dead)	0.0
+M_athr_L_c	Not Constrained
+M_pgp140_p	Not Constrained
+M_3htdcoa_c	Not Constrained
+R_DSBGGT (Dead)	0.0
+M_dtdp4aaddg_c	Not Constrained
+R_EX_fe3hox_e_	0.0
+R_FFSD	0.0
+M_octeACP_c	Not Constrained
+b3806	Not Constrained
+b3805	Not Constrained
+b3804	Not Constrained
+b3803	Not Constrained
+R_CLPNH181pp	0.0
+R_LADGMDH	0.0
+R_DTMPtex	0.0
+M_unaga_c	Not Constrained
+R_CRNDCAL2	0.0
+M_cpgn_p	Not Constrained
+R_GOFUCR (Dead)	0.0
+M_gar_c	Not Constrained
+R_ACNML	0.0
+M_cpgn_c	Not Constrained
+R_NADH16pp	23.614879
+R_ULA4Ntppi	0.0
+M_cpgn_b	Not Constrained
+b3833	Not Constrained
+M_cpgn_e	Not Constrained
+b3831	Not Constrained
+b3835	Not Constrained
+M_palmACP_c	Not Constrained
+R_PAPPT3	0.016453
+M_g1p_e	Not Constrained
+M_g1p_c	Not Constrained
+R_ACGAtex	0.0
+M_3hoctaACP_c	Not Constrained
+R_EX_mal_D_e_	0.0
+M_lac_D_c	Not Constrained
+R_GLYOX3	0.0
+M_lac_D_b	Not Constrained
+M_lac_D_e	Not Constrained
+M_g1p_b	Not Constrained
+R_3HCINNMH	0.0
+R_THRPtex	0.0
+R_GUAD	0.0
+R_DAPAL	0.0
+b3821	Not Constrained
+b3824	Not Constrained
+b3823	Not Constrained
+R_G1PACT	0.055945
+R_ANS	0.033664
+b3825	Not Constrained
+R_H2Stex	0.0
+M_lac_D_p	Not Constrained
+b3829	Not Constrained
+M_g1p_p	Not Constrained
+R_ATHRDHr	0.0
+M_ser_L_e	Not Constrained
+M_arab_L_c	Not Constrained
+M_arab_L_b	Not Constrained
+M_arab_L_e	Not Constrained
+M_ser_L_p	Not Constrained
+R_EAR121y	0.0
+M_2obut_c	Not Constrained
+b3850	Not Constrained
+R_GLCP2	0.0
+R_EAR121x	0.089087
+M_cytd_p	Not Constrained
+R_ACSERtpp	0.0
+M_mso3_b	Not Constrained
+b0978_and_b0979	Not Constrained
+R_CYSDDS	0.0
+b3849	Not Constrained
+R_3OAS180	0.0
+R_3OAS181	0.0
+M_mso3_p	Not Constrained
+b3845	Not Constrained
+b3846	Not Constrained
+R_AGMt2pp	0.0
+M_mn2_b	Not Constrained
+b3843	Not Constrained
+M_mn2_c	Not Constrained
+M_mso3_e	Not Constrained
+b3844	Not Constrained
+M_mso3_c	Not Constrained
+M_dd2coa_c	Not Constrained
+M_mn2_e	Not Constrained
+b4198	Not Constrained
+b4196	Not Constrained
+R_NTP5	0.0
+b4197	Not Constrained
+b4194	Not Constrained
+b4195	Not Constrained
+b4192	Not Constrained
+b4193	Not Constrained
+R_ABUTD	0.0
+M_ser_L_c	Not Constrained
+M_ser_L_b	Not Constrained
+M_mn2_p	Not Constrained
+R_NTP3	0.0
+R_NTP1	0.0
+M_2p4c2me_c	Not Constrained
+lacI	1.0
+M_sbt_D_p	Not Constrained
+M_hxa_b	Not Constrained
+b3870	Not Constrained
+b3500	Not Constrained
+M_hxa_c	Not Constrained
+b3502	Not Constrained
+b3503	Not Constrained
+b3875	Not Constrained
+M_hxa_e	Not Constrained
+M_ile_L_e	Not Constrained
+M_ile_L_b	Not Constrained
+M_ile_L_c	Not Constrained
+R_ALLTNt2rpp	0.0
+R_NTD12pp	0.0
+R_GLYK	0.0
+b0684_and_b3924_and_b4238_and_b4237	Not Constrained
+R_HACD1i	0.0
+R_DAPDC	0.203263
+M_hxa_p	Not Constrained
+M_adocbl_p	Not Constrained
+M_ile_L_p	Not Constrained
+b2417_and_b1621_and_b2415_and_b2416	Not Constrained
+R_PETNT181pp	0.0
+M_3ig3p_c	Not Constrained
+M_adocbl_e	Not Constrained
+b3519	Not Constrained
+b3867	Not Constrained
+b3517	Not Constrained
+b3860	Not Constrained
+M_adocbl_c	Not Constrained
+M_adocbl_b	Not Constrained
+R_EX_ddca_e_	0.0
+R_HDCEAtexi	0.0
+R_MDDCP5pp	0.0
+M_arab_L_p	Not Constrained
+R_3HPPPNH	0.0
+R_CYTDt2pp	0.0
+M_fmnh2_c	Not Constrained
+R_LA4NTpp	0.0
+R_PYNP2r	0.0
+b4138	Not Constrained
+b4139	Not Constrained
+b3893	Not Constrained
+b3892	Not Constrained
+R_PGP181abcpp	0.0
+b4136	Not Constrained
+b3894	Not Constrained
+R_DDGLCNt2rpp	0.0
+M_no3_b	Not Constrained
+M_dump_c	Not Constrained
+b3526	Not Constrained
+M_dump_b	Not Constrained
+b3528	Not Constrained
+M_no3_e	Not Constrained
+R_GALCTtex	0.0
+M_dump_e	Not Constrained
+M_no3_c	Not Constrained
+M_metsox_S_L_e	Not Constrained
+M_h2s_b	Not Constrained
+M_h2s_c	Not Constrained
+M_dump_p	Not Constrained
+R_OMCDC	0.266812
+M_h2s_e	Not Constrained
+R_HACD3i	0.0
+R_EX_colipa_e_	0.0
+M_no3_p	Not Constrained
+M_metsox_S_L_b	Not Constrained
+M_metsox_S_L_c	Not Constrained
+M_h2s_p	Not Constrained
+R_GUAt2pp	0.0
+M_tmrs2eACP_c	Not Constrained
+R_ACGAM1Ptex	0.0
+b3559_and_b3560	Not Constrained
+R_SBTptspp	0.0
+R_TMAOtex	0.0
+R_3OAS140	0.121662
+R_DASYN160	0.037792
+R_3OAS141	0.089087
+R_DASYN161	0.044544
+M_anhm_c	Not Constrained
+R_GLCRD	0.0
+R_NH4tex	6.38693
+M_pydx5p_c	Not Constrained
+R_LPLIPAL1E120pp	0.0
+R_HACD2i	0.0
+M_2ohph_c	Not Constrained
+R_GLCS1	0.0
+b4154	Not Constrained
+R_GLYCAt2rpp	0.0
+b4153	Not Constrained
+R_HPPPNDO	0.0
+b4152	Not Constrained
+lacZ	1.0
+b4151	Not Constrained
+lacY	1.0
+R_FADRx	0.0
+R_DDGLCNtex	0.0
+b1094_and_b0181	Not Constrained
+M_h2o2_c	Not Constrained
+M_h2o2_b	Not Constrained
+M_tre6p_c	Not Constrained
+b3544	Not Constrained
+R_PAPA180pp	0.0
+b3546	Not Constrained
+b3541	Not Constrained
+b3540	Not Constrained
+R_5DOAN	0.0
+M_h2o2_e	Not Constrained
+b3543	Not Constrained
+R_EX_lac_D_e_	0.0
+b3542	Not Constrained
+R_LACZpp	0.0
+M_kphphhlipa_c	Not Constrained
+M_h_p	Not Constrained
+M_for_p	Not Constrained
+R_EX_cobalt2_e_	-0.00187
 R_GLUN	0.0
-b2287	1.0
-M_q8_c	0.0
-b2286	1.0
-b1849	1.0
-b2288	1.0
-R_SUCCt3	0.0
-b0485	1.0
-b1702	1.0
-R_PIt2r	3.214895
-b4151_and_b4152_and_b4153_and_b4154	0.0
-M_pep_c	0.0
-b3736_and_b3737_and_b3738_and_b3731_and_b3732_and_b3733_and_b3734_and_b3735	0.0
-b2284	1.0
-b2285	1.0
-R_EX_akg_e	0.0
-b2282	1.0
-b2283	1.0
-b2280	1.0
-b2281	1.0
-M_glx_c	0.0
-M_h_b	0.0
-b3962	1.0
-b1241	1.0
-b1854	1.0
-M_xu5p_D_c	0.0
-M_h_c	0.0
-b0728_and_b0729	0.0
-b2279	1.0
-R_ACKr	0.0
-b2278	1.0
-M_h_e	0.0
-b2277	1.0
-b2276	1.0
-M_g6p_c	0.0
-b1852	1.0
-b1101	1.0
-b0474	1.0
+M_h2o2_p	Not Constrained
+R_HACD5i	0.0
+R_GLUR	-0.016453
+R_PSERT	1.015501
+b4160	Not Constrained
+M_ddcaACP_c	Not Constrained
+b4161	Not Constrained
+b4169	Not Constrained
+R_LPLIPAL1A161pp	0.0
+R_EAR120y	0.0
+R_EAR120x	0.121662
+R_XYLUt2pp	0.0
+b3553	Not Constrained
+R_HYXNtex	0.0
+b3551	Not Constrained
+R_PLIPA2E181pp	0.0
+M_hdeACP_c	Not Constrained
+M_metsox_S_L_p	Not Constrained
+b3559	Not Constrained
+R_HACD4i	0.0
+M_h_b	Not Constrained
+R_DASYN180	0.0
+M_h_c	Not Constrained
+M_h_e	Not Constrained
+R_DASYN181	0.0
+R_3OAS160	0.075584
+R_3OAS161	0.089087
+b3560	Not Constrained
+b4177	Not Constrained

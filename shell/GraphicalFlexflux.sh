@@ -1,12 +1,9 @@
 #!/bin/bash
 
-path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+path="${0/GraphicalFlexflux.sh/}" 
 
+cd $path
 
-source $path/config
+source config
 
-cmd="java -Djava.library.path=$CPLEX_shared_library:$GLPK_shared_library -cp $GLPK_JAR:$path/lib/flexflux.jar flexflux.applications.gui.GraphicalFlexflux"
-
-echo $cmd
-
-eval $cmd
+eval "java -Djava.library.path=$CPLEX_shared_library:$GLPK_shared_library -cp bin/:$CPLEX_JAR:$GLPK_JAR:lib/* flexflux.applications.gui.GraphicalFlexflux"
