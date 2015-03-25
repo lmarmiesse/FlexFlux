@@ -46,7 +46,7 @@ public class TestListOfConditions {
 				}
 
 			}
-			assertEquals("Bad number of conditions", 2, conditions.size());
+			assertEquals("Bad number of conditions", 3, conditions.size());
 
 			ArrayList<String> entitiesRef = new ArrayList<String>();
 
@@ -70,6 +70,13 @@ public class TestListOfConditions {
 
 			assertTrue("contains c2", conditions.contains(c2));
 
+			Condition c3 = new  Condition("3", "3");
+			c3.addConstraint("b", 10.0, ConstraintType.DOUBLE);
+			c3.addConstraint("b2", 10.0, ConstraintType.DOUBLE);
+			assertTrue("contains c3", conditions.contains(c3));
+			
+			
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -221,6 +228,7 @@ public class TestListOfConditions {
 		Condition c = new Condition("1", "1");
 		c.addConstraint("b", 10.0, ConstraintType.BINARY);
 		c.addConstraint("b2", 10.0, ConstraintType.BINARY);
+		c.addConstraint("b3", 0.0, ConstraintType.BINARY);
 
 		conditions.add(c);
 
@@ -230,6 +238,13 @@ public class TestListOfConditions {
 		c2.addConstraint("b3", 10.0, ConstraintType.BINARY);
 
 		conditions.add(c2);
+		
+		Condition c3 = new  Condition("3", "3");
+		c3.addConstraint("b", 10.0, ConstraintType.DOUBLE);
+		c3.addConstraint("b2", 10.0, ConstraintType.DOUBLE);
+		
+		conditions.add(c3);
+		
 
 		conditions.writeConditionFile(fileTest);
 

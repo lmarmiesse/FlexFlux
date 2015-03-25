@@ -1,0 +1,4 @@
+# number of conditions where each objective is activated
+objectiveId	nbConditions
+maxR_OBJ	3
+minR_OBJ2	4

@@ -408,7 +408,10 @@ public abstract class Bind {
 					}
 					if (b.getClass().getSimpleName()
 							.equals("BioPhysicalEntity")) {
+						
+						
 						BioPhysicalEntity metab = (BioPhysicalEntity) b;
+						
 						if (metab.getBoundaryCondition()) {
 							// now we need to find the exchangReaction concerned
 							// and change one of its bound
@@ -1377,6 +1380,21 @@ public abstract class Bind {
 
 		Bind newBind = (Bind) ctor.newInstance();
 
+		/**
+		 * Adds the simple constraints
+		 */
+		for(BioEntity b: this.simpleConstraints.keySet())
+		{
+			Constraint c = this.simpleConstraints.get(b);
+			
+			Constraint newC = new Constraint(c.getEntities(), c.getLb(), c.getUb());
+			
+			newBind.addSimpleConstraint(b, newC);
+		}
+		
+		/**
+		 * Adds the "normal" constraints
+		 */
 		for (Constraint c : this.constraints) {
 			Constraint newC;
 

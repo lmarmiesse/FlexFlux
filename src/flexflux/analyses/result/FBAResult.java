@@ -108,6 +108,7 @@ public class FBAResult extends AnalysisResult {
 					if (bind.constrainedEntities.contains(entity)) {
 
 						if (bind.getDeadReactions().contains(entity)) {
+							
 							entToResult.put(entity.getId() + " (Dead)", String
 									.valueOf(Vars.round(bind
 											.getSolvedValue(entity))));
