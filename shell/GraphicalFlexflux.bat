@@ -1,5 +1,9 @@
 @echo off
 
+SET mypath=%~dp0
+
+cd %mypath%
+
 call config.windows.bat
 
 

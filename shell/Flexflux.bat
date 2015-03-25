@@ -1,7 +1,13 @@
-@echo off
+@echo OFF
+
+SET mypath=%~dp0
 
 
-call config.windows.bat
+
+
+call %mypath%config.windows.bat
+
+
 
 set ana=%1
 shift
@@ -17,4 +23,4 @@ goto continue
 :fin
 
 
-java -Djava.library.path=%GLPK_shared_library%;%CPLEX_shared_library%   -cp bin/;%CPLEX_JAR%;%GLPK_JAR%;lib/* flexflux.applications.Flexflux%ana% %args%
+java -Djava.library.path=%GLPK_shared_library%;%CPLEX_shared_library%   -cp %mypath%bin/;%CPLEX_JAR%;%GLPK_JAR%;%mypath%lib/* flexflux.applications.Flexflux%ana% %args%

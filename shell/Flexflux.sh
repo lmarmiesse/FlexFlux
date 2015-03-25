@@ -1,7 +1,7 @@
 #!/bin/bash
 
-path="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+path="${0/Flexflux.sh/}" 
 
 foo=""
 for i in `seq 2 $#`
@@ -18,8 +18,5 @@ done
 
 source $path/config
 
-cmd="java -Djava.library.path=$CPLEX_shared_library:$GLPK_shared_library -cp $GLPK_JAR:$path/lib/flexflux.jar flexflux.applications.Flexflux$1 $foo"
 
-echo $cmd
-
-eval $cmd
+eval "java -Djava.library.path=$CPLEX_shared_library:$GLPK_shared_library -cp $path/bin/:$CPLEX_JAR:$GLPK_JAR:$path/lib/* flexflux.applications.Flexflux$1 $foo"

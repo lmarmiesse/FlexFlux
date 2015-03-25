@@ -3,6 +3,7 @@ FlexFlux installation
 
 For FlexFlux to work, you must have already installed a solver.
 At this point, FlexFlux supports CPLEX and GLPK.
+(On WINDOWS, GLPK is distributed with FlexFlux so you shouldn't have to install it)
 
 To use FlexFlux you need Java to be installed.
 
@@ -13,7 +14,7 @@ LINUX
 chmod +x Flexflux.sh
 chmod +x GraphicalFlexflux.sh
 
-2) Test your solvers by typing :
+2) Test your solvers and run the unit tests by typing :
 
 ./Flexflux.sh Test
 
@@ -41,6 +42,16 @@ Example :
 
 ./Flexflux.sh FBA -s network.xml -cond conditions.txt -plot
 
+
+
+You can test each function by running the examples provided in the "examples" folder.
+
+1) make them executables by typing the command :
+chmod +x examples/*.sh
+
+2) Run an example for instance :
+
+./examples/FBA_example.sh
 
 WINDOWS
 
@@ -74,3 +85,8 @@ Flexflux.bat your_analysis your_parameters
 Example : 
 
 Flexflux.bat FBA -s network.xml -cond conditions.txt -plot
+
+
+You can test each function by running the examples provided in the "examples" folder.
+
+You can run any of the examples by double clicking on it (the windows files have a ".bat" extension)

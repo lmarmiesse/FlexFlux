@@ -1,4 +1,5 @@
 @echo off
+SET mypath=%~dp0
 
 
 ::IF YOU ARE USING CPLEX YOU MUST SET THE RIGHE VALUE FOR THOSE TWO VARIABLES
@@ -12,10 +13,10 @@ set CPLEX_JAR=
 ::link to the GLPK shared library (directory containing glpk_4_50_java.dll)
 
 if %PROCESSOR_ARCHITECTURE%==x86 (
-  set GLPK_shared_library=lib\glpk-4.50\w32
+  set GLPK_shared_library=%mypath%lib\glpk-4.50\w32
 ) else (
-  set GLPK_shared_library=lib\glpk-4.50\w64
+  set GLPK_shared_library=%mypath%lib\glpk-4.50\w64
 )
 
 ::link to glpk jar
-set GLPK_JAR=lib\glpk-java-win.jar
+set GLPK_JAR=%mypath%lib\glpk-java-win.jar
