@@ -56,6 +56,12 @@ public class RSAAnalysisResult extends AnalysisResult {
 	private Set<BioEntity> resultEntities = new HashSet<BioEntity>();
 
 	private List<Map<BioEntity, Integer>> attractorStatesList = new ArrayList<Map<BioEntity, Integer>>();
+	
+	/**
+	 * Mean state values
+	 */
+	private Map<BioEntity, Double> meanAttractorStates;
+	
 
 	public void addResultEntity(BioEntity ent) {
 		resultEntities.add(ent);
@@ -384,4 +390,15 @@ public class RSAAnalysisResult extends AnalysisResult {
 		}
 	}
 
+	public Map<BioEntity, Double> getMeanAttractorStates() {
+		return meanAttractorStates;
+	}
+
+	public void setMeanAttractorStates(Map<BioEntity, Double> meanAttractorStates) {
+		this.meanAttractorStates = meanAttractorStates;
+	}
+
+	
+	
+	
 }

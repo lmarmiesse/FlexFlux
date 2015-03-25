@@ -1,7 +1,7 @@
 package flexflux.thread;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
 import parsebionet.biodata.BioEntity;
@@ -66,7 +66,7 @@ public class ThreadMultiRSA extends Thread {
 		Condition condition;
 
 		while ((condition = conditions.poll()) != null) {
-
+			
 			Condition newCondition = new Condition(condition.code,
 					condition.name);
 
@@ -78,21 +78,16 @@ public class ThreadMultiRSA extends Thread {
 
 			RSAAnalysisResult res = rsa.runAnalysis();
 
-			List<Constraint> finalConstraints = res.getSteadyStateConstraints();
+			Map<BioEntity, Double> meanAttractorStates = res.getMeanAttractorStates();
 
-			for (Constraint constr : finalConstraints) {
-				if (constr.getEntities().size() == 1) {
-					for (BioEntity ent : constr.getEntities().keySet()) {
-						if (constr.getEntities().get(ent) == 1.0) {
-							if (condition.containsConstraint(ent.getId())) {
-								newCondition.addConstraint(ent.getId(),
-										constr.getLb(), ConstraintType.DOUBLE);
-							}
-						}
-					}
-				}
+			
+			for(BioEntity ent : meanAttractorStates.keySet())
+			{
+				Double value = meanAttractorStates.get(ent);
+				newCondition.addConstraint(ent.getId(),
+						Vars.round(value), ConstraintType.DOUBLE);
 			}
-
+			
 			result.addCondition(newCondition);
 
 			int percent = (int) Math.round(((double) todo - (double) conditions
