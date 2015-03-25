@@ -1,0 +1,446 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2" version="1" level="2" xmlns:html="http://www.w3.org/1999/xhtml">
+<model id="TEST" name="NA">
+	<listOfUnitDefinitions>
+      <unitDefinition id="mmol_per_gDW_per_hr">
+        <listOfUnits>
+          <unit kind="mole" scale="-3" multiplier="1" offset="0"/>
+          <unit kind="gram" exponent="-1" multiplier="1" offset="0"/>
+          <unit kind="second" exponent="-1" multiplier="0.00027777" offset="0"/>
+        </listOfUnits>
+      </unitDefinition>
+    </listOfUnitDefinitions>
+<listOfCompartments>
+<compartment id="b" name ="b" />
+<compartment id="c" name ="c" />
+</listOfCompartments>
+<listOfSpecies>
+  <species id="A_ex" name ="A_ex" compartment="b" boundaryCondition="true" />
+  <species id="B_ex" name ="B_ex" compartment="b" boundaryCondition="true" />
+  <species id="C_ex" name ="C_ex" compartment="b" boundaryCondition="true" />
+  <species id="E_ex" name ="E_ex" compartment="b" boundaryCondition="true" />
+  <species id="F_ex" name ="F_ex" compartment="b" boundaryCondition="true" />
+  <species id="I_ex" name ="I_ex" compartment="b" boundaryCondition="true" />
+  <species id="P_ex" name ="P_ex" compartment="b" boundaryCondition="true" />
+  <species id="Q_ex" name ="Q_ex" compartment="b" boundaryCondition="true" />
+  <species id="OBJ_ex" name ="OBJ_ex" compartment="b" boundaryCondition="true" />
+  <species id="OBJ2_ex" name ="OBJ2_ex" compartment="b" boundaryCondition="true" />
+  <species id="A" name ="A" compartment="c" boundaryCondition="false" />
+  <species id="B" name ="B" compartment="c" boundaryCondition="false" />
+  <species id="C" name ="C" compartment="c" boundaryCondition="false" />
+  <species id="D" name ="D" compartment="c" boundaryCondition="false" />
+  <species id="E" name ="E" compartment="b" boundaryCondition="false" />
+  <species id="F" name ="F" compartment="b" boundaryCondition="false" />
+  <species id="G" name ="G" compartment="b" boundaryCondition="false" />
+  <species id="H" name ="H" compartment="b" boundaryCondition="false" />
+  <species id="I" name ="I" compartment="b" boundaryCondition="false" />
+  <species id="P" name ="P" compartment="b" boundaryCondition="false" />
+  <species id="Q" name ="Q" compartment="b" boundaryCondition="false" />
+  <species id="OBJ" name ="OBJ" compartment="b" boundaryCondition="false" />
+  <species id="OBJ2" name ="OBJ2" compartment="b" boundaryCondition="false" />
+  <species id="XX" name ="XX" compartment="b" boundaryCondition="false" />
+  <species id="YY" name ="YY" compartment="b" boundaryCondition="false" />
+</listOfSpecies>
+<listOfReactions>
+  <reaction id="R_A_EX" name ="R_A_EX" reversible="false">
+  	 <notes>
+      <html:p>GENE_ASSOCIATION: G00 or G01</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="A_ex" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="A" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="0" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="10" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+  <reaction id="R_B_EX" name ="R_B_EX" reversible="false">
+    <listOfReactants>
+      <speciesReference species="B_ex" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="B" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="0" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="1000" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+  <reaction id="R_C_EX" name ="R_C_EX" reversible="true">
+    <listOfReactants>
+      <speciesReference species="C_ex" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="C" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="-99999" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="99999" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+  <reaction id="R_E_EX" name ="R_E_EX" reversible="false">
+    <listOfReactants>
+      <speciesReference species="E_ex" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="E" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="0" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="99999" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+  <reaction id="R_I_EX" name ="R_I_EX" reversible="true">
+    <listOfReactants>
+      <speciesReference species="I_ex" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="I" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="0" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="0" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+  <reaction id="R_F_EX" name ="R_F_EX" reversible="true">
+    <listOfReactants>
+      <speciesReference species="F_ex" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="F" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="-99999" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="99999" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+  <reaction id="R_P_EX" name ="R_P_EX" reversible="true">
+    <listOfReactants>
+      <speciesReference species="P_ex" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="P" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="-99999" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="99999" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+  <reaction id="R_Q_EX" name ="R_Q_EX" reversible="true">
+    <listOfReactants>
+      <speciesReference species="Q_ex" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="Q" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="-99999" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="99999" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+  <reaction id="R_OBJ_EX" name ="R_OBJ_EX" reversible="false">
+    <listOfReactants>
+      <speciesReference species="OBJ" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="OBJ_ex" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="0" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="99999" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+  <reaction id="R_OBJ2_EX" name ="R_OBJ2_EX" reversible="true">
+    <listOfReactants>
+      <speciesReference species="OBJ2_ex" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="OBJ2" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="-99999" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="99999" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+  <reaction id="R1" name ="R1" reversible="false">
+    <notes>
+      <html:p>GENE_ASSOCIATION: G1</html:p>
+      <html:p>SUBSYSTEM: Pathway1</html:p>
+      <html:p>PROTEIN_ASSOCIATION: ( P1 )</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="A" stoichiometry="1"/>
+      <speciesReference species="B" stoichiometry="1"/>
+      <speciesReference species="H" stoichiometry="0.5"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="C" stoichiometry="1"/>
+      <speciesReference species="D" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="0" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="10" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+  <reaction id="R2" name ="R2" reversible="false">
+    <notes>
+      <html:p>GENE_ASSOCIATION: (G2) or (G9)</html:p>
+      <html:p>PROTEIN_ASSOCIATION: ( P2 )</html:p>
+      <html:p>SUBSYSTEM: Pathway2</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="A" stoichiometry="1"/>
+      <speciesReference species="I" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="D" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="0" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="99999" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+  <reaction id="R3" name ="R3" reversible="false">
+    <notes>
+      <html:p>GENE_ASSOCIATION: G3 or G2</html:p>
+      <html:p>PROTEIN_ASSOCIATION: ( P3 )</html:p>
+      <html:p>SUBSYSTEM: Pathway2</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="A" stoichiometry="1"/>
+      <speciesReference species="E" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="D" stoichiometry="1"/>
+      <speciesReference species="F" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="0" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="99999" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+    <reaction id="R4" name ="R4" reversible="false">
+    <notes>
+      <html:p>GENE_ASSOCIATION: G4</html:p>
+      <html:p>PROTEIN_ASSOCIATION: ( P4 )</html:p>
+      <html:p>SUBSYSTEM: Pathway2</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="D" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="G" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="0" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="99999" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+  <reaction id="R5" name ="R5" reversible="false">
+    <notes>
+      <html:p>GENE_ASSOCIATION: G5</html:p>
+      <html:p>PROTEIN_ASSOCIATION: ( P5 )</html:p>
+      <html:p>SUBSYSTEM: Pathway2</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="D" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="H" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="0" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="99999" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+  <reaction id="R6" name ="R6" reversible="false">
+    <notes>
+      <html:p>GENE_ASSOCIATION: G6</html:p>
+      <html:p>PROTEIN_ASSOCIATION: ( P6 )</html:p>
+      <html:p>SUBSYSTEM: Pathway2</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="G" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="H" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="0" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="99999" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+  <reaction id="R7" name ="R7" reversible="false">
+    <notes>
+      <html:p>GENE_ASSOCIATION: G7</html:p>
+      <html:p>PROTEIN_ASSOCIATION: ( P7 )</html:p>
+      <html:p>SUBSYSTEM: Pathway2</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="H" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="OBJ2" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="0" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="99999" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+  <reaction id="R8" name ="R8" reversible="false">
+    <notes>
+      <html:p>GENE_ASSOCIATION: G8</html:p>
+      <html:p>PROTEIN_ASSOCIATION: ( P8 )</html:p>
+      <html:p>SUBSYSTEM: Pathway2</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="H" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="OBJ" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="0" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="99999" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+  <reaction id="RAV" name ="RAV" reversible="true">
+    <notes>
+      <html:p>GENE_ASSOCIATION: G10</html:p>
+      <html:p>PROTEIN_ASSOCIATION: ( P10 )</html:p>
+      <html:p>SUBSYSTEM: Pathway2</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="P" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="Q" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="-99999" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="99999" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+  <reaction id="DEAD" name ="dead" reversible="true">
+    <notes>
+      <html:p>GENE_ASSOCIATION: G12</html:p>
+      <html:p>PROTEIN_ASSOCIATION: ( P12 )</html:p>
+      <html:p>SUBSYSTEM: Pathway2</html:p>
+    </notes>
+    <listOfReactants>
+      <speciesReference species="XX" stoichiometry="1"/>
+    </listOfReactants>
+    <listOfProducts>
+      <speciesReference species="YY" stoichiometry="1"/>
+    </listOfProducts>
+    <kineticLaw>
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      <ci> FLUX_VALUE </ci>
+    </math>
+    <listOfParameters>
+      <parameter id="LOWER_BOUND" value="-99999" units="mmol_per_gDW_per_hr"/>
+      <parameter id="UPPER_BOUND" value="99999" units="mmol_per_gDW_per_hr"/>
+    </listOfParameters>
+    </kineticLaw>
+  </reaction>
+</listOfReactions>
+</model>
+</sbml>

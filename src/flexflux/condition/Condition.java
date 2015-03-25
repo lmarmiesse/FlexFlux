@@ -35,12 +35,14 @@
 package flexflux.condition;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
 
+import parsebionet.biodata.BioEntity;
+import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.ConstraintType;
 import flexflux.general.SimplifiedConstraint;
+import flexflux.interaction.InteractionNetwork;
 
 public class Condition {
 
@@ -77,60 +79,60 @@ public class Condition {
 	 * @param type
 	 *            : type of the constraint
 	 */
-	public void addConstraint(String entityId, double value,
-			ConstraintType type) {
+	public void addConstraint(String entityId, double value, ConstraintType type) {
 
-		SimplifiedConstraint constraint = new SimplifiedConstraint(entityId,value, type);
-		
+		SimplifiedConstraint constraint = new SimplifiedConstraint(entityId,
+				value, type);
+
 		constraints.put(entityId, constraint);
-		
+
 		return;
 
 	}
-	
+
 	/**
-	 * Compare to another condition
-	 * Compare only the constraints and not the name and the codes
+	 * Compare to another condition Compare only the constraints and not the
+	 * name and the codes
+	 * 
 	 * @param c2
 	 * @return
 	 */
 	@Override
 	public boolean equals(Object other) {
 
-		if(other == null)
-		{
+		if (other == null) {
 			return false;
 		}
-		if(other == this) {
+		if (other == this) {
 			return true;
 		}
-		
-		if (!(other instanceof Condition))return false;
-		
+
+		if (!(other instanceof Condition))
+			return false;
+
 		Condition c2 = (Condition) other;
-		
-		if(! c2.constraints.equals(this.constraints)) {
+
+		if (!c2.constraints.equals(this.constraints)) {
 			return false;
 		}
-		
+
 		return true;
-		
+
 	}
-	
+
 	@Override
 	public int hashCode() {
-		
-		int prim =  name.hashCode()+code.hashCode();
-		
-		for(SimplifiedConstraint c : constraints.values()) {
+
+		int prim = name.hashCode() + code.hashCode();
+
+		for (SimplifiedConstraint c : constraints.values()) {
 			prim += c.hashCode();
 		}
-		
+
 		return prim;
-		
+
 	}
-	
-	
+
 	/**
 	 * 
 	 * @return the number of constraints
@@ -138,29 +140,117 @@ public class Condition {
 	public int size() {
 		return constraints.size();
 	}
-	
+
 	/**
 	 * Get a constraint by the entity id
+	 * 
 	 * @param entityId
 	 * @return
 	 */
 	public SimplifiedConstraint getConstraint(String entityId) {
-		
+
 		return this.constraints.get(entityId);
-		
-		
+
 	}
-	
+
 	/**
 	 * Check if a constraint exists for an entity id
+	 * 
 	 * @param entityId
 	 * @return
 	 */
 	public Boolean containsConstraint(String entityId) {
 		return this.constraints.containsKey(entityId);
 	}
-	
-	
-	
-}
 
+	/**
+	 * 
+	 * Adds constraints to a bind
+	 * 
+	 * @param bind
+	 * @param fixConditions
+	 *            : if true, the constraints can not be updated by the
+	 *            regulatory network
+	 * @return
+	 */
+	public void addListOfConstraintsToBind(Bind bind, Boolean fixConditions) {
+
+		for (String entityId : this.constraints.keySet()) {
+
+			SimplifiedConstraint simplifiedConstraint = this.constraints
+					.get(entityId);
+
+			if (bind.getInteractionNetwork().getEntity(entityId) == null) {
+				BioEntity bioEntity = new BioEntity(entityId, entityId);
+				bind.addRightEntityType(bioEntity, false, false);
+			}
+
+			BioEntity e = bind.getInteractionNetwork().getEntity(entityId);
+
+			Map<BioEntity, Double> constraintMap = new HashMap<BioEntity, Double>();
+			constraintMap.put(e, 1.0);
+
+			Constraint constraint = null;
+
+			Double value = simplifiedConstraint.getValue();
+
+			constraint = new Constraint(constraintMap, value, value);
+
+			if (fixConditions == false) {
+				if (!bind.getInteractionNetwork()
+						.getInteractionNetworkEntities().containsKey(entityId)) {
+					bind.addSimpleConstraint(e, constraint);
+				} else {
+					bind.getInteractionNetwork().addInitialConstraint(e,
+							constraint);
+				}
+			} else {
+				bind.addSimpleConstraint(e, constraint);
+			}
+		}
+
+		return;
+
+	}
+
+	/**
+	 * 
+	 * Add the constraints to an interaction network
+	 * 
+	 * Be careful !
+	 * Replace the constraints for the entities. 
+	 * Thise that are not in the constraints are not changed 
+	 * 
+	 * 
+	 * @param intNet
+	 */
+	public void addInitialConstraintsToInteractionNetwork(
+			InteractionNetwork intNet) {
+
+		for (String entityId : this.constraints.keySet()) {
+
+			SimplifiedConstraint simplifiedConstraint = this.constraints
+					.get(entityId);
+
+			if (intNet.getEntity(entityId) != null) {
+				BioEntity e = intNet.getEntity(entityId);
+
+				Map<BioEntity, Double> constraintMap = new HashMap<BioEntity, Double>();
+				constraintMap.put(e, 1.0);
+
+				Constraint constraint = null;
+
+				Double value = simplifiedConstraint.getValue();
+
+				constraint = new Constraint(constraintMap, value, value);
+
+				intNet.addInitialConstraint(e, constraint);
+			}
+
+		}
+
+		return;
+
+	}
+
+}

@@ -54,14 +54,14 @@ public class RSAAnalysisResult extends AnalysisResult {
 
 	private Set<BioEntity> resultEntities = new HashSet<BioEntity>();
 
-	private List<Map<BioEntity, Integer>> atractorStatesList = new ArrayList<Map<BioEntity, Integer>>();
+	private List<Map<BioEntity, Integer>> attractorStatesList = new ArrayList<Map<BioEntity, Integer>>();
 
 	public void addResultEntity(BioEntity ent) {
 		resultEntities.add(ent);
 	}
 
-	public void setatractorStatesList(List<Map<BioEntity, Integer>> states) {
-		atractorStatesList = states;
+	public void setAttractorStatesList(List<Map<BioEntity, Integer>> states) {
+		attractorStatesList = states;
 	}
 
 	public void setStatesList(List<Map<BioEntity, Integer>> states) {
@@ -187,7 +187,7 @@ public class RSAAnalysisResult extends AnalysisResult {
 		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.PAGE_AXIS));
 		centerPanel.add(searchPanel);
 		centerPanel.add(new JLabel("Attractor of size "
-				+ atractorStatesList.size()));
+				+ attractorStatesList.size()));
 
 		centerPanel.add(new JScrollPane(resultTable));
 
@@ -272,7 +272,7 @@ public class RSAAnalysisResult extends AnalysisResult {
 			setBorder(UIManager.getBorder("TableHeader.cellBorder"));
 
 			
-			int limit = statesList.size() - atractorStatesList.size();
+			int limit = statesList.size() - attractorStatesList.size();
 			if (column >= limit) {
 				c.setBackground(Color.GREEN);
 			}else{

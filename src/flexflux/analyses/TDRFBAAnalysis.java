@@ -171,7 +171,7 @@ public class TDRFBAAnalysis extends Analysis {
 
 			if (i != 0) {
 
-				RSAAnalysis ssa = new RSAAnalysis(b,
+				RSAAnalysis ssa = new RSAAnalysis(
 						b.getInteractionNetwork(),
 						new HashMap<BioEntity, Constraint>());
 				List<BioEntity> entitiesToCheck = new ArrayList<BioEntity>();

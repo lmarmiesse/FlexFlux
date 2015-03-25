@@ -1,0 +1,1 @@
+var str = "name,essential,zeroFlux,mle,ele,conc,ind,opt,dead\nC1__maxR_OBJ,3,2,3,2,2,3,4,1\nC1__minR_OBJ2,3,2,3,2,2,3,4,1\nC2__maxR_OBJ,6,5,0,2,2,3,1,1\nC2__minR_OBJ2,6,5,0,2,2,3,1,1\nC3__maxR_OBJ,3,2,3,2,2,3,4,1\nC3__minR_OBJ2,3,2,3,2,2,3,4,1\nC4__maxR_OBJ,6,5,0,2,2,3,1,1\nC4__minR_OBJ2,6,5,0,2,2,3,1,1\nC5__maxR_OBJ,0,0,0,0,0,0,0,0\nC5__minR_OBJ2,0,0,0,0,0,0,0,0\n"
