@@ -46,14 +46,8 @@ public class TestClassification extends FFUnitTest {
 			IllegalAccessException, IllegalArgumentException,
 			InvocationTargetException {
 
-		try {
-			tmpDir = File.createTempFile("temp-file", "tmp").getParent()+"/testPfba";
-		} catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		
-		
+		tmpDir = System.getProperty("java.io.tmpdir") + "/testPfba";
+
 		String solver = "GLPK";
 		if (System.getProperties().containsKey("solver")) {
 			solver = System.getProperty("solver");
@@ -370,7 +364,7 @@ public class TestClassification extends FFUnitTest {
 		}
 
 	}
-	
+
 	@Test
 	public void testWriteCytoscapeGenericAttributes() {
 
@@ -379,10 +373,11 @@ public class TestClassification extends FFUnitTest {
 		res.writeCytoscapeGenericAttributes(fileTest, true);
 
 		try {
-			String fileRef = TestUtils.copyProjectResource(
-					"flexflux/unit_tests/data/pfba/genericAttributes.tab",
-					java.nio.file.Files.createTempFile("test", ".tab")
-							.toFile());
+			String fileRef = TestUtils
+					.copyProjectResource(
+							"flexflux/unit_tests/data/pfba/genericAttributes.tab",
+							java.nio.file.Files.createTempFile("test", ".tab")
+									.toFile());
 
 			FileAssert.assertEquals("test generic attribute file", new File(
 					fileRef), new File(fileTest));
