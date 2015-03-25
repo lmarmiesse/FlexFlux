@@ -7,12 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.JOptionPane;
-
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioPhysicalEntity;
 import flexflux.analyses.result.RSAAnalysisResult;
-import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.interaction.Interaction;
 import flexflux.interaction.InteractionNetwork;
@@ -23,7 +20,7 @@ public class RSAAnalysis extends Analysis {
 
 	private List<Map<BioEntity, Integer>> statesList = new ArrayList<Map<BioEntity, Integer>>();
 
-	private List<Map<BioEntity, Integer>> atractorStatesList = new ArrayList<Map<BioEntity, Integer>>();
+	private List<Map<BioEntity, Integer>> attractorStatesList = new ArrayList<Map<BioEntity, Integer>>();
 
 	private List<Constraint> finalConstraints = new ArrayList<Constraint>();
 
@@ -35,9 +32,9 @@ public class RSAAnalysis extends Analysis {
 	 */
 	private int steadyStatesIterations = 10000;
 
-	public RSAAnalysis(Bind b, InteractionNetwork intNetwork,
+	public RSAAnalysis(InteractionNetwork intNetwork,
 			Map<BioEntity, Constraint> simpleConstraints) {
-		super(b);
+		super(null);
 		this.intNet = intNetwork;
 		this.simpleConstraints = simpleConstraints;
 
@@ -248,7 +245,7 @@ public class RSAAnalysis extends Analysis {
 					attractorSize = it - statesList.indexOf(previousStep);
 
 					for (int index = statesList.indexOf(previousStep); index < it; index++) {
-						atractorStatesList.add(statesList.get(index));
+						attractorStatesList.add(statesList.get(index));
 					}
 
 					break;
@@ -271,9 +268,9 @@ public class RSAAnalysis extends Analysis {
 
 		statesList.add(thisState);
 
-		if (atractorStatesList.size() != 0) {
+		if (attractorStatesList.size() != 0) {
 
-			for (BioEntity b : atractorStatesList.get(0).keySet()) {
+			for (BioEntity b : attractorStatesList.get(0).keySet()) {
 
 				// If it is an external metab, we set a constraint
 				boolean isExtMetab = false;
@@ -293,21 +290,21 @@ public class RSAAnalysis extends Analysis {
 				// attractor
 				double lb = 0;
 				double ub = 0;
-				for (int nb = 0; nb < atractorStatesList.size(); nb++) {
+				for (int nb = 0; nb < attractorStatesList.size(); nb++) {
 					if (intNet.canTranslate(b)) {
 						lb += intNet.getConstraintFromState(b,
-								atractorStatesList.get(nb).get(b)).getLb();
+								attractorStatesList.get(nb).get(b)).getLb();
 						ub += intNet.getConstraintFromState(b,
-								atractorStatesList.get(nb).get(b)).getUb();
+								attractorStatesList.get(nb).get(b)).getUb();
 					} else {
-						lb += atractorStatesList.get(nb).get(b);
-						ub += atractorStatesList.get(nb).get(b);
+						lb += attractorStatesList.get(nb).get(b);
+						ub += attractorStatesList.get(nb).get(b);
 					}
 
 				}
 
-				lb = lb / atractorStatesList.size();
-				ub = ub / atractorStatesList.size();
+				lb = lb / attractorStatesList.size();
+				ub = ub / attractorStatesList.size();
 
 				Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
 				constMap.put(b, 1.0);
@@ -323,7 +320,7 @@ public class RSAAnalysis extends Analysis {
 
 		}
 		res.setStatesList(statesList);
-		res.setatractorStatesList(atractorStatesList);
+		res.setAttractorStatesList(attractorStatesList);
 
 		// ////TRANSLATION
 

@@ -323,7 +323,7 @@ public abstract class Bind {
 
 					List<Constraint> intNetSteadyStateConstraints = new ArrayList<Constraint>();
 
-					RSAAnalysis ssa = new RSAAnalysis(this,
+					RSAAnalysis ssa = new RSAAnalysis(
 							this.getInteractionNetwork(), simpleConstraints);
 					RSAAnalysisResult res = ssa.runAnalysis();
 
@@ -408,10 +408,9 @@ public abstract class Bind {
 					}
 					if (b.getClass().getSimpleName()
 							.equals("BioPhysicalEntity")) {
-						
-						
+
 						BioPhysicalEntity metab = (BioPhysicalEntity) b;
-						
+
 						if (metab.getBoundaryCondition()) {
 							// now we need to find the exchangReaction concerned
 							// and change one of its bound
@@ -1383,15 +1382,15 @@ public abstract class Bind {
 		/**
 		 * Adds the simple constraints
 		 */
-		for(BioEntity b: this.simpleConstraints.keySet())
-		{
+		for (BioEntity b : this.simpleConstraints.keySet()) {
 			Constraint c = this.simpleConstraints.get(b);
-			
-			Constraint newC = new Constraint(c.getEntities(), c.getLb(), c.getUb());
-			
+
+			Constraint newC = new Constraint(c.getEntities(), c.getLb(),
+					c.getUb());
+
 			newBind.addSimpleConstraint(b, newC);
 		}
-		
+
 		/**
 		 * Adds the "normal" constraints
 		 */

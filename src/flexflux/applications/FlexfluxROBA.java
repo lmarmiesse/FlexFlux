@@ -129,7 +129,7 @@ public class FlexfluxROBA extends FFApplication {
 		
 		if (flag == false) {
 			System.err.println("Error in reading the condition file "
-					+ f.objectiveFile);
+					+ f.conditionFile);
 			System.exit(0);
 		}
 		

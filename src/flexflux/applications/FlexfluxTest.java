@@ -24,6 +24,7 @@ import flexflux.unit_tests.TestInteraction;
 import flexflux.unit_tests.TestKoWithInteractions;
 import flexflux.unit_tests.TestListOfConditions;
 import flexflux.unit_tests.TestROBA;
+import flexflux.unit_tests.TestRSA;
 import flexflux.unit_tests.TestRandomConditions;
 import flexflux.unit_tests.TestSBMLQual;
 import flexflux.unit_tests.TestSimplifiedConstraint;
@@ -114,6 +115,7 @@ public class FlexfluxTest extends FFApplication {
 
 			List<Class> classes = new ArrayList<Class>();
 			
+			classes.add(TestRSA.class);
 			classes.add(TestBind.class);
 			classes.add(TestBECO.class);
 			classes.add(TestClassification.class);

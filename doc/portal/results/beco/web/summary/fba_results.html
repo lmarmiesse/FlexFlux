@@ -1,0 +1,105 @@
+<html>
+<head>
+<script src="../js/jquery-2.0.3.min.js"></script>
+<script src="../js/kinetic-v5.0.0.min.js"></script>
+<script src="../js/inchlib-1.0.1.min.js"></script>
+<script src="heatmap_data.js"></script>
+<script>
+	$(document).ready(function() { //run when the whole page is loaded
+
+		window.dendrogram = new InCHlib({ //instantiate InCHlib
+			target : "dendrogram", //ID of a target HTML element
+			metadata : true, //turn on the metadata 
+			max_height : 1200, //set maximum height of visualization in pixels
+			width : 1000, //set width of visualization in pixels
+			heatmap_colors : "Greens", //set color scale for clustered data
+			metadata_colors : "Reds", //set color scale for metadata
+			independent_columns : true
+		});
+
+		dendrogram.read_data(data);
+		dendrogram.draw(); //draw cluster heatmap
+
+		var target_element = $("#dendrogram");
+		var offset = target_element.offset();
+		var max_y = offset.top + 150;
+		var x_pos = offset.left + dendrogram.settings.width - 80;
+		var mol_element = $("#molecule").css({
+			"left" : x_pos,
+			"position" : "absolute",
+			"height" : "20px",
+			"width" : "300px",
+			"z-index" : 100,
+			"border" : "solid #D2D2D2 1px",
+			"border-radius" : "10px",
+			"display" : "none",
+			"background-color" : "white"
+		});
+		var mol_id_element = $("#mol_id").css({
+			"font-size" : "small",
+			"position" : "absolute",
+			"right" : "10px"
+		});
+
+		bind_dendrogram_events();
+
+		// Functions
+		// show molecule id
+		function show_molecule(mol_id, evt) {
+
+			var y = evt.pageY - 300;
+			if (y < max_y) {
+				y = max_y;
+			}
+			mol_element.css({
+				"top" : y,
+				"border-width" : "1px"
+			});
+			mol_id_element.text(mol_id);
+			mol_element.show();
+
+		}
+
+		// Hide molecule id
+		function hide_molecule(ids, evt) {
+			mol_element.hide();
+		}
+
+		function bind_dendrogram_events() {
+			dendrogram.events.row_onmouseover = function(ids, evt) {
+				show_molecule(ids, evt);
+			};
+
+			dendrogram.events.heatmap_onmouseout = function(evt) {
+				hide_molecule(evt);
+			};
+
+			dendrogram.events.row_onclick = function(ids, evt) {
+				show_molecule(ids[0], evt);
+				current_mol = ids[0];
+				dendrogram.highlight_rows(ids);
+				mol_element.css({
+					"border-width" : "2px"
+				});
+				dendrogram.unhighlight_cluster();
+			};
+
+			dendrogram.events.empty_space_onclick = function() {
+				hide_molecule();
+				dendrogram.highlight_rows([]);
+				bind_dendrogram_events();
+			}
+
+		}
+
+	});
+</script>
+</head>
+
+<body>
+	<div id="molecule">
+		<div id="mol_id"></div>
+	</div>
+	<div id="dendrogram"></div>
+</body>
+</html>

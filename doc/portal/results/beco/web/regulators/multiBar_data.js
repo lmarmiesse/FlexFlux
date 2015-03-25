@@ -1,0 +1,1 @@
+var str = "name,essential,opt,neu\nC1__maxR_OBJ,0,1,1\nC1__minR_OBJ2,0,1,1\nC2__maxR_OBJ,1,0,1\nC2__minR_OBJ2,1,0,1\nC3__maxR_OBJ,0,1,1\nC3__minR_OBJ2,0,1,1\nC4__maxR_OBJ,1,0,1\nC4__minR_OBJ2,1,0,1\nC5__maxR_OBJ,0,0,0\nC5__minR_OBJ2,0,0,0\n"

@@ -56,10 +56,9 @@ public class FlexfluxRSA extends FFApplication {
 			System.exit(0);
 		}
 
-		InteractionNetwork intNet = null;
-
-		intNet = SBMLQualReader.loadSbmlQual(f.regFile,
+		InteractionNetwork intNet = SBMLQualReader.loadSbmlQual(f.regFile,
 				new InteractionNetwork(), new RelationFactory());
+
 
 		Map<BioEntity, Constraint> simpleConstraints = new HashMap<BioEntity, Constraint>();
 
@@ -73,7 +72,8 @@ public class FlexfluxRSA extends FFApplication {
 
 		}
 
-		RSAAnalysis analysis = new RSAAnalysis(null, intNet, simpleConstraints);
+		RSAAnalysis analysis = new RSAAnalysis(intNet, simpleConstraints);
+
 
 		RSAAnalysisResult res = analysis.runAnalysis();
 

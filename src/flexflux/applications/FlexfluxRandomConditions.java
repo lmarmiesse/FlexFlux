@@ -46,8 +46,7 @@ import flexflux.general.Vars;
  */
 public class FlexfluxRandomConditions extends FFApplication {
 
-	public static String applicationName = FlexfluxRandomConditions.class
-			.getSimpleName();
+	public static String applicationName = FlexfluxRandomConditions.class.getSimpleName();
 
 	public static String message = applicationName + " [options...]\n"
 			+ "Generates a file with randomized conditions";
