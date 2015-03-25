@@ -56,8 +56,10 @@ public class SBMLQualReader {
 		try {
 			document = SBMLReader.read(new File(path));
 		} catch (XMLStreamException | IOException e) {
-			// TODO Auto-generated catch block
+			System.err.println("Error while reading the sbml qual file "+path);
 			e.printStackTrace();
+			
+			return null;
 		}
 
 		Model model = document.getModel();

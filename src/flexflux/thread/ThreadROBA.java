@@ -106,44 +106,14 @@ public class ThreadROBA extends ResolveThread {
 
 			Set<String> inputsWithPositiveValue = new HashSet<String>();
 			
+			condition.addListOfConstraintsToBind(bind, fixConditions);
+			
 			for(String entityId : condition.constraints.keySet()) {
-				if (bind.getInteractionNetwork().getEntity(entityId) == null) {
-					BioEntity bioEntity = new BioEntity(entityId,
-							entityId);
-					bind.addRightEntityType(bioEntity, false, false);
-				}
-				
-				BioEntity e = bind.getInteractionNetwork().getEntity(
-						entityId);
-				
-				Map<BioEntity, Double> constraintMap = new HashMap<BioEntity, Double>();
-				constraintMap.put(e, 1.0);
-
-				Constraint constraint = null;
-				
 				Double value = condition.getConstraint(entityId).getValue();
 				
 				if(value > 0)
 				{
 					inputsWithPositiveValue.add(entityId);
-				}
-				
-				
-				constraint = new Constraint(constraintMap, value, value);
-				
-				
-				if (fixConditions == false) {
-					if (! bind.getInteractionNetwork().getInteractionNetworkEntities().containsKey(entityId)) {
-						System.err.println("Add simple constraint "+constraint);
-						bind.addSimpleConstraint(e, constraint);
-					} else {
-						System.err.println("Add initial constraint "+constraint);
-						bind.getInteractionNetwork().addInitialConstraint(e,
-								constraint);
-					}
-				} else {
-					System.err.println("Add simple constraint (! fixCondtions) "+constraint);
-					bind.addSimpleConstraint(e, constraint);
 				}
 			}
 			
