@@ -3,6 +3,7 @@
  */
 package flexflux.analyses;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -47,6 +48,7 @@ public class MultiRSA extends Analysis {
 		
 		this.listOfConditions = listOfConditions;
 		this.interactionNetwork = intNet;
+		this.threads = new ArrayList<ThreadMultiRSA>();
 		
 	}
 
@@ -66,8 +68,7 @@ public class MultiRSA extends Analysis {
 		
 		for (int i = 0; i < Vars.maxThread; i++) {
 			
-			
-			ThreadMultiRSA thread = new ThreadMultiRSA(this.interactionNetwork, tasks, result);
+			ThreadMultiRSA thread = new ThreadMultiRSA(this.interactionNetwork.copy(), tasks, result);
 			
 			threads.add(thread);
 			

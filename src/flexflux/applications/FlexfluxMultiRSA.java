@@ -83,51 +83,66 @@ public class FlexfluxMultiRSA extends FFApplication {
 		FlexfluxMultiRSA f = new FlexfluxMultiRSA();
 
 		f.parseArguments(args);
+		
+		Boolean flag = f.run();
+		
+		if(flag == false)
+		{
+			System.err.println("Error in the execution");
+			System.exit(0);
+		}
 
-		if (f.verbose) {
+	}
+
+	/**
+	 *
+	 */
+	public Boolean run() {
+		
+		if (this.verbose) {
 			Vars.verbose = true;
 		}
 
-		if (f.nThreads > 0) {
-			Vars.maxThread = f.nThreads;
+		if (this.nThreads > 0) {
+			Vars.maxThread = this.nThreads;
 		} else {
 			System.err.println("The number of threads must be at least 1");
-			System.exit(0);
+			return false;
 		}
 
 		/**
 		 * Parsing the regulatory file
 		 */
-		if (!new File(f.regFile).isFile()) {
-			System.err.println("Error : file " + f.regFile + " not found");
-			System.exit(0);
+		if (!new File(this.regFile).isFile()) {
+			System.err.println("Error : file " + this.regFile + " not found");
+			return false;
 		}
 
-		InteractionNetwork intNet = SBMLQualReader.loadSbmlQual(f.regFile,
+		InteractionNetwork intNet = SBMLQualReader.loadSbmlQual(this.regFile,
 				new InteractionNetwork(), new RelationFactory());
 
 		if (intNet == null) {
-			System.exit(0);
+			return false;
 		}
 
 		/**
 		 * Parsing the condition file
 		 */
-		if (!new File(f.conditionFile).isFile()) {
+		if (!new File(this.conditionFile).isFile()) {
 			System.err
-					.println("Error : file " + f.conditionFile + " not found");
-			System.exit(0);
+					.println("Error : file " + this.conditionFile + " not found");
+			return false;
 		}
 
 		ListOfConditions conditions = new ListOfConditions();
 
-		Boolean flag = conditions.loadConditionFile(f.conditionFile,
+		Boolean flag = conditions.loadConditionFile(this.conditionFile,
 				ConstraintType.DOUBLE);
 
 		if (flag == false) {
 			System.err.println("Error in reading the condition file "
-					+ f.conditionFile);
-			System.exit(0);
+					+ this.conditionFile);
+			return false;
 		}
 		
 		/**
@@ -138,10 +153,13 @@ public class FlexfluxMultiRSA extends FFApplication {
 		
 		MultiRSAResult res = analysis.runAnalysis();
 		
-		res.writeToFile(f.outName);
-
+		res.writeToFile(this.outName);
+		
+		return true;
+		
 	}
-
+	
+	
 	@Override
 	public String getMessage() {
 		// TODO Auto-generated method stub
