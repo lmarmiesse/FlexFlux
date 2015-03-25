@@ -1,2 +1,0 @@
-glpk-4.50.1.patch
-	Add source directory bflib to makefiles.
