@@ -343,5 +343,25 @@ public class ListOfConditions implements Iterable<Condition> {
 		return true;
 
 	}
+	
+	
+	/**
+	 * @param code
+	 * @return a condition with its code or null otherwise
+	 */
+	public Condition get(String code) {
+		
+		for(Condition c : this.conditions) 
+		{
+			if(c.code.compareTo(code)==0)
+			{
+				return c;
+			}
+		}
+		
+		return null;
+		
+	}
+	
 
 }

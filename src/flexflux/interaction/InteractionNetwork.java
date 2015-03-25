@@ -36,10 +36,8 @@ package flexflux.interaction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import parsebionet.biodata.BioEntity;
@@ -172,7 +170,7 @@ public class InteractionNetwork {
 
 	public Constraint getConstraintFromState(BioEntity ent, Integer state) {
 
-		//if ND
+		// if ND
 		if (entityStateConstraintTranslation.get(ent).get(state) == null) {
 			return (new Constraint(ent, -Double.MAX_VALUE, Double.MAX_VALUE));
 		}
@@ -182,6 +180,11 @@ public class InteractionNetwork {
 	}
 
 	/**
+	 * 
+	 * Parse the translation table coming from SBML qual If a interval in the
+	 * SBML qual corresponds to the given value, returns the corresponding
+	 * qualitative state, -1 otherwise
+	 * 
 	 * 
 	 * @param ent
 	 * @param value
@@ -393,7 +396,8 @@ public class InteractionNetwork {
 			newInteractionNetwork.addInitialState(ent, initialStates.get(ent));
 		}
 
-		newInteractionNetwork.interactionNetworkEntitiesStates = this.getInteractionNetworkEntitiesStates();
+		newInteractionNetwork.interactionNetworkEntitiesStates = this
+				.getInteractionNetworkEntitiesStates();
 
 		newInteractionNetwork.setInteractionToConstraints(this
 				.getInteractionToConstraints());
@@ -449,6 +453,48 @@ public class InteractionNetwork {
 
 	public Map<String, BioEntity> getNumEntities() {
 		return numEntities;
+	}
+
+	/**
+	 * returns a string describing the network in a human readable format
+	 */
+	public String toString() {
+
+		String str = "";
+
+		for (BioEntity e : this.getEntities()) {
+
+			str += "--------\n" + e.getId() + "\n";
+
+			if (this.getInitialConstraints().containsKey(e)) {
+				str += "Initial constraint : ["
+						+ this.getInitialConstraint(e).getLb() + " , "
+						+ this.getInitialConstraint(e).getUb() + "]\n";
+				if (this.canTranslate(e)) {
+					str += "Initial state : ["
+							+ this.getStateFromValue(e, this
+									.getInitialConstraint(e).getLb())
+							+ " , "
+							+ +this.getStateFromValue(e, this
+									.getInitialConstraint(e).getUb()) + "]\n";
+				}
+			}
+
+			if (this.getTargetToInteractions().containsKey(e)) {
+				for (Interaction i : this.getTargetToInteractions().get(e)
+						.getConditionalInteractions()) {
+					str += i + "\n";
+				}
+				str += "ELSE : "
+						+ this.getTargetToInteractions().get(e)
+								.getdefaultInteraction().getConsequence()
+						+ "\n";
+			}
+
+		}
+
+		return str;
+
 	}
 
 }

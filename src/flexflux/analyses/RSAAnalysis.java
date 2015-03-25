@@ -44,7 +44,7 @@ public class RSAAnalysis extends Analysis {
 	public RSAAnalysisResult runAnalysis() {
 
 		RSAAnalysisResult res = new RSAAnalysisResult();
-
+		
 		if (intNet.getTargetToInteractions().isEmpty()
 				&& intNet.getInitialConstraints().isEmpty()
 				&& intNet.getInitialStates().isEmpty()) {
@@ -62,7 +62,7 @@ public class RSAAnalysis extends Analysis {
 		Map<BioEntity, Integer> thisState = intNet.getInitialStates();
 
 		for (BioEntity b : intNet.getInitialConstraints().keySet()) {
-
+			
 			// If the entity is in the regulatory network
 			if (intNet.getInteractionNetworkEntities().containsKey(b.getId())) {
 
@@ -267,11 +267,14 @@ public class RSAAnalysis extends Analysis {
 		
 
 		statesList.add(thisState);
+		
+		Map<BioEntity, Double> meanAttractorStates = new HashMap<BioEntity, Double>();
+		
 
 		if (attractorStatesList.size() != 0) {
 
 			for (BioEntity b : attractorStatesList.get(0).keySet()) {
-
+				
 				// If it is an external metab, we set a constraint
 				boolean isExtMetab = false;
 
@@ -290,7 +293,16 @@ public class RSAAnalysis extends Analysis {
 				// attractor
 				double lb = 0;
 				double ub = 0;
+				
+				/**
+				 * Mean state value
+				 */
+				double meanStateValue = 0;
+				
 				for (int nb = 0; nb < attractorStatesList.size(); nb++) {
+					
+					meanStateValue += attractorStatesList.get(nb).get(b);
+					
 					if (intNet.canTranslate(b)) {
 						lb += intNet.getConstraintFromState(b,
 								attractorStatesList.get(nb).get(b)).getLb();
@@ -303,6 +315,10 @@ public class RSAAnalysis extends Analysis {
 
 				}
 
+				meanStateValue = meanStateValue / attractorStatesList.size();
+				
+				meanAttractorStates.put(b, meanStateValue);
+				
 				lb = lb / attractorStatesList.size();
 				ub = ub / attractorStatesList.size();
 
@@ -322,6 +338,8 @@ public class RSAAnalysis extends Analysis {
 		res.setStatesList(statesList);
 		res.setAttractorStatesList(attractorStatesList);
 
+		res.setMeanAttractorStates(meanAttractorStates);
+		
 		// ////TRANSLATION
 
 		res.setSteadyStateConstraints(finalConstraints);
