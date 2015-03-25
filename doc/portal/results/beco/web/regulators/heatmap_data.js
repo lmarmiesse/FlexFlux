@@ -1,0 +1,197 @@
+var data = {
+    'metadata': {
+        'nodes': {
+            '0': [
+                'NA', 
+                'NA'
+            ], 
+            '1': [
+                'NA', 
+                'NA'
+            ]
+        }, 
+        'feature_names': [
+            'metadata1', 
+            'metadata2'
+        ]
+    }, 
+    'data': {
+        'nodes': {
+            '0': {
+                'count': 1, 
+                'distance': 0, 
+                'objects': [
+                    'T1'
+                ], 
+                'features': [
+                    0.0, 
+                    0.0, 
+                    1.0, 
+                    1.0, 
+                    1.0, 
+                    1.0, 
+                    3.0, 
+                    3.0, 
+                    3.0, 
+                    3.0
+                ], 
+                'parent': 2
+            }, 
+            '1': {
+                'count': 1, 
+                'distance': 0, 
+                'objects': [
+                    'T2'
+                ], 
+                'features': [
+                    0.0, 
+                    0.0, 
+                    2.0, 
+                    2.0, 
+                    2.0, 
+                    2.0, 
+                    1.0, 
+                    1.0, 
+                    1.0, 
+                    1.0
+                ], 
+                'parent': 2
+            }, 
+            '2': {
+                'count': 2, 
+                'distance': 4.472, 
+                'left_child': 0, 
+                'right_child': 1
+            }
+        }, 
+        'feature_names': [
+            'C5__minR_OBJ2', 
+            'C5__maxR_OBJ', 
+            'C1__minR_OBJ2', 
+            'C1__maxR_OBJ', 
+            'C3__maxR_OBJ', 
+            'C3__minR_OBJ2', 
+            'C2__minR_OBJ2', 
+            'C2__maxR_OBJ', 
+            'C4__maxR_OBJ', 
+            'C4__minR_OBJ2'
+        ]
+    }, 
+    'column_dendrogram': {
+        'nodes': {
+            '0': {
+                'count': 1, 
+                'distance': 0, 
+                'parent': 10
+            }, 
+            '1': {
+                'count': 1, 
+                'distance': 0, 
+                'parent': 10
+            }, 
+            '2': {
+                'count': 1, 
+                'distance': 0, 
+                'parent': 12
+            }, 
+            '3': {
+                'count': 1, 
+                'distance': 0, 
+                'parent': 12
+            }, 
+            '4': {
+                'count': 1, 
+                'distance': 0, 
+                'parent': 11
+            }, 
+            '5': {
+                'count': 1, 
+                'distance': 0, 
+                'parent': 14
+            }, 
+            '6': {
+                'count': 1, 
+                'distance': 0, 
+                'parent': 13
+            }, 
+            '7': {
+                'count': 1, 
+                'distance': 0, 
+                'parent': 15
+            }, 
+            '8': {
+                'count': 1, 
+                'distance': 0, 
+                'parent': 16
+            }, 
+            '9': {
+                'count': 1, 
+                'distance': 0, 
+                'parent': 16
+            }, 
+            '10': {
+                'count': 2, 
+                'distance': 0.0, 
+                'left_child': 0, 
+                'parent': 11, 
+                'right_child': 1
+            }, 
+            '11': {
+                'count': 3, 
+                'distance': 0.0, 
+                'left_child': 4, 
+                'parent': 14, 
+                'right_child': 10
+            }, 
+            '12': {
+                'count': 2, 
+                'distance': 0.0, 
+                'left_child': 2, 
+                'parent': 13, 
+                'right_child': 3
+            }, 
+            '13': {
+                'count': 3, 
+                'distance': 0.0, 
+                'left_child': 6, 
+                'parent': 15, 
+                'right_child': 12
+            }, 
+            '14': {
+                'count': 4, 
+                'distance': 0.0, 
+                'left_child': 5, 
+                'parent': 17, 
+                'right_child': 11
+            }, 
+            '15': {
+                'count': 4, 
+                'distance': 0.0, 
+                'left_child': 7, 
+                'parent': 18, 
+                'right_child': 13
+            }, 
+            '16': {
+                'count': 2, 
+                'distance': 0.0, 
+                'left_child': 8, 
+                'parent': 17, 
+                'right_child': 9
+            }, 
+            '17': {
+                'count': 6, 
+                'distance': 3.651, 
+                'left_child': 14, 
+                'parent': 18, 
+                'right_child': 16
+            }, 
+            '18': {
+                'count': 10, 
+                'distance': 5.164, 
+                'left_child': 15, 
+                'right_child': 17
+            }
+        }
+    }
+}
+;

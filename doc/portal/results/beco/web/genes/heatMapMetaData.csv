@@ -1,0 +1,14 @@
+id,nbReactions,interactionTarget,metadata1,metadata2
+G7,1,-,--,T
+G8,1,-,--,T
+G9,1,-,++,T
+G4,1,-,--,T
+G01,1,-,NA,NA
+G3,1,+,--,T
+G6,1,-,--,I
+G12,0,-,NA,NA
+G5,1,-,--,T
+G2,2,+,---,I
+G1,1,+,+++,T
+G10,1,-,+,I
+G00,1,-,NA,NA

@@ -1,0 +1,6 @@
+conditionName	conditionCode	T1	T2	G1	G2	G3	A_ex
+C1	C1	0	0.6	1	1	1.6	0.2
+C2	C2	1	0	1	1	1	6
+C3	C3	0.1	1	0	0	0	1
+C4	C4	0	0	1	1	1	1
+C5	C5	1	1	1	1	1	0

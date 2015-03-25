@@ -47,18 +47,19 @@ public class FlexfluxRSA extends FFApplication {
 
 		f.parseArguments(args);
 
-
 		if (!new File(f.regFile).isFile()) {
 			System.err.println("Error : file " + f.regFile + " not found");
 			System.exit(0);
 		}
 
-		InteractionNetwork intNet = null;
-
-		intNet = SBMLQualReader.loadSbmlQual(f.regFile,
+		InteractionNetwork intNet = SBMLQualReader.loadSbmlQual(f.regFile,
 				new InteractionNetwork(), new RelationFactory());
 
-		RSAAnalysis analysis = new RSAAnalysis(null, intNet,
+		if (intNet == null) {
+			System.exit(0);
+		}
+
+		RSAAnalysis analysis = new RSAAnalysis(intNet,
 				new HashMap<BioEntity, Constraint>());
 
 		RSAAnalysisResult res = analysis.runAnalysis();
