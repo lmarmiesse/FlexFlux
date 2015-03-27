@@ -84,8 +84,17 @@ public class ListOfConditions implements Iterable<Condition> {
 	 * @return false if there is a problem while reading the file
 	 * 
 	 */
+	
 	public boolean loadConditionFile(String conditionFile,
 			ConstraintType constraintType) {
+		
+		return this.loadConditionFile(conditionFile, constraintType, true);
+		
+	}
+	
+	
+	public boolean loadConditionFile(String conditionFile,
+			ConstraintType constraintType, Boolean warning) {
 
 		Boolean flag = true;
 
@@ -193,7 +202,7 @@ public class ListOfConditions implements Iterable<Condition> {
 
 					}
 
-					conditions.add(condition);
+					this.add(condition, warning);
 				}
 				nbLine++;
 			}
@@ -204,6 +213,7 @@ public class ListOfConditions implements Iterable<Condition> {
 		} catch (IOException e) {
 			System.err.println("Error while reading " + conditionFile);
 			e.printStackTrace();
+			return false;
 		}
 
 		finally {
@@ -224,13 +234,23 @@ public class ListOfConditions implements Iterable<Condition> {
 
 	/**
 	 * Adds a condition and adds entity ids in the list
-	 * 
 	 * @param condition
 	 */
 	public void add(Condition condition) {
-		if (this.contains(condition)) {
-			System.err.println("[FLEXFLUX WARNING] condition " + condition.code
-					+ " - " + condition.name + " is duplicated");
+		this.add(condition, false);
+	}
+	
+	/**
+	 * Adds a condition and adds entity ids in the list
+	 * 
+	 * @param condition
+	 */
+	public void add(Condition condition, Boolean warning) {
+		
+		if (warning && this.contains(condition)) {
+				System.err.println("[FLEXFLUX WARNING] condition "
+						+ condition.code + " - " + condition.name
+						+ " is duplicated");
 		}
 		for (SimplifiedConstraint c : condition.constraints.values()) {
 			if (!entities.contains(c.entityId)) {
@@ -289,7 +309,7 @@ public class ListOfConditions implements Iterable<Condition> {
 			 * To facilitate tests and reading
 			 */
 			Collections.sort(this.entities);
-			
+
 			// Header
 			fw.write("conditionId\tconditionName");
 
@@ -302,7 +322,7 @@ public class ListOfConditions implements Iterable<Condition> {
 			// prints each condition
 			for (Condition condition : this.conditions) {
 				fw.write(condition.code + "\t" + condition.name);
-				
+
 				for (String entityId : this.entities) {
 					String value = "0.0";
 					if (condition.containsConstraint(entityId)) {
@@ -343,25 +363,21 @@ public class ListOfConditions implements Iterable<Condition> {
 		return true;
 
 	}
-	
-	
+
 	/**
 	 * @param code
 	 * @return a condition with its code or null otherwise
 	 */
 	public Condition get(String code) {
-		
-		for(Condition c : this.conditions) 
-		{
-			if(c.code.compareTo(code)==0)
-			{
+
+		for (Condition c : this.conditions) {
+			if (c.code.compareTo(code) == 0) {
 				return c;
 			}
 		}
-		
+
 		return null;
-		
+
 	}
-	
 
 }

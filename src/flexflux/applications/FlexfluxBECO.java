@@ -24,7 +24,7 @@ public class FlexfluxBECO extends FFApplication {
 			+ "Compares the list of essential/usable genes/reactions in several conditions";
 
 	public String example = applicationName
-			+ " -s network.xml -c conditionFile.tab -o objectives.txt -int int.txt  -plot -out out.tab";
+			+ " -s network.xml -c conditionFile.tab -o objectives.txt -int int.xml  -plot -out out.tab";
 
 	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
 	public String sbmlFile = "";

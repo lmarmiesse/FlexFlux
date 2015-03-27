@@ -13,9 +13,9 @@ import flexflux.condition.ListOfConditions;
 public class MultiRSAResult extends AnalysisResult {
 	
 	/**
-	 * conditions generated
+	 * mean attractor generated
 	 */
-	protected ListOfConditions conditions;
+	protected ListOfConditions meanAttractors;
 	
 	/**
 	 * To lock conditions
@@ -28,7 +28,7 @@ public class MultiRSAResult extends AnalysisResult {
 	 */
 	public MultiRSAResult() {
 		
-		this.conditions = new ListOfConditions();
+		this.meanAttractors = new ListOfConditions();
 		
 	}
 	
@@ -38,7 +38,7 @@ public class MultiRSAResult extends AnalysisResult {
 	 */
 	public void addCondition(Condition condition) {
 		synchronized (lock) {
-			this.getConditions().add(condition);
+			this.getMeanAttractors().add(condition);
 		}
 	}
 	
@@ -46,14 +46,14 @@ public class MultiRSAResult extends AnalysisResult {
 	 * 
 	 * @return the conditions
 	 */
-	public ListOfConditions getConditions() {
-		return conditions;
+	public ListOfConditions getMeanAttractors() {
+		return meanAttractors;
 	}
 
 	@Override
 	public void writeToFile(String path) {
 		
-		Boolean flag = this.conditions.writeConditionFile(path);
+		Boolean flag = this.meanAttractors.writeConditionFile(path);
 		
 		if(! flag)
 		{

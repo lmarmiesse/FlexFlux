@@ -67,6 +67,13 @@ public class Condition {
 	}
 
 	/**
+	 * Constructor
+	 */
+	public Condition() {
+
+	}
+
+	/**
 	 * Add a constraint to the condition If the entity does not exist in the
 	 * bind create it
 	 * 
@@ -217,9 +224,8 @@ public class Condition {
 	 * 
 	 * Add the constraints to an interaction network
 	 * 
-	 * Be careful !
-	 * Replace the constraints for the entities. 
-	 * Thise that are not in the constraints are not changed 
+	 * Be careful ! Replace the constraints for the entities. Thise that are not
+	 * in the constraints are not changed
 	 * 
 	 * 
 	 * @param intNet
@@ -250,6 +256,24 @@ public class Condition {
 		}
 
 		return;
+
+	}
+
+	/**
+	 * Converts a flexFlux condition in a HashMap<String, Double>
+	 * 
+	 * @param c
+	 * @return
+	 */
+	public HashMap<String, Double> toHashMap() {
+
+		HashMap<String, Double> res = new HashMap<String, Double>();
+
+		for (String id : this.constraints.keySet()) {
+			res.put(id, this.getConstraint(id).value);
+		}
+
+		return res;
 
 	}
 
