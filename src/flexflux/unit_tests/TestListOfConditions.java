@@ -38,6 +38,8 @@ public class TestListOfConditions {
 			ListOfConditions conditions = new ListOfConditions();
 			conditions.loadConditionFile(fileRef, ConstraintType.DOUBLE);
 
+			System.err.println("End loading");
+			
 			for (Condition condition : conditions) {
 
 				System.err.println(condition.code);
