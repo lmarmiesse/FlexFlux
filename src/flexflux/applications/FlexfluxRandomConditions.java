@@ -56,21 +56,21 @@ public class FlexfluxRandomConditions extends FFApplication {
 			+ "During the choice of the inputs to activate during a simulation, the inputs are duplicated n times, with n=weight", metaVar = "File", required = true)
 	public String inputRandomParameterFile = "";
 
-	@Option(name = "-nbSim", usage = "[100] Number of simulations to perform")
+	@Option(name = "-nbSim", usage = "[100] Number of simulations to perform",metaVar = "Integer")
 	public int nbSim = 100;
 
 	@Option(name = "-mean", usage = "[10] Mean of the gaussian distribution used for selecting "
-			+ "the number of inputs activated in each simulation")
+			+ "the number of inputs activated in each simulation",metaVar = "Double")
 	public Double meanGaussian = 10.0;
 
 	@Option(name = "-std", usage = "[5] Standard deviation of the gaussian distribution used for selecting "
-			+ "the number of inputs activated in each simulation")
+			+ "the number of inputs activated in each simulation",metaVar = "Double")
 	public Double stdGaussian = 5.0;
 
-	@Option(name = "-min", usage = "[1] minimum number of activated inputs at each step of the simulation")
+	@Option(name = "-min", usage = "[1] minimum number of activated inputs at each step of the simulation",metaVar = "Integer")
 	public Integer minInputs = 1;
 
-	@Option(name = "-max", usage = "[1] maximum number of activated inputs at each step of the simulation")
+	@Option(name = "-max", usage = "[1] maximum number of activated inputs at each step of the simulation",metaVar = "Integer")
 	public Integer maxInputs = 50;
 
 	@Option(name = "-plot", usage = "[OPTIONAL, default = false] Plots the results")

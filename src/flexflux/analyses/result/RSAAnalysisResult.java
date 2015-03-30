@@ -87,6 +87,12 @@ public class RSAAnalysisResult extends AnalysisResult {
 
 	}
 	
+	public List<Map<BioEntity, Integer>> getAttractorStatesList() {
+
+		return attractorStatesList;
+
+	}
+	
 	public List<Map<BioEntity, Integer>> getStatesList() {
 
 		return statesList;
