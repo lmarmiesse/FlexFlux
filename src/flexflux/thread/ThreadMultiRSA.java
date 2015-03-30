@@ -66,7 +66,7 @@ public class ThreadMultiRSA extends Thread {
 		Condition condition;
 
 		while ((condition = conditions.poll()) != null) {
-			
+
 			Condition newCondition = new Condition(condition.code,
 					condition.name);
 
@@ -78,16 +78,15 @@ public class ThreadMultiRSA extends Thread {
 
 			RSAAnalysisResult res = rsa.runAnalysis();
 
-			Map<BioEntity, Double> meanAttractorStates = res.getMeanAttractorStates();
+			Map<BioEntity, Double> meanAttractorStates = res
+					.getMeanAttractorStates();
 
-			
-			for(BioEntity ent : meanAttractorStates.keySet())
-			{
+			for (BioEntity ent : meanAttractorStates.keySet()) {
 				Double value = meanAttractorStates.get(ent);
-				newCondition.addConstraint(ent.getId(),
-						Vars.round(value), ConstraintType.DOUBLE);
+				newCondition.addConstraint(ent.getId(), Vars.round(value),
+						ConstraintType.DOUBLE);
 			}
-			
+
 			result.addCondition(newCondition);
 
 			int percent = (int) Math.round(((double) todo - (double) conditions
@@ -96,8 +95,8 @@ public class ThreadMultiRSA extends Thread {
 			if (percent > percentage) {
 
 				percentage = percent;
-				if (Vars.verbose && percent % 2 == 0) {
-					System.err.print("*");
+				if (percent % 2 == 0 && !Vars.verbose) {
+					 System.err.print("*");
 				}
 			}
 
