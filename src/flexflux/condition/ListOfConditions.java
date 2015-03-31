@@ -42,6 +42,7 @@ import java.util.Iterator;
 
 import flexflux.general.ConstraintType;
 import flexflux.general.SimplifiedConstraint;
+import flexflux.general.Vars;
 
 public class ListOfConditions implements Iterable<Condition> {
 
@@ -284,6 +285,12 @@ public class ListOfConditions implements Iterable<Condition> {
 
 		for (Condition cRef : conditions) {
 			if (c.equals(cRef)) {
+				
+				if(Vars.verbose)
+				{
+					System.err.println(c.code+" equals to "+cRef.code);
+				}
+				
 				return true;
 			}
 		}
@@ -291,6 +298,26 @@ public class ListOfConditions implements Iterable<Condition> {
 		return false;
 
 	}
+	
+	
+	/**
+	 * Check if a condition with the code code already exits in the conditions
+	 * @param code
+	 * @return
+	 */
+	public Boolean containsWithCode(String code)
+	{
+		for (Condition c : conditions) {
+			if(c.code.compareTo(code)==0)
+			{
+				return true;
+			}
+		}
+		
+		return false;
+		
+	}
+	
 
 	/**
 	 * Write conditions in a file

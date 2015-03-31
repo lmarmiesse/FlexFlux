@@ -56,6 +56,7 @@ public class ThreadMultiRSA extends Thread {
 		this.todo = conditions.size();
 		this.result = result;
 		this.interactionNetwork = intNet;
+		percentage = 0;
 	}
 
 	/**
@@ -65,11 +66,12 @@ public class ThreadMultiRSA extends Thread {
 
 		Condition condition;
 
+		
 		while ((condition = conditions.poll()) != null) {
 			
 			Condition newCondition = new Condition(condition.code,
 					condition.name);
-
+			
 			condition
 					.addInitialConstraintsToInteractionNetwork(this.interactionNetwork);
 
@@ -100,6 +102,7 @@ public class ThreadMultiRSA extends Thread {
 					System.err.print("*");
 				}
 			}
+			
 
 		}
 
