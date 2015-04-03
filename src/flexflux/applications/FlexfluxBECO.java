@@ -11,9 +11,12 @@ import flexflux.objective.ListOfObjectives;
 
 public class FlexfluxBECO extends FFApplication {
 	
+	public Boolean graphicalVersion = false;
+	
 	public FlexfluxBECO()
 	{
 		super();
+		
 	}
 	
 	public static String applicationName = FlexfluxBECO.class

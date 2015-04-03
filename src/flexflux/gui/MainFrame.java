@@ -113,12 +113,29 @@ public class MainFrame extends JFrame {
 			this.executableClasses = classes;
 		}
 		
-		//removes classes with no simpleName
+		//removes classes with no simpleName and with the option graphicalVersion = false;
 		List<Class> toRemove = new ArrayList<Class>();
 		for (Class c : executableClasses){
-			if (c.getSimpleName().equals("")){
+			
+			Field field = null;
+			Boolean graphicalVersion = null;
+			
+			try {
+				field = c.getField("graphicalVersion");
+				graphicalVersion = (Boolean)field.get(c.newInstance());
+			} catch (NoSuchFieldException | SecurityException | IllegalAccessException | InstantiationException e ) {
+				
+			}
+			
+			
+			
+			
+			if (c.getSimpleName().equals("") || graphicalVersion == false){
 				toRemove.add(c);
 			}
+			
+			
+			
 		}
 		
 		executableClasses.removeAll(toRemove);
