@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -153,7 +154,11 @@ public class ROBAResult extends AnalysisResult {
 			out.print("# number of conditions where each objective is activated\n");
 			out.print("objectiveId\tnbConditions\n");
 
-			for (String objId : this.objCondCount.keySet()) {
+			ArrayList<String> conditions = new ArrayList<String>(this.objCondCount.keySet());
+			
+			Collections.sort(conditions);
+			
+			for (String objId : conditions) {
 				Integer val = this.objCondCount.get(objId);
 				out.print(objId + "\t" + val + "\n");
 			}
