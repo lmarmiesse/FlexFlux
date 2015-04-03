@@ -16,6 +16,8 @@ import flexflux.objective.ListOfObjectives;
 
 public class FlexfluxROBA extends FFApplication {
 
+	public Boolean graphicalVersion = false;
+	
 	public static String applicationName = FlexfluxROBA.class
 			.getSimpleName();
 

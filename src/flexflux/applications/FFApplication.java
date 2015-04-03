@@ -21,6 +21,10 @@ public abstract class FFApplication {
 	
 	public static boolean requiresSolver = true;
 	
+
+	public static boolean graphicalVersion = true;
+	
+	
 	public CmdLineParser parser;
 	
 	/**
