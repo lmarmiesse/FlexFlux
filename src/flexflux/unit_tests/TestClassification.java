@@ -365,7 +365,9 @@ public class TestClassification extends FFUnitTest {
 
 	}
 
-	@Test
+	/**
+	 * TODO Not tested because the order can not be controlled
+	 */
 	public void testWriteCytoscapeGenericAttributes() {
 
 		String fileTest = tmpDir + "/genericAttributes.tab";
