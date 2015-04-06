@@ -110,9 +110,9 @@ body {
 								Pareto analysis</a></li>
 						<li><a href="#dead"><i class="icon-chevron-right"></i>
 								Dead reactions</a></li>
-						<li><a href="#beco"><i class="icon-chevron-right"></i>
+					<!--	<li><a href="#beco"><i class="icon-chevron-right"></i>
 								BECO: Biological Entity Clustering for their contribution to the
-								Objective function</a></li>
+								Objective function</a></li> -->
 					</ul>
 
 				</ul>
@@ -1419,7 +1419,7 @@ R_MALt2_2
 					<!-- End Dead Reactions -->
 
 					<!-- BECO -->
-					<h3 id="beco">Biological Entity Clustering by their
+	<!--				<h3 id="beco">Biological Entity Clustering by their
 						contribution to the Objective Function (BECO)</h3>
 
 					The BECO method has been designed to classify the biological
@@ -1436,14 +1436,14 @@ R_MALt2_2
 						<li>-s String: Path to the Sbml or MetExploreXml file
 							containing the metabolic network</li>
 						<!-- TODO : url to the MetExplore doc -->
-						<li>-ext: [OPTIONAL, default = false] Uses the MetExploreXml
+<!--						<li>-ext: [OPTIONAL, default = false] Uses the MetExploreXml
 							format instead of SBML format for the metabolic network</li>
 						<li>-cons String: [OPTIONAL] <a href="#cons">Constraint
 								file</a></li>
 						<li>-reg String: [OPTIONAL] Path to the regulation file path
 							(SBML-QUAL format)</li>
 						<!-- TODO : description du format -->
-						<li>-cond String : File describing conditions (set of initial
+<!--						<li>-cond String : File describing conditions (set of initial
 							states)</li>
 						<li>-o String: Path to the file containing the objective
 							functions</li>
@@ -1455,7 +1455,7 @@ R_MALt2_2
 						<!-- TODO : 
 					- cf si on ne peut pas coder ça en JAVA
 					- cf si la modif du code est essentielle -->
-						<li>-inchlibPath: Path to the inchlib program
+<!--						<li>-inchlibPath: Path to the inchlib program
 							[default=/usr/local/inchlib_clust/inchlib_clust.py]</li>
 						<li>-mdg: [OPTIONAL] Gene metadata file used for heatmap
 							analysis</li>
@@ -1481,7 +1481,7 @@ R_MALt2_2
 						<li>-plot: [OPTIONAL, default = false] Plots the
 							condition/objective heatmap</li>
 						<!-- TODO : décrire l'influence du parametre -lib -->
-						<li>-lib Double: [OPTIONAL, default = 0] Percentage of non
+<!--						<li>-lib Double: [OPTIONAL, default = 0] Percentage of non
 							optimality for new constraints</li>
 						<li>-n Integer: [OPTIONAL, default = number of available
 							processors] Number of threads</li>
@@ -1582,14 +1582,14 @@ C4,5.0,-5.0
 					<h5>Metabolic gene clustering</h5>
 
 					<!-- TODO : Faire Classificaton of the reactions -->
-					For each pair condition/objective, a classification of the
+<!--					For each pair condition/objective, a classification of the
 					metabolic genes depending of their contribution to the objective
 					function (see ...) is performed. The genes and the pairs
 					condition/objective are clustered considering the classication of
 					the genes.
 
 					<!-- TODO : Verifier que s'il n'y a pas de réseau de régulation, cette étape n'est pas réalisée -->
-					<h5>Regulator clustering</h5>
+<!--					<h5>Regulator clustering</h5>
 					For each pair condition/objective, a classification of the actors
 					of the regulatory network depending of their contribution to the
 					objective function (see ...) is performed. Regulators are
