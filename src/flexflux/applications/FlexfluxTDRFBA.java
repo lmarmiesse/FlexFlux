@@ -71,6 +71,9 @@ import parsebionet.biodata.BioEntity;
  * 
  */
 public class FlexfluxTDRFBA extends FFApplication{
+	
+	// order for the graphical version
+	public static int order = 7;
 
 	public static String message = "FlexfluxTDRFBA\n"
 

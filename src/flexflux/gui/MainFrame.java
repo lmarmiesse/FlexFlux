@@ -78,25 +78,24 @@ public class MainFrame extends JFrame {
 			hasSolver = false;
 			String message = "No solver is well configured. Check the configuration file.\nYou wont be able to use "
 					+ "all of Flexflux functions";
-			 JOptionPane.showMessageDialog(new JFrame(), message,
-			 "No solver found", JOptionPane.WARNING_MESSAGE);
-//			System.exit(0);
+			JOptionPane.showMessageDialog(new JFrame(), message,
+					"No solver found", JOptionPane.WARNING_MESSAGE);
+			// System.exit(0);
 		}
 
 		this.solvers = solvers;
 
 		if (hasSolver == false) {
-			
-			for (Class<?> cl : classes){
-				
+
+			for (Class<?> cl : classes) {
+
 				try {
-					
-					if(!(boolean) cl.getField("requiresSolver").get(null)){
+					if (!(boolean) cl.getField("requiresSolver").get(null)) {
 						this.executableClasses.add(cl);
 					}
-					
-					
+
 				} catch (NoSuchFieldException | SecurityException e) {
+					System.out.println(cl.getSimpleName());
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IllegalArgumentException e) {
@@ -107,39 +106,34 @@ public class MainFrame extends JFrame {
 					e.printStackTrace();
 				}
 			}
-			
 
 		} else {
 			this.executableClasses = classes;
 		}
-		
-		//removes classes with no simpleName and with the option graphicalVersion = false;
+		// removes classes with no simpleName and with the option
+		// graphicalVersion = false;
 		List<Class> toRemove = new ArrayList<Class>();
-		for (Class c : executableClasses){
-			
+		for (Class c : executableClasses) {
+
 			Field field = null;
 			Boolean graphicalVersion = null;
-			
+
 			try {
 				field = c.getField("graphicalVersion");
-				graphicalVersion = (Boolean)field.get(c.newInstance());
-			} catch (NoSuchFieldException | SecurityException | IllegalAccessException | InstantiationException e ) {
-				
+				graphicalVersion = (Boolean) field.get(c.newInstance());
+			} catch (NoSuchFieldException | SecurityException
+					| IllegalAccessException | InstantiationException e) {
+
 			}
-			
-			
-			
-			
-			if (c.getSimpleName().equals("") || graphicalVersion == false){
+
+			if (c.getSimpleName().equals("") || graphicalVersion == false) {
 				toRemove.add(c);
 			}
-			
-			
-			
+
 		}
-		
+
 		executableClasses.removeAll(toRemove);
-		
+
 		fillExecList();
 
 		JPanel northPanel = new JPanel();
@@ -305,8 +299,14 @@ public class MainFrame extends JFrame {
 						opt.name());
 				optionalArgsPanel.add(p);
 				argComponents.add(p);
-				p.init(String.valueOf(optionToField.get(opt).get(
-						selectedClass.newInstance())));
+
+				if (opt.name().equals("-plot")) {
+					p.init("true");
+				} else {
+					p.init(String.valueOf(optionToField.get(opt).get(
+							selectedClass.newInstance())));
+				}
+
 				if (previousArguments.containsKey(opt.name())) {
 					p.init(previousArguments.get(opt.name()));
 				}

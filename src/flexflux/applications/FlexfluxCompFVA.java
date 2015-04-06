@@ -65,7 +65,10 @@ import parsebionet.biodata.BioEntity;
  * 
  */
 public class FlexfluxCompFVA extends FFApplication{
-
+	
+	// order for the graphical version
+	public static int order = 5;
+	
 	public static String message = "FlexfluxCompFVA\n"
 
 			+ "Compares the results of two FVA analyses given a metabolic network, an objective function and two different set of constraints.\n"

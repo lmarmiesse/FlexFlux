@@ -66,6 +66,9 @@ import parsebionet.biodata.BioEntity;
  * 
  */
 public class FlexfluxKO extends FFApplication{
+	
+	// order for the graphical version
+	public static int order = 6;
 
 	public static String message = "FlexfluxKO\n"
 

@@ -60,6 +60,9 @@ import parsebionet.biodata.BioEntity;
  * 
  */
 public class FlexfluxPP3D extends FFApplication{
+	
+	// order for the graphical version
+	public static int order = 9;	
 
 	public static String message = "FlexfluxPP3D\n"
 
