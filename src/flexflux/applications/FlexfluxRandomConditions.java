@@ -46,6 +46,9 @@ import flexflux.general.Vars;
  */
 public class FlexfluxRandomConditions extends FFApplication {
 
+	// order for the graphical version
+	public static int order = 12;
+	
 	public static String applicationName = FlexfluxRandomConditions.class.getSimpleName();
 
 	public static String message = applicationName + " [options...]\n"

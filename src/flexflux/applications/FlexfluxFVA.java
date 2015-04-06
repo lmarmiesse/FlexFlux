@@ -51,17 +51,23 @@ import parsebionet.biodata.BioEntity;
 
 /**
  * 
- * <p>Computes an FVA analysis given a metabolic network, an objective function and
- * constraints.</p> An FVA analysis consists in getting the optimal value for
- * the objective function, setting this value as a constraint and, given a list
- * of entities, minimize and maximize their values. If no entity is specified in
- * argument -e, the FVA analysis is performed on all reactions.
+ * <p>
+ * Computes an FVA analysis given a metabolic network, an objective function and
+ * constraints.
+ * </p>
+ * An FVA analysis consists in getting the optimal value for the objective
+ * function, setting this value as a constraint and, given a list of entities,
+ * minimize and maximize their values. If no entity is specified in argument -e,
+ * the FVA analysis is performed on all reactions.
  * 
  * @author lmarmiesse 6 mars 2013
  * 
  */
-public class FlexfluxFVA extends FFApplication{
-
+public class FlexfluxFVA extends FFApplication {
+	// order for the graphical version
+	public static int order = 4;
+	
+	
 	public static String message = "FlexfluxFVA\n"
 
 			+ "Computes an FVA given a metabolic network, an objective function and constraints.\n"
@@ -106,7 +112,6 @@ public class FlexfluxFVA extends FFApplication{
 	@Option(name = "-ext", usage = "[OPTIONAL, default = false]Uses the extended SBML format")
 	public boolean extended = false;
 
-
 	public static void main(String[] args) {
 
 		FlexfluxFVA f = new FlexfluxFVA();
@@ -123,7 +128,6 @@ public class FlexfluxFVA extends FFApplication{
 			System.exit(0);
 		}
 
-
 		Bind bind = null;
 
 		if (!new File(f.sbmlFile).isFile()) {
@@ -131,7 +135,8 @@ public class FlexfluxFVA extends FFApplication{
 			System.exit(0);
 		}
 		if (!new File(f.consFile).isFile()) {
-			System.err.println("Error : condition file " + f.consFile + " not found");
+			System.err.println("Error : condition file " + f.consFile
+					+ " not found");
 			System.exit(0);
 		}
 

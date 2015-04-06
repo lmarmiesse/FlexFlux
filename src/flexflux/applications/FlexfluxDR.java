@@ -63,6 +63,9 @@ import parsebionet.io.Sbml2Bionetwork;
  * 
  */
 public class FlexfluxDR extends FFApplication{
+	
+	// order for the graphical version
+	public static int order = 11;	
 
 	public static String message = "FlexfluxDR\n"
 

@@ -52,9 +52,13 @@ import flexflux.interaction.RelationFactory;
  */
 public class FlexfluxMultiRSA extends FFApplication {
 
-	public String applicationName = FlexfluxMultiRSA.class.getSimpleName();
+	// order for the graphical version
+	public static int order = 2;
 
-	public String message = applicationName + " [options...]\n"
+	public static String applicationName = FlexfluxMultiRSA.class
+			.getSimpleName();
+
+	public static String message = applicationName + " [options...]\n"
 			+ "Performs a Steady State analysis for multiple conditions";
 
 	@Option(name = "-reg", usage = "Regulation file path", metaVar = "File", required = true)
@@ -72,7 +76,6 @@ public class FlexfluxMultiRSA extends FFApplication {
 	@Option(name = "-out", usage = "Output file", metaVar = "File")
 	public String outName = "ssa.tab";
 
-
 	/**
 	 * Main
 	 * 
@@ -83,11 +86,10 @@ public class FlexfluxMultiRSA extends FFApplication {
 		FlexfluxMultiRSA f = new FlexfluxMultiRSA();
 
 		f.parseArguments(args);
-		
+
 		Boolean flag = f.run();
-		
-		if(flag == false)
-		{
+
+		if (flag == false) {
 			System.err.println("Error in the execution");
 			System.exit(0);
 		}
@@ -98,7 +100,7 @@ public class FlexfluxMultiRSA extends FFApplication {
 	 *
 	 */
 	public Boolean run() {
-		
+
 		if (this.verbose) {
 			Vars.verbose = true;
 		}
@@ -129,8 +131,8 @@ public class FlexfluxMultiRSA extends FFApplication {
 		 * Parsing the condition file
 		 */
 		if (!new File(this.conditionFile).isFile()) {
-			System.err
-					.println("Error : file " + this.conditionFile + " not found");
+			System.err.println("Error : file " + this.conditionFile
+					+ " not found");
 			return false;
 		}
 
@@ -144,22 +146,21 @@ public class FlexfluxMultiRSA extends FFApplication {
 					+ this.conditionFile);
 			return false;
 		}
-		
+
 		/**
 		 * Creation of the analysis
 		 */
-		
+
 		MultiRSA analysis = new MultiRSA(intNet, conditions);
-		
+
 		MultiRSAResult res = analysis.runAnalysis();
-		
+
 		res.writeToFile(this.outName);
-		
+
 		return true;
-		
+
 	}
-	
-	
+
 	@Override
 	public String getMessage() {
 		// TODO Auto-generated method stub

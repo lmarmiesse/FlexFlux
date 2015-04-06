@@ -26,6 +26,9 @@ import flexflux.interaction.RelationFactory;
  */
 
 public class FlexfluxRSA extends FFApplication {
+	
+	//order for the graphical version
+	public static int order = 1;
 
 	public static boolean requiresSolver = false;
 

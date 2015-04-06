@@ -53,7 +53,10 @@ import flexflux.general.Vars;
  * @author lmarmiesse 6 mars 2013
  * 
  */
-public class FlexfluxFBA extends FFApplication{
+public class FlexfluxFBA extends FFApplication {
+
+	// order for the graphical version
+	public static int order = 3;
 
 	public static String message = "FlexfluxFBA [options...]\n"
 			+ "Computes an FBA given a metabolic network, an objective function and constraints.\n"
@@ -90,17 +93,16 @@ public class FlexfluxFBA extends FFApplication{
 
 	@Option(name = "-ext", usage = "[OPTIONAL, default = false]Uses the extended SBML format")
 	public boolean extended = false;
-	
-	@Option(name = "-senFile", usage = "[OPTIONAL] A sensitivity analysis is performed and saved in the indicated file name", metaVar = "File")
-	public String senFile="";
 
+	@Option(name = "-senFile", usage = "[OPTIONAL] A sensitivity analysis is performed and saved in the indicated file name", metaVar = "File")
+	public String senFile = "";
 
 	public static void main(String[] args) {
 
 		FlexfluxFBA f = new FlexfluxFBA();
 
 		f.parseArguments(args);
-		
+
 		Vars.libertyPercentage = f.liberty;
 		Vars.decimalPrecision = f.precision;
 
@@ -142,9 +144,9 @@ public class FlexfluxFBA extends FFApplication{
 
 		if (f.stateFile != "") {
 			Vars.writeInteractionNetworkStates = true;
-			bind.statesFileName=f.stateFile;
+			bind.statesFileName = f.stateFile;
 		}
-		
+
 		bind.loadSbmlNetwork(f.sbmlFile, f.extended);
 		if (f.consFile != "") {
 			bind.loadConstraintsFile(f.consFile);
@@ -163,11 +165,11 @@ public class FlexfluxFBA extends FFApplication{
 		if (!f.outName.equals("")) {
 			result.writeToFile(f.outName);
 		}
-		
-		if(f.senFile != "") {
+
+		if (f.senFile != "") {
 			result.sensitivityAnalysis(f.senFile);
 		}
-	
+
 		bind.end();
 	}
 

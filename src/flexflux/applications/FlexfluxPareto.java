@@ -80,6 +80,9 @@ import org.kohsuke.args4j.Option;
  * 
  */
 public class FlexfluxPareto extends FFApplication{
+	
+	// order for the graphical version
+	public static int order = 10;	
 
 	public static String message = "FlexfluxPareto\n"
 			+ "The goal of this analysis is to determine what objective (or set of objectives) an organism is optimizing.\n"
