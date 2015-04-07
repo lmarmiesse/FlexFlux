@@ -582,7 +582,7 @@ public class ConstraintsFileReader {
 				0.0);
 
 		constraints.add(summationConstraint);
-
+		
 		return FluxesSummation;
 
 	}

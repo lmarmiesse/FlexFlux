@@ -706,7 +706,7 @@ public abstract class Bind {
 		ConstraintsFileReader r = new ConstraintsFileReader("", intNet,
 				constraints, simpleConstraints, steadyStateConstraints, bioNet,
 				true);
-		
+
 		return r.createFluxesSummation();
 
 	}
@@ -729,7 +729,7 @@ public abstract class Bind {
 		ConstraintsFileReader r = new ConstraintsFileReader("", intNet,
 				constraints, simpleConstraints, steadyStateConstraints, bioNet,
 				true);
-		
+
 		return r.makeObjectiveFromString(expr, maximize, name);
 
 	}
@@ -1237,7 +1237,10 @@ public abstract class Bind {
 
 	public double getSolvedValue(BioEntity ent) {
 
-		return lastSolve.get(ent.getId());
+		if (lastSolve.containsKey(ent.getId())) {
+			return lastSolve.get(ent.getId());
+		}
+		return Double.NaN;
 	}
 
 	public Map<BioEntity, Map<Relation, double[]>> getInteractionsEntities() {
