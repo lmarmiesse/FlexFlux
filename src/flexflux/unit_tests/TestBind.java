@@ -121,7 +121,6 @@ public class TestBind extends FFUnitTest {
 				bind = new GLPKBind();
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			fail("Solver error");
 		}
 
@@ -142,10 +141,14 @@ public class TestBind extends FFUnitTest {
 		// all the reaction are loaded
 		Assert.assertEquals(2214, n.getBiochemicalReactionList().size());
 
-		Assert.assertTrue("Network entities are not added correctly", n
+		int nb = n
 				.getPhysicalEntityList().size()
 				+ n.getBiochemicalReactionList().size()
-				+ n.getProteinList().size() + n.getGeneList().size() >= i
+				+ n.getProteinList().size() + n.getGeneList().size() +  bind.getDeadReactions().size();
+		
+		System.err.println("n : "+nb+"\nnum: "+i.getNumEntities().size());
+		
+		Assert.assertTrue("Network entities are not added correctly", nb >= i
 				.getNumEntities().size());
 
 		// entities are added

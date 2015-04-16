@@ -1,6 +1,6 @@
 <?xml version="1.0"  encoding="UTF-8"?>
 <sbml xmlns="http://www.sbml.org/sbml/level2" version="1" level="2" xmlns:html="http://www.w3.org/1999/xhtml">
-<model id="NA" name="NA">
+<model id="modelNA" name="NA">
 	<listOfUnitDefinitions>
 	<unitDefinition id="mmol_per_gDW_per_hr">
 		<listOfUnits>

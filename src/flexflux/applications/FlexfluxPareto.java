@@ -119,7 +119,7 @@ public class FlexfluxPareto extends FFApplication{
 	@Option(name = "-pre", usage = "[OPTIONAL, default = 6]Number of decimals of precision for calculations and results", metaVar = "Integer")
 	public int precision = 6;
 
-	@Option(name = "-ext", usage = "[OPTIONAL, default = false]Uses the extended SBML format")
+	@Option(name = "-ext", usage = extParameterDescription)
 	public boolean extended = false;
 
 	@Option(name = "-all", usage = "[OPTIONAL, default = false]Plots all results. If false, plots 1D results and only the best result for 2D and 3D results")

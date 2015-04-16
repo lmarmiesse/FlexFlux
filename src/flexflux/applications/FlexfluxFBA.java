@@ -91,7 +91,7 @@ public class FlexfluxFBA extends FFApplication {
 	@Option(name = "-pre", usage = "[OPTIONAL, default = 6]Number of decimals of precision for calculations and results", metaVar = "Integer")
 	public int precision = 6;
 
-	@Option(name = "-ext", usage = "[OPTIONAL, default = false]Uses the extended SBML format")
+	@Option(name = "-ext", usage = extParameterDescription)
 	public boolean extended = false;
 
 	@Option(name = "-senFile", usage = "[OPTIONAL] A sensitivity analysis is performed and saved in the indicated file name", metaVar = "File")

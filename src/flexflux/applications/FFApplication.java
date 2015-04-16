@@ -24,6 +24,9 @@ public abstract class FFApplication {
 	public static boolean requiresSolver = true;
 
 	public static boolean graphicalVersion = true;
+	
+	public static final String extParameterDescription = "[OPTIONAL, default = false]if activated, uses recon2 SBML format to decode gene association, otherwise uses Cobra toolbox SBML format (http://www.nature.com/protocolexchange/system/uploads/1808/original/Supplementary_Material.pdf?1304792680)";
+
 
 	public CmdLineParser parser;
 

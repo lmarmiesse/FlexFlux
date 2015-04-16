@@ -33,6 +33,9 @@
  */
 package flexflux.general;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -44,6 +47,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.sbml.jsbml.xml.test.GetNotesStringTests;
+
 import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioComplex;
 import parsebionet.biodata.BioEntity;
@@ -52,6 +57,7 @@ import parsebionet.biodata.BioNetwork;
 import parsebionet.biodata.BioPhysicalEntity;
 import parsebionet.biodata.BioPhysicalEntityParticipant;
 import parsebionet.biodata.BioProtein;
+import parsebionet.io.JSBMLToBionetwork;
 import parsebionet.io.Sbml2Bionetwork;
 import flexflux.analyses.FBAAnalysis;
 import flexflux.analyses.RSAAnalysis;
@@ -567,11 +573,18 @@ public abstract class Bind {
 	 * @param path
 	 *            Path to the SBML file.
 	 * @param ext
-	 *            If true : uses extended SBML format.
+	 * 			  If false : the GPR association is coded as in the Cobra Toolbox
+	 *            If true :  the GPR association is coded as in the Recon2 model
 	 */
 	public void loadSbmlNetwork(String path, boolean ext) {
-		Sbml2Bionetwork parser = new Sbml2Bionetwork(path, ext);
-		setNetworkAndConstraints(parser.getBioNetwork());
+		if (ext) {
+			JSBMLToBionetwork parser = new JSBMLToBionetwork(path);
+			setNetworkAndConstraints(parser.getBioNetwork());
+			
+		} else {
+			Sbml2Bionetwork parser = new Sbml2Bionetwork(path, ext);
+			setNetworkAndConstraints(parser.getBioNetwork());
+		}
 	}
 
 	/**
@@ -816,6 +829,7 @@ public abstract class Bind {
 		// we add the metabolites
 		Map<String, BioPhysicalEntity> metabolitesMap = bioNet
 				.getPhysicalEntityList();
+		System.err.println("phy ent : "+bioNet.getPhysicalEntityList().size());
 
 		for (String metabName : metabolitesMap.keySet()) {
 			entities.add(metabolitesMap.get(metabName));
@@ -823,16 +837,18 @@ public abstract class Bind {
 
 		// we add the genes
 		Map<String, BioGene> genesMap = bioNet.getGeneList();
+		System.err.println("genes : "+bioNet.getGeneList().size());
 		for (String geneName : genesMap.keySet()) {
 			entities.add(genesMap.get(geneName));
 		}
 
 		// we add the proteins
 		Map<String, BioProtein> proteinsMap = bioNet.getProteinList();
+		System.err.println("proteins : "+bioNet.getProteinList().size());
 		for (String protName : proteinsMap.keySet()) {
 			entities.add(proteinsMap.get(protName));
 		}
-
+		
 		for (BioEntity be : entities) {
 			intNet.addNumEntity(be);
 		}

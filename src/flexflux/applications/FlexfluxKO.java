@@ -116,7 +116,7 @@ public class FlexfluxKO extends FFApplication{
 	@Option(name = "-pre", usage = "[OPTIONAL, default = 6]Number of decimals of precision for calculations  and results", metaVar = "Integer")
 	public int precision = 6;
 
-	@Option(name = "-ext", usage = "[OPTIONAL, default = false]Uses the extended SBML format")
+	@Option(name = "-ext", usage = extParameterDescription)
 	public boolean extended = false;
 
 
