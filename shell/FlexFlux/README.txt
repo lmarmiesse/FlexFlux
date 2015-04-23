@@ -7,6 +7,9 @@ At this point, FlexFlux supports CPLEX and GLPK.
 
 To use FlexFlux you need Java to be installed.
 
+To install glpk for java on Ubuntu and Debian you can type this in a terminal :
+sudo apt-get install libglpk-java
+
 LINUX
 
 

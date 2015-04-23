@@ -48,6 +48,8 @@ public class FlexfluxRandomConditions extends FFApplication {
 
 	// order for the graphical version
 	public static int order = 12;
+	
+	public static boolean requiresSolver = false;
 
 	public static String applicationName = FlexfluxRandomConditions.class
 			.getSimpleName();

@@ -54,6 +54,8 @@ public class FlexfluxMultiRSA extends FFApplication {
 
 	// order for the graphical version
 	public static int order = 2;
+	
+	public static boolean requiresSolver = false;
 
 	public static String applicationName = FlexfluxMultiRSA.class
 			.getSimpleName();
