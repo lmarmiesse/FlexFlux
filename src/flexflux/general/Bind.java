@@ -301,6 +301,8 @@ public abstract class Bind {
 				// checking interactions
 				Set<BioEntity> hadNoSimpleConstraint = new HashSet<BioEntity>();
 
+				
+				// we update the simpleConstraints for the RSA (it needs simpleConstraints)
 				for (Constraint constr : constraintsToAdd) {
 
 					if (constr.getEntities().size() == 1) {
@@ -309,6 +311,9 @@ public abstract class Bind {
 								if (simpleConstraints.containsKey(ent)) {
 									oldSimpleConstraints.put(ent,
 											simpleConstraints.get(ent));
+									
+									constraints.remove(simpleConstraints.get(ent));
+									
 								} else {
 									hadNoSimpleConstraint.add(ent);
 								}
@@ -335,6 +340,8 @@ public abstract class Bind {
 						intNetSteadyStateConstraints.add(c);
 					}
 
+					
+					// we update the simpleConstraints for the GPR (it needs simpleConstraints)
 					for (Constraint constr : intNetSteadyStateConstraints) {
 
 						if (constr.getEntities().size() == 1) {
@@ -365,8 +372,10 @@ public abstract class Bind {
 								.getInteractionToConstraints().get(i));
 					}
 				}
-				//
-
+				
+				
+				
+				// we go back to the original simpleConstraints
 				for (Constraint constr : constraintsToAdd) {
 					if (constr.getEntities().size() == 1) {
 						for (BioEntity ent : constr.getEntities().keySet()) {

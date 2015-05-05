@@ -249,7 +249,8 @@ public class SBMLQualReader {
 			for (FunctionTerm ft : tr.getListOfFunctionTerms()) {
 				double starts = 0;
 				double lasts = 0;
-
+				String interID = "";
+				
 				Interaction inter;
 
 				int resValue = 0;
@@ -302,12 +303,18 @@ public class SBMLQualReader {
 								lasts = Double.parseDouble(text.split(":")[1]);
 
 							}
+							if (text.startsWith("ID")) {
+
+								interID = text.split(":")[1].trim();
+
+							}
 						}
 					}
 
 				}
 
 				inter.setTimeInfos(new double[] { starts, lasts });
+				inter.setName(interID);
 
 			}
 

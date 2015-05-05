@@ -446,7 +446,7 @@ public class CplexBind extends Bind {
 			e.printStackTrace();
 		}
 
-		return new DoubleResult(0, 1);
+		return new DoubleResult(Double.NaN, 1);
 
 	}
 

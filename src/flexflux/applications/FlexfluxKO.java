@@ -188,7 +188,7 @@ public class FlexfluxKO extends FFApplication{
 		if (f.regFile != "") {
 			bind.loadRegulationFile(f.regFile);
 		}
-		bind.prepareSolver();
+//		bind.prepareSolver();
 
 		Map<String, BioEntity> entitiesMap = new HashMap<String, BioEntity>();
 

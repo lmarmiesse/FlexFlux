@@ -168,6 +168,8 @@ public class KOAnalysis extends Analysis {
 			tasks.add(entitiesMap.get(entityName));
 		}
 
+		
+		
 		for (int j = 0; j < Vars.maxThread; j++) {
 			
 			Bind newBind = null;
@@ -188,6 +190,7 @@ public class KOAnalysis extends Analysis {
 			
 			threads.add(threadKo);
 		}
+		
 
 		if (Vars.verbose) {
 			System.err.println("Progress : ");

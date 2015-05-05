@@ -117,7 +117,7 @@ public class KOResult extends AnalysisResult {
 	}
 
 	public void plot() {
-		
+
 		resultTable = new JTable(0, 2);
 
 		String[] columnNames = { "Entity name", "Objective value" };
@@ -127,7 +127,13 @@ public class KOResult extends AnalysisResult {
 		int i = 0;
 		for (BioEntity ent : map.keySet()) {
 
-			data[i] = new Object[] { ent.getId(), Vars.round(map.get(ent)) };
+			double plotVal = Vars.round(map.get(ent));
+
+			if (Double.isNaN(plotVal)) {
+				data[i] = new Object[] { ent.getId()+ "(Unfeasible)", 0.0 };
+			} else {
+				data[i] = new Object[] { ent.getId(), plotVal };
+			}
 			i++;
 		}
 

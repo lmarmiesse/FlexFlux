@@ -78,7 +78,6 @@ public abstract class ResolveThread extends Thread {
 		this.bind = b;
 		bind.setObjective(obj);
 		bind.prepareSolver();
-
 	}
 
 	/**
