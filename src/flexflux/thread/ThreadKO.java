@@ -115,7 +115,7 @@ public class ThreadKO extends ResolveThread {
 				toRemove = bind.getSimpleConstraints().get(entity);
 				bind.getSimpleConstraints().remove(entity);
 				bind.getConstraints().remove(toRemove);
-//				bind.prepareSolver();
+				bind.prepareSolver();
 			}
 
 			//

@@ -225,11 +225,11 @@ public class KOAnalysis extends Analysis {
 			threads.remove(0);
 		}
 
-		if (Vars.verbose) {
+//		if (Vars.verbose) {
 			System.err.println("KO over "
 					+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
 					+ Vars.maxThread + " threads");
-		}
+//		}
 		return koResult;
 	}
 }
