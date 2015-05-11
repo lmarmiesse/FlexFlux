@@ -100,7 +100,7 @@ public class ThreadKO extends ResolveThread {
 	public void run() {
 
 		BioEntity entity;
-
+		
 		while ((entity = entities.poll()) != null) {
 
 			Map<BioEntity, Double> entityMap = new HashMap<BioEntity, Double>();
