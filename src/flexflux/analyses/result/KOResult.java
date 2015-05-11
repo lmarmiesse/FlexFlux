@@ -99,11 +99,22 @@ public class KOResult extends AnalysisResult {
 			PrintWriter out = new PrintWriter(new File(path));
 
 			out.println("KO results : \n");
+			
+			
 
 			for (BioEntity entity : map.keySet()) {
+				
+				double plotVal = Vars.round(map.get(entity));
 
-				out.println(entity.getId() + " obj value : "
-						+ Vars.round(map.get(entity)));
+				if (Double.isNaN(plotVal)) {
+					out.println(entity.getId() + "(Unfeasible) obj value : "
+							+ Vars.round(map.get(entity)));
+				} else {
+					out.println(entity.getId() + " obj value : "
+							+ Vars.round(map.get(entity)));
+				}
+
+				
 			}
 			out.close();
 		} catch (IOException e) {
