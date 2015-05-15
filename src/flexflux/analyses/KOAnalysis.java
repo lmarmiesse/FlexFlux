@@ -168,6 +168,8 @@ public class KOAnalysis extends Analysis {
 			tasks.add(entitiesMap.get(entityName));
 		}
 
+		
+		
 		for (int j = 0; j < Vars.maxThread; j++) {
 			
 			Bind newBind = null;
@@ -188,6 +190,7 @@ public class KOAnalysis extends Analysis {
 			
 			threads.add(threadKo);
 		}
+		
 
 		if (Vars.verbose) {
 			System.err.println("Progress : ");
@@ -222,11 +225,11 @@ public class KOAnalysis extends Analysis {
 			threads.remove(0);
 		}
 
-		if (Vars.verbose) {
+//		if (Vars.verbose) {
 			System.err.println("KO over "
 					+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
 					+ Vars.maxThread + " threads");
-		}
+//		}
 		return koResult;
 	}
 }

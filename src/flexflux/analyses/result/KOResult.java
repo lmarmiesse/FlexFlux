@@ -99,11 +99,22 @@ public class KOResult extends AnalysisResult {
 			PrintWriter out = new PrintWriter(new File(path));
 
 			out.println("KO results : \n");
+			
+			
 
 			for (BioEntity entity : map.keySet()) {
+				
+				double plotVal = Vars.round(map.get(entity));
 
-				out.println(entity.getId() + " obj value : "
-						+ Vars.round(map.get(entity)));
+				if (Double.isNaN(plotVal)) {
+					out.println(entity.getId() + "(Unfeasible) obj value : "
+							+ Vars.round(map.get(entity)));
+				} else {
+					out.println(entity.getId() + " obj value : "
+							+ Vars.round(map.get(entity)));
+				}
+
+				
 			}
 			out.close();
 		} catch (IOException e) {
@@ -117,7 +128,7 @@ public class KOResult extends AnalysisResult {
 	}
 
 	public void plot() {
-		
+
 		resultTable = new JTable(0, 2);
 
 		String[] columnNames = { "Entity name", "Objective value" };
@@ -127,7 +138,13 @@ public class KOResult extends AnalysisResult {
 		int i = 0;
 		for (BioEntity ent : map.keySet()) {
 
-			data[i] = new Object[] { ent.getId(), Vars.round(map.get(ent)) };
+			double plotVal = Vars.round(map.get(ent));
+
+			if (Double.isNaN(plotVal)) {
+				data[i] = new Object[] { ent.getId()+ "(Unfeasible)", 0.0 };
+			} else {
+				data[i] = new Object[] { ent.getId(), plotVal };
+			}
 			i++;
 		}
 

@@ -94,22 +94,42 @@ public class ThreadKO extends ResolveThread {
 		this.entitiesInInteractionNetwork = entitiesInInteractionNetwork;
 		this.interactionNetworkConstraints = interactionNetwotkConstraints;
 		percentage = 0;
+
 	}
 
 	public void run() {
 
 		BioEntity entity;
-
+		
 		while ((entity = entities.poll()) != null) {
 
 			Map<BioEntity, Double> entityMap = new HashMap<BioEntity, Double>();
 			entityMap.put(entity, 1.0);
 
+			boolean removedConst = false;
+			Constraint toRemove = null;
+			// we remove a constraint that is already present on this entity
+			if (bind.getSimpleConstraints().containsKey(entity)) {
+				removedConst = true;
+
+				toRemove = bind.getSimpleConstraints().get(entity);
+				bind.getSimpleConstraints().remove(entity);
+				bind.getConstraints().remove(toRemove);
+			}
+
+			//
+
 			List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 
 			Constraint newConstraint = new Constraint(entityMap, 0.0, 0.0);
 
-			constraintsToAdd.add(newConstraint);
+			bind.getConstraints().add(newConstraint);
+			bind.getSimpleConstraints().put(entity, newConstraint);
+			
+			bind.prepareSolver();
+			
+			
+//			constraintsToAdd.add(newConstraint);
 
 			// if the entity is not in the interaction network, we
 			// don't recompute the attractors
@@ -120,12 +140,12 @@ public class ThreadKO extends ResolveThread {
 
 			DoubleResult value = bind.FBA(constraintsToAdd, false, true);
 
-			if(Vars.verbose)
-			{
-				System.err.println("Entity : "+entity.getId()+"\tValue : "+value.result);
-			}
-			
 			result.addLine(entity, value.result);
+
+			if (Vars.verbose) {
+				System.err.println("Entity : " + entity.getId() + "\tValue : "
+						+ value.result);
+			}
 
 			bind.checkInteractionNetwork = true;
 
@@ -139,6 +159,20 @@ public class ThreadKO extends ResolveThread {
 					}
 				}
 			}
+
+			bind.getSimpleConstraints().remove(entity);
+			bind.getConstraints().remove(newConstraint);
+			
+			
+			if (removedConst) {
+				bind.getConstraints().add(toRemove);
+				bind.getSimpleConstraints().put(entity, toRemove);
+				bind.prepareSolver();
+			}
+			
+			
+			
+
 		}
 
 		bind.end();

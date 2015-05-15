@@ -51,8 +51,8 @@ import flexflux.utils.web.JsonUtils;
 
 public class BECOResult extends AnalysisResult {
 
-	HashMap<String, HashMap<String, ClassificationResult>> pfbaAllResults = null;
-	HashMap<String, HashMap<String, KOResult>> koAllResults = null;
+	public HashMap<String, HashMap<String, ClassificationResult>> pfbaAllResults = null;
+	public HashMap<String, HashMap<String, KOResult>> koAllResults = null;
 
 	public BECOFbaResultSet fbaAllResults = null;
 

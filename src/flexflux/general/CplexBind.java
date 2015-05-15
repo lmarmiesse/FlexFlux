@@ -102,7 +102,7 @@ public class CplexBind extends Bind {
 
 			// cplex.setParam(IloCplex.IntParam.AdvInd, 0);
 
-			// cplex.setParam(IloCplex.IntParam.ParallelMode, -1);
+//			cplex.setParam(IloCplex.IntParam.ParallelMode, 1);
 			// System.out.println(IloCplex.IntParam.Threads.getValue());
 
 			// System.out.println(cplex.getParam(IloCplex.IntParam.Threads));
@@ -441,12 +441,12 @@ public class CplexBind extends Bind {
 				}
 			}
 
-			return new DoubleResult(0, 1);
+			return new DoubleResult(Double.NaN, 1);
 		} catch (IloException e) {
 			e.printStackTrace();
 		}
 
-		return new DoubleResult(0, 1);
+		return new DoubleResult(Double.NaN, 1);
 
 	}
 

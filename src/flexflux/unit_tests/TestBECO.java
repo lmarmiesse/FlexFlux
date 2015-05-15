@@ -1,10 +1,15 @@
 package flexflux.unit_tests;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Scanner;
 
 import junitx.framework.FileAssert;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -509,7 +514,21 @@ public class TestBECO extends FFUnitTest{
 		String pathFileTest = basePath + "/concurrentReactions.tsv";
 		File fileTest = new File(pathFileTest);
 		File fileRef = new File(referenceConcurrentFile);
-
+		
+		
+		Scanner sc;
+		try {
+			sc = new Scanner(fileTest);
+			
+			while(sc.hasNextLine()){
+			    System.err.println(sc.nextLine());                     
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		FileAssert.assertEquals(
 				"Concurrent reactions are different from the reference",
 				fileRef, fileTest);
@@ -730,7 +749,7 @@ public class TestBECO extends FFUnitTest{
 	@AfterClass
 	public static void afterTest() {
 
-//		 tempDir.delete();
+		 tempDir.delete();
 
 	}
 

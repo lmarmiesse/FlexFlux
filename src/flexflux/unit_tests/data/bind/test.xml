@@ -11,17 +11,17 @@
 	</unitDefinition>
 </listOfUnitDefinitions>
 <listOfCompartments>
-<compartment id="NA" name ="NA" />
+<compartment id="c_NA" name ="NA" />
 </listOfCompartments>
 <listOfSpecies>
-  <species id="D" name="D" compartment="NA" boundaryCondition="false" />
-  <species id="Biomass_ex" name="Biomass_ex" compartment="NA" boundaryCondition="true" />
-  <species id="A" name="A" compartment="NA" boundaryCondition="false" />
-  <species id="B" name="B" compartment="NA" boundaryCondition="false" />
-  <species id="C" name="C" compartment="NA" boundaryCondition="false" />
-  <species id="Biomass" name="Biomass" compartment="NA" boundaryCondition="false" />
-  <species id="Aex" name="Aex" compartment="NA" boundaryCondition="true" />
-  <species id="Dex" name="Dex" compartment="NA" boundaryCondition="true" />
+  <species id="D" name="D" compartment="c_NA" boundaryCondition="false" />
+  <species id="Biomass_ex" name="Biomass_ex" compartment="c_NA" boundaryCondition="true" />
+  <species id="A" name="A" compartment="c_NA" boundaryCondition="false" />
+  <species id="B" name="B" compartment="c_NA" boundaryCondition="false" />
+  <species id="C" name="C" compartment="c_NA" boundaryCondition="false" />
+  <species id="Biomass" name="Biomass" compartment="c_NA" boundaryCondition="false" />
+  <species id="Aex" name="Aex" compartment="c_NA" boundaryCondition="true" />
+  <species id="Dex" name="Dex" compartment="c_NA" boundaryCondition="true" />
 </listOfSpecies>
 <listOfReactions>
   <reaction id="V2" name="V2" reversible="false">

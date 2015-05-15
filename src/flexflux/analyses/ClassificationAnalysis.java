@@ -1,5 +1,6 @@
 package flexflux.analyses;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,6 +10,7 @@ import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioGene;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.utils.graphe.ScopeCompounds;
+import flexflux.analyses.result.ConcurrentReactionsResult;
 import flexflux.analyses.result.FBAResult;
 import flexflux.analyses.result.FVAResult;
 import flexflux.analyses.result.KOResult;
@@ -109,7 +111,7 @@ public class ClassificationAnalysis extends Analysis {
 			if (performGeneAnalysis) {
 				this.geneKoAnalysis();
 			}
-			
+
 			this.reactionDeletionAnalysis();
 
 			this.fvaWithNoConstraint();
@@ -164,7 +166,7 @@ public class ClassificationAnalysis extends Analysis {
 		res.zeroFluxGenes = zeroFluxGenes;
 		res.redundantGenesForEssentialReactions = redundantGenesForEssentialReactions;
 		res.deadGenes = deadGenes;
-		
+
 		res.network = b.getBioNetwork();
 
 		return res;
@@ -176,7 +178,21 @@ public class ClassificationAnalysis extends Analysis {
 	 */
 	private double fba() {
 
-		FBAAnalysis a = new FBAAnalysis(b);
+		Bind newBind = null;
+
+		try {
+			newBind = b.copy();
+		} catch (ClassNotFoundException | NoSuchMethodException
+				| SecurityException | InstantiationException
+				| IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+		newBind.prepareSolver();
+
+		FBAAnalysis a = new FBAAnalysis(newBind);
 		FBAResult r = a.runAnalysis();
 
 		return r.getObjValue();
@@ -192,15 +208,27 @@ public class ClassificationAnalysis extends Analysis {
 			System.err.println("[PFBA] Reaction Deletion Analysis");
 		}
 
-		KOAnalysis koAnalysis = new KOAnalysis(b, 0,
+		Bind newBind = null;
+
+		try {
+			newBind = b.copy();
+		} catch (ClassNotFoundException | NoSuchMethodException
+				| SecurityException | InstantiationException
+				| IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+		KOAnalysis koAnalysis = new KOAnalysis(newBind, 0,
 				(HashMap<String, BioEntity>) remainReactions);
 
 		KOResult koResult = koAnalysis.runAnalysis();
 
 		essentialReactions = koResult.getEssentialEntities();
-		
+
 		if (Vars.verbose) {
-			System.err.println("essential Reactions : "+essentialReactions);
+			System.err.println("essential Reactions : " + essentialReactions);
 		}
 		// We remove the reactions from the remain reactions
 		for (String id : essentialReactions.keySet()) {
@@ -224,15 +252,30 @@ public class ClassificationAnalysis extends Analysis {
 			System.err.println("[PFBA] FVA with no constraint");
 		}
 
+		Bind newBind = null;
+
+		try {
+			newBind = b.copy();
+		} catch (ClassNotFoundException | NoSuchMethodException
+				| SecurityException | InstantiationException
+				| IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+		newBind.prepareSolver();
+
 		double oldLibertyPercentage = Vars.libertyPercentage;
 
 		// We remove the constraint on the objective
 		Vars.libertyPercentage = 100;
 
-		FVAAnalysis fvaAnalysis = new FVAAnalysis(b, remainReactions, null);
+		FVAAnalysis fvaAnalysis = new FVAAnalysis(newBind, remainReactions,
+				null);
 
 		fvaWithNoConstraintResult = fvaAnalysis.runAnalysis();
-
+		
 		zeroFluxReactions = fvaWithNoConstraintResult.getZeroFluxReactions();
 
 		// We remove the zero flux reactions from the remain reactions
@@ -251,7 +294,7 @@ public class ClassificationAnalysis extends Analysis {
 	}
 
 	/**
-	 * Get the mle reactions and the concurrent reactions
+	 * Get the optima Zero flux reactions
 	 */
 	private void fvaWithConstraint() {
 
@@ -259,7 +302,22 @@ public class ClassificationAnalysis extends Analysis {
 			System.err.println("[PFBA] FVA with constraint");
 		}
 
-		FVAAnalysis fvaAnalysis = new FVAAnalysis(b, remainReactions, null);
+		Bind newBind = null;
+
+		try {
+			newBind = b.copy();
+		} catch (ClassNotFoundException | NoSuchMethodException
+				| SecurityException | InstantiationException
+				| IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+		newBind.prepareSolver();
+
+		FVAAnalysis fvaAnalysis = new FVAAnalysis(newBind, remainReactions,
+				null);
 
 		FVAResult fvaResult = fvaAnalysis.runAnalysis();
 
@@ -286,22 +344,34 @@ public class ClassificationAnalysis extends Analysis {
 			System.err.println("[PFBA] FVA with flux sum constraints");
 		}
 
+		Bind newBind = null;
+
+		try {
+			newBind = b.copy();
+		} catch (ClassNotFoundException | NoSuchMethodException
+				| SecurityException | InstantiationException
+				| IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+
 		// Set minimum flux as objective
-		b.solverPrepared = false;
-		BioEntity fluxSumEnt = b.createFluxesSummation();
+		BioEntity fluxSumEnt = newBind.createFluxesSummation();
 		BioEntity fluxSumEntArray[] = { fluxSumEnt };
 		double fluxSumCoeff[] = { 1.0 };
 
 		Objective objMinFluxSum = new Objective(fluxSumEntArray, fluxSumCoeff,
 				"fluxSum", false);
 
-		b.setObjective(objMinFluxSum);
+		newBind.constraintObjectives.add(newBind.getObjective());
 
-		b.constraintObjectives.add(this.mainObjective);
+		newBind.setObjective(objMinFluxSum);
 
-		b.prepareSolver();
+		newBind.prepareSolver();
 
-		FVAAnalysis fvaAnalysis = new FVAAnalysis(b, remainReactions, null);
+		FVAAnalysis fvaAnalysis = new FVAAnalysis(newBind, remainReactions,
+				null);
 
 		FVAResult fvaResult = fvaAnalysis.runAnalysis();
 
@@ -423,139 +493,162 @@ public class ClassificationAnalysis extends Analysis {
 			System.err.print("[");
 		}
 
-		int n = 0;
+		Bind newBind = null;
 
-		// Change all the internal reaction bounds to extreme values
-		for (BioEntity e : b.getSimpleConstraints().keySet()) {
-
-			String id = e.getId();
-
-			if (b.getBioNetwork().getBiochemicalReactionList().containsKey(id)) {
-
-				BioChemicalReaction reaction = b.getBioNetwork()
-						.getBiochemicalReactionList().get(id);
-
-				// We limit the exchange reaction identification to one to
-				// one
-				// reactions
-				if (!(reaction.isExchangeReaction()
-						&& reaction.getLeftParticipantList().size() == 1 && reaction
-						.getRightParticipantList().size() == 1)) {
-					// if the reaction is not an exchange reaction we change
-					// its
-					// lower and upper bound to FVA max values.
-					Constraint constraint = b.getSimpleConstraints().get(e);
-					constraint.setUb(Vars.maxUpperBound);
-
-					if (reaction.isReversible()) {
-						constraint.setLb(Vars.minLowerBound);
-					} else {
-						constraint.setLb(0);
-					}
-				}
-			}
-
+		try {
+			newBind = b.copy();
+		} catch (ClassNotFoundException | NoSuchMethodException
+				| SecurityException | InstantiationException
+				| IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			e.printStackTrace();
+			System.exit(1);
 		}
 
-		double sumFBA1 = 0.0;
-		double sumFBA2 = 0.0;
-		int n2 = 0;
+		newBind.prepareSolver();
 
-		for (BioEntity e : optimaZeroFluxReactions.values()) {
+		ConcurrentReactionsAnalysis a = new ConcurrentReactionsAnalysis(
+				newBind, optimaZeroFluxReactions, fvaWithNoConstraintResult);
+		ConcurrentReactionsResult r = a.runAnalysis();
 
-			long startTime = System.currentTimeMillis();
+		this.concurrentReactions = r.getConcurrentReactions();
+		this.mleReactions = r.getOtherReactions();
 
-			n++;
-
-			String id = e.getId();
-
-			BioChemicalReaction reaction = b.getBioNetwork()
-					.getBiochemicalReactionList().get(id);
-
-			Double min = 0.0;
-			Double max = 0.0;
-
-			Constraint constraint = b.getSimpleConstraints().get(e);
-
-			double oldLb = constraint.getLb();
-			double oldUb = constraint.getUb();
-
-			max = fvaWithNoConstraintResult.getMap().get(e)[1];
-			min = fvaWithNoConstraintResult.getMap().get(e)[0];
-
-			constraint.setUb(max);
-			constraint.setLb(max);
-
-			// We compute the optimal value of the main objective. If the
-			// optimal value equals to 0, the reaction is concurrent
-			b.prepareSolver();
-
-			FBAAnalysis fbaAnalysis = new FBAAnalysis(b);
-			FBAResult res = fbaAnalysis.runAnalysis();
-
-			long stopTime = System.currentTimeMillis();
-			long elapsedTime = stopTime - startTime;
-
-			sumFBA1 += elapsedTime;
-
-			// System.err.println("First FBA : "+elapsedTime);
-
-			if (res.getObjValue().isNaN() || res.getObjValue() == 0) {
-				concurrentReactions.put(e.getId(), e);
-			} else {
-				if (reaction.isReversible()) {
-
-					n2++;
-
-					startTime = System.currentTimeMillis();
-
-					constraint.setUb(min);
-					constraint.setLb(min);
-
-					b.prepareSolver();
-
-					fbaAnalysis = new FBAAnalysis(b);
-					res = fbaAnalysis.runAnalysis();
-
-					stopTime = System.currentTimeMillis();
-					elapsedTime = stopTime - startTime;
-
-					sumFBA2 += elapsedTime;
-
-					// System.err.println("Second FBA : "+elapsedTime);
-
-					if (res.getObjValue().isNaN() || res.getObjValue() == 0) {
-						concurrentReactions.put(e.getId(), e);
-					} else {
-						mleReactions.put(e.getId(), e);
-					}
-				} else {
-					mleReactions.put(e.getId(), e);
-				}
-			}
-
-			constraint.setUb(oldUb);
-			constraint.setLb(oldLb);
-
-			if (Vars.verbose) {
-				if (n % 10 == 0) {
-					System.err.print("*");
-				}
-			}
-
-		}
-		if (Vars.verbose) {
-			System.err.println("First FBA mean time : " + sumFBA1 / n);
-			System.err.println("First FBA 2 mean time : " + sumFBA2 / n2);
-		}
-
-		if (Vars.verbose) {
-			System.err.println("]");
-			System.err.println("[PFBA] Number of mle reactions : "
-					+ mleReactions.size());
-			System.err.println("[PFBA] Number of concurrent reactions : "
-					+ concurrentReactions.size());
-		}
+		// int n = 0;
+		//
+		// // Change all the internal reaction bounds to extreme values
+		// for (BioEntity e : newBind.getSimpleConstraints().keySet()) {
+		//
+		// String id = e.getId();
+		//
+		// if
+		// (newBind.getBioNetwork().getBiochemicalReactionList().containsKey(id))
+		// {
+		//
+		// BioChemicalReaction reaction = newBind.getBioNetwork()
+		// .getBiochemicalReactionList().get(id);
+		//
+		// // We limit the exchange reaction identification to one to
+		// // one
+		// // reactions
+		// if (!(reaction.isExchangeReaction()
+		// && reaction.getLeftParticipantList().size() == 1 && reaction
+		// .getRightParticipantList().size() == 1)) {
+		// // if the reaction is not an exchange reaction we change
+		// // its
+		// // lower and upper bound to FVA max values.
+		// Constraint constraint = newBind.getSimpleConstraints().get(e);
+		// constraint.setUb(Vars.maxUpperBound);
+		//
+		// if (reaction.isReversible()) {
+		// constraint.setLb(Vars.minLowerBound);
+		// } else {
+		// constraint.setLb(0);
+		// }
+		// }
+		// }
+		//
+		// }
+		//
+		// double sumFBA1 = 0.0;
+		// double sumFBA2 = 0.0;
+		// int n2 = 0;
+		//
+		// for (BioEntity e : optimaZeroFluxReactions.values()) {
+		//
+		// long startTime = System.currentTimeMillis();
+		//
+		// n++;
+		//
+		// String id = e.getId();
+		//
+		// BioChemicalReaction reaction = newBind.getBioNetwork()
+		// .getBiochemicalReactionList().get(id);
+		//
+		// Double min = 0.0;
+		// Double max = 0.0;
+		//
+		// Constraint constraint = newBind.getSimpleConstraints().get(e);
+		//
+		// double oldLb = constraint.getLb();
+		// double oldUb = constraint.getUb();
+		//
+		// max = fvaWithNoConstraintResult.getMap().get(e)[1];
+		// min = fvaWithNoConstraintResult.getMap().get(e)[0];
+		//
+		// constraint.setUb(max);
+		// constraint.setLb(max);
+		//
+		// // We compute the optimal value of the main objective. If the
+		// // optimal value equals to 0, the reaction is concurrent
+		// newBind.prepareSolver();
+		//
+		// FBAAnalysis fbaAnalysis = new FBAAnalysis(newBind);
+		// FBAResult res = fbaAnalysis.runAnalysis();
+		//
+		// long stopTime = System.currentTimeMillis();
+		// long elapsedTime = stopTime - startTime;
+		//
+		// sumFBA1 += elapsedTime;
+		//
+		// // System.err.println("First FBA : "+elapsedTime);
+		//
+		// if (res.getObjValue().isNaN() || res.getObjValue() == 0) {
+		// concurrentReactions.put(e.getId(), e);
+		// } else {
+		// if (reaction.isReversible()) {
+		//
+		// n2++;
+		//
+		// startTime = System.currentTimeMillis();
+		//
+		// constraint.setUb(min);
+		// constraint.setLb(min);
+		//
+		// newBind.prepareSolver();
+		//
+		// fbaAnalysis = new FBAAnalysis(newBind);
+		// res = fbaAnalysis.runAnalysis();
+		//
+		// stopTime = System.currentTimeMillis();
+		// elapsedTime = stopTime - startTime;
+		//
+		// sumFBA2 += elapsedTime;
+		//
+		// // System.err.println("Second FBA : "+elapsedTime);
+		//
+		// if (res.getObjValue().isNaN() || res.getObjValue() == 0) {
+		// concurrentReactions.put(e.getId(), e);
+		// } else {
+		// mleReactions.put(e.getId(), e);
+		// }
+		// } else {
+		// mleReactions.put(e.getId(), e);
+		// }
+		// }
+		//
+		// constraint.setUb(oldUb);
+		// constraint.setLb(oldLb);
+		//
+		// if (Vars.verbose) {
+		// if (n % 10 == 0) {
+		// System.err.print("*");
+		// }
+		// }
+		//
+		// }
+		// if (Vars.verbose) {
+		// System.err.println("First FBA mean time : " + sumFBA1 / n);
+		// System.err.println("First FBA 2 mean time : " + sumFBA2 / n2);
+		// }
+		//
+		// if (Vars.verbose) {
+		// System.err.println("]");
+		// System.err.println("[PFBA] Number of mle reactions : "
+		// + mleReactions.size());
+		// System.err.println("[PFBA] Number of concurrent reactions : "
+		// + concurrentReactions.size());
+		// }
 
 	}
 
@@ -567,8 +660,19 @@ public class ClassificationAnalysis extends Analysis {
 		if (Vars.verbose) {
 			System.err.println("[PFBA] Gene Ko Analysis");
 		}
+		Bind newBind = null;
 
-		KOAnalysis koAnalysis = new KOAnalysis(b, 1, null);
+		try {
+			newBind = b.copy();
+		} catch (ClassNotFoundException | NoSuchMethodException
+				| SecurityException | InstantiationException
+				| IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+		KOAnalysis koAnalysis = new KOAnalysis(newBind, 1, null);
 
 		KOResult res = koAnalysis.runAnalysis();
 

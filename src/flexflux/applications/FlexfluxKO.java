@@ -181,6 +181,10 @@ public class FlexfluxKO extends FFApplication{
 			System.exit(0);
 		}
 
+		if (f.verbose) {
+			Vars.verbose = true;
+		}
+		
 		bind.loadSbmlNetwork(f.sbmlFile, f.extended);
 		if (f.consFile != "") {
 			bind.loadConstraintsFile(f.consFile);
@@ -188,7 +192,7 @@ public class FlexfluxKO extends FFApplication{
 		if (f.regFile != "") {
 			bind.loadRegulationFile(f.regFile);
 		}
-		bind.prepareSolver();
+//		bind.prepareSolver();
 
 		Map<String, BioEntity> entitiesMap = new HashMap<String, BioEntity>();
 

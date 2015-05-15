@@ -341,7 +341,7 @@ public class GLPKBind extends Bind {
 			}
 
 		}
-		return new DoubleResult(0, 1);
+		return new DoubleResult(Double.NaN, 1);
 	}
 
 	public void end() {

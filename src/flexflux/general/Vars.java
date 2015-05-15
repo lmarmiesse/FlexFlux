@@ -106,6 +106,10 @@ public class Vars {
 	 * @return The rounded value.
 	 */
 	static public double round(double value) {
+		if(Double.isNaN(value)){
+			return Double.NaN;
+		}
+		
 		double r = (Math.round(value * Math.pow(10, decimalPrecision)))
 				/ (Math.pow(10, decimalPrecision));
 		return r;

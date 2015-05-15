@@ -64,6 +64,8 @@ public abstract class Interaction {
 	 */
 	protected Relation condition;
 	
+	protected String name;
+	
 	
 	/**
 	 * Links an interactions to when it begins and how long it lasts (only used
@@ -75,6 +77,7 @@ public abstract class Interaction {
 
 		this.consequence = consequence;
 		this.condition = condition;
+		this.name = "";
 
 	}
 	
@@ -92,6 +95,14 @@ public abstract class Interaction {
 
 	public Relation getCondition() {
 		return condition;
+	}
+	
+	public void setName(String name){
+		this.name = name;
+	}
+	
+	public String getName(){
+		return this.name;
 	}
 
 }

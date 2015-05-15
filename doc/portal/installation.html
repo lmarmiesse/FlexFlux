@@ -110,9 +110,7 @@ body {
 					To install <a href="http://glpk-java.sourceforge.net/index.html">glpk
 						for java</a> on Ubuntu and Debian you can type this in a terminal :
 
-					<pre class="prettyprint">sudo apt-get install glpk
-sudo apt-get install libglpk-java
-</pre>
+					<pre class="prettyprint">sudo apt-get install libglpk-java</pre>
 
 					<ol>
 						<li><p>Open a terminal and go into the directory where you
@@ -125,14 +123,14 @@ sudo apt-get install libglpk-java
 							<p>If a solver is OK, you are all set ! Skip step 4, you can
 								use FlexFlux. If no solver is OK, go to step 4.</p>
 						<li><p>Open the configuration file : config</p> which looks
-							like that : <pre class="prettyprint">#IF YOU ARE USING CPLEX YOU MUST SET THE RIGHE VALUE FOR THOSE TWO VARIABLES
+							like that : <pre class="prettyprint">#IF YOU ARE USING CPLEX YOU MUST SET THE RIGHT VALUE FOR THOSE TWO VARIABLES
 #link to the CPLEX shared library (directory containing libcplex124.so)
 CPLEX_shared_library=/usr/local/ILOG/CPLEX_Studio124/cplex/bin/x86-64_sles10_4.1/
 #link to CPLEX.jar
 CPLEX_JAR=/usr/local/ILOG/CPLEX_Studio124/cplex/lib/cplex.jar
 
 
-#IF YOU ARE USING GLPK YOU MUST SET THE RIGHE VALUE FOR THOSE TWO VARIABLES
+#IF YOU ARE USING GLPK YOU MUST SET THE RIGHT VALUE FOR THOSE TWO VARIABLES
 #link to the GLPK shared library (directory containing libglpk_java.so)
 GLPK_shared_library=/usr/local/lib/jni:/usr/lib/jni/
 GLPK_JAR=lib/glpk-java-linux.jar
@@ -184,14 +182,14 @@ GLPK_JAR=lib/glpk-java-linux.jar
 						<li><p>Open the configuration file : config.windows.bat</p>
 							which looks like that : <pre class="prettyprint">@echo off
 
-::IF YOU ARE USING CPLEX YOU MUST SET THE RIGHE VALUE FOR THOSE TWO VARIABLES
+::IF YOU ARE USING CPLEX YOU MUST SET THE RIGHT VALUE FOR THOSE TWO VARIABLES
 ::link to the CPLEX shared library (directory containing libcplex124.so)
 set CPLEX_shared_library=
 ::link to CPLEX.jar
 set CPLEX_JAR=
 
 
-::IF YOU ARE USING GLPK YOU MUST SET THE RIGHE VALUE FOR THOSE TWO VARIABLES
+::IF YOU ARE USING GLPK YOU MUST SET THE RIGHT VALUE FOR THOSE TWO VARIABLES
 ::link to the GLPK shared library (directory containing glpk_4_50_java.dll)
 
 if %PROCESSOR_ARCHITECTURE%==x86 (
