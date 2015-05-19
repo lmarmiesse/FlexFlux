@@ -401,6 +401,7 @@ public class BECOResult extends AnalysisResult {
 		PrintWriter outOptima = null;
 		PrintWriter outRedundant = null;
 		PrintWriter outDead = null;
+		PrintWriter outUnfeasible = null;
 
 		HashMap<String, PrintWriter> writers = new HashMap<String, PrintWriter>();
 
@@ -426,6 +427,8 @@ public class BECOResult extends AnalysisResult {
 					+ ".tsv"));
 			outDead = new PrintWriter(new File(path + "/dead" + objectName
 					+ ".tsv"));
+			outUnfeasible = new PrintWriter(new File(path + "/unfeasibleKo" + objectName
+					+ ".tsv"));
 
 			if (objectName.compareTo("Genes") == 0) {
 				outRedundant = new PrintWriter(new File(path
@@ -441,6 +444,7 @@ public class BECOResult extends AnalysisResult {
 			writers.put("ind", outIndependent);
 			writers.put("opt", outOptima);
 			writers.put("dead", outDead);
+			writers.put("unfeasibleKo", outUnfeasible);
 
 			if (objectName.compareTo("Genes") == 0) {
 				writers.put("red", outRedundant);
@@ -504,6 +508,7 @@ public class BECOResult extends AnalysisResult {
 						ArrayList<String> objectiveIndependentIds = new ArrayList<String>(
 								result.get("objectiveIndependent" + objectName)
 										.keySet());
+						
 						Collections.sort(objectiveIndependentIds);
 						classification.put("ind", objectiveIndependentIds);
 
@@ -516,6 +521,12 @@ public class BECOResult extends AnalysisResult {
 								result.get("dead" + objectName).keySet());
 						Collections.sort(deadIds);
 						classification.put("dead", deadIds);
+						
+						ArrayList<String> unfIds = new ArrayList<String>(
+								result.get("unfeasibleKo" + objectName).keySet());
+						Collections.sort(unfIds);
+						classification.put("unfeasibleKo", unfIds);
+						
 
 						if (objectName.compareTo("Genes") == 0) {
 							ArrayList<String> redundantIds = new ArrayList<String>(
@@ -571,6 +582,7 @@ public class BECOResult extends AnalysisResult {
 		PrintWriter outEssential = null;
 		PrintWriter outOptimaEssential = null;
 		PrintWriter outNeutral = null;
+		PrintWriter outUnf = null;
 
 		HashMap<String, PrintWriter> writers = new HashMap<String, PrintWriter>();
 
@@ -586,10 +598,13 @@ public class BECOResult extends AnalysisResult {
 					+ "/optimaRegulators.tsv"));
 			outNeutral = new PrintWriter(new File(path
 					+ "/neutralRegulators.tsv"));
+			outUnf = new PrintWriter(new File(path
+					+ "/unfeasibleKoRegulators.tsv"));
 
 			writers.put("ess", outEssential);
 			writers.put("opt", outOptimaEssential);
 			writers.put("neu", outNeutral);
+			writers.put("unf", outUnf);
 
 			// Prints the headers
 			for (PrintWriter out : writers.values()) {
@@ -665,6 +680,16 @@ public class BECOResult extends AnalysisResult {
 						if (Vars.verbose) {
 							System.err.println("Neutral :" + neutralIds);
 						}
+						
+						ArrayList<String> unfIds = new ArrayList<String>(
+								result.getUnfeasibleKos().keySet());
+						Collections.sort(unfIds);
+						classification.put("unf", unfIds);
+
+						if (Vars.verbose) {
+							System.err.println("Unfeasible Kos  :" + unfIds);
+						}
+						
 
 						for (String key : writers.keySet()) {
 							PrintWriter out = writers.get(key);
@@ -769,9 +794,9 @@ public class BECOResult extends AnalysisResult {
 					+ ".txt"));
 
 			if (isReaction) {
-				out.write("name,essential,zeroFlux,mle,ele,conc,ind,opt,dead\n");
+				out.write("name,essential,zeroFlux,mle,ele,conc,ind,opt,dead,unf\n");
 			} else {
-				out.write("name,essential,red,zeroFlux,mle,ele,conc,ind,opt,dead\n");
+				out.write("name,essential,red,zeroFlux,mle,ele,conc,ind,opt,dead,unf\n");
 			}
 
 			for (Condition c : conditions) {
@@ -791,6 +816,7 @@ public class BECOResult extends AnalysisResult {
 					int nbOpt = 0;
 					int nbRed = 0;
 					int nbDead = 0;
+					int nbUnf= 0;
 
 					if (result != null) {
 
@@ -804,6 +830,7 @@ public class BECOResult extends AnalysisResult {
 								.size();
 						nbOpt = result.get("optima" + objectName).size();
 						nbDead = result.get("dead" + objectName).size();
+						nbUnf = result.get("unfeasibleKo" + objectName).size();
 
 						if (!isReaction) {
 							nbRed = result.get(
@@ -816,12 +843,12 @@ public class BECOResult extends AnalysisResult {
 						out.write(c.code + "__" + objName + "," + nbEssential
 								+ "," + nbZeroFlux + "," + nbMle + "," + nbEle
 								+ "," + nbConc + "," + nbInd + "," + nbOpt
-								+ "," + nbDead + "\n");
+								+ "," + nbDead + "," + nbUnf + "\n");
 					} else {
 						out.write(c.code + "__" + objName + "," + nbEssential
 								+ "," + nbRed + "," + nbZeroFlux + "," + nbMle
 								+ "," + nbEle + "," + nbConc + "," + nbInd
-								+ "," + nbOpt + "," + nbDead + "\n");
+								+ "," + nbOpt + "," + nbDead + "," + nbUnf +"\n");
 					}
 
 				}
@@ -857,7 +884,7 @@ public class BECOResult extends AnalysisResult {
 		try {
 			out = new PrintWriter(new File(path + "/summaryRegulators.txt"));
 
-			out.write("name,essential,opt,neu\n");
+			out.write("name,essential,opt,neu,unf\n");
 
 			for (Condition c : conditions) {
 				HashMap<String, KOResult> koResults = koAllResults.get(c.code);
@@ -871,6 +898,7 @@ public class BECOResult extends AnalysisResult {
 					int nbEssential = 0;
 					int nbOptimal = 0;
 					int nbNeutral = 0;
+					int nbUnf = 0;
 
 					if (result != null) {
 
@@ -883,10 +911,12 @@ public class BECOResult extends AnalysisResult {
 								.size();
 						nbNeutral = result.getNeutralEntities(optimalValue)
 								.size();
+						nbUnf = result.getUnfeasibleKos()
+								.size();
 					}
 
 					out.write(c.code + "__" + objName + "," + nbEssential + ","
-							+ nbOptimal + "," + nbNeutral + "\n");
+							+ nbOptimal + "," + nbNeutral + "," + nbUnf + "\n");
 
 				}
 

@@ -108,8 +108,8 @@ public class TestBECO extends FFUnitTest{
 
 		Vars.writeInteractionNetworkStates = false;
 		
-		Vars.maxThread = 20;
-//		Vars.maxThread = 2;
+//		Vars.maxThread = 20;
+		Vars.maxThread = 2;
 		
 		
 

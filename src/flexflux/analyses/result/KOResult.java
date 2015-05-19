@@ -225,12 +225,32 @@ public class KOResult extends AnalysisResult {
 		for (BioEntity entity : map.keySet()) {
 
 			Double value = Vars.round(map.get(entity));
-			if (value.isNaN() || value == 0)
+			if (value == 0)
 				essentialEntities.put(entity.getId(), entity);
 		}
 		return essentialEntities;
 
 	}
+	
+	/**
+	 * 
+	 * @return a HashMap of the Kos taht returns an unfeasible solution
+	 */
+	public HashMap<String, BioEntity> getUnfeasibleKos() {
+		
+		HashMap<String, BioEntity> unfeasible = new HashMap<String, BioEntity>();
+
+		for (BioEntity entity : map.keySet()) {
+
+			Double value = Vars.round(map.get(entity));
+			if (Double.isNaN(value))
+				unfeasible.put(entity.getId(), entity);
+		}
+		return unfeasible;
+		
+		
+	}
+	
 
 	/**
 	 * 

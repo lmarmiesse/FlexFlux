@@ -185,7 +185,7 @@ public class KOAnalysis extends Analysis {
 				System.exit(1);
 			}
 			
-			ThreadKO threadKo = new ThreadKO(newBind, tasks, koResult, b.getObjective(),
+			ThreadKO threadKo = new ThreadKO(newBind, tasks, koResult, newBind.getObjective(),
 	                entitiesInInteractionNetwork, interactionNetworkConstraints); 
 			
 			threads.add(threadKo);
@@ -225,11 +225,11 @@ public class KOAnalysis extends Analysis {
 			threads.remove(0);
 		}
 
-//		if (Vars.verbose) {
+		if (Vars.verbose) {
 			System.err.println("KO over "
 					+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
 					+ Vars.maxThread + " threads");
-//		}
+		}
 		return koResult;
 	}
 }

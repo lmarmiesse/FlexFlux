@@ -40,6 +40,7 @@ import flexflux.general.DoubleResult;
 import flexflux.general.Vars;
 import flexflux.objective.Objective;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -106,15 +107,29 @@ public class ThreadKO extends ResolveThread {
 			Map<BioEntity, Double> entityMap = new HashMap<BioEntity, Double>();
 			entityMap.put(entity, 1.0);
 
+			Bind newBind = null;
+			
+			try {
+				newBind = bind.copy();
+				
+			} catch (ClassNotFoundException | NoSuchMethodException
+					| SecurityException | InstantiationException
+					| IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+			
+			
 			boolean removedConst = false;
 			Constraint toRemove = null;
 			// we remove a constraint that is already present on this entity
-			if (bind.getSimpleConstraints().containsKey(entity)) {
+			if (newBind.getSimpleConstraints().containsKey(entity)) {
 				removedConst = true;
 
-				toRemove = bind.getSimpleConstraints().get(entity);
-				bind.getSimpleConstraints().remove(entity);
-				bind.getConstraints().remove(toRemove);
+				toRemove = newBind.getSimpleConstraints().get(entity);
+				newBind.getSimpleConstraints().remove(entity);
+				newBind.getConstraints().remove(toRemove);
 			}
 
 			//
@@ -123,10 +138,10 @@ public class ThreadKO extends ResolveThread {
 
 			Constraint newConstraint = new Constraint(entityMap, 0.0, 0.0);
 
-			bind.getConstraints().add(newConstraint);
-			bind.getSimpleConstraints().put(entity, newConstraint);
+			newBind.getConstraints().add(newConstraint);
+			newBind.getSimpleConstraints().put(entity, newConstraint);
 			
-			bind.prepareSolver();
+			newBind.prepareSolver();
 			
 			
 //			constraintsToAdd.add(newConstraint);
@@ -135,10 +150,11 @@ public class ThreadKO extends ResolveThread {
 			// don't recompute the attractors
 			if (!entitiesInInteractionNetwork.contains(entity)) {
 				constraintsToAdd.addAll(interactionNetworkConstraints);
-				bind.checkInteractionNetwork = false;
+				newBind.checkInteractionNetwork = false;
 			}
 
-			DoubleResult value = bind.FBA(constraintsToAdd, false, true);
+			DoubleResult value = newBind.FBA(constraintsToAdd, false, true);
+			
 
 			result.addLine(entity, value.result);
 
@@ -147,7 +163,7 @@ public class ThreadKO extends ResolveThread {
 						+ value.result);
 			}
 
-			bind.checkInteractionNetwork = true;
+			newBind.checkInteractionNetwork = true;
 
 			int percent = (int) Math.round((todo - entities.size()) / todo
 					* 100);
@@ -160,19 +176,14 @@ public class ThreadKO extends ResolveThread {
 				}
 			}
 
-			bind.getSimpleConstraints().remove(entity);
-			bind.getConstraints().remove(newConstraint);
+			newBind.getSimpleConstraints().remove(entity);
+			newBind.getConstraints().remove(newConstraint);
 			
-			
+			// We put the old constraint
 			if (removedConst) {
-				bind.getConstraints().add(toRemove);
-				bind.getSimpleConstraints().put(entity, toRemove);
-				bind.prepareSolver();
+				newBind.getConstraints().add(toRemove);
+				newBind.getSimpleConstraints().put(entity, toRemove);
 			}
-			
-			
-			
-
 		}
 
 		bind.end();
