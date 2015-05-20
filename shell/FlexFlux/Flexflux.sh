@@ -18,5 +18,4 @@ done
 
 source $path/config
 
-
 eval "java -Djava.library.path=$CPLEX_shared_library:$GLPK_shared_library -cp $path/bin/:$CPLEX_JAR:$GLPK_JAR:$path/lib/* flexflux.applications.Flexflux$1 $foo"

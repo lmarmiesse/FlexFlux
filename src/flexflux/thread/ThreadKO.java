@@ -179,13 +179,17 @@ public class ThreadKO extends ResolveThread {
 			newBind.getSimpleConstraints().remove(entity);
 			newBind.getConstraints().remove(newConstraint);
 			
-			// We put the old constraint
-			if (removedConst) {
-				newBind.getConstraints().add(toRemove);
-				newBind.getSimpleConstraints().put(entity, toRemove);
-			}
+			// Important to release the memory !!!!
+			newBind.clearAll();
+			newBind = null;
+			
+			constraintsToAdd.clear();
+			constraintsToAdd = null;
+			
+			
 		}
 
-		bind.end();
+		bind.clearAll();
+		bind = null;
 	}
 }

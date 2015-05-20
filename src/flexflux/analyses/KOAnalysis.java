@@ -230,6 +230,7 @@ public class KOAnalysis extends Analysis {
 					+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
 					+ Vars.maxThread + " threads");
 		}
+		
 		return koResult;
 	}
 }

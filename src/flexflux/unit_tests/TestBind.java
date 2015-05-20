@@ -325,7 +325,7 @@ public class TestBind extends FFUnitTest {
 		System.err.println("Flag : "+res.flag);
 		
 		
-		Assert.assertEquals("Test FBA", 14.0, res.result, 0.0);
+		Assert.assertEquals("Test FBA", 14.0, res.result, 0.001);
 		
 	}
 	

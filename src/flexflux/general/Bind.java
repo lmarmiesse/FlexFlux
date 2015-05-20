@@ -33,9 +33,6 @@
  */
 package flexflux.general;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -46,8 +43,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.sbml.jsbml.xml.test.GetNotesStringTests;
 
 import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioComplex;
@@ -265,6 +260,31 @@ public abstract class Bind {
 		solverPrepared = false;
 
 	}
+	
+	
+	/**
+	 * Make null all the variables and clear the solver and end the solver
+	 */
+	public void clearAll() {
+		this.clearSolver();
+		this.end();
+		this.constraintObjectives = null;
+		this.intNet.allNull();
+		this.intNet = null;
+		this.bioNet = null;
+		this.constraints = null;
+		this.deadReactions = null;
+		this.simpleConstraints = null;
+		this.steadyStateConstraints = null;
+		this.solverSimpleConstraints = null;
+		this.exchangeInteractions = null;
+		this.interactionsEntitiesConsequence = null;
+		this.interactionsEntitiesCause = null;
+		this.constrainedEntities = null;
+	}
+	
+	
+	
 
 	/**
 	 * @return true : the problem is a MIP, false : it is not
@@ -653,8 +673,8 @@ public abstract class Bind {
 		simpleConstraints.clear();
 		constraints.clear();
 		intNet.clear();
-		clear();
 
+		clear();
 		// we add the trimed reactions as set to 0
 		for (BioChemicalReaction trimed : deadReactions) {
 
@@ -1246,6 +1266,7 @@ public abstract class Bind {
 			makeSolverObjective();
 		}
 	}
+	
 
 	public abstract void init();
 

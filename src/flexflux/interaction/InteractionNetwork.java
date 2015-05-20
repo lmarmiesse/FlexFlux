@@ -502,5 +502,26 @@ public class InteractionNetwork {
 		return str;
 
 	}
+	
+	/**
+	 * Make null all fields
+	 */
+	public void allNull() {
+		
+		interactionNetworkEntities = null;
+		interactionNetworkEntitiesStates = null;
+		numEntities = null;
+		intEntities = null;
+		binaryEntities = null;
+		GPRInteractions = null;
+		initialConstraints = null;
+		initialStates = null;
+		interactionToConstraints = null;
+		targetToInteractions = null;
+		entityStateConstraintTranslation = null;
+		
+		
+	}
+	
 
 }

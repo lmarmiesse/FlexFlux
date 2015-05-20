@@ -5,9 +5,9 @@ path="${0/Flexflux.sh/}"
 
 #IF YOU ARE USING CPLEX YOU MUST SET THE RIGHT VALUE FOR THOSE TWO VARIABLES
 #link to the CPLEX shared library (directory containing libcplex124.so)
-CPLEX_shared_library=/usr/local/bioinfo/ILOG/CPLEX_Studio124/cplex/bin/x86-64_sles10_4.1/
+CPLEX_shared_library=/usr/local/cplex/cplex/bin/x86-64_sles10_4.1/:/usr/lib/x86_64-linux-gnu/jni
 #link to CPLEX.jar
-CPLEX_JAR=/usr/local/bioinfo/ILOG/CPLEX_Studio124/cplex/lib/cplex.jar
+CPLEX_JAR=/usr/local/cplex/cplex/lib/cplex.jar
 
 
 #IF YOU ARE USING GLPK YOU MUST SET THE RIGHT VALUE FOR THOSE TWO VARIABLES
