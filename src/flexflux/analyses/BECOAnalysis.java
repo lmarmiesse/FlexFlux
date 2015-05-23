@@ -42,6 +42,7 @@ import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.biodata.BioPhysicalEntity;
+import parsebionet.io.JSBMLToBionetwork;
 import parsebionet.io.Sbml2Bionetwork;
 import flexflux.analyses.result.KOResult;
 import flexflux.analyses.result.ClassificationResult;
@@ -61,12 +62,12 @@ import flexflux.objective.Objective;
 
 /**
  * 
- * Classifies reactions, genes and regulators in several conditions for several objectives.
+ * Classifies reactions, genes and regulators in several conditions for several
+ * objectives.
  * 
  * @author lcottret
- *
+ * 
  */
-
 
 public class BECOAnalysis extends Analysis {
 
@@ -74,7 +75,7 @@ public class BECOAnalysis extends Analysis {
 	String objectiveFile = "";
 	String regulationFile = "";
 	String constraintFile = "";
-	
+
 	// Metadata files used for heatmaps
 	String reactionMetaDataFile = "";
 	String geneMetaDataFile = "";
@@ -83,7 +84,6 @@ public class BECOAnalysis extends Analysis {
 	String sbmlFile = "";
 	String inchlibPath = "";
 
-	Boolean extended = false;
 	String solver = "GLPK";
 	Boolean flag = true;
 	BioNetwork network = null;
@@ -123,7 +123,6 @@ public class BECOAnalysis extends Analysis {
 		super(bind);
 
 		this.sbmlFile = sbmlFile;
-		this.extended = extended;
 		this.solver = solver;
 		this.conditionFile = conditionFile;
 		this.regulationFile = regulationFile;
@@ -159,9 +158,14 @@ public class BECOAnalysis extends Analysis {
 			/**
 			 * Reads the SBML file
 			 */
-			Sbml2Bionetwork parser = new Sbml2Bionetwork(this.sbmlFile,
-					extended);
-			this.network = parser.getBioNetwork();
+			if (extended) {
+				JSBMLToBionetwork parser = new JSBMLToBionetwork(sbmlFile);
+				this.network = parser.getBioNetwork();
+
+			} else {
+				Sbml2Bionetwork parser = new Sbml2Bionetwork(sbmlFile, false);
+				this.network = parser.getBioNetwork();
+			}
 
 		}
 	}
@@ -241,7 +245,7 @@ public class BECOAnalysis extends Analysis {
 				}
 			}
 		}
-		
+
 		/**
 		 * Loads interaction file
 		 */
@@ -288,11 +292,10 @@ public class BECOAnalysis extends Analysis {
 		 * Build list of constraints depending on the condition
 		 */
 
-		
 		for (SimplifiedConstraint c : condition.constraints.values()) {
-			
+
 			String id = c.entityId;
-			
+
 			BioEntity e = null;
 
 			if (b.getInteractionNetwork().getEntity(id) == null) {
@@ -308,7 +311,8 @@ public class BECOAnalysis extends Analysis {
 					c.getValue());
 
 			if (fixConditions == false) {
-				if (! b.getInteractionNetwork().getInteractionNetworkEntities().containsKey(id)) {
+				if (!b.getInteractionNetwork().getInteractionNetworkEntities()
+						.containsKey(id)) {
 					b.addSimpleConstraint(e, constraint);
 				} else {
 					b.getInteractionNetwork().addInitialConstraint(e,
