@@ -13,6 +13,10 @@ import javax.swing.JPanel;
  */
 public abstract class ArgumentComponent extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected String argument;
 
 	public ArgumentComponent(String arg) {

@@ -189,21 +189,19 @@ public abstract class Bind {
 	 *            Constraint to create
 	 * @param toRemoveFromModel
 	 *            is used to come back to how it was before.
-	 * @param oldBounds
-	 *            is used to come back to how it was before.
 	 */
 
 	protected void makeSolverConstraint(Constraint c,
-			List<Object> toRemoveFromModel, Map<String, double[]> oldBounds) {
+			List<Object> toRemoveFromModel) {
 
 		constrainedEntities.addAll(c.getEntities().keySet());
 
-		createSolverConstraint(c, toRemoveFromModel, oldBounds);
+		createSolverConstraint(c, toRemoveFromModel);
 
 	}
 
 	protected abstract void createSolverConstraint(Constraint c,
-			List<Object> toRemoveFromModel, Map<String, double[]> oldBounds);
+			List<Object> toRemoveFromModel);
 
 	/**
 	 * Deletes solver constraints.
@@ -343,9 +341,6 @@ public abstract class Bind {
 								if (simpleConstraints.containsKey(ent)) {
 									oldSimpleConstraints.put(ent,
 											simpleConstraints.get(ent));
-
-									constraints.remove(simpleConstraints
-											.get(ent));
 
 								} else {
 									hadNoSimpleConstraint.add(ent);
@@ -527,6 +522,8 @@ public abstract class Bind {
 			// ////////////////
 			// ////////////////
 
+			
+			
 			return goWithConstraints(constraintsToAdd, saveResults);
 
 		} else {
@@ -554,9 +551,19 @@ public abstract class Bind {
 		List<Object> toRemoveFromModel = new ArrayList<Object>();
 		Map<String, double[]> oldBounds = new HashMap<String, double[]>();
 
+		for(BioEntity e : this.simpleConstraints.keySet()) {
+			Constraint c = this.simpleConstraints.get(e);
+			
+			double bounds[] = {c.getLb(), c.getUb()};
+			
+			oldBounds.put(e.getId(),bounds);
+			
+		}
+		
+		
 		for (Constraint c : constraints) {
 
-			makeSolverConstraint(c, toRemoveFromModel, oldBounds);
+			makeSolverConstraint(c, toRemoveFromModel);
 		}
 
 		DoubleResult result = go(saveResults);
@@ -564,10 +571,11 @@ public abstract class Bind {
 		// we go back to how it was
 		deleteConstraints(toRemoveFromModel);
 
-		for (String entity : oldBounds.keySet()) {
-			changeVarBounds(entity, oldBounds.get(entity));
-
-		}
+		// TODO : change les resultats de TD-RFBA : à regarder
+//		for (String entity : oldBounds.keySet()) {
+//			changeVarBounds(entity, oldBounds.get(entity));
+//
+//		}
 
 		return result;
 	}
@@ -812,12 +820,15 @@ public abstract class Bind {
 	 */
 	public void prepareSolver() {
 
+		constrainedEntities.clear();
+		
 		clearSolver();
 
 		entitiesToSolverVars();
 
 		constraintsToSolverConstraints();
 
+		
 		if (obj != null) {
 			makeSolverObjective();
 		}
@@ -856,7 +867,7 @@ public abstract class Bind {
 
 			constraints.add(c);
 
-			makeSolverConstraint(c, null, null);
+			makeSolverConstraint(c, null);
 
 		}
 
@@ -1228,7 +1239,7 @@ public abstract class Bind {
 
 		// the fixed constraints
 		for (Constraint constraint : constraints) {
-			makeSolverConstraint(constraint, null, null);
+			makeSolverConstraint(constraint, null);
 		}
 
 	}

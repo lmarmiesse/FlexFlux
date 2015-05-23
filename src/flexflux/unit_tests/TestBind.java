@@ -44,7 +44,6 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import parsebionet.biodata.BioEntity;
@@ -222,7 +221,10 @@ public class TestBind extends FFUnitTest {
 					.equals("R_GLCptspp")) {
 				List<Relation> rels = ((And) interaction.getCondition())
 						.getList();
-				for (Relation r : rels) {
+				/**
+				 * TODO : we only test if there is a relation, not enough !
+				 */
+				if(rels.size()> 0 ) {
 					gpr = true;
 				}
 			}

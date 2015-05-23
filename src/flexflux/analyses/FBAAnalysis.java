@@ -37,7 +37,6 @@ import flexflux.analyses.result.FBAResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.DoubleResult;
-import flexflux.general.Vars;
 
 import java.util.ArrayList;
 

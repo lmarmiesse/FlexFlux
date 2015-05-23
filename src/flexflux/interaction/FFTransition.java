@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import flexflux.interaction.Interaction;
-import flexflux.interaction.Unique;
 
 
 public class FFTransition {

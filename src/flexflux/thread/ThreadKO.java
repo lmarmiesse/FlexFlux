@@ -40,7 +40,6 @@ import flexflux.general.DoubleResult;
 import flexflux.general.Vars;
 import flexflux.objective.Objective;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -101,60 +100,55 @@ public class ThreadKO extends ResolveThread {
 	public void run() {
 
 		BioEntity entity;
-		
+
 		while ((entity = entities.poll()) != null) {
 
 			Map<BioEntity, Double> entityMap = new HashMap<BioEntity, Double>();
 			entityMap.put(entity, 1.0);
 
-			Bind newBind = null;
-			
-			try {
-				newBind = bind.copy();
-				
-			} catch (ClassNotFoundException | NoSuchMethodException
-					| SecurityException | InstantiationException
-					| IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException e) {
-				e.printStackTrace();
-				System.exit(1);
-			}
-			
-			
 			boolean removedConst = false;
 			Constraint toRemove = null;
 			// we remove a constraint that is already present on this entity
-			if (newBind.getSimpleConstraints().containsKey(entity)) {
+			if (bind.getSimpleConstraints().containsKey(entity)) {
+
 				removedConst = true;
 
-				toRemove = newBind.getSimpleConstraints().get(entity);
-				newBind.getSimpleConstraints().remove(entity);
-				newBind.getConstraints().remove(toRemove);
-			}
+				toRemove = bind.getSimpleConstraints().get(entity);
+				bind.getSimpleConstraints().remove(entity);
+				bind.getConstraints().remove(toRemove);
 
-			//
+				 bind.prepareSolver();
+			}
 
 			List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 
 			Constraint newConstraint = new Constraint(entityMap, 0.0, 0.0);
 
-			newBind.getConstraints().add(newConstraint);
-			newBind.getSimpleConstraints().put(entity, newConstraint);
-			
-			newBind.prepareSolver();
-			
-			
-//			constraintsToAdd.add(newConstraint);
+			constraintsToAdd.add(newConstraint);
 
 			// if the entity is not in the interaction network, we
 			// don't recompute the attractors
 			if (!entitiesInInteractionNetwork.contains(entity)) {
 				constraintsToAdd.addAll(interactionNetworkConstraints);
-				newBind.checkInteractionNetwork = false;
+				 bind.checkInteractionNetwork = false;
+			} else {
+				bind.checkInteractionNetwork = true;
+				
 			}
-
-			DoubleResult value = newBind.FBA(constraintsToAdd, false, true);
 			
+
+			List<Constraint> tmpConstraints = new ArrayList<Constraint>(constraintsToAdd);
+			
+			for(Constraint c : tmpConstraints) 
+			{
+				if(c.getEntityNames().containsKey(entity.getId())) {
+					constraintsToAdd.remove(c);
+				}
+			}
+			
+			constraintsToAdd.add(newConstraint);
+
+			DoubleResult value = bind.FBA(constraintsToAdd, false, true);
 
 			result.addLine(entity, value.result);
 
@@ -162,8 +156,6 @@ public class ThreadKO extends ResolveThread {
 				System.err.println("Entity : " + entity.getId() + "\tValue : "
 						+ value.result);
 			}
-
-			newBind.checkInteractionNetwork = true;
 
 			int percent = (int) Math.round((todo - entities.size()) / todo
 					* 100);
@@ -176,20 +168,14 @@ public class ThreadKO extends ResolveThread {
 				}
 			}
 
-			newBind.getSimpleConstraints().remove(entity);
-			newBind.getConstraints().remove(newConstraint);
-			
-			// Important to release the memory !!!!
-			newBind.clearAll();
-			newBind = null;
-			
-			constraintsToAdd.clear();
-			constraintsToAdd = null;
-			
-			
-		}
+			// bind.getSimpleConstraints().remove(entity);
+			// bind.getConstraints().remove(newConstraint);
 
-		bind.clearAll();
-		bind = null;
+			if (removedConst == true) {
+				bind.getConstraints().add(toRemove);
+				bind.getSimpleConstraints().put(entity, toRemove);
+				// bind.prepareSolver();
+			}
+		}
 	}
 }

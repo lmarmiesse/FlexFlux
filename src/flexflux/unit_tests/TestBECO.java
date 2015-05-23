@@ -2,14 +2,11 @@ package flexflux.unit_tests;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Scanner;
 
 import junitx.framework.FileAssert;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -19,7 +16,6 @@ import parsebionet.unit_tests.utils.TestUtils;
 import flexflux.analyses.BECOAnalysis;
 import flexflux.analyses.result.beco.BECOResult;
 import flexflux.applications.FlexfluxBECO;
-import flexflux.general.ConstraintType;
 import flexflux.general.Vars;
 import flexflux.objective.ListOfObjectives;
 
@@ -109,7 +105,7 @@ public class TestBECO extends FFUnitTest{
 		Vars.writeInteractionNetworkStates = false;
 		
 //		Vars.maxThread = 20;
-		Vars.maxThread = 2;
+		Vars.maxThread = 1;
 		
 		
 

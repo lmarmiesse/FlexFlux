@@ -1,10 +1,8 @@
 package flexflux.unit_tests;
 
-import static org.junit.Assert.*;
 
 import javax.swing.JFrame;
 
-import org.junit.Test;
 import org.math.plot.Plot2DPanel;
 
 import flexflux.utils.maths.RandomGaussian;
@@ -16,20 +14,11 @@ public class TestRandomGaussian extends FFUnitTest{
 		
 		double[] numbers = new double[100000];
 		
-		double min = 1.0;
-		double max = 100.0;
-		
 		
 		for(int i=0;i < 100000; i++) {
 			double val = r.getRandomDouble(10, 50);
 			
-//			if(val <min || val > max) {
-//				i--;
-//				
-//			}
-//			else {
 				numbers[i] = val;
-//			}
 		}
 		
 		Plot2DPanel plot = new Plot2DPanel();

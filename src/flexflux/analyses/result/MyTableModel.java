@@ -43,11 +43,16 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MyTableModel extends DefaultTableModel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public MyTableModel(Object rowData[][], Object columnNames[]) {
 		super(rowData, columnNames);
 	}
 
-	public Class getColumnClass(int c) {
+	public Class<? extends Object> getColumnClass(int c) {
 		return getValueAt(0, c).getClass();
 	}
 

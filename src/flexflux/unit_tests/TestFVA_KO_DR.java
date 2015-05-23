@@ -52,15 +52,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.unit_tests.utils.TestUtils;
@@ -160,11 +157,6 @@ public class TestFVA_KO_DR extends FFUnitTest {
 
 	public void go() {
 
-		Map<String, BioChemicalReaction> networkReacs = n
-				.getBiochemicalReactionList();
-
-		BioChemicalReaction reaction = null;
-
 		FVAAnalysis fva = new FVAAnalysis(bind, null, null);
 		FVAResult result = fva.runAnalysis();
 		try {
@@ -189,6 +181,8 @@ public class TestFVA_KO_DR extends FFUnitTest {
 
 			}
 
+			in.close();
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -218,6 +212,8 @@ public class TestFVA_KO_DR extends FFUnitTest {
 						.getInteractionNetwork().getEntity(name)) - value) < 0.001);
 
 			}
+			
+			in.close();
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -264,6 +260,9 @@ public class TestFVA_KO_DR extends FFUnitTest {
 				Assert.assertTrue((simuResult - value) < 0.001);
 
 			}
+			
+			in.close();
+			
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

@@ -166,7 +166,7 @@ public class CplexBind extends Bind {
 	}
 
 	public void createSolverConstraint(Constraint constraint,
-			List<Object> toRemoveFromModel, Map<String, double[]> oldBounds) {
+			List<Object> toRemoveFromModel) {
 
 		try {
 			double ub = constraint.getUb();
@@ -212,13 +212,10 @@ public class CplexBind extends Bind {
 		BioEntity[] entities = obj.getEntities();
 		double[] coeffs = obj.getCoeffs();
 		boolean maximize = obj.getMaximize();
-		String name = obj.getName();
 
 		try {
 
 			if (model.getObjective() == null) {
-				IloNumVar[] objVars = new IloNumVar[vars.size()];
-				double[] objVals = new double[vars.size()];
 
 				if (maximize) {
 
@@ -317,11 +314,7 @@ public class CplexBind extends Bind {
 					}
 				}
 
-				Iterator it0 = cplex.rangeIterator();
-				while (it0.hasNext()) {
-					IloRange r = (IloRange) it0.next();
-				}
-
+				
 				return new DoubleResult(cplex.getObjValue(), 0);
 
 			} else {
@@ -366,7 +359,7 @@ public class CplexBind extends Bind {
 
 					IloRange[] ranges = new IloRange[cplex.getNrows()];
 
-					Iterator it = cplex.rangeIterator();
+					Iterator<?> it = cplex.rangeIterator();
 					int i = 0;
 					while (it.hasNext()) {
 						ranges[i] = (IloRange) it.next();

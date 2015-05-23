@@ -114,9 +114,6 @@ public class ThreadConcurrentReactions extends ResolveThread {
 
 			Constraint constraint = bind.getSimpleConstraints().get(entity);
 
-			double oldLb = constraint.getLb();
-			double oldUb = constraint.getUb();
-
 			max = previousFVA.getMap().get(entity)[1];
 			min = previousFVA.getMap().get(entity)[0];
 
@@ -165,6 +162,9 @@ public class ThreadConcurrentReactions extends ResolveThread {
 					System.err.print("*");
 				}
 			}
+			
+			
+			newBind.clearAll();
 
 		}
 

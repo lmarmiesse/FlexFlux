@@ -87,11 +87,11 @@ public class DRResult extends FVAResult {
 
 	public void plot() {
 
-		JList resultList = new JList(new DefaultListModel());
+		JList<String> resultList = new JList<String>(new DefaultListModel<String>());
 
 		for (BioEntity ent : map.keySet()) {
 
-			((DefaultListModel) resultList.getModel()).addElement(ent.getId());
+			((DefaultListModel<String>) resultList.getModel()).addElement(ent.getId());
 		}
 
 		JFrame frame = new JFrame("Dead Reactions results");

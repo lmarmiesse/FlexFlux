@@ -327,7 +327,6 @@ public class TDRFBAAnalysis extends Analysis {
 
 			}
 
-			double fbaResult = 0;
 			double mu = 0;
 			DoubleResult result;
 
@@ -335,8 +334,6 @@ public class TDRFBAAnalysis extends Analysis {
 			try {
 				result = b.FBA(new ArrayList<Constraint>(constraintsToAdd),
 						true, false);
-
-				fbaResult = result.result;
 
 			} catch (Exception e) {
 				System.err.println("rFBA stopped");

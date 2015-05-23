@@ -114,7 +114,7 @@ public class FlexfluxTest extends FFApplication {
 			// ////////////////////// Unit tests
 			JUnitCore junit = new JUnitCore();
 
-			List<Class> classes = new ArrayList<Class>();
+			List<Class<?>> classes = new ArrayList<Class<?>>();
 			
 			classes.add(TestRSA.class);
 			classes.add(TestMultiRSA.class);
@@ -135,7 +135,7 @@ public class FlexfluxTest extends FFApplication {
 
 			System.out.println("Running unit tests : ");
 
-			for (Class cl : classes) {
+			for (Class<?> cl : classes) {
 
 				try{
 

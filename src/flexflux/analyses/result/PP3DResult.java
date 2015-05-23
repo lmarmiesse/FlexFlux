@@ -413,9 +413,9 @@ public class PP3DResult extends AnalysisResult {
 
 			int size = 0;
 			for (double objValue : expValues.keySet()) {
-				for (double[] point : expValues.get(objValue)) {
-					size++;
-				}
+				
+				size =+ expValues.get(objValue).size();
+				
 			}
 
 			double[][] data = new double[size][3];

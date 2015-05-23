@@ -33,7 +33,6 @@
  */
 package flexflux.interaction;
 
-import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.operation.Operation;
 import flexflux.operation.OperationGe;

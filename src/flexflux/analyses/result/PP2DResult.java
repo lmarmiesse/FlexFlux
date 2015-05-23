@@ -475,6 +475,11 @@ public class PP2DResult extends AnalysisResult {
 	 */
 	private class MyRenderer extends XYLineAndShapeRenderer {
 
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		Map<Integer, Integer> correspGroup;
 
 		public Color[] COLORLIST = { Color.BLUE, Color.RED, Color.GREEN,

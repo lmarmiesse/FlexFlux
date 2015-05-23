@@ -33,7 +33,6 @@
  */
 package flexflux.analyses;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +41,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
-import flexflux.analyses.result.AnalysisResult;
 import flexflux.analyses.result.ConcurrentReactionsResult;
 import flexflux.analyses.result.FVAResult;
 import flexflux.general.Bind;

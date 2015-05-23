@@ -101,7 +101,7 @@ public class GraphicalFlexflux {
 		ArrayList<Class<?>> orderedClasses = new ArrayList<Class<?>>();
 		// change order*
 		int maxOrder = 0;
-		for (Class c : classes) {
+		for (Class<?> c : classes) {
 			Field f = null;
 			int orderValue = -1;
 			try {
@@ -118,7 +118,7 @@ public class GraphicalFlexflux {
 		}
 
 		for (int i = 0; i <= maxOrder; i++) {
-			for (Class c : classes) {
+			for (Class<?> c : classes) {
 				Field f = null;
 				int orderValue = -1;
 				try {
@@ -134,7 +134,7 @@ public class GraphicalFlexflux {
 
 		}
 
-		for (Class c : classes) {
+		for (Class<?> c : classes) {
 			if (!orderedClasses.contains(c) && !c.getSimpleName().equals("") ) {
 				orderedClasses.add(c);
 			}

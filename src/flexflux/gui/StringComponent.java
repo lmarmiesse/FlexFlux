@@ -12,6 +12,10 @@ import javax.swing.JTextField;
  */
 public class StringComponent extends ArgumentComponent {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	JTextField textField = new JTextField(20);
 
 	public StringComponent(String arg) {

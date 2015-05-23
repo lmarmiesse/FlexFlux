@@ -17,6 +17,10 @@ import javax.swing.JTextField;
  */
 public class FileComponent extends ArgumentComponent {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField textField = new JTextField(10);
 	private JButton chooserButton = new JButton("Choose file");
 	private JFileChooser fc;

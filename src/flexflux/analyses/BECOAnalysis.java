@@ -35,7 +35,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -60,12 +59,23 @@ import flexflux.general.Vars;
 import flexflux.objective.ListOfObjectives;
 import flexflux.objective.Objective;
 
+/**
+ * 
+ * Classifies reactions, genes and regulators in several conditions for several objectives.
+ * 
+ * @author lcottret
+ *
+ */
+
+
 public class BECOAnalysis extends Analysis {
 
 	String conditionFile = "";
 	String objectiveFile = "";
 	String regulationFile = "";
 	String constraintFile = "";
+	
+	// Metadata files used for heatmaps
 	String reactionMetaDataFile = "";
 	String geneMetaDataFile = "";
 	String regulatorMetaDataFile = "";

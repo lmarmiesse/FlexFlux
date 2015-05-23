@@ -631,6 +631,8 @@ public class ClassificationAnalysis extends Analysis {
 
 		classificationResult.essentialGenes = res.getEssentialEntities();
 		
+		System.err.println("Nb of essential genes : "+classificationResult.essentialGenes.size());
+		
 		classificationResult.unfeasibleKoGenes = res.getUnfeasibleKos();
 
 		return;

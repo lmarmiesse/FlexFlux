@@ -112,8 +112,8 @@ public class MainFrame extends JFrame {
 		}
 		// removes classes with no simpleName and with the option
 		// graphicalVersion = false;
-		List<Class> toRemove = new ArrayList<Class>();
-		for (Class c : executableClasses) {
+		List<Class<?>> toRemove = new ArrayList<Class<?>>();
+		for (Class<?> c : executableClasses) {
 
 			Field field = null;
 			Boolean graphicalVersion = null;

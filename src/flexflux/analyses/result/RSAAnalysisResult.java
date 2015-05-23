@@ -49,13 +49,23 @@ public class RSAAnalysisResult extends AnalysisResult {
 
 	private JTable resultTable;
 
-	private List<Map<BioEntity, Integer>> statesList = new ArrayList<Map<BioEntity, Integer>>();
+	private List<Map<BioEntity, Integer>> statesList;
 
-	private List<Constraint> finalConstraints = new ArrayList<Constraint>();
+	private List<Constraint> finalConstraints;
 
-	private Set<BioEntity> resultEntities = new HashSet<BioEntity>();
+	private Set<BioEntity> resultEntities;
 
-	private List<Map<BioEntity, Integer>> attractorStatesList = new ArrayList<Map<BioEntity, Integer>>();
+	private List<Map<BioEntity, Integer>> attractorStatesList;
+	
+	public RSAAnalysisResult() {
+		statesList = new ArrayList<Map<BioEntity, Integer>>();
+		finalConstraints = new ArrayList<Constraint>();
+
+		resultEntities = new HashSet<BioEntity>();
+
+		attractorStatesList = new ArrayList<Map<BioEntity, Integer>>();
+	}
+	
 	
 	/**
 	 * Mean state values
@@ -368,6 +378,8 @@ public class RSAAnalysisResult extends AnalysisResult {
 					return UIManager.getIcon("Table.ascendingSortIcon");
 				case DESCENDING:
 					return UIManager.getIcon("Table.descendingSortIcon");
+				default:
+					return UIManager.getIcon("Table.descendingSortIcon");
 				}
 			}
 			return null;
@@ -383,12 +395,12 @@ public class RSAAnalysisResult extends AnalysisResult {
 		 * @return the SortKey, or null if the column is unsorted
 		 */
 		protected SortKey getSortKey(JTable table, int column) {
-			RowSorter rowSorter = table.getRowSorter();
+			RowSorter<?> rowSorter = table.getRowSorter();
 			if (rowSorter == null) {
 				return null;
 			}
 
-			List sortedColumns = rowSorter.getSortKeys();
+			List<?> sortedColumns = rowSorter.getSortKeys();
 			if (sortedColumns.size() > 0) {
 				return (SortKey) sortedColumns.get(0);
 			}
