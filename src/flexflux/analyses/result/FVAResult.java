@@ -84,7 +84,7 @@ public class FVAResult extends AnalysisResult {
 	 * 
 	 * Map containig all result values.
 	 */
-	protected Map<BioEntity, double[]> map = new HashMap<BioEntity, double[]>();
+	protected Map<BioEntity, double[]> map; 
 	TableRowSorter<TableModel> sorter;
 
 	/**
@@ -107,6 +107,8 @@ public class FVAResult extends AnalysisResult {
 
 	public FVAResult(double objValue) {
 		this.objValue = objValue;
+		
+		map = new HashMap<BioEntity, double[]>();
 	}
 
 	/**

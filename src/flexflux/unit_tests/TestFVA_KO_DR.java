@@ -51,8 +51,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -276,23 +276,22 @@ public class TestFVA_KO_DR extends FFUnitTest {
 		DRAnalysis dr = new DRAnalysis(bind, 0.000001);
 		DRResult resultDr = dr.runAnalysis();
 
-		List<BioEntity> dead = resultDr.getDeadReactions();
-
-		System.err.println(dead.size());
+		Set<String> dead = resultDr.getDeadReactions().keySet();
+		
 		Assert.assertTrue(dead.size() == 8);
 
-		List<BioEntity> testDead = new ArrayList<BioEntity>();
+		Set<String> testDead = new HashSet<String>();
 
-		testDead.add(bind.getInteractionNetwork().getEntity("R_EX_mal_L_e"));
-		testDead.add(bind.getInteractionNetwork().getEntity("R_EX_fru_e"));
-		testDead.add(bind.getInteractionNetwork().getEntity("R_EX_fru_e"));
-		testDead.add(bind.getInteractionNetwork().getEntity("R_EX_gln_L_e"));
-		testDead.add(bind.getInteractionNetwork().getEntity("R_GLNabc"));
-		testDead.add(bind.getInteractionNetwork().getEntity("R_MALt2_2"));
-		testDead.add(bind.getInteractionNetwork().getEntity("R_FUMt2_2"));
-		testDead.add(bind.getInteractionNetwork().getEntity("R_FRUpts2"));
+		testDead.add("R_EX_mal_L_e");
+		testDead.add("R_EX_fru_e");
+		testDead.add("R_EX_fum_e");
+		testDead.add("R_EX_gln_L_e");
+		testDead.add("R_GLNabc");
+		testDead.add("R_MALt2_2");
+		testDead.add("R_FUMt2_2");
+		testDead.add("R_FRUpts2");
 
-		Assert.assertTrue(dead.containsAll(testDead));
+		Assert.assertEquals(testDead, dead);
 
 	}
 }

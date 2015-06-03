@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -50,6 +51,7 @@ import javax.swing.JScrollPane;
 
 import org.jfree.ui.RefineryUtilities;
 
+import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
 
 
@@ -64,6 +66,13 @@ public class DRResult extends FVAResult {
 
 	public DRResult(double objValue, Bind b) {
 		super(objValue);
+		
+		/**
+		 * Add trimed reactions in the result
+		 */
+		for (BioChemicalReaction trimedReac : b.getDeadReactions()) {
+			this.addLine(trimedReac, new double[] { 0.0, 0.0 });
+		}
 	}
 
 	public void writeToFile(String path) {
@@ -109,19 +118,22 @@ public class DRResult extends FVAResult {
 	 * 
 	 * @return The dead reactions.
 	 */
-	public List<BioEntity> getDeadReactions() {
+	public HashMap<String,BioChemicalReaction> getDeadReactions() {
 
-		List<BioEntity> dead = new ArrayList<BioEntity>();
+		HashMap<String, BioChemicalReaction> dead = new HashMap<String,BioChemicalReaction>();
 
-		dead.addAll(map.keySet());
-
+		for(BioEntity ent : map.keySet()) {
+			dead.put(ent.getId(), (BioChemicalReaction) ent);
+		}
+		
+		
 		return dead;
 	}
 
 	/**
 	 * 
 	 * Removes all reaction that are not considered dead.
-	 * 
+	 * 	 
 	 * @param minValue
 	 *            The minimal value to consider a reaction dead.
 	 */

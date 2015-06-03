@@ -48,6 +48,8 @@ import org.kohsuke.args4j.Option;
 
 import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioNetwork;
+import parsebionet.biodata.Flux;
+import parsebionet.io.JSBMLToBionetwork;
 import parsebionet.io.Sbml2Bionetwork;
 
 /**
@@ -174,35 +176,38 @@ public class FlexfluxDR extends FFApplication{
 							+ f.solver + ".");
 			System.exit(0);
 		}
+		
+		BioNetwork network;
+		
+		if (f.extended) {
+			JSBMLToBionetwork parser = new JSBMLToBionetwork(f.sbmlFile);
+			network = parser.getBioNetwork();
 
-		Sbml2Bionetwork sbmlParser = new Sbml2Bionetwork(f.sbmlFile, f.extended);
-		BioNetwork network = sbmlParser.getBioNetwork();
-		Collection<BioChemicalReaction> trimed = network.trim();
-
-		bind.loadSbmlNetwork(f.sbmlFile, f.extended);
+		} else {
+			Sbml2Bionetwork parser = new Sbml2Bionetwork(f.sbmlFile, false);
+			network = parser.getBioNetwork();
+		}
 
 		if (f.mode == 1) {
-			for (String reac : bind.getBioNetwork()
-					.getBiochemicalReactionList().keySet()) {
+			for (BioChemicalReaction reaction : network
+					.getBiochemicalReactionList().values()) {
 
-				BioChemicalReaction reaction = (BioChemicalReaction) bind
-						.getInteractionNetwork().getEntity(reac);
-
-				if (bind.getSimpleConstraints().containsKey(reaction)) {
-
-					Constraint c = bind.getSimpleConstraints().get(reaction);
-					c.setUb(999999);
-					if (reaction.isReversible()) {
-						c.setLb(-999999);
-					} else {
-						c.setLb(0);
-					}
-
+				if (reaction.isReversible()) {
+					reaction.setLowerBound(new Flux("-999999", network
+							.getUnitDefinitions().values().iterator().next()));
+				} else {
+					reaction.setLowerBound(new Flux("0", network
+							.getUnitDefinitions().values().iterator().next()));
 				}
+				
+				reaction.setUpperBound(new Flux("999999", network
+						.getUnitDefinitions().values().iterator().next()));
 
 			}
 
 		}
+		
+		bind.setNetworkAndConstraints(network);
 
 		if (f.condFile != "") {
 			bind.loadConstraintsFile(f.condFile);
@@ -214,12 +219,6 @@ public class FlexfluxDR extends FFApplication{
 
 		DRAnalysis analysis = new DRAnalysis(bind, f.d);
 		DRResult result = analysis.runAnalysis();
-
-		for (BioChemicalReaction trimedReac : trimed) {
-
-			result.addLine(trimedReac, new double[] { 0.0, 0.0 });
-
-		}
 
 		if (f.plot) {
 			result.plot();

@@ -71,8 +71,6 @@ import flexflux.objective.Objective;
 
 public class BECOAnalysis extends Analysis {
 
-	String conditionFile = "";
-	String objectiveFile = "";
 	String regulationFile = "";
 	String constraintFile = "";
 
@@ -81,7 +79,6 @@ public class BECOAnalysis extends Analysis {
 	String geneMetaDataFile = "";
 	String regulatorMetaDataFile = "";
 
-	String sbmlFile = "";
 	String inchlibPath = "";
 
 	String solver = "GLPK";
@@ -110,6 +107,7 @@ public class BECOAnalysis extends Analysis {
 	public Boolean launchRegulatorAnalysis;
 
 	public Boolean fixConditions;
+	
 
 	public BECOAnalysis(Bind bind, String sbmlFile, String regulationFile,
 			String conditionFile, String constraintFile,
@@ -122,9 +120,7 @@ public class BECOAnalysis extends Analysis {
 
 		super(bind);
 
-		this.sbmlFile = sbmlFile;
 		this.solver = solver;
-		this.conditionFile = conditionFile;
 		this.regulationFile = regulationFile;
 		this.constraintFile = constraintFile;
 		this.reactionMetaDataFile = reactionMetaDataFile;
