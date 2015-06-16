@@ -139,7 +139,7 @@ public class TDRFBAAnalysis extends Analysis {
 		TDRFBAResult rFBAResult = new TDRFBAResult();
 
 		for (int i = 0; i < iterations; i++) {
-
+			
 			// we save the results
 			Map<String, Double> valuesMap = new HashMap<String, Double>();
 			valuesMap.put("X", X);
@@ -151,7 +151,7 @@ public class TDRFBAAnalysis extends Analysis {
 				System.err.println("it number " + i);
 			}
 
-			// translation
+//			// translation
 			Map<BioEntity, Integer> networkState = new HashMap<BioEntity, Integer>();
 
 			for (BioEntity enti : simpleConstraints.keySet()) {
@@ -184,11 +184,16 @@ public class TDRFBAAnalysis extends Analysis {
 
 				Map<Constraint, double[]> nextStepConsMap = new HashMap<Constraint, double[]>();
 
+				
 				// translation
 				for (Constraint c1 : nextStepStates.keySet()) {
+					
+					
 
 					BioEntity enti = (BioEntity) c1.getEntities().keySet()
 							.toArray()[0];
+					
+				
 
 					if (b.getInteractionNetwork().canTranslate(enti)) {
 						nextStepConsMap.put(
@@ -200,7 +205,7 @@ public class TDRFBAAnalysis extends Analysis {
 					} else {
 
 						nextStepConsMap.put(c1, nextStepStates.get(c1));
-
+						
 					}
 
 				}
@@ -218,7 +223,7 @@ public class TDRFBAAnalysis extends Analysis {
 					for (int iter = iterBegin; iter <= iterEnd; iter++) {
 						if (iter < iterations) {
 							timeConstraintMap.get(iter).add(c);
-
+							
 						}
 					}
 				}
@@ -229,7 +234,10 @@ public class TDRFBAAnalysis extends Analysis {
 			Set<BioEntity> hasConstraint = new HashSet<BioEntity>();
 			// we add the constraints for the current iteration
 			for (Constraint c : timeConstraintMap.get(i)) {
+				
 				if (c.getEntities().size() == 1) {
+					
+					
 
 					BioEntity ent = null;
 
@@ -238,7 +246,7 @@ public class TDRFBAAnalysis extends Analysis {
 					}
 
 					if (hasConstraint.contains(ent)) {
-
+						
 						Constraint c1 = c;
 						Constraint c2 = simpleConstraints.get(ent);
 
@@ -249,6 +257,7 @@ public class TDRFBAAnalysis extends Analysis {
 								newUb));
 
 					} else {
+						
 						simpleConstraints.put(ent, c);
 						hasConstraint.add(ent);
 					}
@@ -258,6 +267,7 @@ public class TDRFBAAnalysis extends Analysis {
 					.getInteractionNetworkEntities().values()) {
 				if (simpleConstraints.containsKey(ent)) {
 					Constraint c = simpleConstraints.get(ent);
+		
 					constraintsToAdd.add(c);
 
 				}
@@ -330,8 +340,8 @@ public class TDRFBAAnalysis extends Analysis {
 			double fbaResult = 0;
 			double mu = 0;
 			DoubleResult result;
-
-
+			
+			
 			try {
 				result = b.FBA(new ArrayList<Constraint>(constraintsToAdd),
 						true, false);
@@ -373,6 +383,7 @@ public class TDRFBAAnalysis extends Analysis {
 					}
 				} else {
 					unfeasibleSteps.add(i);
+					
 					if (Vars.verbose) {
 						System.err.println(timeToString(i * deltaT) + " X = "
 								+ Vars.round(X) + " no growth : unfeasible");

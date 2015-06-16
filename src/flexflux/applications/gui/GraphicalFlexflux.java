@@ -28,6 +28,7 @@ import flexflux.gui.MainFrame;
 public class GraphicalFlexflux {
 
 	public static void main(String[] args) {
+		
 
 		FlexfluxTest.doUnitTests = false;
 		FlexfluxTest.main(args);
@@ -58,6 +59,7 @@ public class GraphicalFlexflux {
 	public static List<Class<?>> getClasses(String packageName)
 			throws ClassNotFoundException, IOException {
 
+		
 		ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
 
 		ClassLoader classLoader = Thread.currentThread()
@@ -97,6 +99,8 @@ public class GraphicalFlexflux {
 			}
 
 		}
+		
+		
 
 		ArrayList<Class<?>> orderedClasses = new ArrayList<Class<?>>();
 		// change order*

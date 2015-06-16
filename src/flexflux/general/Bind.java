@@ -396,6 +396,8 @@ public abstract class Bind {
 				constraintsToAdd.addAll(GPRConstraints);
 
 			}
+			
+
 
 			// /////////////////
 			// /////////////////
