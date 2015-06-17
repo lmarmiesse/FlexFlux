@@ -293,6 +293,7 @@ public class CplexBind extends Bind {
 
 	public synchronized DoubleResult go(boolean saveResults) {
 		try {
+			
 
 			while (cplex.getNMIPStarts() > 0) {
 

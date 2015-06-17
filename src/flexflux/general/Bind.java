@@ -301,8 +301,8 @@ public abstract class Bind {
 				// checking interactions
 				Set<BioEntity> hadNoSimpleConstraint = new HashSet<BioEntity>();
 
-				
-				// we update the simpleConstraints for the RSA (it needs simpleConstraints)
+				// we update the simpleConstraints for the RSA (it needs
+				// simpleConstraints)
 				for (Constraint constr : constraintsToAdd) {
 
 					if (constr.getEntities().size() == 1) {
@@ -311,9 +311,10 @@ public abstract class Bind {
 								if (simpleConstraints.containsKey(ent)) {
 									oldSimpleConstraints.put(ent,
 											simpleConstraints.get(ent));
-									
-									constraints.remove(simpleConstraints.get(ent));
-									
+
+									constraints.remove(simpleConstraints
+											.get(ent));
+
 								} else {
 									hadNoSimpleConstraint.add(ent);
 								}
@@ -340,8 +341,8 @@ public abstract class Bind {
 						intNetSteadyStateConstraints.add(c);
 					}
 
-					
-					// we update the simpleConstraints for the GPR (it needs simpleConstraints)
+					// we update the simpleConstraints for the GPR (it needs
+					// simpleConstraints)
 					for (Constraint constr : intNetSteadyStateConstraints) {
 
 						if (constr.getEntities().size() == 1) {
@@ -372,9 +373,7 @@ public abstract class Bind {
 								.getInteractionToConstraints().get(i));
 					}
 				}
-				
-				
-				
+
 				// we go back to the original simpleConstraints
 				for (Constraint constr : constraintsToAdd) {
 					if (constr.getEntities().size() == 1) {
@@ -396,84 +395,88 @@ public abstract class Bind {
 				constraintsToAdd.addAll(GPRConstraints);
 
 			}
-			
 
+			if (checkInteractions) {
+				// /////////////////
+				// /////////////////
+				// if a constraint is an external metab set to 0, we change the
+				// bound of the exchange reaction
+				List<Constraint> extMetabConstraints = new ArrayList<Constraint>();
 
-			// /////////////////
-			// /////////////////
-			// if a constraint is an external metab set to 0, we change the
-			// bound of the exchange reaction
-			List<Constraint> extMetabConstraints = new ArrayList<Constraint>();
+				Set<Constraint> constraintsToTest = new HashSet<Constraint>();
+				constraintsToTest.addAll(constraintsToAdd);
+				// constraintsToTest.addAll(constraints);
+				constraintsToTest.addAll(simpleConstraints.values());
 
-			Set<Constraint> constraintsToTest = new HashSet<Constraint>();
-			constraintsToTest.addAll(constraintsToAdd);
-			// constraintsToTest.addAll(constraints);
-			constraintsToTest.addAll(simpleConstraints.values());
+				for (Constraint c : constraintsToTest) {
+					if (c.getEntities().size() == 1 && c.getLb() == 0
+							&& c.getUb() == 0) {
+						BioEntity b = null;
+						for (BioEntity ent : c.getEntities().keySet()) {
+							b = ent;
+						}
+						if (b.getClass().getSimpleName()
+								.equals("BioPhysicalEntity")) {
 
-			for (Constraint c : constraintsToTest) {
-				if (c.getEntities().size() == 1 && c.getLb() == 0
-						&& c.getUb() == 0) {
-					BioEntity b = null;
-					for (BioEntity ent : c.getEntities().keySet()) {
-						b = ent;
-					}
-					if (b.getClass().getSimpleName()
-							.equals("BioPhysicalEntity")) {
+							BioPhysicalEntity metab = (BioPhysicalEntity) b;
 
-						BioPhysicalEntity metab = (BioPhysicalEntity) b;
+							if (metab.getBoundaryCondition()) {
+								// now we need to find the exchangReaction
+								// concerned
+								// and change one of its bound
 
-						if (metab.getBoundaryCondition()) {
-							// now we need to find the exchangReaction concerned
-							// and change one of its bound
+								for (String reacName : metab
+										.getReactionsAsSubstrate().keySet()) {
+									BioChemicalReaction reac = metab
+											.getReactionsAsSubstrate().get(
+													reacName);
 
-							for (String reacName : metab
-									.getReactionsAsSubstrate().keySet()) {
-								BioChemicalReaction reac = metab
-										.getReactionsAsSubstrate()
-										.get(reacName);
+									//
+									if (simpleConstraints.containsKey(reac)) {
 
-								//
-								if (simpleConstraints.containsKey(reac)) {
+										if (reac.getLeftList().containsKey(
+												metab.getId())
+												&& reac.getLeftList().size() == 1) {
 
-									if (reac.getLeftList().containsKey(
-											metab.getId())
-											&& reac.getLeftList().size() == 1) {
+											double lb = simpleConstraints.get(
+													reac).getLb();
+											double ub = 0.0;
 
-										double lb = simpleConstraints.get(reac)
-												.getLb();
-										double ub = 0.0;
+											Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
+											constMap.put(reac, 1.0);
 
-										Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
-										constMap.put(reac, 1.0);
+											extMetabConstraints
+													.add(new Constraint(
+															constMap, lb, ub));
+										}
 
-										extMetabConstraints.add(new Constraint(
-												constMap, lb, ub));
+										if (reac.getRightList().containsKey(
+												metab.getId())
+												&& reac.getRightList().size() == 1) {
+
+											double lb = 0.0;
+
+											double ub = simpleConstraints.get(
+													reac).getUb();
+
+											Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
+											constMap.put(reac, 1.0);
+
+											extMetabConstraints
+													.add(new Constraint(
+															constMap, lb, ub));
+										}
+
 									}
-
-									if (reac.getRightList().containsKey(
-											metab.getId())
-											&& reac.getRightList().size() == 1) {
-
-										double lb = 0.0;
-
-										double ub = simpleConstraints.get(reac)
-												.getUb();
-
-										Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
-										constMap.put(reac, 1.0);
-
-										extMetabConstraints.add(new Constraint(
-												constMap, lb, ub));
-									}
-
 								}
-							}
 
+							}
 						}
 					}
 				}
+				constraintsToAdd.addAll(extMetabConstraints);
 			}
-			constraintsToAdd.addAll(extMetabConstraints);
+
 			// ////////////////
 			// ////////////////
 

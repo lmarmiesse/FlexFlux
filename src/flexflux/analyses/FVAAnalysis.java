@@ -101,8 +101,10 @@ public class FVAAnalysis extends Analysis {
 	public FVAResult runAnalysis() {
 
 		double startTime = System.currentTimeMillis();
+		
 
 		DoubleResult result = b.FBA(constraints, false, true);
+		
 
 		FVAResult fvaResult = null;
 

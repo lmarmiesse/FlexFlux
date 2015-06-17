@@ -57,7 +57,7 @@ public class ThreadFVA extends ResolveThread {
 	/**
 	 * Number of entities to treat.
 	 */
-	private int todo;
+	private double todo;
 
 	/**
 	 * Contains all entities to treat.
@@ -102,13 +102,16 @@ public class ThreadFVA extends ResolveThread {
 		
 		while ((entity = entities.poll()) != null) {
 			
+			
 			bind.changeObjVarValue(entity, 1.0);
 			result.setMin(entity, bind.FBA(new ArrayList<Constraint>(),false, false).result);
 			bind.changeObjVarValue(entity, 0.0);
 
-			int percent = (int) Math.round((todo - entities.size()) / todo * 50);
+			int percent = (int) Math.round(((todo - entities.size())/todo)*50);
+			
+			
 			if (percent > percentage) {
-
+//				System.out.println(percent);
 				percentage = percent;
 				if (Vars.verbose && percent % 2 == 0) {
 					System.err.print("*");
@@ -125,8 +128,9 @@ public class ThreadFVA extends ResolveThread {
 			result.setMax(entity, bind.FBA(new ArrayList<Constraint>(),false, false).result);
 			bind.changeObjVarValue(entity, 0.0);
 
-			int percent = (int) Math.round((todo - entitiesCopy.size()) / todo * 50) + 50;
+			int percent = (int) Math.round(((todo - entitiesCopy.size())/todo)*50) + 50;
 			if (percent > percentage) {
+//				System.out.println(percent);
 				percentage = percent;
 				if (Vars.verbose && percent % 2 == 0 && percentage != 0) {
 					System.err.print("*");

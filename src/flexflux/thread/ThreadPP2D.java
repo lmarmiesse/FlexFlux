@@ -109,7 +109,9 @@ public class ThreadPP2D extends ResolveThread {
 		Double value;
 		
 		while ((value = fluxesQueue.poll()) != null) {
+			
 
+			
 			List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 			constraintsToAdd.add(new Constraint(entities, value, value));
 
@@ -130,6 +132,8 @@ public class ThreadPP2D extends ResolveThread {
 
 				continue;
 			}
+			
+
 
 			// calculation of shadowPrice
 			double shadowPrice = 0;
@@ -137,12 +141,18 @@ public class ThreadPP2D extends ResolveThread {
 			constraintsToAdd.clear();
 			constraintsToAdd.add(new Constraint(entities, value + 0.1,
 					value + 0.1));
+			
 
 			DoubleResult resShadowPrice = bind.FBA(constraintsToAdd, false,
 					true);
+			
 
+			
 			shadowPrice = resShadowPrice.result - res.result;
 			boolean add = true;
+			
+
+
 
 			lock.lock();
 			for (Double val : shadowPriceGroups.keySet()) {
@@ -163,11 +173,13 @@ public class ThreadPP2D extends ResolveThread {
 
 			lock.unlock();
 
+
 			result.addValue(value, res.result);
 
 			done++;
-
-			int percent = (int) Math.round((double) done / (double) todo * 100);
+			
+			int percent = (int) Math.round(((double) done / (double) todo) * 100);
+			
 			if (percent > percentage) {
 
 				percentage = percent;
@@ -177,7 +189,7 @@ public class ThreadPP2D extends ResolveThread {
 			}
 
 		}
-
+		
 	}
 
 	public void setShadowPriceGroups() {
