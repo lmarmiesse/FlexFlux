@@ -92,4 +92,10 @@ public class InversedRelation extends Relation {
 	public boolean isInverseTrue(Map<BioEntity, Constraint> simpleConstraints) {
 		return rel.isTrue(simpleConstraints);
 	}
+
+	@Override
+	public String toFormula() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

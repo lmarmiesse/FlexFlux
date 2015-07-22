@@ -73,6 +73,25 @@ public class Or extends RelationWithList {
 		s += (")");
 		return s;
 	}
+	
+	public String toFormula() {
+		String s = "";
+		s += "(";
+
+		int i = 0;
+		for (Relation rel : list) {
+			if (i != 0) {
+				s += " || ";
+			}
+
+			s += rel.toFormula();
+
+			i++;
+		}
+
+		s += (")");
+		return s;
+	}
 
 	public boolean isTrue(Map<BioEntity, Constraint> simpleConstraints) {
 

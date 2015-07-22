@@ -272,9 +272,9 @@ public class SBMLQualReader {
 				} else {
 
 					ASTNode ast = ft.getMath();
-
+					
 					ifRelation = createRealtion(ast);
-
+					
 					thenRelation = new Unique(outEntity, new OperationEq(),
 							resValue);
 
@@ -438,14 +438,15 @@ public class SBMLQualReader {
 	private static Relation createRealtion(ASTNode ast) {
 
 		Relation rel = getRightRelation(ast);
-
+		
 		for (ASTNode astChild : ast.getListOfNodes()) {
 
 			try {
 				RelationWithList rel2 = (RelationWithList) rel;
 				if (rel2 != null) {
-
+					
 					rel2.addRelation(createRealtion(astChild));
+					
 				}
 			} catch (ClassCastException e) {
 
@@ -459,7 +460,7 @@ public class SBMLQualReader {
 	private static Relation getRightRelation(ASTNode ast) {
 
 		Type type = ast.getType();
-
+		
 		if (type.toString().equals("LOGICAL_AND")) {
 			return new And();
 		} else if (type.toString().equals("LOGICAL_OR")) {
@@ -471,6 +472,7 @@ public class SBMLQualReader {
 		} else if (type.toString().equals("RELATIONAL_EQ")) {
 
 			int value = 0;
+			
 
 			BioEntity ent = intNet.getEntity(ast.getChild(0).toString());
 
@@ -574,6 +576,9 @@ public class SBMLQualReader {
 			return unique;
 
 		}
+		
+		System.err.println("Error in rule : "+ast+", missing logical rule or mathematical sign");
+		System.exit(0);
 
 		return null;
 	}

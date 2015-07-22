@@ -59,6 +59,11 @@ public class OperationLe extends Operation {
 
 	}
 
+	public String toFormula() {
+
+		return (" <= ");
+	}
+	
 	public List<Constraint> makeConstraint(BioEntity entity, double value) {
 
 		List<Constraint> constraints = new ArrayList<Constraint>();

@@ -120,6 +120,16 @@ public class Unique extends Relation {
 		s += value;
 		return s;
 	}
+	
+	public String toFormula() {
+		String s = "";
+		s += entity.getId();
+
+		s += operation.toFormula();
+
+		s += value;
+		return s;
+	}
 
 	public boolean isTrue(Map<BioEntity, Constraint> simpleConstraints) {
 

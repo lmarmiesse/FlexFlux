@@ -54,6 +54,8 @@ import parsebionet.biodata.BioEntity;
 public abstract class Relation {
 
 	public abstract String toString();
+	
+	public abstract String toFormula();
 
 	protected boolean probabilityRelation = false;
 
