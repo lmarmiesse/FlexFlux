@@ -33,12 +33,10 @@
  */
 package flexflux.interaction;
 
-import flexflux.general.Bind;
-import flexflux.general.Constraint;
-
 import java.util.ArrayList;
 import java.util.Map;
 
+import flexflux.general.Constraint;
 import parsebionet.biodata.BioEntity;
 
 /**
@@ -73,7 +71,7 @@ public class Or extends RelationWithList {
 		s += (")");
 		return s;
 	}
-	
+
 	public String toFormula() {
 		String s = "";
 		s += "(";
@@ -103,7 +101,7 @@ public class Or extends RelationWithList {
 		return false;
 
 	}
-	
+
 	public boolean isInverseTrue(Map<BioEntity, Constraint> simpleConstraints) {
 
 		for (Relation rel : list) {
@@ -116,12 +114,36 @@ public class Or extends RelationWithList {
 
 	protected void makeConstraints() {
 
-		System.err
-				.println("Error: Unsupported condition when interactions not in solver : "
-						+ this);
+		System.err.println("Error: Unsupported condition when interactions not in solver : " + this);
 
 		constraints = new ArrayList<Constraint>();
 
+	}
+
+	/**
+	 * Calculates "an expression value" of the relation given omics data results in one condition
+	 * @param sampleValues 
+	 */
+	public double calculateRelationQuantitativeValue(Map<BioEntity, Double> sampleValues) {
+
+		double expr = 0;
+		boolean allNaN = true;
+		for (Relation rel : list) {
+
+			double expr2 = rel.calculateRelationQuantitativeValue(sampleValues);
+
+			if (!Double.isNaN(expr2)) {
+				allNaN = false;
+				expr += expr2;
+			}
+
+		}
+		if (!allNaN) {
+			return expr;
+		}
+		else{
+			return Double.NaN;
+		}
 	}
 
 }

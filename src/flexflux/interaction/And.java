@@ -72,7 +72,7 @@ public class And extends RelationWithList {
 		s += ")";
 		return s;
 	}
-	
+
 	@Override
 	public String toFormula() {
 		String s = "(";
@@ -103,7 +103,7 @@ public class And extends RelationWithList {
 		}
 		return true;
 	}
-	
+
 	public boolean isInverseTrue(Map<BioEntity, Constraint> simpleConstraints) {
 		for (Relation rel : list) {
 			if (rel.isInverseTrue(simpleConstraints)) {
@@ -113,7 +113,6 @@ public class And extends RelationWithList {
 		return false;
 	}
 
-
 	protected void makeConstraints() {
 
 		constraints = new ArrayList<Constraint>();
@@ -122,6 +121,33 @@ public class And extends RelationWithList {
 			constraints.addAll(rel.createConstraints());
 		}
 
+	}
+
+	/**
+	 * Calculates "an expression value" of the relation given omics data results
+	 * in one condition
+	 * 
+	 * @param sampleValues
+	 */
+	public double calculateRelationQuantitativeValue(Map<BioEntity, Double> sampleValues) {
+		double expr = 0;
+		boolean allNaN = true;
+		for (Relation rel : list) {
+
+			double expr2 = rel.calculateRelationQuantitativeValue(sampleValues);
+
+			if (!Double.isNaN(expr2)) {
+				allNaN = false;
+				expr += expr2;
+			}
+
+		}
+		if (!allNaN) {
+			return expr / list.size();
+		}
+		else{
+			return Double.NaN;
+		}
 	}
 
 }

@@ -113,4 +113,14 @@ public abstract class Relation {
 	public abstract boolean isUndeterminedVariable(Map<BioEntity, Constraint> simpleConstraints);
 
 	public abstract boolean isInverseTrue(Map<BioEntity, Constraint> simpleConstraints);
+	
+	
+	
+	
+	
+	/**
+	 * Calculates "an expression value" of the relation given omics data results in one condition
+	 * @param sampleValues 
+	 */
+	public abstract double calculateRelationQuantitativeValue(Map<BioEntity, Double> sampleValues);
 }

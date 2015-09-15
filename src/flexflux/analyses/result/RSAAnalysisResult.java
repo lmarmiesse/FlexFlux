@@ -101,6 +101,12 @@ public class RSAAnalysisResult extends AnalysisResult {
 
 	@Override
 	public void writeToFile(String path) {
+		
+		if (resultEntities.size()==0){
+			
+			System.err.println("Error : no component has a steady state value. Check that some of your components have initial values.");
+			System.exit(0);	
+		}
 
 		try {
 			PrintWriter out = new PrintWriter(new File(path));
@@ -158,6 +164,12 @@ public class RSAAnalysisResult extends AnalysisResult {
 
 	@Override
 	public void plot() {
+		
+		if (resultEntities.size()==0){
+			
+			System.err.println("Error : no component has a steady state value. Check that some of your components have initial values.");
+			System.exit(0);	
+		}
 
 		JFrame frame = new JFrame("Steady state analysis results");
 
@@ -181,7 +193,7 @@ public class RSAAnalysisResult extends AnalysisResult {
 
 		int i = 0;
 		for (BioEntity ent : resultEntities) {
-
+			
 			Object[] entValues = new Object[statesList.size() + 2];
 
 			entValues[0] = ent.getId();
