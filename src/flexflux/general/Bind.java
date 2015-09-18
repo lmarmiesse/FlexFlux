@@ -192,8 +192,7 @@ public abstract class Bind {
 	 *            is used to come back to how it was before.
 	 */
 
-	protected void makeSolverConstraint(Constraint c,
-			List<Object> toRemoveFromModel, Map<String, double[]> oldBounds) {
+	protected void makeSolverConstraint(Constraint c, List<Object> toRemoveFromModel, Map<String, double[]> oldBounds) {
 
 		constrainedEntities.addAll(c.getEntities().keySet());
 
@@ -201,8 +200,8 @@ public abstract class Bind {
 
 	}
 
-	protected abstract void createSolverConstraint(Constraint c,
-			List<Object> toRemoveFromModel, Map<String, double[]> oldBounds);
+	protected abstract void createSolverConstraint(Constraint c, List<Object> toRemoveFromModel,
+			Map<String, double[]> oldBounds);
 
 	/**
 	 * Deletes solver constraints.
@@ -288,8 +287,7 @@ public abstract class Bind {
 	 * @return A doubleResult object containing the result and a flag saying if
 	 *         the problem was feasible
 	 */
-	public DoubleResult FBA(List<Constraint> constraintsToAdd,
-			boolean saveResults, boolean checkInteractions) {
+	public DoubleResult FBA(List<Constraint> constraintsToAdd, boolean saveResults, boolean checkInteractions) {
 
 		if (solverPrepared) {
 
@@ -309,11 +307,9 @@ public abstract class Bind {
 						for (BioEntity ent : constr.getEntities().keySet()) {
 							if (constr.getEntities().get(ent) == 1.0) {
 								if (simpleConstraints.containsKey(ent)) {
-									oldSimpleConstraints.put(ent,
-											simpleConstraints.get(ent));
+									oldSimpleConstraints.put(ent, simpleConstraints.get(ent));
 
-									constraints.remove(simpleConstraints
-											.get(ent));
+									constraints.remove(simpleConstraints.get(ent));
 
 								} else {
 									hadNoSimpleConstraint.add(ent);
@@ -329,8 +325,7 @@ public abstract class Bind {
 
 					List<Constraint> intNetSteadyStateConstraints = new ArrayList<Constraint>();
 
-					RSAAnalysis ssa = new RSAAnalysis(
-							this.getInteractionNetwork(), simpleConstraints);
+					RSAAnalysis ssa = new RSAAnalysis(this.getInteractionNetwork(), simpleConstraints);
 					RSAAnalysisResult res = ssa.runAnalysis();
 
 					if (Vars.writeInteractionNetworkStates) {
@@ -349,11 +344,8 @@ public abstract class Bind {
 							for (BioEntity ent : constr.getEntities().keySet()) {
 
 								if (constr.getEntities().get(ent) == 1.0) {
-									if (simpleConstraints.containsKey(ent)
-											&& !hadNoSimpleConstraint
-													.contains(ent)) {
-										oldSimpleConstraints.put(ent,
-												simpleConstraints.get(ent));
+									if (simpleConstraints.containsKey(ent) && !hadNoSimpleConstraint.contains(ent)) {
+										oldSimpleConstraints.put(ent, simpleConstraints.get(ent));
 
 									}
 									simpleConstraints.put(ent, constr);
@@ -369,8 +361,7 @@ public abstract class Bind {
 				List<Constraint> GPRConstraints = new ArrayList<Constraint>();
 				for (Interaction i : intNet.getGPRInteractions()) {
 					if (i.getCondition().isTrue(simpleConstraints)) {
-						GPRConstraints.addAll(intNet
-								.getInteractionToConstraints().get(i));
+						GPRConstraints.addAll(intNet.getInteractionToConstraints().get(i));
 					}
 				}
 
@@ -381,8 +372,7 @@ public abstract class Bind {
 							if (constr.getEntities().get(ent) == 1.0) {
 
 								if (oldSimpleConstraints.containsKey(ent)) {
-									simpleConstraints.put(ent,
-											oldSimpleConstraints.get(ent));
+									simpleConstraints.put(ent, oldSimpleConstraints.get(ent));
 								} else {
 									simpleConstraints.remove(ent);
 								}
@@ -409,14 +399,12 @@ public abstract class Bind {
 				constraintsToTest.addAll(simpleConstraints.values());
 
 				for (Constraint c : constraintsToTest) {
-					if (c.getEntities().size() == 1 && c.getLb() == 0
-							&& c.getUb() == 0) {
+					if (c.getEntities().size() == 1 && c.getLb() == 0 && c.getUb() == 0) {
 						BioEntity b = null;
 						for (BioEntity ent : c.getEntities().keySet()) {
 							b = ent;
 						}
-						if (b.getClass().getSimpleName()
-								.equals("BioPhysicalEntity")) {
+						if (b.getClass().getSimpleName().equals("BioPhysicalEntity")) {
 
 							BioPhysicalEntity metab = (BioPhysicalEntity) b;
 
@@ -425,46 +413,35 @@ public abstract class Bind {
 								// concerned
 								// and change one of its bound
 
-								for (String reacName : metab
-										.getReactionsAsSubstrate().keySet()) {
-									BioChemicalReaction reac = metab
-											.getReactionsAsSubstrate().get(
-													reacName);
+								for (String reacName : metab.getReactionsAsSubstrate().keySet()) {
+									BioChemicalReaction reac = metab.getReactionsAsSubstrate().get(reacName);
 
 									//
 									if (simpleConstraints.containsKey(reac)) {
 
-										if (reac.getLeftList().containsKey(
-												metab.getId())
+										if (reac.getLeftList().containsKey(metab.getId())
 												&& reac.getLeftList().size() == 1) {
 
-											double lb = simpleConstraints.get(
-													reac).getLb();
+											double lb = simpleConstraints.get(reac).getLb();
 											double ub = 0.0;
 
 											Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
 											constMap.put(reac, 1.0);
 
-											extMetabConstraints
-													.add(new Constraint(
-															constMap, lb, ub));
+											extMetabConstraints.add(new Constraint(constMap, lb, ub));
 										}
 
-										if (reac.getRightList().containsKey(
-												metab.getId())
+										if (reac.getRightList().containsKey(metab.getId())
 												&& reac.getRightList().size() == 1) {
 
 											double lb = 0.0;
 
-											double ub = simpleConstraints.get(
-													reac).getUb();
+											double ub = simpleConstraints.get(reac).getUb();
 
 											Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
 											constMap.put(reac, 1.0);
 
-											extMetabConstraints
-													.add(new Constraint(
-															constMap, lb, ub));
+											extMetabConstraints.add(new Constraint(constMap, lb, ub));
 										}
 
 									}
@@ -500,8 +477,7 @@ public abstract class Bind {
 	 * @return A doubleResult object containing the result and a flag saying if
 	 *         the problem was feasible
 	 */
-	private DoubleResult goWithConstraints(List<Constraint> constraints,
-			boolean saveResults) {
+	private DoubleResult goWithConstraints(List<Constraint> constraints, boolean saveResults) {
 
 		// objects represent a constraint for the solver
 		List<Object> toRemoveFromModel = new ArrayList<Object>();
@@ -538,9 +514,8 @@ public abstract class Bind {
 	 * @param bioNet
 	 *            BioNetwork to copy.
 	 */
-	public Bind(List<Constraint> constraints2,
-			Map<BioEntity, Constraint> simpleConstraints,
-			InteractionNetwork intNet, BioNetwork bioNet) {
+	public Bind(List<Constraint> constraints2, Map<BioEntity, Constraint> simpleConstraints, InteractionNetwork intNet,
+			BioNetwork bioNet) {
 
 		this.constraints.addAll(constraints2);
 		this.simpleConstraints.putAll(simpleConstraints);
@@ -694,9 +669,8 @@ public abstract class Bind {
 	 */
 	public void loadConstraintsFile(String path) {
 
-		ConstraintsFileReader r = new ConstraintsFileReader(path, intNet,
-				constraints, simpleConstraints, steadyStateConstraints, bioNet,
-				loadObjective);
+		ConstraintsFileReader r = new ConstraintsFileReader(path, intNet, constraints, simpleConstraints,
+				steadyStateConstraints, bioNet, loadObjective);
 
 		r.readConstraintsFile();
 
@@ -717,11 +691,14 @@ public abstract class Bind {
 
 	public BioEntity createFluxesSummation() {
 
-		ConstraintsFileReader r = new ConstraintsFileReader("", intNet,
-				constraints, simpleConstraints, steadyStateConstraints, bioNet,
-				true);
+		if (intNet.getEntity(Vars.FluxSumKeyWord) == null) {
 
-		return r.createFluxesSummation();
+			ConstraintsFileReader r = new ConstraintsFileReader("", intNet, constraints, simpleConstraints,
+					steadyStateConstraints, bioNet, true);
+
+			return r.createFluxesSummation();
+		}
+		return intNet.getEntity(Vars.FluxSumKeyWord);
 
 	}
 
@@ -737,12 +714,10 @@ public abstract class Bind {
 	 *            The name of the objective.
 	 * @return The created objective.
 	 */
-	public Objective makeObjectiveFromString(String expr, boolean maximize,
-			String name) {
+	public Objective makeObjectiveFromString(String expr, boolean maximize, String name) {
 
-		ConstraintsFileReader r = new ConstraintsFileReader("", intNet,
-				constraints, simpleConstraints, steadyStateConstraints, bioNet,
-				true);
+		ConstraintsFileReader r = new ConstraintsFileReader("", intNet, constraints, simpleConstraints,
+				steadyStateConstraints, bioNet, true);
 
 		return r.makeObjectiveFromString(expr, maximize, name);
 
@@ -774,8 +749,7 @@ public abstract class Bind {
 		// if there are constraint objective, we treat them
 		if (constraintObjectives.size() != 0) {
 			if (Vars.verbose) {
-				System.err.println(Vars.libertyPercentage
-						+ "% of non optimality");
+				System.err.println(Vars.libertyPercentage + "% of non optimality");
 			}
 		}
 		for (Objective constObj : constraintObjectives) {
@@ -794,8 +768,7 @@ public abstract class Bind {
 
 			double lb = resultFba.getObjValue();
 			double ub = resultFba.getObjValue();
-			double delta = Math.abs(resultFba.getObjValue())
-					* Vars.libertyPercentage / 100;
+			double delta = Math.abs(resultFba.getObjValue()) * Vars.libertyPercentage / 100;
 
 			Constraint c = new Constraint(constMap, lb - delta, ub + delta);
 
@@ -820,16 +793,14 @@ public abstract class Bind {
 
 		List<BioEntity> entities = new ArrayList<BioEntity>();
 		// we add the reactions
-		Map<String, BioChemicalReaction> reactionsMap = bioNet
-				.getBiochemicalReactionList();
+		Map<String, BioChemicalReaction> reactionsMap = bioNet.getBiochemicalReactionList();
 
 		for (String reacName : reactionsMap.keySet()) {
 			entities.add(reactionsMap.get(reacName));
 		}
 
 		// we add the metabolites
-		Map<String, BioPhysicalEntity> metabolitesMap = bioNet
-				.getPhysicalEntityList();
+		Map<String, BioPhysicalEntity> metabolitesMap = bioNet.getPhysicalEntityList();
 
 		for (String metabName : metabolitesMap.keySet()) {
 			entities.add(metabolitesMap.get(metabName));
@@ -863,11 +834,9 @@ public abstract class Bind {
 		Map<String, Integer> metabIndiceMap = new HashMap<String, Integer>();
 		Map<String, Integer> reacIndiceMap = new HashMap<String, Integer>();
 
-		Map<String, BioChemicalReaction> reactionsMap = bioNet
-				.getBiochemicalReactionList();
+		Map<String, BioChemicalReaction> reactionsMap = bioNet.getBiochemicalReactionList();
 
-		Map<String, BioPhysicalEntity> metabolitesMap = bioNet
-				.getPhysicalEntityList();
+		Map<String, BioPhysicalEntity> metabolitesMap = bioNet.getPhysicalEntityList();
 
 		for (String name : metabolitesMap.keySet()) {
 			// we only keep internal metabolites
@@ -879,19 +848,16 @@ public abstract class Bind {
 		}
 
 		// stoe matrix
-		double[][] sMatrix = new double[reactionsMap.size()][metabolitesMap
-				.size()];
+		double[][] sMatrix = new double[reactionsMap.size()][metabolitesMap.size()];
 
 		// we go through each reaction
 		for (String reacName : reactionsMap.keySet()) {
 
-			BioChemicalReaction reac = (BioChemicalReaction) intNet
-					.getEntity(reacName);
+			BioChemicalReaction reac = (BioChemicalReaction) intNet.getEntity(reacName);
 			reacIndiceMap.put(reacName, reacIndice);
 
 			// we get the reactants
-			Map<String, BioPhysicalEntityParticipant> reactants = reac
-					.getLeftParticipantList();
+			Map<String, BioPhysicalEntityParticipant> reactants = reac.getLeftParticipantList();
 
 			for (String reactantName : reactants.keySet()) {
 				BioPhysicalEntityParticipant bpep = reactants.get(reactantName);
@@ -900,8 +866,7 @@ public abstract class Bind {
 				if (!reactant.getBoundaryCondition()) {
 					// we set the value in the matrix
 					sMatrix[reacIndice][metabIndiceMap.get(reactant.getId())] = Double
-							.parseDouble(bpep.getStoichiometricCoefficient())
-							* -1;
+							.parseDouble(bpep.getStoichiometricCoefficient()) * -1;
 				}
 				// if it is external we add it to the map for exchange reactions
 				// interactions
@@ -911,23 +876,19 @@ public abstract class Bind {
 
 						Map<BioEntity, Double> map = new HashMap<BioEntity, Double>();
 
-						map.put(reactant, Double.parseDouble(bpep
-								.getStoichiometricCoefficient()));
+						map.put(reactant, Double.parseDouble(bpep.getStoichiometricCoefficient()));
 
 						exchangeInteractions.put(reac, map);
 					} else {
-						exchangeInteractions.get(reac).put(
-								reactant,
-								Double.parseDouble(bpep
-										.getStoichiometricCoefficient()));
+						exchangeInteractions.get(reac).put(reactant,
+								Double.parseDouble(bpep.getStoichiometricCoefficient()));
 					}
 				}
 
 			}
 
 			// we get the products
-			Map<String, BioPhysicalEntityParticipant> products = reac
-					.getRightParticipantList();
+			Map<String, BioPhysicalEntityParticipant> products = reac.getRightParticipantList();
 
 			for (String productName : products.keySet()) {
 
@@ -948,16 +909,12 @@ public abstract class Bind {
 
 						Map<BioEntity, Double> map = new HashMap<BioEntity, Double>();
 
-						map.put(product,
-								Double.parseDouble(bpep
-										.getStoichiometricCoefficient()) * -1);
+						map.put(product, Double.parseDouble(bpep.getStoichiometricCoefficient()) * -1);
 
 						exchangeInteractions.put(reac, map);
 					} else {
-						exchangeInteractions.get(reac).put(
-								product,
-								Double.parseDouble(bpep
-										.getStoichiometricCoefficient()) * -1);
+						exchangeInteractions.get(reac).put(product,
+								Double.parseDouble(bpep.getStoichiometricCoefficient()) * -1);
 					}
 
 					// }
@@ -976,8 +933,7 @@ public abstract class Bind {
 			for (String reaction : reacIndiceMap.keySet()) {
 				if (sMatrix[reacIndiceMap.get(reaction)][ligne] != 0.0) {
 
-					constraintMap.put(reactionsMap.get(reaction),
-							sMatrix[reacIndiceMap.get(reaction)][ligne]);
+					constraintMap.put(reactionsMap.get(reaction), sMatrix[reacIndiceMap.get(reaction)][ligne]);
 
 				}
 			}
@@ -990,12 +946,10 @@ public abstract class Bind {
 					List<Constraint> cList = new ArrayList<Constraint>();
 					cList.add(c);
 
-					steadyStateConstraints.put(reactionsMap.get(ent.getId()),
-							cList);
+					steadyStateConstraints.put(reactionsMap.get(ent.getId()), cList);
 				} else {
 
-					steadyStateConstraints.get(reactionsMap.get(ent.getId()))
-							.add(c);
+					steadyStateConstraints.get(reactionsMap.get(ent.getId())).add(c);
 
 				}
 			}
@@ -1012,8 +966,7 @@ public abstract class Bind {
 	 * 
 	 */
 	private void setReactionsBounds() {
-		Map<String, BioChemicalReaction> reactionsMap = bioNet
-				.getBiochemicalReactionList();
+		Map<String, BioChemicalReaction> reactionsMap = bioNet.getBiochemicalReactionList();
 		// we go through each reaction to create the bound constraints
 		for (String reacName : reactionsMap.keySet()) {
 			BioChemicalReaction reaction = reactionsMap.get(reacName);
@@ -1024,8 +977,7 @@ public abstract class Bind {
 			if (reaction.isReversible() == false && lb < 0) {
 				lb = 0;
 				if (Vars.verbose) {
-					System.err
-							.println("Warning : irreversible reaction with < 0 lower bound");
+					System.err.println("Warning : irreversible reaction with < 0 lower bound");
 				}
 			}
 
@@ -1046,8 +998,7 @@ public abstract class Bind {
 	 */
 	private void gprInteractions() {
 
-		Map<String, BioChemicalReaction> reactionsMap = bioNet
-				.getBiochemicalReactionList();
+		Map<String, BioChemicalReaction> reactionsMap = bioNet.getBiochemicalReactionList();
 
 		for (String name : reactionsMap.keySet()) {
 
@@ -1060,8 +1011,7 @@ public abstract class Bind {
 			// to : if G1=0 OR G2=0 then R=0
 			// so we invert AND and OR
 
-			Map<String, BioPhysicalEntity> enzymes = reactionsMap.get(name)
-					.getEnzList();
+			Map<String, BioPhysicalEntity> enzymes = reactionsMap.get(name).getEnzList();
 
 			if (enzymes.size() != 0) {
 
@@ -1111,13 +1061,11 @@ public abstract class Bind {
 
 						involvedGenes.add((BioGene) intNet.getEntity(geneName));
 
-						Unique unique = (Unique) relationFactory.makeUnique(
-								intNet.getEntity(geneName),
+						Unique unique = (Unique) relationFactory.makeUnique(intNet.getEntity(geneName),
 								operationFactory.makeEq(), 0);
 
-						Unique uniqueActive = (Unique) relationFactory
-								.makeUnique(intNet.getEntity(geneName),
-										operationFactory.makeGt(), 0.0);
+						Unique uniqueActive = (Unique) relationFactory.makeUnique(intNet.getEntity(geneName),
+								operationFactory.makeGt(), 0.0);
 
 						if (rel2 != null) {
 							((Or) rel2).addRelation(unique);
@@ -1149,11 +1097,10 @@ public abstract class Bind {
 
 				// if the genes are not there, the reaction is not there
 
-				Unique reacEqZero = (Unique) relationFactory.makeUnique(
-						intNet.getEntity(name), operationFactory.makeEq(), 0.0);
+				Unique reacEqZero = (Unique) relationFactory.makeUnique(intNet.getEntity(name),
+						operationFactory.makeEq(), 0.0);
 
-				Interaction inter = relationFactory.makeIfThenInteraction(
-						reacEqZero, rel1);
+				Interaction inter = relationFactory.makeIfThenInteraction(reacEqZero, rel1);
 
 				intNet.addGPRIntercation(inter);
 				inter.setTimeInfos(new double[] { 0.0, 0.0 });
@@ -1320,10 +1267,8 @@ public abstract class Bind {
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
 	 */
-	public Bind createNewBind() throws ClassNotFoundException,
-			NoSuchMethodException, SecurityException, InstantiationException,
-			IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException {
+	public Bind createNewBind() throws ClassNotFoundException, NoSuchMethodException, SecurityException,
+			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
 		String className = this.getClass().getName();
 
@@ -1349,10 +1294,8 @@ public abstract class Bind {
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
 	 */
-	public Bind lightCopy() throws ClassNotFoundException,
-			NoSuchMethodException, SecurityException, InstantiationException,
-			IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException {
+	public Bind lightCopy() throws ClassNotFoundException, NoSuchMethodException, SecurityException,
+			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
 		String className = this.getClass().getName();
 
@@ -1384,9 +1327,8 @@ public abstract class Bind {
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
 	 */
-	public Bind copy() throws ClassNotFoundException, NoSuchMethodException,
-			SecurityException, InstantiationException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException {
+	public Bind copy() throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
 		String className = this.getClass().getName();
 
@@ -1402,8 +1344,7 @@ public abstract class Bind {
 		for (BioEntity b : this.simpleConstraints.keySet()) {
 			Constraint c = this.simpleConstraints.get(b);
 
-			Constraint newC = new Constraint(c.getEntities(), c.getLb(),
-					c.getUb());
+			Constraint newC = new Constraint(c.getEntities(), c.getLb(), c.getUb());
 
 			newBind.addSimpleConstraint(b, newC);
 		}
@@ -1423,8 +1364,7 @@ public abstract class Bind {
 			newBind.constraints.add(newC);
 
 			if (c.getEntities().size() == 1) {
-				newBind.simpleConstraints.put(c.getEntities().keySet()
-						.iterator().next(), newC);
+				newBind.simpleConstraints.put(c.getEntities().keySet().iterator().next(), newC);
 			}
 		}
 

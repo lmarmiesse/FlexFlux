@@ -1,11 +1,19 @@
 package flexflux.omics;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import flexflux.analyses.FBAAnalysis;
 import flexflux.general.Bind;
+import flexflux.general.Constraint;
 import flexflux.general.GLPKBind;
+import flexflux.general.Vars;
 import flexflux.interaction.Interaction;
+import flexflux.objective.Objective;
+import parsebionet.biodata.BioChemicalReaction;
+import parsebionet.biodata.BioEntity;
 
 public class MainTest {
 
@@ -14,34 +22,270 @@ public class MainTest {
 
 		Bind bind = new GLPKBind();
 
-		bind.loadSbmlNetwork("/home/lmarmiesse/Bureau/sa_sbml_215902682.xml", false);
+		bind.loadSbmlNetwork("D:/Documents/Sclero_central_sbml_2015_09_15.xml", false);
 
-		OmicsData omicsData = OmicsDataReader.loadOmicsData("/home/lmarmiesse/Bureau/RNAseq_data.tab",
+		OmicsData omicsData = OmicsDataReader.loadOmicsData("D:/Documents/RNAseq_data.tab",
 				bind.getInteractionNetwork().getEntities());
-		// Sample s_mm = omicsData.getSample("RNAseq_MM");
-		
+
 		List<Sample> samples = new ArrayList<Sample>();
-		samples.addAll(omicsData.getSamples());
-		
+		// samples.addAll(omicsData.getSamples());
+		samples.add(omicsData.getSample("RNAseq_MM"));
+
+		Map<Sample, Map<BioChemicalReaction, Double>> reactionExpressionValues = new HashMap<Sample, Map<BioChemicalReaction, Double>>();
+
 		for (Sample s : samples) {
-			System.out.print(s.getName()+"\t");
+			reactionExpressionValues.put(s, new HashMap<BioChemicalReaction, Double>());
 		}
-		System.out.print("\n");
 
 		for (Interaction inter : bind.getInteractionNetwork().getGPRInteractions()) {
 
-			System.out.print(inter.getConsequence().getEntity().getId());
+			BioChemicalReaction reac = (BioChemicalReaction) inter.getConsequence().getEntity();
 
 			for (Sample s : samples) {
 
 				double expr = inter.getCondition()
 						.calculateRelationQuantitativeValue(omicsData.getDataValuesForSample(s));
-				System.out.print("\t" + expr);
-			}
-			System.out.print("\n");
-			// R_SUCD3_u6m
-			// break;
+				reactionExpressionValues.get(s).put(reac, expr);
 
+			}
+		}
+
+		// System.out.println(samples.get(0).getName());
+		// System.out.println(expReactionActivities.get(samples.get(0)));
+
+		bind.loadConstraintsFile("D:/Documents/Environmental_condition_Glc.tab");
+		bind.prepareSolver();
+		FBAAnalysis fba = new FBAAnalysis(bind);
+		double res = fba.runAnalysis().getObjValue();
+
+		////////////// Constrain FBA result and minimize flux sum
+		Map<BioEntity, Double> constraintMap = new HashMap<BioEntity, Double>();
+
+		for (int i = 0; i < bind.getObjective().getCoeffs().length; i++) {
+			constraintMap.put(bind.getObjective().getEntities()[i], bind.getObjective().getCoeffs()[i]);
+		}
+
+		Constraint c = new Constraint(constraintMap, res, res);
+		BioEntity fluxSum = bind.createFluxesSummation();
+		bind.prepareSolver();
+
+		Objective minFluxSumBoj = new Objective(new BioEntity[] { fluxSum }, new double[] { 1 }, "", false);
+		bind.setObjective(minFluxSumBoj);
+
+		List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
+		constraintsToAdd.add(c);
+		bind.FBA(constraintsToAdd, true, true);
+		/////////////
+
+		///////////// We calculated the sum of the reaction expression valeus
+		///////////// AND of the calculated fluxes
+		Map<BioChemicalReaction, Double> reactionExpressionValues_MM = reactionExpressionValues.get(samples.get(0));
+
+		double fluxSumNoNan = 0;
+		double reactionExpressionValuesSum = 0;
+
+		for (BioChemicalReaction reac : reactionExpressionValues_MM.keySet()) {
+			if (!Double.isNaN(reactionExpressionValues_MM.get(reac))
+					&& Math.abs(bind.getSolvedValue(reac)) > 0.0000001) {
+				reactionExpressionValuesSum += Math.abs(reactionExpressionValues_MM.get(reac));
+				fluxSumNoNan += Math.abs(bind.getSolvedValue(reac));
+
+			}
+		}
+
+		// System.out.println(reactionExpressionValuesSum);
+		// System.out.println(fluxSumNoNan);
+
+		/////////////
+
+		///////////// Reaction expression values are scaled
+		double scalingFactor = reactionExpressionValuesSum / fluxSumNoNan;
+		System.out.println(scalingFactor);
+
+		Map<BioChemicalReaction, Double> scaledRactionExpressionValues_MM = new HashMap<BioChemicalReaction, Double>();
+
+		for (BioChemicalReaction reac : reactionExpressionValues_MM.keySet()) {
+			if (!Double.isNaN(reactionExpressionValues_MM.get(reac))) {
+				double scaledExpressionValue = reactionExpressionValues_MM.get(reac) / scalingFactor;
+				scaledRactionExpressionValues_MM.put(reac, scaledExpressionValue);
+				// System.out.println(reac.getId()+"\t"+Math.abs(scalesRactionExpressionValues_MM.get(reac))+"\t"+Math.abs(bind.getSolvedValue(reac)));
+
+			}
+		}
+		/////////////
+
+		///////////// We create FBA variables that correspond to the distance
+		///////////// between scaled reaction expression values and flux values.
+		///////////// We also create the objective function that minimises the
+		///////////// distances
+
+		BioEntity[] objectiveEntities = new BioEntity[scaledRactionExpressionValues_MM.size()];
+		double[] objectiveCoeffs = new double[scaledRactionExpressionValues_MM.size()];
+		int index = 0;
+
+		constraintsToAdd = new ArrayList<Constraint>();
+
+		for (BioChemicalReaction reac : scaledRactionExpressionValues_MM.keySet()) {
+
+			BioEntity reacPrime = new BioEntity(reac.getId() + "_prime");
+			bind.getInteractionNetwork().addNumEntity(reacPrime);
+			objectiveEntities[index] = reacPrime;
+			objectiveCoeffs[index] = 1.0;
+
+			Constraint c1, c2;
+
+			if (bind.getSimpleConstraints().get(reac).getLb() >= 0) {
+				// we create the constraints : R1 - R1exp <= R'1
+				//                             R1exp - R1 <= R'1
+
+				// Const 1 : -inf < R1 - R1exp - R'1 <= 0
+				// <=>       -inf < R1 - R'1 <= R1exp
+				Map<BioEntity, Double> cMap1 = new HashMap<BioEntity, Double>();
+				cMap1.put(reac, 1.0);
+				cMap1.put(reacPrime, -1.0);
+				c1 = new Constraint(cMap1, -Double.MAX_VALUE, scaledRactionExpressionValues_MM.get(reac));
+				// System.out.println(c1);
+
+				// Const 2 : -inf < R1exp - R1 - R'1 <= 0
+				//       <=> -inf < -R1 - R'1 <= - R1exp
+				Map<BioEntity, Double> cMap2 = new HashMap<BioEntity, Double>();
+				cMap2.put(reac, -1.0);
+				cMap2.put(reacPrime, -1.0);
+				c2 = new Constraint(cMap2, -Double.MAX_VALUE, -scaledRactionExpressionValues_MM.get(reac));
+				// System.out.println(c2);
+
+			}
+			// reversible reactions
+			else {
+				BioEntity irrevReac1 = bind.getInteractionNetwork().getEntity(reac.getId() + Vars.Irrev1);
+				BioEntity irrevReac2 = bind.getInteractionNetwork().getEntity(reac.getId() + Vars.Irrev2);
+
+				// we create the constraints : (R1irrev1-R1irrev2) - R1exp <= R'1
+				//                              R1exp - (R1irrev1-R1irrev2) <= R'1
+
+				// Const 1 : -inf < R1irrev1-R1irrev2 - R1exp - R'1 <= 0
+				// <=>       -inf < R1irrev1-R1irrev2 - R'1 <= R1exp
+				Map<BioEntity, Double> cMap1 = new HashMap<BioEntity, Double>();
+				cMap1.put(irrevReac1, 1.0);
+				cMap1.put(irrevReac2, 1.0);
+				cMap1.put(reacPrime, -1.0);
+				c1 = new Constraint(cMap1, -Double.MAX_VALUE, scaledRactionExpressionValues_MM.get(reac));
+				// System.out.println(c1);
+
+				// Const 2 : -inf < R1exp - (R1irrev1-R1irrev2) - R'1 <= 0
+				// <=>       -inf < -(R1irrev1-R1irrev2) - R'1 <= - R1exp
+				// <=>       -inf < - R1irrev1 + R1irrev2 - R'1 <= - R1exp
+				Map<BioEntity, Double> cMap2 = new HashMap<BioEntity, Double>();
+				cMap2.put(irrevReac1, -1.0);
+				cMap2.put(irrevReac2, -1.0);
+				cMap2.put(reacPrime, -1.0);
+				c2 = new Constraint(cMap2, -Double.MAX_VALUE, -scaledRactionExpressionValues_MM.get(reac));
+				
+				
+				
+				
+				
+				/////////////////// Then we make sure that the summ of the 2 components
+				/////////////////// of a reversible reaction is = to the absolute flux
+				/////////////////// values of the reaction (not more)
+				
+				
+				///////////// Need to add two boolean variables : b and a = 1-b
+				BioEntity b = new BioEntity("interger_mip_b_"+reac.getId());
+				bind.getInteractionNetwork().addBinaryEntity(b);
+				BioEntity a = new BioEntity("interger_mip_a_"+reac.getId());
+				bind.getInteractionNetwork().addBinaryEntity(a);
+
+				///constraint a = 1-b     <=>    a-1+b = 0     <=>    a+b=1
+				Map<BioEntity, Double> intergerConstraintMap = new HashMap<BioEntity, Double>();
+				intergerConstraintMap.put(a, 1.0);
+				intergerConstraintMap.put(b, 1.0);
+				Constraint integerConstraint = new Constraint(intergerConstraintMap, 1.0, 1.0);
+				constraintsToAdd.add(integerConstraint);
+
+				
+				////////////// http://lpsolve.sourceforge.net/5.1/absolute.htm
+				////////////// We add these two constrains:
+				//       R1 + M * B >= R1a + R1b
+				//		-R1 + M * A >= R1a + R1b
+				// <=>
+				//		R1 + M*B - R1a - R1b >= 0
+				//		-R1 + M*A - R1a - R1b >= 0
+				
+				double M = 999999;
+				//first const
+				Map<BioEntity, Double> intergerSumConstraintMap1 = new HashMap<BioEntity, Double>();
+				intergerSumConstraintMap1.put(reac, 1.0);
+				intergerSumConstraintMap1.put(b, M);
+				intergerSumConstraintMap1.put(irrevReac1, -1.0);
+				intergerSumConstraintMap1.put(irrevReac2, -1.0);
+				Constraint integerSumConstraint1 = new Constraint(intergerSumConstraintMap1, 0.0, Double.MAX_VALUE);
+				
+				constraintsToAdd.add(integerSumConstraint1);
+//				if (reac.getId().contains("R_ASPTAm")){
+//					System.out.println(integerSumConstraint1);
+//				}
+				
+				
+				//second const
+				Map<BioEntity, Double> intergerSumConstraintMap2 = new HashMap<BioEntity, Double>();
+				intergerSumConstraintMap2.put(reac, -1.0);
+				intergerSumConstraintMap2.put(a, M);
+				intergerSumConstraintMap2.put(irrevReac1, -1.0);
+				intergerSumConstraintMap2.put(irrevReac2, -1.0);
+				Constraint integerSumConstraint2 = new Constraint(intergerSumConstraintMap2, 0.0, Double.MAX_VALUE);
+				
+				constraintsToAdd.add(integerSumConstraint2);
+				
+				// System.out.println(c2);
+			}
+			constraintsToAdd.add(c1);
+			constraintsToAdd.add(c2);
+			index++;
+		}
+		
+		bind.prepareSolver();
+
+		Objective p = new Objective(objectiveEntities, objectiveCoeffs, "", false);
+		bind.setObjective(p);
+
+		System.out.println(bind.FBA(constraintsToAdd, true, false).result);
+
+		double sum = 0;
+
+		for (BioChemicalReaction reac : scaledRactionExpressionValues_MM.keySet()) {
+			//
+			double ecart = Math
+					.abs(bind.getSolvedValue(bind.getInteractionNetwork().getEntity(reac.getId() + "_prime")));
+			sum += ecart;
+
+//			 System.out.println(reac.getId()+"\t"+Math.abs(scaledRactionExpressionValues_MM.get(reac))+"\t"+Math.abs(bind.getSolvedValue(reac))+"\t"+ecart);
+//
+//			if (bind.getSimpleConstraints().get(reac).getLb() < 0) {
+//				
+//				System.out.println(reac.getId());
+//				System.out.println(bind.getSolvedValue(reac));
+//				double irr1 = Math
+//						.abs(bind.getSolvedValue(bind.getInteractionNetwork().getEntity(reac.getId() + Vars.Irrev1)));
+//				double irr2 = Math
+//						.abs(bind.getSolvedValue(bind.getInteractionNetwork().getEntity(reac.getId() + Vars.Irrev2)));
+//
+//				System.out.println(irr1+"\t"+irr2);
+//			}
+
+		}
+//		 System.out.println(sum);
+		 
+
+		/////////////
+		
+		
+		for (String s : bind.getLastSolve().keySet()){
+			
+			if (s.contains("R_ASPTAm")){
+				System.out.println(s+"\t"+bind.getLastSolve().get(s));
+			}
+			
 		}
 
 	}
