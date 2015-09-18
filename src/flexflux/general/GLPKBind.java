@@ -291,6 +291,9 @@ public class GLPKBind extends Bind {
 
 	protected DoubleResult go(boolean saveResults) {
 
+//		GLPK.glp_write_lp(model, null, "D:/Documents/lp.txt");
+//		GLPK.glp_write_mps(model, GLPK.GLP_MPS_FILE, null, "D:/Documents/mps.txt");
+		
 		int ret = GLPK.glp_simplex(model, parm);
 
 		if (isMIP()) {

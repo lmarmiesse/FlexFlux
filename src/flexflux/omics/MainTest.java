@@ -204,38 +204,50 @@ public class MainTest {
 				constraintsToAdd.add(integerConstraint);
 
 				
+				////////////// We add an entity Y that is R1a + R1b
+				//////////////   <=>     Y-Raa-R1b = 0
+				BioEntity y = new BioEntity("Y_"+reac.getId());
+				bind.getInteractionNetwork().addNumEntity(y);
+				Map<BioEntity, Double> yConstraintMap = new HashMap<BioEntity, Double>();
+				yConstraintMap.put(y, 1.0);
+				yConstraintMap.put(irrevReac1, -1.0);
+				yConstraintMap.put(irrevReac2, -1.0);
+				Constraint yConstraint = new Constraint(yConstraintMap, 0.0, 0.0);
+				constraintsToAdd.add(yConstraint);
+				
 				////////////// http://lpsolve.sourceforge.net/5.1/absolute.htm
 				////////////// We add these two constrains:
-				//       R1 + M * B >= R1a + R1b
-				//		-R1 + M * A >= R1a + R1b
+				//       R1 + M * B >= Y
+				//		-R1 + M * A >= Y
 				// <=>
-				//		R1 + M*B - R1a - R1b >= 0
-				//		-R1 + M*A - R1a - R1b >= 0
+				//		R1 + M*B - Y >= 0
+				//		-R1 + M*A - Y >= 0
 				
-				double M = 999999;
+				
+				double M = 100;
 				//first const
 				Map<BioEntity, Double> intergerSumConstraintMap1 = new HashMap<BioEntity, Double>();
 				intergerSumConstraintMap1.put(reac, 1.0);
 				intergerSumConstraintMap1.put(b, M);
-				intergerSumConstraintMap1.put(irrevReac1, -1.0);
-				intergerSumConstraintMap1.put(irrevReac2, -1.0);
+				intergerSumConstraintMap1.put(y, -1.0);
+
 				Constraint integerSumConstraint1 = new Constraint(intergerSumConstraintMap1, 0.0, Double.MAX_VALUE);
 				
 				constraintsToAdd.add(integerSumConstraint1);
-//				if (reac.getId().contains("R_ASPTAm")){
-//					System.out.println(integerSumConstraint1);
-//				}
-				
 				
 				//second const
 				Map<BioEntity, Double> intergerSumConstraintMap2 = new HashMap<BioEntity, Double>();
 				intergerSumConstraintMap2.put(reac, -1.0);
 				intergerSumConstraintMap2.put(a, M);
-				intergerSumConstraintMap2.put(irrevReac1, -1.0);
-				intergerSumConstraintMap2.put(irrevReac2, -1.0);
+				intergerSumConstraintMap2.put(y, -1.0);
 				Constraint integerSumConstraint2 = new Constraint(intergerSumConstraintMap2, 0.0, Double.MAX_VALUE);
 				
 				constraintsToAdd.add(integerSumConstraint2);
+				
+				if (reac.getId().contains("R_ASPTAm")){
+					System.out.println(integerSumConstraint1);
+					System.out.println(integerSumConstraint2);
+				}
 				
 				// System.out.println(c2);
 			}
