@@ -1019,6 +1019,8 @@ public abstract class Bind {
 
 				// if the genes are here
 				Relation rel1Active = null;
+				
+				
 				// if there are more than 1 enzyme, we create a And
 				if (enzymes.size() > 1) {
 					rel1 = (And) relationFactory.makeAnd();
@@ -1027,7 +1029,7 @@ public abstract class Bind {
 				}
 
 				for (String enzName : enzymes.keySet()) {
-
+					
 					BioPhysicalEntity enzyme = enzymes.get(enzName);
 
 					String classe = enzyme.getClass().getSimpleName();

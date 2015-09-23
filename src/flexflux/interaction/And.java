@@ -129,25 +129,46 @@ public class And extends RelationWithList {
 	 * 
 	 * @param sampleValues
 	 */
-	public double calculateRelationQuantitativeValue(Map<BioEntity, Double> sampleValues) {
-		double expr = 0;
-		boolean allNaN = true;
-		for (Relation rel : list) {
+	public double calculateRelationQuantitativeValue(Map<BioEntity, Double> sampleValues, int method) {
 
-			double expr2 = rel.calculateRelationQuantitativeValue(sampleValues);
-
-			if (!Double.isNaN(expr2)) {
-				allNaN = false;
-				expr += expr2;
+		// sum
+		if (method == 1) {
+			double expr = 0;
+			boolean allNaN = true;
+			for (Relation rel : list) {
+				double expr2 = rel.calculateRelationQuantitativeValue(sampleValues, method);
+				if (!Double.isNaN(expr2)) {
+					allNaN = false;
+					expr += expr2;
+				}
 			}
+			if (!allNaN) {
+				return expr;
+			} else {
+				return Double.NaN;
+			}
+		}
+		// mean
+		else if (method == 2) {
+			double expr = 0;
+			boolean allNaN = true;
+			for (Relation rel : list) {
+				double expr2 = rel.calculateRelationQuantitativeValue(sampleValues, method);
+				if (!Double.isNaN(expr2)) {
+					allNaN = false;
+					expr += expr2;
+				}
+			}
+			if (!allNaN) {
+				return expr / list.size();
+			} else {
+				return Double.NaN;
+			}
+		}
 
-		}
-		if (!allNaN) {
-			return expr / list.size();
-		}
-		else{
-			return Double.NaN;
-		}
+		System.err.println("Error : unknow gpr calculation method : " + method);
+		System.exit(0);
+		return 0;
 	}
 
 }

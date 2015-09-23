@@ -121,29 +121,40 @@ public class Or extends RelationWithList {
 	}
 
 	/**
-	 * Calculates "an expression value" of the relation given omics data results in one condition
-	 * @param sampleValues 
+	 * Calculates "an expression value" of the relation given omics data results
+	 * in one condition
+	 * 
+	 * @param sampleValues
+	 * 
+	 * @param method
+	 *            1 => And : sum ; or : mean <br/> 2 => all mean
+	 * 
+	 * 
 	 */
-	public double calculateRelationQuantitativeValue(Map<BioEntity, Double> sampleValues) {
+	public double calculateRelationQuantitativeValue(Map<BioEntity, Double> sampleValues, int method) {
+		if (method == 1 || method == 2) {
 
-		double expr = 0;
-		boolean allNaN = true;
-		for (Relation rel : list) {
+			double expr = 0;
+			boolean allNaN = true;
+			for (Relation rel : list) {
 
-			double expr2 = rel.calculateRelationQuantitativeValue(sampleValues);
+				double expr2 = rel.calculateRelationQuantitativeValue(sampleValues, method);
 
-			if (!Double.isNaN(expr2)) {
-				allNaN = false;
-				expr += expr2;
+				if (!Double.isNaN(expr2)) {
+					allNaN = false;
+					expr += expr2;
+				}
+
 			}
-
+			if (!allNaN) {
+				return expr / list.size();
+			} else {
+				return Double.NaN;
+			}
 		}
-		if (!allNaN) {
-			return expr;
-		}
-		else{
-			return Double.NaN;
-		}
+		System.err.println("Error : unknow gpr calculation method : "+method);
+		System.exit(0);
+		return 0;
 	}
 
 }

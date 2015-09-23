@@ -195,7 +195,7 @@ public class Unique extends Relation {
 	 * Calculates "an expression value" of the relation given omics data results in one condition
 	 * @param sampleValues 
 	 */
-	public double calculateRelationQuantitativeValue(Map<BioEntity, Double> sampleValues) {
+	public double calculateRelationQuantitativeValue(Map<BioEntity, Double> sampleValues,int method) {
 		
 		if (sampleValues.containsKey(entity)){
 			return sampleValues.get(entity);
