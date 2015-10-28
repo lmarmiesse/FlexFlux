@@ -209,7 +209,7 @@ public class FlexfluxTDRFBA extends FFApplication{
 				toDisplay.add(b.getId());
 			}
 		}
-
+		
 		Analysis analysis = new TDRFBAAnalysis(bind, f.biomassReac, f.X,
 				f.deltaT, f.iterations, toDisplay);
 		AnalysisResult result = analysis.runAnalysis();

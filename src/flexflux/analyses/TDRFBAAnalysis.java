@@ -48,6 +48,7 @@ import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.DoubleResult;
 import flexflux.general.Vars;
+import flexflux.interaction.Interaction;
 
 /**
  * 
@@ -344,6 +345,16 @@ public class TDRFBAAnalysis extends Analysis {
 			DoubleResult result;
 			
 			
+			///////// We check the GPR constraints
+			List<Constraint> GPRConstraints = new ArrayList<Constraint>();
+			for (Interaction inter : b.getInteractionNetwork().getGPRInteractions()) {
+				if (inter.getCondition().isTrue(simpleConstraints)) {
+					GPRConstraints.addAll(b.getInteractionNetwork().getInteractionToConstraints().get(inter));
+				}
+			}
+			constraintsToAdd.addAll(GPRConstraints);
+			/////////
+			
 			try {
 				result = b.FBA(new ArrayList<Constraint>(constraintsToAdd),
 						true, false);
@@ -364,14 +375,12 @@ public class TDRFBAAnalysis extends Analysis {
 				mu = 0;
 			} else {
 				lastSolve = b.getLastSolve();
-				
-				System.out.println(lastSolve.get("R_ATPS4r"));
 
 				mu = b.getSolvedValue(b.getInteractionNetwork().getEntity(
 						biomassReac));
 			}
 			
-			System.out.println(mu);
+//			System.out.println(mu);
 
 			// we add the results for this iteration
 			for (String s : toPlot) {
