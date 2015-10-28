@@ -157,6 +157,7 @@ public class KOAnalysis extends Analysis {
 		
 		
 		RSAAnalysis ssa = new RSAAnalysis(b.getInteractionNetwork(),b.getSimpleConstraints());
+		
 		RSAAnalysisResult res = ssa.runAnalysis();
 
 		List<Constraint> interactionNetworkConstraints = res.getSteadyStateConstraints();

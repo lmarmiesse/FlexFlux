@@ -75,13 +75,13 @@ public class FlexfluxDR extends FFApplication{
 	public String example = "Example 1 : FlexfluxDR -s network.xml -plot -out out.txt\n"
 			+ "Example 2 : FlexfluxDR -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -mode 1 -d 0.1\n";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
+	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-cons", usage = "[OPTIONAL]Constraints file path", metaVar = "File")
+	@Option(name = "-cons", usage = "[OPTIONAL]Constraints file path", metaVar = "File - in")
 	public String condFile = "";
 
-	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File")
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File - in")
 	public String regFile = "";
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
@@ -90,7 +90,7 @@ public class FlexfluxDR extends FFApplication{
 	@Option(name = "-plot", usage = "[OPTIONAL, default = false]Plots the results")
 	public boolean plot = false;
 
-	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File - out")
 	public String outName = "";
 
 	@Option(name = "-n", usage = "[OPTIONAL, default = number of available processors]Number of threads", metaVar = "Integer")

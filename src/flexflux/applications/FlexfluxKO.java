@@ -82,13 +82,13 @@ public class FlexfluxKO extends FFApplication{
 	public String example = "Example 1 : FlexfluxKO -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -mode 1\n"
 			+ "Example 2 : FlexfluxKO -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -e \"R1 R2 G1 G2\"\n";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
+	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File", required = true)
+	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File - in", required = true)
 	public String consFile = "";
 
-	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File")
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File - in")
 	public String regFile = "";
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
@@ -104,7 +104,7 @@ public class FlexfluxKO extends FFApplication{
 			+ "- Mode 1: the KO analysis is performed on genes.\n", metaVar = "[0,1]")
 	public int mode = 0;
 
-	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File - out")
 	public String outName = "";
 
 	@Option(name = "-n", usage = "[OPTIONAL, default = number of available processors]Number of threads", metaVar = "Integer")
@@ -199,9 +199,10 @@ public class FlexfluxKO extends FFApplication{
 				BioEntity b = bind.getInteractionNetwork().getEntity(
 						entitiesArray[i]);
 				if (b == null) {
-					System.err.println("Unknown entity " + entitiesArray[i]);
-					f.parser.printUsage(System.err);
-					System.exit(0);
+					System.err.println("Warning: Unknown entity " + entitiesArray[i]);
+//					f.parser.printUsage(System.err);
+//					System.exit(0);
+					continue;
 				}
 
 				entitiesMap.put(b.getId(), b);

@@ -101,6 +101,7 @@ public class TDRFBAAnalysis extends Analysis {
 		// warning list to tell when the model was unfeasible
 		List<Integer> unfeasibleSteps = new ArrayList<Integer>();
 
+		
 		double startTime = System.currentTimeMillis();
 
 		Map<BioEntity, Constraint> simpleConstraints = b.getSimpleConstraints();
@@ -112,6 +113,7 @@ public class TDRFBAAnalysis extends Analysis {
 					.get(ent);
 
 			if (b.getInteractionNetwork().canTranslate(ent)) {
+
 				simpleConstraints.put(ent, b.getInteractionNetwork()
 						.getConstraintFromState(ent, state));
 
@@ -120,13 +122,14 @@ public class TDRFBAAnalysis extends Analysis {
 						(double) state));
 			}
 		}
+		
 		for (BioEntity ent : b.getInteractionNetwork().getInitialConstraints()
 				.keySet()) {
 
 			simpleConstraints.put(ent, b.getInteractionNetwork()
 					.getInitialConstraints().get(ent));
 		}
-
+		
 		Map<BioChemicalReaction, Map<BioEntity, Double>> exchangeInteractions = b
 				.getExchangeInteractions();
 
@@ -181,19 +184,19 @@ public class TDRFBAAnalysis extends Analysis {
 				Map<Constraint, double[]> nextStepStates = ssa
 						.goToNextInteractionNetworkState(networkState,
 								entitiesToCheck);
+			
 
 				Map<Constraint, double[]> nextStepConsMap = new HashMap<Constraint, double[]>();
 
+//				System.out.println("\n"+i+"\n");
 				
 				// translation
 				for (Constraint c1 : nextStepStates.keySet()) {
 					
+//					System.out.println(c1);
 					
-
 					BioEntity enti = (BioEntity) c1.getEntities().keySet()
 							.toArray()[0];
-					
-				
 
 					if (b.getInteractionNetwork().canTranslate(enti)) {
 						nextStepConsMap.put(
@@ -207,7 +210,6 @@ public class TDRFBAAnalysis extends Analysis {
 						nextStepConsMap.put(c1, nextStepStates.get(c1));
 						
 					}
-
 				}
 
 				for (Constraint c : nextStepConsMap.keySet()) {
@@ -362,10 +364,14 @@ public class TDRFBAAnalysis extends Analysis {
 				mu = 0;
 			} else {
 				lastSolve = b.getLastSolve();
+				
+				System.out.println(lastSolve.get("R_ATPS4r"));
 
 				mu = b.getSolvedValue(b.getInteractionNetwork().getEntity(
 						biomassReac));
 			}
+			
+			System.out.println(mu);
 
 			// we add the results for this iteration
 			for (String s : toPlot) {
@@ -467,6 +473,7 @@ public class TDRFBAAnalysis extends Analysis {
 					// new ub = ub + uptake*X*deltat
 
 					ub += uptake * X * deltaT;
+					
 				}
 
 				if (Double.isNaN(ub)) {

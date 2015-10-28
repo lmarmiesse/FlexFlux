@@ -336,7 +336,7 @@ public class MainFrame extends JFrame {
 	private ArgumentComponent getRightComponent(String metaVar, String name) {
 
 		if (!metaVar.equals("")) {
-			if (metaVar.equals("File")) {
+			if (metaVar.contains("File")) {
 				return new FileComponent(name);
 			} else if (metaVar.equals("Solver")) {
 

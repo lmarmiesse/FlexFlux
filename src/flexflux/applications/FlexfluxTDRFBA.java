@@ -85,13 +85,13 @@ public class FlexfluxTDRFBA extends FFApplication{
 	public String example = "Example 1 : FlexfluxRFBA -s network.xml -cond cond.txt -int int.txt -bio R_Biomass -x 0.01 -plot -out out.txt\n"
 			+ "Example 2 : FlexfluxRFBA -s network.xml -cond cond.txt -int int.txt -bio R_Biomass -plot -out out.txt -x 0.01 -t 0.02 -it 400 -e \"R1 R2 G1 G2\"\n";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
+	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File", required = true)
+	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File - in", required = true)
 	public String consFile = "";
 
-	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File")
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File - in")
 	public String regFile = "";
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
@@ -103,7 +103,7 @@ public class FlexfluxTDRFBA extends FFApplication{
 	@Option(name = "-e", usage = "[OPTIONAL]Biological entities included in the results.\nIf empty, only concerned metabolites and cell density will be included", metaVar = "String")
 	public String entities = "";
 
-	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File - out")
 	public String outName = "";
 
 	@Option(name = "-x", usage = "Cell density initial value in g/L", metaVar = "Double", required = true)

@@ -92,16 +92,16 @@ public class FlexfluxPareto extends FFApplication{
 			+ " objective optimization is closest to the experimental values.";
 	public String example = "Example : FlexfluxPareto -s network.xml -cond cond.txt -int int.txt -plot -e expFile";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
+	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File")
+	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File - in")
 	public String consFile = "";
 
-	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File")
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File - in")
 	public String regFile = "";
 
-	@Option(name = "-exp", usage = "Path of file containing objective functions and experimental values", metaVar = "File", required = true)
+	@Option(name = "-exp", usage = "Path of file containing objective functions and experimental values", metaVar = "File - in", required = true)
 	public String expFile = "";
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
@@ -110,7 +110,7 @@ public class FlexfluxPareto extends FFApplication{
 	@Option(name = "-plot", usage = "[OPTIONAL, default = false]Plots the results")
 	public boolean plot = false;
 
-	@Option(name = "-out", usage = "[OPTIONAL]Output folder name", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL]Output folder name", metaVar = "File - out")
 	public String outName = "";
 
 	@Option(name = "-lib", usage = "[OPTIONAL, default = 0]Percentage of non optimality for new constraints", metaVar = "Double")

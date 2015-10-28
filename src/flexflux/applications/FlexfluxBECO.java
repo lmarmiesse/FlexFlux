@@ -29,37 +29,37 @@ public class FlexfluxBECO extends FFApplication {
 	public String example = applicationName
 			+ " -s network.xml -c conditionFile.tab -o objectives.txt -int int.txt  -plot -out out.tab";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
+	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-mdr", usage = "[OPTIONAL] Reaction metadata file used for heatmap analysis", metaVar = "File", required = false)
+	@Option(name = "-mdr", usage = "[OPTIONAL] Reaction metadata file used for heatmap analysis", metaVar = "File - in", required = false)
 	public String metaReactionDataFile = "";
 
-	@Option(name = "-mdg", usage = "[OPTIONAL] Gene metadata file used for heatmap analysis", metaVar = "File", required = false)
+	@Option(name = "-mdg", usage = "[OPTIONAL] Gene metadata file used for heatmap analysis", metaVar = "File - in", required = false)
 	public String metaGeneDataFile = "";
 
-	@Option(name = "-mdreg", usage = "[OPTIONAL] Regulator metadata file used for heatmap analysis", metaVar = "File", required = false)
+	@Option(name = "-mdreg", usage = "[OPTIONAL] Regulator metadata file used for heatmap analysis", metaVar = "File - in", required = false)
 	public String metaRegulatorDataFile = "";
 
 	@Option(name = "-mdSep", usage = "[Default=,] Separator for the columns in the metaData file", metaVar = "String", required = false)
 	public String mdSep = ",";
 
-	@Option(name = "-cond", usage = "File containing several conditions", metaVar = "File", required = true)
+	@Option(name = "-cond", usage = "File containing several conditions", metaVar = "File - in", required = true)
 	public String conditionFile = "";
 
-	@Option(name = "-cons", usage = "[OPTIONAL] File containing the constraints applied on the metabolic network", metaVar = "File", required = false)
+	@Option(name = "-cons", usage = "[OPTIONAL] File containing the constraints applied on the metabolic network", metaVar = "File - in", required = false)
 	public String constraintFile = "";
 
-	@Option(name = "-o", usage = "File containing the objective functions", metaVar = "File", required = true)
+	@Option(name = "-o", usage = "File containing the objective functions", metaVar = "File - in", required = true)
 	public String objectiveFile = "";
 
-	@Option(name = "-reg", usage = "[OPTIONAL] Regulation file path", metaVar = "File")
+	@Option(name = "-reg", usage = "[OPTIONAL] Regulation file path", metaVar = "File - in")
 	public String regFile = "";
 
 	@Option(name = "-plot", usage = "[OPTIONAL, default = false] Plots the results")
 	public Boolean plot = false;
 
-	@Option(name = "-out", usage = "[OPTIONAL] Output file directory", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL] Output file directory", metaVar = "File - out")
 	public String outName = "";
 
 	@Option(name = "-n", usage = "[OPTIONAL, default = number of available processors] Number of threads", metaVar = "Integer")

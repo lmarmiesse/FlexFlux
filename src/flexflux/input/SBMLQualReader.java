@@ -559,7 +559,7 @@ public class SBMLQualReader {
 			int value = 0;
 
 			BioEntity ent = intNet.getEntity(ast.getChild(0).toString());
-
+			
 			if (!intNet.getInteractionNetworkEntities()
 					.containsKey(ent.getId())) {
 				System.err.println("Error : entity " + ent.getId()

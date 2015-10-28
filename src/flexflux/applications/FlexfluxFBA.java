@@ -64,13 +64,13 @@ public class FlexfluxFBA extends FFApplication {
 
 	public String example = "Example : FlexfluxFBA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -states res.tab";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
+	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File", required = true)
+	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File - in", required = true)
 	public String consFile = "";
 
-	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File")
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File - in")
 	public String regFile = "";
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
@@ -79,10 +79,10 @@ public class FlexfluxFBA extends FFApplication {
 	@Option(name = "-plot", usage = "[OPTIONAL, default = false]Plots the results")
 	public boolean plot = false;
 
-	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File - out")
 	public String outName = "";
 
-	@Option(name = "-states", usage = "[OPTIONAL]The states of the regulatory network are saved in the indicated file name", metaVar = "File")
+	@Option(name = "-states", usage = "[OPTIONAL]The states of the regulatory network are saved in the indicated file name", metaVar = "File - out")
 	public String stateFile = "";
 
 	@Option(name = "-lib", usage = "[OPTIONAL, default = 0]Percentage of non optimality for new constraints", metaVar = "Double")
@@ -94,7 +94,7 @@ public class FlexfluxFBA extends FFApplication {
 	@Option(name = "-ext", usage = "[OPTIONAL, default = false]Uses the extended SBML format")
 	public boolean extended = false;
 
-	@Option(name = "-senFile", usage = "[OPTIONAL] A sensitivity analysis is performed and saved in the indicated file name", metaVar = "File")
+	@Option(name = "-senFile", usage = "[OPTIONAL] A sensitivity analysis is performed and saved in the indicated file name", metaVar = "File - out")
 	public String senFile = "";
 
 	public static void main(String[] args) {
@@ -171,6 +171,8 @@ public class FlexfluxFBA extends FFApplication {
 		}
 
 		bind.end();
+		
+		Vars.writeInteractionNetworkStates = false;
 	}
 
 	@Override

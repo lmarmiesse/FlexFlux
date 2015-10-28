@@ -24,13 +24,13 @@ public class FlexfluxTDRNA extends FFApplication {
 
 	public String example = "Example : FlexfluxTDRNA -int int.sbml -plot -out out.txt";
 	
-	@Option(name = "-reg", usage = "Regulation file path", metaVar = "File", required = true)
+	@Option(name = "-reg", usage = "Regulation file path", metaVar = "File - in", required = true)
 	public String regFile = "";
 	
 	@Option(name = "-plot", usage = "[OPTIONAL, default = false]Plots the results")
 	public boolean plot = false;
 
-	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File - out")
 	public String outName = "";
 	
 	@Option(name = "-t", usage = "[OPTIONAL, default = 0.1]Time between each iteration in hour", metaVar = "Double")

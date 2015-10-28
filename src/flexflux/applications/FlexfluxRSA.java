@@ -37,16 +37,16 @@ public class FlexfluxRSA extends FFApplication {
 
 	public String example = "Example : FlexfluxRSA -reg int.sbml -plot -out out.txt";
 
-	@Option(name = "-reg", usage = "Regulation file path", metaVar = "File", required = true)
+	@Option(name = "-reg", usage = "Regulation file path", metaVar = "File - in", required = true)
 	public String regFile = "";
 
-	@Option(name = "-cons", usage = "[OPTIONAL]Constraints file path", metaVar = "File", required = false)
+	@Option(name = "-cons", usage = "[OPTIONAL]Constraints file path", metaVar = "File - in", required = false)
 	public String consFile = "";
 
 	@Option(name = "-plot", usage = "[OPTIONAL, default = false]Plots the results")
 	public boolean plot = false;
 
-	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File - out")
 	public String outName = "";
 
 	public static void main(String[] args) {

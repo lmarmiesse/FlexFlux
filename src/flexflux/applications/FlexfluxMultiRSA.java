@@ -63,10 +63,10 @@ public class FlexfluxMultiRSA extends FFApplication {
 	public static String message = applicationName + " [options...]\n"
 			+ "Performs a Steady State analysis for multiple conditions";
 
-	@Option(name = "-reg", usage = "Regulation file path", metaVar = "File", required = true)
+	@Option(name = "-reg", usage = "Regulation file path", metaVar = "File - in", required = true)
 	public String regFile = "";
 
-	@Option(name = "-cond", usage = "[OPTIONAL] " + ListOfConditions.fileFormat, metaVar = "File", required = false)
+	@Option(name = "-cond", usage = "[OPTIONAL] " + ListOfConditions.fileFormat, metaVar = "File - in", required = false)
 	public String conditionFile = "";
 
 	@Option(name = "-fixConditions", usage = "[OPTIONAL] If true, the conditions set in the condition file are fixed and can not be updated by the regulation network.")
@@ -75,7 +75,7 @@ public class FlexfluxMultiRSA extends FFApplication {
 	@Option(name = "-n", usage = "[OPTIONAL, default = number of available processors] Number of threads", metaVar = "Integer")
 	public int nThreads = Runtime.getRuntime().availableProcessors();
 
-	@Option(name = "-out", usage = "Output file", metaVar = "File")
+	@Option(name = "-out", usage = "Output file", metaVar = "File - out")
 	public String outName = "ssa.tab";
 
 	/**

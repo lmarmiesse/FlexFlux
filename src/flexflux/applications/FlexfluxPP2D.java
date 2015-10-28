@@ -71,13 +71,13 @@ public class FlexfluxPP2D extends FFApplication {
 
 	public String example = "Example : FlexfluxReac -s network.xml -cond cond.txt -int int.txt -r R_EX_o2_e_ -init -10 -end 0 -plot -out out.txt";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
+	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File", required = true)
+	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File - in", required = true)
 	public String consFile = "";
 
-	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File")
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File - in")
 	public String regFile = "";
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
@@ -89,7 +89,7 @@ public class FlexfluxPP2D extends FFApplication {
 	@Option(name = "-r", usage = "Name of the reaction to test", metaVar = "String", required = true)
 	public String reac = "";
 
-	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File - out")
 	public String outName = "";
 
 	@Option(name = "-init", usage = "Initial flux value of the reaction to test", metaVar = "Double", required = true)

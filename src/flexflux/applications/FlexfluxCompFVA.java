@@ -79,16 +79,16 @@ public class FlexfluxCompFVA extends FFApplication{
 	public String example = "Example 1 : FlexfluxCompFVA -s network.xml -cond cond.txt -cond2 cond2.txt -int int.txt -plot -out out.txt\n"
 			+ "Example 2 : FlexfluxCompFVA -s network.xml -cond cond.txt -cond2 cond2.txt -int int.txt -plot -out out.txt -e \"R1 R2 G1 G2\"\n";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
+	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-cons", usage = "First constraint file path", metaVar = "File", required = true)
+	@Option(name = "-cons", usage = "First constraint file path", metaVar = "File - in", required = true)
 	public String consFile = "";
 
-	@Option(name = "-cons2", usage = "Second constraint file path", metaVar = "File", required = true)
+	@Option(name = "-cons2", usage = "Second constraint file path", metaVar = "File - in", required = true)
 	public String consFile2 = "";
 
-	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File")
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File - in")
 	public String regFile = "";
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
@@ -100,7 +100,7 @@ public class FlexfluxCompFVA extends FFApplication{
 	@Option(name = "-e", usage = "[OPTIONAL]Biological entities to perform the FVA analysis on (Space-separated list of entities, example : \"R1 R2 G1 G2\"). If empty, FVA is done on all reactions", metaVar = "String")
 	public String entities = "";
 
-	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File - out")
 	public String outName = "";
 
 	@Option(name = "-n", usage = "[OPTIONAL, default = number of available processors]Number of threads", metaVar = "Integer")

@@ -138,8 +138,13 @@ public class TDRFBAResult extends AnalysisResult {
 				line = time + "\t";
 				for (String s : entities) {
 
-					line += Vars.round(resultMap.get(time).get(s)) + "\t";
-
+					if (resultMap.get(time).containsKey(s) && resultMap.get(time).get(s)!=null) {
+						line += Vars.round(resultMap.get(time).get(s)) + "\t";
+					}
+					else{
+						System.err.println("Error for variable "+s+", no calculated value.");
+						
+					}
 				}
 				out.println(line);
 
@@ -180,7 +185,7 @@ public class TDRFBAResult extends AnalysisResult {
 					true, // include legend
 					true, // tooltips
 					false // urls
-					);
+			);
 
 			chart.setBackgroundPaint(Color.white);
 

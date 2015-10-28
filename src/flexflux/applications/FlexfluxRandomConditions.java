@@ -59,7 +59,7 @@ public class FlexfluxRandomConditions extends FFApplication {
 
 	@Option(name = "-i", usage = "Input random parameter file"
 			+ "Each line must contain a entity id, a value of inhibition, a value of activation and a weight for the simulation."
-			+ "During the choice of the inputs to activate during a simulation, the inputs are duplicated n times, with n=weight", metaVar = "File", required = true)
+			+ "During the choice of the inputs to activate during a simulation, the inputs are duplicated n times, with n=weight", metaVar = "File - in", required = true)
 	public String inputRandomParameterFile = "";
 
 	@Option(name = "-nbSim", usage = "[100] Number of simulations to perform", metaVar = "Integer")
@@ -82,7 +82,7 @@ public class FlexfluxRandomConditions extends FFApplication {
 	@Option(name = "-plot", usage = "[OPTIONAL, default = false] Plots the results")
 	public Boolean plot = false;
 
-	@Option(name = "-out", usage = "[OPTIONAL] Output file directory", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL] Output file directory", metaVar = "File - out")
 	public String outName = "";
 
 	@Option(name = "-n", usage = "[OPTIONAL, default = number of available processors] Number of threads", metaVar = "Integer")
