@@ -99,22 +99,17 @@ public class KOResult extends AnalysisResult {
 			PrintWriter out = new PrintWriter(new File(path));
 
 			out.println("KO results : \n");
-			
-			
 
 			for (BioEntity entity : map.keySet()) {
-				
+
 				double plotVal = Vars.round(map.get(entity));
 
 				if (Double.isNaN(plotVal)) {
-					out.println(entity.getId() + "(Unfeasible) obj value : "
-							+ Vars.round(map.get(entity)));
+					out.println(entity.getId() + "(Unfeasible) obj value : " + Vars.round(map.get(entity)));
 				} else {
-					out.println(entity.getId() + " obj value : "
-							+ Vars.round(map.get(entity)));
+					out.println(entity.getId() + " obj value : " + Vars.round(map.get(entity)));
 				}
 
-				
 			}
 			out.close();
 		} catch (IOException e) {
@@ -141,7 +136,7 @@ public class KOResult extends AnalysisResult {
 			double plotVal = Vars.round(map.get(ent));
 
 			if (Double.isNaN(plotVal)) {
-				data[i] = new Object[] { ent.getId()+ "(Unfeasible)", 0.0 };
+				data[i] = new Object[] { ent.getId() + "(Unfeasible)", 0.0 };
 			} else {
 				data[i] = new Object[] { ent.getId(), plotVal };
 			}
@@ -151,8 +146,7 @@ public class KOResult extends AnalysisResult {
 		DefaultTableModel model = new MyTableModel(data, columnNames);
 		resultTable.setModel(model);
 
-		final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(
-				resultTable.getModel());
+		final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(resultTable.getModel());
 		resultTable.setRowSorter(sorter);
 
 		JPanel northPanel = new JPanel();
@@ -204,8 +198,7 @@ public class KOResult extends AnalysisResult {
 		String text = searchField.getText();
 		if (sorter.getModelRowCount() != 0 && text.length() != 0) {
 			// case insensitive
-			sorter.setRowFilter(RowFilter.regexFilter(
-					"(?i)" + Pattern.quote(text), 0));
+			sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(text), 0));
 		}
 
 	}
@@ -286,6 +279,44 @@ public class KOResult extends AnalysisResult {
 			}
 		}
 		return neutralEntities;
+
+	}
+
+	@Override
+	public void writeHTML(String path) {
+		try {
+			PrintWriter out = new PrintWriter(new File(path));
+
+			out.println("<table>");
+			
+			out.println("<tr>");
+			out.println("<th>Entity name</th>");
+			out.println("<th>Objective value</th>");
+			out.println("</tr>");
+			
+			for (BioEntity entity : map.keySet()) {
+				out.println("<tr>");
+				
+				double plotVal = Vars.round(map.get(entity));
+
+				if (Double.isNaN(plotVal)) {
+					out.println("<td>"+entity.getId() + "(Unfeasible)</td>");
+					out.println("<td>"+Vars.round(map.get(entity))+"</td>");
+					
+				} else {
+					out.println("<td>"+entity.getId() + "</td>");
+					out.println("<td>"+Vars.round(map.get(entity))+"</td>");
+				}
+
+				out.println("</tr>");
+			}
+			
+			out.println("</table>");
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

@@ -67,6 +67,12 @@ public class MultiRSAResult extends AnalysisResult {
 		System.err.println("Function not implemented");
 		
 	}
+
+	@Override
+	public void writeHTML(String path) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	

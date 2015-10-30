@@ -66,8 +66,7 @@ import parsebionet.biodata.BioEntity;
 public class FlexfluxFVA extends FFApplication {
 	// order for the graphical version
 	public static int order = 4;
-	
-	
+
 	public static String message = "FlexfluxFVA\n"
 
 			+ "Computes an FVA given a metabolic network, an objective function and constraints.\n"
@@ -135,8 +134,7 @@ public class FlexfluxFVA extends FFApplication {
 			System.exit(0);
 		}
 		if (!new File(f.consFile).isFile()) {
-			System.err.println("Error : condition file " + f.consFile
-					+ " not found");
+			System.err.println("Error : condition file " + f.consFile + " not found");
 			System.exit(0);
 		}
 
@@ -152,17 +150,12 @@ public class FlexfluxFVA extends FFApplication {
 				System.exit(0);
 			}
 		} catch (UnsatisfiedLinkError e) {
-			System.err
-					.println("Error, the solver "
-							+ f.solver
-							+ " cannot be found. Check your solver installation and the configuration file, or choose a different solver (-sol).");
+			System.err.println("Error, the solver " + f.solver
+					+ " cannot be found. Check your solver installation and the configuration file, or choose a different solver (-sol).");
 			System.exit(0);
 		} catch (NoClassDefFoundError e) {
-			System.err
-					.println("Error, the solver "
-							+ f.solver
-							+ " cannot be found. There seems to be a problem with the .jar file of "
-							+ f.solver + ".");
+			System.err.println("Error, the solver " + f.solver
+					+ " cannot be found. There seems to be a problem with the .jar file of " + f.solver + ".");
 			System.exit(0);
 		}
 
@@ -182,8 +175,7 @@ public class FlexfluxFVA extends FFApplication {
 			String[] entitiesArray = f.entities.split("\\s+");
 			for (int i = 0; i < entitiesArray.length; i++) {
 
-				BioEntity b = bind.getInteractionNetwork().getEntity(
-						entitiesArray[i]);
+				BioEntity b = bind.getInteractionNetwork().getEntity(entitiesArray[i]);
 				if (b == null) {
 					System.err.println("Unknown entity " + entitiesArray[i]);
 					f.parser.printUsage(System.err);
@@ -208,6 +200,9 @@ public class FlexfluxFVA extends FFApplication {
 		}
 		if (!f.outName.equals("")) {
 			result.writeToFile(f.outName);
+		}
+		if (f.web) {
+			result.writeHTML(f.outName + ".html");
 		}
 
 		bind.end();

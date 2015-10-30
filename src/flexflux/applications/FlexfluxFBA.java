@@ -165,6 +165,9 @@ public class FlexfluxFBA extends FFApplication {
 		if (!f.outName.equals("")) {
 			result.writeToFile(f.outName);
 		}
+		if (f.web) {
+			result.writeHTML(f.outName+".html");
+		}
 
 		if (f.senFile != "") {
 			result.sensitivityAnalysis(f.senFile);

@@ -221,15 +221,15 @@ public class FlexfluxCompFVA extends FFApplication{
 		CompFVAResult compAnalysisResult = compAnalysis.runAnalysis();
 
 		if (f.plot) {
-
 			compAnalysisResult.plot();
-
 		}
 		if (!f.outName.equals("")) {
-
 			compAnalysisResult.writeToFile(f.outName);
-
 		}
+		if (f.web) {
+			compAnalysisResult.writeHTML(f.outName+".html");
+		}
+		
 
 		bind.end();
 	}

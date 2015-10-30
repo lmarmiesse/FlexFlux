@@ -284,4 +284,11 @@ public class ClassificationResult extends AnalysisResult {
 
 	}
 
+
+	@Override
+	public void writeHTML(String path) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

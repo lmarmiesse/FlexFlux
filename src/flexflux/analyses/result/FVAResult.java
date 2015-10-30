@@ -202,44 +202,40 @@ public class FVAResult extends AnalysisResult {
 		return essentials;
 
 	}
-	
-	
+
 	/**
 	 * 
 	 * @return all reactions that have min and max equal to 0
 	 */
 	public HashMap<String, BioEntity> getZeroFluxReactions() {
-		
+
 		HashMap<String, BioEntity> zeroFluxReactions = new HashMap<String, BioEntity>();
-		
+
 		for (BioEntity entity : map.keySet()) {
-			
-			if (Math.abs(map.get(entity)[0]) <= Math.pow(10, -Vars.decimalPrecision) && Math.abs(map.get(entity)[1]) <= Math.pow(10, -Vars.decimalPrecision)) {
+
+			if (Math.abs(map.get(entity)[0]) <= Math.pow(10, -Vars.decimalPrecision)
+					&& Math.abs(map.get(entity)[1]) <= Math.pow(10, -Vars.decimalPrecision)) {
 				zeroFluxReactions.put(entity.getId(), entity);
 			}
 
 		}
-		
+
 		return zeroFluxReactions;
-		
-		
+
 	}
-	
-	
+
 	public void writeToFile(String path) {
 		try {
 			PrintWriter out = new PrintWriter(new File(path));
 			out.println("FVA result\n");
-			out.println("obj : " + Vars.round(objValue) + "(+-"
-					+ Vars.libertyPercentage + "%)");
+			out.println("obj : " + Vars.round(objValue) + "(+-" + Vars.libertyPercentage + "%)");
 
 			out.println("Name\tmin\tmax");
 
 			for (BioEntity entity : map.keySet()) {
 
-				out.println(entity.getId() + "\t"
-						+ Vars.round(map.get(entity)[0]) + "\t"
-						+ Vars.round(map.get(entity)[1]));
+				out.println(
+						entity.getId() + "\t" + Vars.round(map.get(entity)[0]) + "\t" + Vars.round(map.get(entity)[1]));
 
 			}
 			out.close();
@@ -253,15 +249,14 @@ public class FVAResult extends AnalysisResult {
 	public void plot() {
 
 		resultTable = new JTable(0, 2);
-		
+
 		String[] columnNames = { "Entity name", "Min", "Max" };
 		Object[][] data = new Object[map.size()][columnNames.length];
 
 		int i = 0;
 		for (BioEntity ent : map.keySet()) {
 
-			data[i] = new Object[] { ent.getId(), map.get(ent)[0],
-					map.get(ent)[1] };
+			data[i] = new Object[] { ent.getId(), map.get(ent)[0], map.get(ent)[1] };
 
 			i++;
 		}
@@ -275,8 +270,7 @@ public class FVAResult extends AnalysisResult {
 		JPanel northPanel = new JPanel();
 		northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.PAGE_AXIS));
 
-		northPanel.add(new JLabel("obj : " + Vars.round(objValue) + "(±"
-				+ Vars.libertyPercentage + "%)"));
+		northPanel.add(new JLabel("obj : " + Vars.round(objValue) + "(±" + Vars.libertyPercentage + "%)"));
 
 		JPanel centerPanel = new JPanel();
 		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.PAGE_AXIS));
@@ -322,8 +316,7 @@ public class FVAResult extends AnalysisResult {
 	/**
 	 * Update the table when a search is made.
 	 */
-	private void updateTable(TableRowSorter<TableModel> sorter,
-			DocumentEvent arg0) {
+	private void updateTable(TableRowSorter<TableModel> sorter, DocumentEvent arg0) {
 		String text = searchField.getText();
 		double min = -999999;
 
@@ -349,15 +342,12 @@ public class FVAResult extends AnalysisResult {
 
 			// case insensitive
 			if (text.length() != 0) {
-				firstFilter = RowFilter.regexFilter(
-						"(?i)" + Pattern.quote(text), 0);
+				firstFilter = RowFilter.regexFilter("(?i)" + Pattern.quote(text), 0);
 			}
 
-			secondFilter = RowFilter.numberFilter(
-					RowFilter.ComparisonType.BEFORE, max, 2);
+			secondFilter = RowFilter.numberFilter(RowFilter.ComparisonType.BEFORE, max, 2);
 
-			thirdFilter = RowFilter.numberFilter(
-					RowFilter.ComparisonType.AFTER, min, 1);
+			thirdFilter = RowFilter.numberFilter(RowFilter.ComparisonType.AFTER, min, 1);
 
 			if (firstFilter != null) {
 				filters.add(firstFilter);
@@ -402,29 +392,7 @@ public class FVAResult extends AnalysisResult {
 
 		String[] columnNames = { "Entity name", "Pathway", "Min", "Max" };
 
-		Object[][] data = new Object[essentialReactions.size()][columnNames.length];
-
-		int i = 0;
-
-		for (BioEntity ent : essentialReactions) {
-
-			String pathwayName = "";
-
-			try {
-
-				for (String name : ((BioChemicalReaction) ent).getPathwayList()
-						.keySet()) {
-					pathwayName += name + " ";
-				}
-
-			} catch (Exception e) {
-
-			}
-			data[i] = new Object[] { ent.getName(), pathwayName,
-					Vars.round(map.get(ent)[0]), Vars.round(map.get(ent)[1]) };
-
-			i++;
-		}
+		Object[][] data = geteEssentialReactionsData(essentialReactions);
 
 		JTable table = new JTable(0, 2);
 
@@ -434,8 +402,7 @@ public class FVAResult extends AnalysisResult {
 		table.getColumnModel().getColumn(3).setPreferredWidth(15);
 		table.getColumnModel().getColumn(2).setPreferredWidth(15);
 
-		TableRowSorter<TableModel> mySorter = new TableRowSorter<TableModel>(
-				table.getModel());
+		TableRowSorter<TableModel> mySorter = new TableRowSorter<TableModel>(table.getModel());
 		table.setRowSorter(mySorter);
 
 		JPanel northPanel = new JPanel();
@@ -449,8 +416,8 @@ public class FVAResult extends AnalysisResult {
 
 		JScrollPane tableScrollPane = new JScrollPane(table);
 
-		tableScrollPane.setPreferredSize(new Dimension(400, Math.min(
-				table.getRowHeight() * table.getRowCount() + 25, 200)));
+		tableScrollPane
+				.setPreferredSize(new Dimension(400, Math.min(table.getRowHeight() * table.getRowCount() + 25, 200)));
 
 		centerPanel.add(tableScrollPane);
 
@@ -458,6 +425,71 @@ public class FVAResult extends AnalysisResult {
 		panel.add(centerPanel);
 
 		return panel;
+	}
+
+	public Object[][] geteEssentialReactionsData(List<BioEntity> essentialReactions) {
+		String[] columnNames = { "Entity name", "Pathway", "Min", "Max" };
+		Object[][] data = new Object[essentialReactions.size()][columnNames.length];
+
+		int i = 0;
+
+		for (BioEntity ent : essentialReactions) {
+
+			String pathwayName = "";
+
+			try {
+
+				for (String name : ((BioChemicalReaction) ent).getPathwayList().keySet()) {
+					pathwayName += name + " ";
+				}
+
+			} catch (Exception e) {
+
+			}
+			data[i] = new Object[] { ent.getName(), pathwayName, Vars.round(map.get(ent)[0]),
+					Vars.round(map.get(ent)[1]) };
+
+			i++;
+		}
+		
+		return data;
+
+	}
+
+	@Override
+	public void writeHTML(String path) {
+
+		try {
+			PrintWriter out = new PrintWriter(new File(path));
+			out.println(
+					"<p>Objective function value: " + Vars.round(objValue) + "(+-" + Vars.libertyPercentage + "%)</p>");
+
+			out.println("<table>");
+
+			out.println("<tr>");
+			out.println("<th>Name</th>");
+			out.println("<th>Min</th>");
+			out.println("<th>Max</th>");
+			out.println("</tr>");
+
+			for (BioEntity entity : map.keySet()) {
+				out.println("<tr>");
+
+				out.println("<td>" + entity.getId() + "</td>");
+				out.println("<td>" + Vars.round(map.get(entity)[0]) + "</td>");
+				out.println("<td>" + Vars.round(map.get(entity)[1]) + "</td>");
+
+				out.println("</tr>");
+
+			}
+
+			out.println("</table>");
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 }

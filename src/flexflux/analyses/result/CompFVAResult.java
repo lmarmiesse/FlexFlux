@@ -65,8 +65,6 @@ import javax.swing.table.TableRowSorter;
 
 import org.jfree.ui.RefineryUtilities;
 
-
-
 /**
  * 
  * Class representing the result of a comparison between two FVA's.
@@ -122,19 +120,15 @@ public class CompFVAResult extends AnalysisResult {
 			PrintWriter out = new PrintWriter(new File(path));
 			out.println("FVA comparison result\n");
 
-			out.println("obj1 : " + Vars.round(obj1) + "(+-"
-					+ Vars.libertyPercentage + "%)");
-			out.println("obj2 : " + Vars.round(obj2) + "(+-"
-					+ Vars.libertyPercentage + "%)");
+			out.println("obj1 : " + Vars.round(obj1) + "(+-" + Vars.libertyPercentage + "%)");
+			out.println("obj2 : " + Vars.round(obj2) + "(+-" + Vars.libertyPercentage + "%)");
 
 			out.println("Name\tmin1\tmax1\tmin2\tmax2");
 
 			for (String entityName : map.keySet()) {
 
-				out.println(entityName + "\t"
-						+ Vars.round(map.get(entityName)[0]) + "\t"
-						+ Vars.round(map.get(entityName)[1]) + "\t"
-						+ Vars.round(map.get(entityName)[2]) + "\t"
+				out.println(entityName + "\t" + Vars.round(map.get(entityName)[0]) + "\t"
+						+ Vars.round(map.get(entityName)[1]) + "\t" + Vars.round(map.get(entityName)[2]) + "\t"
 						+ Vars.round(map.get(entityName)[3]));
 			}
 			out.close();
@@ -146,11 +140,10 @@ public class CompFVAResult extends AnalysisResult {
 	}
 
 	public void plot() {
-		
+
 		resultTable = new JTable(0, 2);
 
-		String[] columnNames = { "Entity name", "Min first FVA",
-				"Max first FVA", "Min second FVA", "Max second FVA",
+		String[] columnNames = { "Entity name", "Min first FVA", "Max first FVA", "Min second FVA", "Max second FVA",
 				"Min difference", "Max difference" };
 		Object[][] data = new Object[map.size()][columnNames.length];
 
@@ -178,8 +171,8 @@ public class CompFVAResult extends AnalysisResult {
 			str = df.format(max2);
 			max2 = Double.parseDouble(str.replace(',', '.'));
 
-			data[i] = new Object[] { entName, min1, max1, min2, max2,
-					Vars.round(min2 - min1), Vars.round(max2 - max1) };
+			data[i] = new Object[] { entName, min1, max1, min2, max2, Vars.round(min2 - min1),
+					Vars.round(max2 - max1) };
 
 			i++;
 		}
@@ -193,10 +186,8 @@ public class CompFVAResult extends AnalysisResult {
 
 		JPanel northPanel = new JPanel();
 		northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.PAGE_AXIS));
-		northPanel.add(new JLabel("obj first FVA : " + Vars.round(obj1) + "(±"
-				+ Vars.libertyPercentage + "%)"));
-		northPanel.add(new JLabel("obj second FVA : " + Vars.round(obj2) + "(±"
-				+ Vars.libertyPercentage + "%)"));
+		northPanel.add(new JLabel("obj first FVA : " + Vars.round(obj1) + "(±" + Vars.libertyPercentage + "%)"));
+		northPanel.add(new JLabel("obj second FVA : " + Vars.round(obj2) + "(±" + Vars.libertyPercentage + "%)"));
 
 		JPanel centerPanel = new JPanel();
 		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.PAGE_AXIS));
@@ -242,8 +233,7 @@ public class CompFVAResult extends AnalysisResult {
 	/**
 	 * Updates the table when a search is made in the plot.
 	 */
-	private void updateTable(TableRowSorter<TableModel> sorter,
-			DocumentEvent arg0) {
+	private void updateTable(TableRowSorter<TableModel> sorter, DocumentEvent arg0) {
 		String text = searchField.getText();
 		double min = -999999;
 
@@ -269,15 +259,12 @@ public class CompFVAResult extends AnalysisResult {
 
 			// case insensitive
 			if (text.length() != 0) {
-				firstFilter = RowFilter.regexFilter(
-						"(?i)" + Pattern.quote(text), 0);
+				firstFilter = RowFilter.regexFilter("(?i)" + Pattern.quote(text), 0);
 			}
 
-			secondFilter = RowFilter.numberFilter(
-					RowFilter.ComparisonType.BEFORE, max, 2, 4);
+			secondFilter = RowFilter.numberFilter(RowFilter.ComparisonType.BEFORE, max, 2, 4);
 
-			thirdFilter = RowFilter.numberFilter(
-					RowFilter.ComparisonType.AFTER, min, 1, 3);
+			thirdFilter = RowFilter.numberFilter(RowFilter.ComparisonType.AFTER, min, 1, 3);
 
 			if (firstFilter != null) {
 				filters.add(firstFilter);
@@ -315,11 +302,9 @@ public class CompFVAResult extends AnalysisResult {
 	 * @author lmarmiesse 11 juin 2013
 	 */
 	class MyTableCellRenderer extends DefaultTableCellRenderer {
-		public Component getTableCellRendererComponent(JTable table,
-				Object value, boolean isSelected, boolean hasFocus, int row,
-				int column) {
-			Component c = super.getTableCellRendererComponent(table, value,
-					isSelected, hasFocus, row, column);
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 			// Only for specific cell
 			if (column == 5 || column == 6) {
@@ -335,6 +320,44 @@ public class CompFVAResult extends AnalysisResult {
 				c.setForeground(new Color(0, 0, 0));
 			}
 			return c;
+		}
+	}
+
+	@Override
+	public void writeHTML(String path) {
+		try {
+			PrintWriter out = new PrintWriter(new File(path));
+
+			out.println(
+					"<p>Objective function 1 value: " + Vars.round(obj1) + "(+-" + Vars.libertyPercentage + "%)</p>");
+			out.println(
+					"<p>Objective function 2 value: " + Vars.round(obj2) + "(+-" + Vars.libertyPercentage + "%)</p>");
+
+			out.println("<table>");
+
+			out.println("<tr>");
+			out.println("<th>Name</th>");
+			out.println("<th>Min1</th>");
+			out.println("<th>Max1</th>");
+			out.println("<th>Min2</th>");
+			out.println("<th>Max2</th>");
+			out.println("</tr>");
+
+			for (String entityName : map.keySet()) {
+				out.println("<tr>");
+				out.println("<td>" + entityName + "</td>");
+				out.println("<td>" + Vars.round(map.get(entityName)[0]) + "</td>");
+				out.println("<td>" + Vars.round(map.get(entityName)[1])+ "</td>");
+				out.println("<td>" + Vars.round(map.get(entityName)[2]) + "</td>");
+				out.println("<td>" + Vars.round(map.get(entityName)[3])+ "</td>");
+				out.println("</tr>");
+			}
+
+			out.println("</table>");
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

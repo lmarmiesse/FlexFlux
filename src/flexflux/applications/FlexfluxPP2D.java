@@ -203,6 +203,9 @@ public class FlexfluxPP2D extends FFApplication {
 		if (!f.outName.equals("")) {
 			result.writeToFile(f.outName);
 		}
+		if (f.web) {
+			result.writeHTML(f.outName+".html");
+		}
 
 		bind.end();
 	}

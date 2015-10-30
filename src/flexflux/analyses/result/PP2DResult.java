@@ -85,8 +85,8 @@ public class PP2DResult extends AnalysisResult {
 	 */
 	double init, end, deltaF;
 
-	public final static Color[] COLORLIST = { Color.BLUE, Color.RED,
-			Color.GREEN, Color.YELLOW, Color.PINK, Color.CYAN, Color.MAGENTA };
+	public final static Color[] COLORLIST = { Color.BLUE, Color.RED, Color.GREEN, Color.YELLOW, Color.PINK, Color.CYAN,
+			Color.MAGENTA };
 
 	/**
 	 * results.
@@ -128,8 +128,7 @@ public class PP2DResult extends AnalysisResult {
 
 	private double score;
 
-	public PP2DResult(String objName, String reacName,
-			List<Double> fluxValues, Map<Double, Double> resultValues,
+	public PP2DResult(String objName, String reacName, List<Double> fluxValues, Map<Double, Double> resultValues,
 			int minGrpsSize, double init, double end, double deltaF) {
 		this.fluxValues = fluxValues;
 		this.resultValues = resultValues;
@@ -167,8 +166,7 @@ public class PP2DResult extends AnalysisResult {
 
 							if (point == x) {
 								groupIndex.put(group, index);
-								for (double point2 : shadowPriceGroups
-										.get(group)) {
+								for (double point2 : shadowPriceGroups.get(group)) {
 									pointIndex.put(point2, index);
 								}
 								notYetAddedGroup.remove(group);
@@ -207,8 +205,7 @@ public class PP2DResult extends AnalysisResult {
 			out.println("Flux\tObjective");
 
 			for (Double value : fluxValues) {
-				out.println(Vars.round(value) + "\t"
-						+ Vars.round(resultValues.get(value)));
+				out.println(Vars.round(value) + "\t" + Vars.round(resultValues.get(value)));
 			}
 
 			out.println();
@@ -275,7 +272,7 @@ public class PP2DResult extends AnalysisResult {
 				true, // include legend
 				true, // tooltips
 				false // urls
-				);
+		);
 
 		XYPlot plot = (XYPlot) chart.getPlot();
 
@@ -283,8 +280,7 @@ public class PP2DResult extends AnalysisResult {
 		plot.setRangeGridlinePaint(Color.GRAY);
 		plot.setDomainGridlinePaint(Color.GRAY);
 
-		XYLineAndShapeRenderer renderer = new MyRenderer(true, false,
-				correspGroup);
+		XYLineAndShapeRenderer renderer = new MyRenderer(true, false, correspGroup);
 
 		plot.setRenderer(0, renderer);
 
@@ -306,39 +302,31 @@ public class PP2DResult extends AnalysisResult {
 			Color color = COLORLIST[i % COLORLIST.length];
 
 			JPanel groupPanel = new JPanel();
-			groupPanel
-					.setLayout(new BoxLayout(groupPanel, BoxLayout.PAGE_AXIS));
+			groupPanel.setLayout(new BoxLayout(groupPanel, BoxLayout.PAGE_AXIS));
 
-			List<BioEntity> newEssentialReactions = comparator
-					.getNewEssentialEntities().get(i);
+			List<BioEntity> newEssentialReactions = comparator.getNewEssentialEntities().get(i);
 
-			List<BioEntity> noLongerEssentialReactions = comparator
-					.getNoLongerEssentialEntities().get(i);
+			List<BioEntity> noLongerEssentialReactions = comparator.getNoLongerEssentialEntities().get(i);
 
 			JPanel colorPanel = new JPanel();
 
 			colorPanel.setBackground(color);
 
 			groupPanel.add(colorPanel);
-			groupPanel
-					.add(new JLabel("Phenotypic phase " + i + ", "
-							+ newEssentialReactions.size()
-							+ " new essential reactions"));
+			groupPanel.add(new JLabel(
+					"Phenotypic phase " + i + ", " + newEssentialReactions.size() + " new essential reactions"));
 
 			fvaPanel.add(groupPanel);
 
 			if (newEssentialReactions.size() > 0) {
-				fvaPanel.add(new JScrollPane(comparator
-						.getNewEssentialEntitiesPanel().get(i)));
+				fvaPanel.add(new JScrollPane(comparator.getNewEssentialEntitiesPanel().get(i)));
 			}
 
-			fvaPanel.add(new JLabel("Phenotypic phase " + i + ", "
-					+ noLongerEssentialReactions.size()
+			fvaPanel.add(new JLabel("Phenotypic phase " + i + ", " + noLongerEssentialReactions.size()
 					+ " no longer essential reactions"));
 
 			if (noLongerEssentialReactions.size() > 0) {
-				fvaPanel.add(fvaPanel.add(new JScrollPane(comparator
-						.getNoLongerEssentialEntitiesPanel().get(i))));
+				fvaPanel.add(fvaPanel.add(new JScrollPane(comparator.getNoLongerEssentialEntitiesPanel().get(i))));
 			}
 
 		}
@@ -346,20 +334,18 @@ public class PP2DResult extends AnalysisResult {
 		JScrollPane fvaScrollPane = new JScrollPane(fvaPanel);
 
 		JFrame frame = new JFrame("Phenotypic phase analysis results");
-		
+
 		if (expValues.size() > 0) {
 			frame.setTitle("Pareto analysis two dimensions results");
 		}
 
 		if (groupIndex.size() > 0) {
 
-			JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-					panel, fvaScrollPane);
+			JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, panel, fvaScrollPane);
 			frame.setContentPane(splitPane);
 			frame.setSize(600, 1000);
 
-		}
-		else{
+		} else {
 			frame.setContentPane(panel);
 			frame.setSize(600, 600);
 		}
@@ -367,7 +353,6 @@ public class PP2DResult extends AnalysisResult {
 		panel.setPreferredSize(new Dimension(600, 600));
 		panel.setMinimumSize(new Dimension(600, 600));
 
-		
 		RefineryUtilities.centerFrameOnScreen(frame);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -409,8 +394,7 @@ public class PP2DResult extends AnalysisResult {
 	 * @param invertY
 	 *            True if Y is minimized in the objective.
 	 */
-	public void normalizeValues(double xLB, double xUB, boolean invertX,
-			double yLB, double yUB, boolean invertY) {
+	public void normalizeValues(double xLB, double xUB, boolean invertX, double yLB, double yUB, boolean invertY) {
 
 		Map<Double, Double> newResultValues = new HashMap<Double, Double>();
 		List<Double> newFluxValues = new ArrayList<Double>();
@@ -477,11 +461,10 @@ public class PP2DResult extends AnalysisResult {
 
 		Map<Integer, Integer> correspGroup;
 
-		public Color[] COLORLIST = { Color.BLUE, Color.RED, Color.GREEN,
-				Color.YELLOW, Color.PINK, Color.CYAN, Color.MAGENTA };
+		public Color[] COLORLIST = { Color.BLUE, Color.RED, Color.GREEN, Color.YELLOW, Color.PINK, Color.CYAN,
+				Color.MAGENTA };
 
-		public MyRenderer(boolean lines, boolean shapes,
-				Map<Integer, Integer> correspGroup) {
+		public MyRenderer(boolean lines, boolean shapes, Map<Integer, Integer> correspGroup) {
 			super(lines, shapes);
 			this.correspGroup = correspGroup;
 		}
@@ -548,17 +531,12 @@ public class PP2DResult extends AnalysisResult {
 
 			for (Double d2 : expValues.get(d)) {
 
-				double minDistance = Math
-						.sqrt(Math.pow(d - fluxValues.get(0), 2)
-								+ Math.pow(
-										d2
-												- resultValues.get(fluxValues
-														.get(0)), 2));
+				double minDistance = Math.sqrt(
+						Math.pow(d - fluxValues.get(0), 2) + Math.pow(d2 - resultValues.get(fluxValues.get(0)), 2));
 
 				for (double point : fluxValues) {
 
-					double distance = Math.sqrt(Math.pow(d - point, 2)
-							+ Math.pow(d2 - resultValues.get(point), 2));
+					double distance = Math.sqrt(Math.pow(d - point, 2) + Math.pow(d2 - resultValues.get(point), 2));
 
 					if (distance < minDistance) {
 						minDistance = distance;
@@ -579,6 +557,103 @@ public class PP2DResult extends AnalysisResult {
 	public double getScore() {
 
 		return score;
+
+	}
+
+	@Override
+	public void writeHTML(String path) {
+		try {
+			PrintWriter out = new PrintWriter(new File(path));
+
+			out.println("<p hidden class='2Dplot' data-plotname='' data-xAxisName=" + reacName + " data-yAxisName="
+					+ objName + ">");
+
+			for (Double value : fluxValues) {
+				out.println("<a>" + Vars.round(value) + ";" + Vars.round(resultValues.get(value)) + "</a>");
+			}
+
+			out.println("</p>");
+
+			if (!groupIndex.isEmpty()) {
+				out.println("<h3>" + groupIndex.size() + " phenotypic phases</h3>");
+
+				for (int i = 1; i <= groupIndex.size(); i++) {
+
+					List<BioEntity> newEssentialReactions = comparator.getNewEssentialEntities().get(i);
+
+					List<BioEntity> noLongerEssentialReactions = comparator.getNoLongerEssentialEntities().get(i);
+
+					out.println("<h4>Phenotypic phase " + i + ", " + newEssentialReactions.size()
+							+ " new essential reactions</h4>");
+
+					if (newEssentialReactions.size() > 0) {
+						Object[][] data = comparator.getNewEssentialEntitiesData().get(i);
+
+						out.println("<table>");
+						out.println("<tr>");
+						out.println("<th>Entity name</th>");
+						out.println("<th>Pathway</th>");
+						out.println("<th>Min</th>");
+						out.println("<th>Max</th>");
+						out.println("</tr>");
+						for (int j = 0; j < data.length; j++) {
+							out.println("<tr>");
+							out.println("<td>" + data[j][0] + "</td>");
+							out.println("<td>" + data[j][1] + "</td>");
+							out.println("<td>" + data[j][2] + "</td>");
+							out.println("<td>" + data[j][3] + "</td>");
+							out.println("</tr>");
+						}
+						out.println("</table>");
+
+					}
+
+					out.println("<h4>Phenotypic phase " + i + ", " + noLongerEssentialReactions.size()
+							+ " no longer essential reactions</h4>");
+
+					if (noLongerEssentialReactions.size() > 0) {
+						Object[][] data = comparator.getNoLongerEssentialEntitiesData().get(i);
+						out.println("<table>");
+						out.println("<tr>");
+						out.println("<th>Entity name</th>");
+						out.println("<th>Pathway</th>");
+						out.println("<th>Min</th>");
+						out.println("<th>Max</th>");
+						out.println("</tr>");
+						for (int j = 0; j < data.length; j++) {
+							out.println("<tr>");
+							out.println("<td>" + data[j][0] + "</td>");
+							out.println("<td>" + data[j][1] + "</td>");
+							out.println("<td>" + data[j][2] + "</td>");
+							out.println("<td>" + data[j][3] + "</td>");
+							out.println("</tr>");
+						}
+						out.println("</table>");
+					}
+
+				}
+			}
+
+			// TODO for pareto
+			// if(!expValues.isEmpty()){
+			//
+			// out.println("<p>Experimental values</p>");
+			//
+			// for (Double value : expValues.keySet()) {
+			//
+			// for (Double value2 : expValues.get(value)) {
+			// out.println(Vars.round(value) + "\t" + Vars.round(value2));
+			// }
+			//
+			// }
+			//
+			// }
+
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 }

@@ -87,6 +87,10 @@ public class FlexfluxRSA extends FFApplication {
 		if (!f.outName.equals("")) {
 			res.writeToFile(f.outName);
 		}
+		
+		if (f.web) {
+			res.writeHTML(f.outName+".html");
+		}
 
 	}
 

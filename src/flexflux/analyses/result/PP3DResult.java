@@ -896,4 +896,10 @@ public class PP3DResult extends AnalysisResult {
 		return score;
 	}
 
+	@Override
+	public void writeHTML(String path) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

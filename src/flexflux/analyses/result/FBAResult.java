@@ -150,6 +150,43 @@ public class FBAResult extends AnalysisResult {
 		}
 
 	}
+	
+	public void writeHTML(String path) {
+
+		try {
+			PrintWriter out = new PrintWriter(new File(path));
+			
+
+			if (Double.isNaN(objValue)) {
+				out.println("<p>Unfeasible</p>");
+			} else {
+				out.println("<p>Objective function value: "+Vars.round(objValue)+"</p>");
+				out.println("<table>");
+				
+				out.println("<tr>");
+				out.println("<th>Entity name</th>");
+				out.println("<th>Value</th>");
+				out.println("</tr>");
+
+				//TODO order by name ?
+				
+				for (String entName : entToResult.keySet()) {
+					out.println("<tr>");
+					out.println("<td>"+entName+"</td>");
+					out.println("<td>"+entToResult.get(entName)+"</td>");
+					out.println("</tr>");
+
+				}
+				out.println("</table>");
+			}
+			out.close();
+		} catch (IOException e) {
+			System.out.println("path " + path
+					+ " is not a valid path, or file could not be created.");
+		}
+
+	}
+	
 
 	public void setObjValue(double d) {
 		this.objValue = d;
@@ -251,5 +288,7 @@ public class FBAResult extends AnalysisResult {
 	public Double getObjValue() {
 		return objValue;
 	}
+
+
 
 }

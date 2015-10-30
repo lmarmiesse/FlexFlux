@@ -66,7 +66,7 @@ public class FlexfluxMultiRSA extends FFApplication {
 	@Option(name = "-reg", usage = "Regulation file path", metaVar = "File - in", required = true)
 	public String regFile = "";
 
-	@Option(name = "-cond", usage = "[OPTIONAL] " + ListOfConditions.fileFormat, metaVar = "File - in", required = false)
+	@Option(name = "-cond", usage = "[OPTIONAL] " + ListOfConditions.fileFormat, metaVar = "File - in", required = true)
 	public String conditionFile = "";
 
 	@Option(name = "-fixConditions", usage = "[OPTIONAL] If true, the conditions set in the condition file are fixed and can not be updated by the regulation network.")

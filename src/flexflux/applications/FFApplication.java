@@ -20,6 +20,9 @@ public abstract class FFApplication {
 
 	@Option(name = "-h", usage = "Prints this help")
 	public Boolean h = false;
+	
+	@Option(name = "-web", usage = "Whether or not FlexFlux is run from a web application")
+	public Boolean web = false;
 
 	public static boolean requiresSolver = true;
 

@@ -34,6 +34,7 @@
 package flexflux.analyses.result;
 
 import flexflux.general.Bind;
+import flexflux.general.Vars;
 
 import java.awt.BorderLayout;
 import java.io.File;
@@ -51,7 +52,6 @@ import javax.swing.JScrollPane;
 import org.jfree.ui.RefineryUtilities;
 
 import parsebionet.biodata.BioEntity;
-
 
 /**
  * 
@@ -95,8 +95,7 @@ public class DRResult extends FVAResult {
 		}
 
 		JFrame frame = new JFrame("Dead Reactions results");
-		frame.add(new JLabel(resultList.getModel().getSize()
-				+ " dead reactions"), BorderLayout.PAGE_START);
+		frame.add(new JLabel(resultList.getModel().getSize() + " dead reactions"), BorderLayout.PAGE_START);
 		frame.add(new JScrollPane(resultList), BorderLayout.CENTER);
 		frame.pack();
 		RefineryUtilities.centerFrameOnScreen(frame);
@@ -131,14 +130,41 @@ public class DRResult extends FVAResult {
 
 		for (BioEntity ent : map.keySet()) {
 
-			if (Math.abs(map.get(ent)[0] - 0) > minValue
-					|| Math.abs(map.get(ent)[1] - 0) > minValue) {
+			if (Math.abs(map.get(ent)[0] - 0) > minValue || Math.abs(map.get(ent)[1] - 0) > minValue) {
 				toRemove.add(ent);
 			}
 		}
 
 		for (BioEntity b : toRemove) {
 			map.remove(b);
+		}
+
+	}
+
+	@Override
+	public void writeHTML(String path) {
+
+		try {
+			PrintWriter out = new PrintWriter(new File(path));
+
+			out.println("<table>");
+
+			out.println("<tr>");
+			out.println("<th>Dead reactions</th>");
+			out.println("</tr>");
+
+			for (BioEntity entity : map.keySet()) {
+
+				out.println("<tr>");
+				out.println("<td>" + entity.getId() + "</td>");
+				out.println("</tr>");
+			}
+			out.println("</table>");
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
 		}
 
 	}

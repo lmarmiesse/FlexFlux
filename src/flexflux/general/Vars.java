@@ -44,11 +44,13 @@ public class Vars {
 
 	
 	public static Boolean verbose=false;
+
+	
+	
 	
 	/**
 	 * Maximum lower bound and upper bounds
-	 */
-	
+	 */	
 	public static double minLowerBound = -999999;
 	public static double maxUpperBound = +999999;
 	
@@ -96,6 +98,7 @@ public class Vars {
 	 * Whether or not the calculated interaction network steady states must be saved to a file;
 	 */
 	public static boolean writeInteractionNetworkStates = false;
+	
 
 	/**
 	 * 

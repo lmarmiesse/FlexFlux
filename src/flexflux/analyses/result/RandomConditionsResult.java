@@ -380,6 +380,12 @@ public class RandomConditionsResult extends AnalysisResult {
 		return true;
 		
 	}
+
+	@Override
+	public void writeHTML(String path) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 

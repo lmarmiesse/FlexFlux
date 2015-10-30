@@ -405,4 +405,65 @@ public class RSAAnalysisResult extends AnalysisResult {
 		this.meanAttractorStates = meanAttractorStates;
 	}
 
+	@Override
+	public void writeHTML(String path) {
+		
+		try {
+			PrintWriter out = new PrintWriter(new File(path));
+
+			out.println("<table>");
+			out.println("<tr>");
+			
+			out.print("<th>Entity name</th>");
+			for (int j = 0; j < statesList.size() - 1; j++) {
+
+				int limit = statesList.size() - attractorStatesList.size();
+				if (j + 1 >= limit) {
+					out.print("<th>State " + (j + 1) + "(Attractor)</th>");
+				} else {
+					out.print("<th>State " + (j + 1) + "</th>");
+				}
+			}
+			
+			out.print("<th>Final constraint lower bound</th>");
+			out.print("<th>Final constraint upper bound</th>");
+			out.println("</tr>");
+
+			for (BioEntity ent : resultEntities) {
+
+				out.println("<tr>");
+				
+				out.print("<td>"+ent.getId()+"</td>");
+				for (int j = 0; j < statesList.size() - 1; j++) {
+
+					if (statesList.get(j).containsKey(ent)) {
+
+						out.print("<td>" + statesList.get(j).get(ent)+"</td>");
+					} else {
+						out.print("<td>" + "?</td>");
+					}
+
+				}
+
+				for (Constraint c : finalConstraints) {
+					if (c.getEntities().keySet().contains(ent)) {
+						out.print("<td>"+c.getLb() + "</td>");
+						out.print("<td>"+c.getUb() + "</td>");
+						break;
+					}
+				}
+				
+				out.println("</tr>");
+
+			}
+			
+			out.println("</table>");
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
 }

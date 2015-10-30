@@ -57,6 +57,8 @@ public class PhenotypicPhaseComparator {
 
 	private Map<Integer, JPanel> newEssentialEntitiesPanel = new HashMap<Integer, JPanel>();
 	private Map<Integer, JPanel> noLongerEssentialEntitiesPanel = new HashMap<Integer, JPanel>();
+	private Map<Integer, Object[][]> newEssentialEntitiesData = new HashMap<Integer, Object[][]>();
+	private Map<Integer, Object[][]> noLongerEssentialEntitiesData = new HashMap<Integer, Object[][]>();
 
 	public PhenotypicPhaseComparator(Map<Integer, FVAResult> fvaResults) {
 
@@ -64,8 +66,7 @@ public class PhenotypicPhaseComparator {
 
 		for (Integer index : fvaResults.keySet()) {
 
-			List<BioEntity> essentialReactions = fvaResults.get(index)
-					.getEssentialReactions();
+			List<BioEntity> essentialReactions = fvaResults.get(index).getEssentialReactions();
 
 			essentialReactionsMap.put(index, essentialReactions);
 
@@ -77,15 +78,12 @@ public class PhenotypicPhaseComparator {
 
 			newEssentialEntities.put(groupIndex, new ArrayList<BioEntity>());
 
-			noLongerEssentialEntities.put(groupIndex,
-					new ArrayList<BioEntity>());
+			noLongerEssentialEntities.put(groupIndex, new ArrayList<BioEntity>());
 
-			List<BioEntity> essentialReactions = essentialReactionsMap
-					.get(groupIndex);
+			List<BioEntity> essentialReactions = essentialReactionsMap.get(groupIndex);
 
 			if (groupIndex > 1) {
-				List<BioEntity> essentialReactionsPreviousStep = essentialReactionsMap
-						.get(groupIndex - 1);
+				List<BioEntity> essentialReactionsPreviousStep = essentialReactionsMap.get(groupIndex - 1);
 
 				// we only add reactions not present in the previous step
 				for (BioEntity ent : essentialReactions) {
@@ -93,10 +91,8 @@ public class PhenotypicPhaseComparator {
 						newEssentialEntities.get(groupIndex).add(ent);
 					} else {
 
-						double val1 = fvaResults.get(groupIndex)
-								.getValuesForEntity(ent)[0];
-						double val2 = fvaResults.get(groupIndex - 1)
-								.getValuesForEntity(ent)[0];
+						double val1 = fvaResults.get(groupIndex).getValuesForEntity(ent)[0];
+						double val2 = fvaResults.get(groupIndex - 1).getValuesForEntity(ent)[0];
 
 						// if they dont have the same sign
 						if (val1 * val2 < 0) {
@@ -115,15 +111,17 @@ public class PhenotypicPhaseComparator {
 				newEssentialEntities.get(groupIndex).addAll(essentialReactions);
 			}
 
-			newEssentialEntitiesPanel.put(
-					groupIndex,
-					fvaResults.get(groupIndex).getReactionsPanel(
-							newEssentialEntities.get(groupIndex)));
+			newEssentialEntitiesData.put(groupIndex,
+					fvaResults.get(groupIndex).geteEssentialReactionsData(newEssentialEntities.get(groupIndex)));
 
-			noLongerEssentialEntitiesPanel.put(
-					groupIndex,
-					fvaResults.get(groupIndex).getReactionsPanel(
-							noLongerEssentialEntities.get(groupIndex)));
+			noLongerEssentialEntitiesData.put(groupIndex,
+					fvaResults.get(groupIndex).geteEssentialReactionsData(noLongerEssentialEntities.get(groupIndex)));
+
+			newEssentialEntitiesPanel.put(groupIndex,
+					fvaResults.get(groupIndex).getReactionsPanel(newEssentialEntities.get(groupIndex)));
+
+			noLongerEssentialEntitiesPanel.put(groupIndex,
+					fvaResults.get(groupIndex).getReactionsPanel(noLongerEssentialEntities.get(groupIndex)));
 
 		}
 	}
@@ -134,6 +132,14 @@ public class PhenotypicPhaseComparator {
 
 	public Map<Integer, JPanel> getNoLongerEssentialEntitiesPanel() {
 		return noLongerEssentialEntitiesPanel;
+	}
+
+	public Map<Integer, Object[][]> getNewEssentialEntitiesData() {
+		return newEssentialEntitiesData;
+	}
+
+	public Map<Integer, Object[][]> getNoLongerEssentialEntitiesData() {
+		return noLongerEssentialEntitiesData;
 	}
 
 	public Map<Integer, List<BioEntity>> getNewEssentialEntities() {
