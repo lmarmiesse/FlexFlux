@@ -34,6 +34,8 @@
 package flexflux.interaction;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import flexflux.general.Constraint;
@@ -158,23 +160,20 @@ public class Or extends RelationWithList {
 		// minimum value
 		else if (method == 3) {
 
-			double expr = 0;
+			List<Double> exprs = new ArrayList<Double>();
+			
 			boolean allNaN = true;
 			for (Relation rel : list) {
 
 				double expr2 = rel.calculateRelationQuantitativeValue(sampleValues, method);
-
 				if (!Double.isNaN(expr2)) {
 					allNaN = false;
-
-					if (expr2 < expr) {
-						expr = expr2;
-					}
+					exprs.add(expr2);
 				}
 
 			}
 			if (!allNaN) {
-				return expr;
+				return Collections.min(exprs);
 			} else {
 				return Double.NaN;
 			}

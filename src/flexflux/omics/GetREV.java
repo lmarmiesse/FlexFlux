@@ -36,13 +36,13 @@ public class GetREV {
 		int revCalculationMethod = 1;
 
 		Sbml2Bionetwork parser = new Sbml2Bionetwork(metabolicNetworkPath, false);
-
 		BioNetwork bioNet = parser.getBioNetwork();
 
 		InteractionNetwork intNet = new InteractionNetwork();
 		intNet.addNetworkEntities(bioNet);
 		intNet.gprInteractions(bioNet, new RelationFactory(), new OperationFactory());
 
+		
 		OmicsData omicsData = OmicsDataReader.loadOmicsData(omicsDataPath, intNet.getEntities());
 
 		List<Sample> samples = omicsData.getSamples();
