@@ -4,18 +4,19 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
+
 public abstract class FFApplication {
 
 	// order for the graphical version. Default : -1 : no particular order
 	public static int order = -1;
 
-	@Option(name = "-verbose", usage = "[default=false] Activates the verbose mode")
+	@Option(name = "-verbose", usage = "[default=false] Activates the verbose mode", hidden=true)
 	public Boolean verbose = false;
 
 	@Option(name = "-h", usage = "Prints this help")
 	public Boolean h = false;
 
-	@Option(name = "-web", usage = "[default=false] Whether or not FlexFlux is run from a web application")
+	@Option(name = "-web", usage = "[default=false] Whether or not FlexFlux is run from a web application", hidden=true)
 	public Boolean web = false;
 
 	public static boolean requiresSolver = true;

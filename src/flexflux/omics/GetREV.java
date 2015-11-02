@@ -62,7 +62,7 @@ public class GetREV {
 		}
 		
 		
-		writeResult(samples);
+//		writeResult(samples);
 
 	}
 	
