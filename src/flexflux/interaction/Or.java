@@ -127,11 +127,14 @@ public class Or extends RelationWithList {
 	 * @param sampleValues
 	 * 
 	 * @param method
-	 *            1 => And : sum ; or : mean <br/> 2 => all mean
+	 *            1 => And : sum ; or : mean <br/>
+	 *            2 => all mean
 	 * 
 	 * 
 	 */
 	public double calculateRelationQuantitativeValue(Map<BioEntity, Double> sampleValues, int method) {
+		
+		//mean
 		if (method == 1 || method == 2) {
 
 			double expr = 0;
@@ -152,7 +155,32 @@ public class Or extends RelationWithList {
 				return Double.NaN;
 			}
 		}
-		System.err.println("Error : unknow gpr calculation method : "+method);
+		// minimum value
+		else if (method == 3) {
+
+			double expr = 0;
+			boolean allNaN = true;
+			for (Relation rel : list) {
+
+				double expr2 = rel.calculateRelationQuantitativeValue(sampleValues, method);
+
+				if (!Double.isNaN(expr2)) {
+					allNaN = false;
+
+					if (expr2 < expr) {
+						expr = expr2;
+					}
+				}
+
+			}
+			if (!allNaN) {
+				return expr;
+			} else {
+				return Double.NaN;
+			}
+
+		}
+		System.err.println("Error : unknow gpr calculation method : " + method);
 		System.exit(0);
 		return 0;
 	}

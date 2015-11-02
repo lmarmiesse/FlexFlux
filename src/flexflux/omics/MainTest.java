@@ -13,6 +13,7 @@ import flexflux.analyses.FBAAnalysis;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.CplexBind;
+import flexflux.general.GLPKBind;
 import flexflux.general.Vars;
 import flexflux.interaction.Interaction;
 import flexflux.objective.Objective;
@@ -26,7 +27,7 @@ public class MainTest {
 		/**
 		 * 1 => And : sum ; or : mean <br/>
 		 * 2 => all mean
-		 * 
+		 * 3 => And : sum ; or : min <br/>
 		 */
 		int gprCalculationMethod = 1;
 
@@ -66,8 +67,8 @@ public class MainTest {
 
 		// TODO Auto-generated method stub
 
-		// Bind bind = new GLPKBind();
-		Bind bind = new CplexBind();
+		 Bind bind = new GLPKBind();
+//		Bind bind = new CplexBind();
 
 		bind.loadSbmlNetwork(metabolicNetworkPath, false);
 

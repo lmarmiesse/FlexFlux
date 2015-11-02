@@ -12,9 +12,9 @@ public class OmicsData {
 	// private String name;
 	// private String description;
 
-	private List<Sample> samples = new ArrayList();
+	private List<Sample> samples = new ArrayList<Sample>();
 
-	private List<BioEntity> variables = new ArrayList();
+	private List<BioEntity> variables = new ArrayList<BioEntity>();
 
 	private HashMap<Sample, Map<BioEntity, Double>> data = new HashMap<Sample, Map<BioEntity, Double>>();
 

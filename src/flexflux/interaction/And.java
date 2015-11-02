@@ -132,7 +132,7 @@ public class And extends RelationWithList {
 	public double calculateRelationQuantitativeValue(Map<BioEntity, Double> sampleValues, int method) {
 
 		// sum
-		if (method == 1) {
+		if (method == 1 || method == 3) {
 			double expr = 0;
 			boolean allNaN = true;
 			for (Relation rel : list) {

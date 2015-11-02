@@ -44,15 +44,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import parsebionet.biodata.BioChemicalReaction;
-import parsebionet.biodata.BioComplex;
-import parsebionet.biodata.BioEntity;
-import parsebionet.biodata.BioGene;
-import parsebionet.biodata.BioNetwork;
-import parsebionet.biodata.BioPhysicalEntity;
-import parsebionet.biodata.BioPhysicalEntityParticipant;
-import parsebionet.biodata.BioProtein;
-import parsebionet.io.Sbml2Bionetwork;
 import flexflux.analyses.FBAAnalysis;
 import flexflux.analyses.RSAAnalysis;
 import flexflux.analyses.result.FBAResult;
@@ -68,6 +59,15 @@ import flexflux.interaction.RelationFactory;
 import flexflux.interaction.Unique;
 import flexflux.objective.Objective;
 import flexflux.operation.OperationFactory;
+import parsebionet.biodata.BioChemicalReaction;
+import parsebionet.biodata.BioComplex;
+import parsebionet.biodata.BioEntity;
+import parsebionet.biodata.BioGene;
+import parsebionet.biodata.BioNetwork;
+import parsebionet.biodata.BioPhysicalEntity;
+import parsebionet.biodata.BioPhysicalEntityParticipant;
+import parsebionet.biodata.BioProtein;
+import parsebionet.io.Sbml2Bionetwork;
 
 /**
  * 
@@ -559,6 +559,7 @@ public abstract class Bind {
 	 *            If true : uses extended SBML format.
 	 */
 	public void loadSbmlNetwork(String path, boolean ext) {
+		
 		Sbml2Bionetwork parser = new Sbml2Bionetwork(path, ext);
 		setNetworkAndConstraints(parser.getBioNetwork());
 	}
@@ -608,7 +609,7 @@ public abstract class Bind {
 		solverPrepared = false;
 
 		// adds networks entites
-		addNetworkEntities();
+		intNet.addNetworkEntities(bioNet);
 
 		// creates the steady state constraints
 		makeSteadyStateConstraints();
@@ -617,7 +618,7 @@ public abstract class Bind {
 		setReactionsBounds();
 
 		// GPR to interaction
-		gprInteractions();
+		intNet.gprInteractions(bioNet,relationFactory,operationFactory);
 
 	}
 
@@ -784,44 +785,7 @@ public abstract class Bind {
 
 	}
 
-	/**
-	 * 
-	 * Adds entities to the problem from the metaboblic network.
-	 * 
-	 */
-	private void addNetworkEntities() {
-
-		List<BioEntity> entities = new ArrayList<BioEntity>();
-		// we add the reactions
-		Map<String, BioChemicalReaction> reactionsMap = bioNet.getBiochemicalReactionList();
-
-		for (String reacName : reactionsMap.keySet()) {
-			entities.add(reactionsMap.get(reacName));
-		}
-
-		// we add the metabolites
-		Map<String, BioPhysicalEntity> metabolitesMap = bioNet.getPhysicalEntityList();
-
-		for (String metabName : metabolitesMap.keySet()) {
-			entities.add(metabolitesMap.get(metabName));
-		}
-
-		// we add the genes
-		Map<String, BioGene> genesMap = bioNet.getGeneList();
-		for (String geneName : genesMap.keySet()) {
-			entities.add(genesMap.get(geneName));
-		}
-
-		// we add the proteins
-		Map<String, BioProtein> proteinsMap = bioNet.getProteinList();
-		for (String protName : proteinsMap.keySet()) {
-			entities.add(proteinsMap.get(protName));
-		}
-
-		for (BioEntity be : entities) {
-			intNet.addNumEntity(be);
-		}
-	}
+	
 
 	/**
 	 * Adds steady-state constraints to the problem from the metabolic network.
@@ -991,127 +955,7 @@ public abstract class Bind {
 
 	}
 
-	/**
-	 * 
-	 * Adds GPR interactions to the problem.
-	 * 
-	 */
-	private void gprInteractions() {
-
-		Map<String, BioChemicalReaction> reactionsMap = bioNet.getBiochemicalReactionList();
-
-		for (String name : reactionsMap.keySet()) {
-
-			// genes invovled in this GPR, to add the interaction to the
-			// interactionsToCheck
-			List<BioGene> involvedGenes = new ArrayList<BioGene>();
-
-			// we crate the interaction : if gene = 0 then reaction = 0
-			// so we transform the gpr from R = G1 AND G2
-			// to : if G1=0 OR G2=0 then R=0
-			// so we invert AND and OR
-
-			Map<String, BioPhysicalEntity> enzymes = reactionsMap.get(name).getEnzList();
-
-			if (enzymes.size() != 0) {
-
-				Relation rel1 = null;
-
-				// if the genes are here
-				Relation rel1Active = null;
-				
-				
-				// if there are more than 1 enzyme, we create a And
-				if (enzymes.size() > 1) {
-					rel1 = (And) relationFactory.makeAnd();
-					rel1Active = (Or) relationFactory.makeOr();
-
-				}
-
-				for (String enzName : enzymes.keySet()) {
-					
-					BioPhysicalEntity enzyme = enzymes.get(enzName);
-
-					String classe = enzyme.getClass().getSimpleName();
-
-					HashMap<String, BioGene> listOfGenes = new HashMap<String, BioGene>();
-
-					// HashMap<String, BioProtein> listOfProteins = new
-					// HashMap<String, BioProtein>();
-
-					if (classe.compareTo("BioProtein") == 0) {
-						// listOfProteins.put(enzyme.getId(),
-						// (BioProtein)enzyme);
-
-						listOfGenes = ((BioProtein) enzyme).getGeneList();
-
-					} else if (classe.compareTo("BioComplex") == 0) {
-
-						listOfGenes = ((BioComplex) enzyme).getGeneList();
-
-					}
-
-					Relation rel2 = null;
-
-					Relation rel2Active = null;
-					if (listOfGenes.size() > 1) {
-						rel2 = (Or) relationFactory.makeOr();
-						rel2Active = (And) relationFactory.makeAnd();
-					}
-
-					for (String geneName : listOfGenes.keySet()) {
-
-						involvedGenes.add((BioGene) intNet.getEntity(geneName));
-
-						Unique unique = (Unique) relationFactory.makeUnique(intNet.getEntity(geneName),
-								operationFactory.makeEq(), 0);
-
-						Unique uniqueActive = (Unique) relationFactory.makeUnique(intNet.getEntity(geneName),
-								operationFactory.makeGt(), 0.0);
-
-						if (rel2 != null) {
-							((Or) rel2).addRelation(unique);
-						} else {
-							rel2 = unique;
-						}
-
-						if (rel2Active != null) {
-							((And) rel2Active).addRelation(uniqueActive);
-						} else {
-							rel2Active = uniqueActive;
-						}
-
-					}
-
-					if (rel1 != null) {
-						((And) rel1).addRelation(rel2);
-					} else {
-						rel1 = rel2;
-					}
-
-					if (rel1Active != null) {
-						((Or) rel1Active).addRelation(rel2Active);
-					} else {
-						rel1Active = rel2Active;
-					}
-
-				}
-
-				// if the genes are not there, the reaction is not there
-
-				Unique reacEqZero = (Unique) relationFactory.makeUnique(intNet.getEntity(name),
-						operationFactory.makeEq(), 0.0);
-
-				Interaction inter = relationFactory.makeIfThenInteraction(reacEqZero, rel1);
-
-				intNet.addGPRIntercation(inter);
-				inter.setTimeInfos(new double[] { 0.0, 0.0 });
-
-			}
-
-		}
-
-	}
+	
 
 	/**
 	 * 

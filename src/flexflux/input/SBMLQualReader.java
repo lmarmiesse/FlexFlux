@@ -2,8 +2,10 @@ package flexflux.input;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -11,6 +13,9 @@ import java.util.TreeSet;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.sbml.jsbml.ASTNode;
 import org.sbml.jsbml.ASTNode.Type;
 import org.sbml.jsbml.Model;
@@ -23,8 +28,8 @@ import org.sbml.jsbml.ext.qual.QualModelPlugin;
 import org.sbml.jsbml.ext.qual.QualitativeSpecies;
 import org.sbml.jsbml.ext.qual.Transition;
 import org.sbml.jsbml.xml.XMLNode;
+import org.sbml.jsbml.xml.parsers.SBMLCoreParser;
 
-import parsebionet.biodata.BioEntity;
 import flexflux.general.Constraint;
 import flexflux.general.Vars;
 import flexflux.interaction.And;
@@ -41,6 +46,7 @@ import flexflux.operation.OperationGe;
 import flexflux.operation.OperationGt;
 import flexflux.operation.OperationLe;
 import flexflux.operation.OperationLt;
+import parsebionet.biodata.BioEntity;
 
 public class SBMLQualReader {
 
@@ -52,7 +58,7 @@ public class SBMLQualReader {
 		SBMLQualReader.intNet = intNet;
 
 		SBMLDocument document = null;
-
+		
 		try {
 			document = SBMLReader.read(new File(path));
 		} catch (XMLStreamException | IOException e) {
@@ -60,7 +66,7 @@ public class SBMLQualReader {
 			e.printStackTrace();
 			
 			return null;
-		}
+		} 
 
 		Model model = document.getModel();
 
