@@ -35,9 +35,6 @@ public class GetREV {
 		 */
 		int revCalculationMethod = 1;
 
-		
-		
-
 		Sbml2Bionetwork parser = new Sbml2Bionetwork(metabolicNetworkPath, false);
 
 		BioNetwork bioNet = parser.getBioNetwork();

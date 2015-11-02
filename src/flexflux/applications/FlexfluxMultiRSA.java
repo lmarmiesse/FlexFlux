@@ -60,8 +60,7 @@ public class FlexfluxMultiRSA extends FFApplication {
 	public static String applicationName = FlexfluxMultiRSA.class
 			.getSimpleName();
 
-	public static String message = applicationName + " [options...]\n"
-			+ "Performs a Steady State analysis for multiple conditions";
+	public static String message = "Performs a Steady State analysis for multiple conditions";
 
 	@Option(name = "-reg", usage = "Regulation file path", metaVar = "File - in", required = true)
 	public String regFile = "";
@@ -162,17 +161,9 @@ public class FlexfluxMultiRSA extends FFApplication {
 		return true;
 
 	}
-
-	@Override
+	
 	public String getMessage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getExample() {
-		// TODO Auto-generated method stub
-		return null;
+		return message;
 	}
 
 }

@@ -22,9 +22,7 @@ public class FlexfluxBECO extends FFApplication {
 	public static String applicationName = FlexfluxBECO.class
 			.getSimpleName();
 
-	public static String message = applicationName
-			+ "[options...]\n"
-			+ "Compares the list of essential/usable genes/reactions in several conditions";
+	public static String message =  "Compares the list of essential/usable genes/reactions in several conditions";
 
 	public String example = applicationName
 			+ " -s network.xml -c conditionFile.tab -o objectives.txt -int int.txt  -plot -out out.tab";
@@ -158,16 +156,6 @@ public class FlexfluxBECO extends FFApplication {
 		}
 	}
 
-	@Override
-	public String getMessage() {
-		return message;
-	}
-
-	@Override
-	public String getExample() {
-		return "";
-	}
-
 	public Boolean getCytoscape() {
 		return cytoscape;
 	}
@@ -176,6 +164,9 @@ public class FlexfluxBECO extends FFApplication {
 		return fixConditions;
 	}
 	
+	public String getMessage() {
+		return message;
+	}
 	
 
 

@@ -19,8 +19,7 @@ public class FlexfluxTDRNA extends FFApplication {
 	
 	public static boolean requiresSolver = false;
 
-	public static String message = "FlexfluxTDRNA [options...]\n"
-			+ "Time-dependant updates of a regulatory network state.";
+	public static String message = "Time-dependant updates of a regulatory network state.";
 
 	public String example = "Example : FlexfluxTDRNA -int int.sbml -plot -out out.txt";
 	
@@ -69,16 +68,12 @@ public class FlexfluxTDRNA extends FFApplication {
 		if (!f.outName.equals("")) {
 			res.writeToFile(f.outName);
 		}
-		
-
 	}
-
+	
+	
 	public String getMessage() {
 		return message;
 	}
-
-	public String getExample() {
-		return example;
-	}
+	
 
 }

@@ -70,9 +70,7 @@ public class FlexfluxKO extends FFApplication{
 	// order for the graphical version
 	public static int order = 6;
 
-	public static String message = "FlexfluxKO\n"
-
-			+ "Computes an KO analysis given a metabolic network, an objective function and constraints.\n"
+	public static String message =  "Computes an KO analysis given a metabolic network, an objective function and constraints.\n"
 			+ "A KO analysis consists in setting network entities values to 0, and observe the effect on the objective function.\n"
 			+ "There are 3 ways to perform this KO analysis : \n"
 			+ "- Mode 0: the KO analysis is performed on reactions.\n"
@@ -228,15 +226,9 @@ public class FlexfluxKO extends FFApplication{
 		}
 		bind.end();
 	}
-
-	@Override
+	
 	public String getMessage() {
 		return message;
-	}
-
-	@Override
-	public String getExample() {
-		return example;
 	}
 
 }

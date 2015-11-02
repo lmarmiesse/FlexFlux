@@ -69,9 +69,7 @@ public class FlexfluxCompFVA extends FFApplication{
 	// order for the graphical version
 	public static int order = 5;
 	
-	public static String message = "FlexfluxCompFVA\n"
-
-			+ "Compares the results of two FVA analyses given a metabolic network, an objective function and two different set of constraints.\n"
+	public static String message =  "Compares the results of two FVA analyses given a metabolic network, an objective function and two different set of constraints.\n"
 			+ "An FVA analysis consists in getting the optimal value for the objective function, setting this value as a\n"
 			+ "constraint and, given a list of entities, minimize and maximize their values.\n"
 			+ "If no entity is specified in argument -e, the FVA analysis is performed on all reactions.";
@@ -233,15 +231,8 @@ public class FlexfluxCompFVA extends FFApplication{
 
 		bind.end();
 	}
-
-	@Override
+	
 	public String getMessage() {
 		return message;
 	}
-
-	@Override
-	public String getExample() {
-		return example;
-	}
-
 }

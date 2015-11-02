@@ -54,8 +54,7 @@ public class FlexfluxRandomConditions extends FFApplication {
 	public static String applicationName = FlexfluxRandomConditions.class
 			.getSimpleName();
 
-	public static String message = applicationName + " [options...]\n"
-			+ "Generates a file with randomized conditions";
+	public static String message =  "Generates a file with randomized conditions";
 
 	@Option(name = "-i", usage = "Input random parameter file"
 			+ "Each line must contain a entity id, a value of inhibition, a value of activation and a weight for the simulation."
@@ -87,16 +86,6 @@ public class FlexfluxRandomConditions extends FFApplication {
 
 	@Option(name = "-n", usage = "[OPTIONAL, default = number of available processors] Number of threads", metaVar = "Integer")
 	public int nThreads = Runtime.getRuntime().availableProcessors();
-
-	@Override
-	public String getMessage() {
-		return message;
-	}
-
-	@Override
-	public String getExample() {
-		return "";
-	}
 
 	/**
 	 * MAIN
@@ -142,5 +131,9 @@ public class FlexfluxRandomConditions extends FFApplication {
 		if (f.plot) {
 			r.plot();
 		}
+	}
+	
+	public String getMessage() {
+		return message;
 	}
 }

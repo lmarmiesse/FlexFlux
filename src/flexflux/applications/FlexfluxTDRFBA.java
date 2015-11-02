@@ -75,9 +75,7 @@ public class FlexfluxTDRFBA extends FFApplication{
 	// order for the graphical version
 	public static int order = 7;
 
-	public static String message = "FlexfluxTDRFBA\n"
-
-			+ "Computes a time dependent analysis given a metabolic network, an objective function and constraints.\n"
+	public static String message =  "Computes a time dependent analysis given a metabolic network, an objective function and constraints.\n"
 			+ "This analysis is based on external metabolic concentrations and cell density.\n"
 			+ "Given initial metabolite concentrations, cell density, a time step and a number of iterations, this "
 			+ "\nanalysis returns the value of each metabolite and cell density for each time";
@@ -226,15 +224,9 @@ public class FlexfluxTDRFBA extends FFApplication{
 
 		bind.end();
 	}
-
-	@Override
+	
 	public String getMessage() {
 		return message;
-	}
-
-	@Override
-	public String getExample() {
-		return example;
 	}
 
 }

@@ -173,22 +173,12 @@ public class FlexfluxTest extends FFApplication {
 					System.out.println(cl.getSimpleName() + " ERROR");
 					
 				}
-
-		
-
 			}
 		}
-
 	}
-
-	@Override
+	
+	
 	public String getMessage() {
 		return message;
 	}
-
-	@Override
-	public String getExample() {
-		return "";
-	}
-
 }

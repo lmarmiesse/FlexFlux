@@ -64,9 +64,7 @@ public class FlexfluxPP2D extends FFApplication {
 	// order for the graphical version
 	public static int order = 8;
 
-	public static String message = "FlexfluxPP2D\n"
-
-			+ "Computes different FBA analysis given a metabolic network, an objective function and constraints, "
+	public static String message =  "Computes different FBA analysis given a metabolic network, an objective function and constraints, "
 			+ "by making a reaction flux change.";
 
 	public String example = "Example : FlexfluxReac -s network.xml -cond cond.txt -int int.txt -r R_EX_o2_e_ -init -10 -end 0 -plot -out out.txt";
@@ -209,15 +207,9 @@ public class FlexfluxPP2D extends FFApplication {
 
 		bind.end();
 	}
-
-	@Override
+	
 	public String getMessage() {
 		return message;
-	}
-
-	@Override
-	public String getExample() {
-		return example;
 	}
 
 }

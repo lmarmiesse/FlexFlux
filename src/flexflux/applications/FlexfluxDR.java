@@ -67,9 +67,7 @@ public class FlexfluxDR extends FFApplication{
 	// order for the graphical version
 	public static int order = 11;	
 
-	public static String message = "FlexfluxDR\n"
-
-	+ "Finds dead reactions in a given metabolic network.\n"
+	public static String message =  "Finds dead reactions in a given metabolic network.\n"
 			+ "Dead reactions are those unable to carry a steady state flux.";
 
 	public String example = "Example 1 : FlexfluxDR -s network.xml -plot -out out.txt\n"
@@ -233,15 +231,7 @@ public class FlexfluxDR extends FFApplication{
 
 		bind.end();
 	}
-
-	@Override
 	public String getMessage() {
 		return message;
 	}
-
-	@Override
-	public String getExample() {
-		return example;
-	}
-
 }

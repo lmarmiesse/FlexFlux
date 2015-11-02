@@ -21,9 +21,7 @@ public class FlexfluxROBA extends FFApplication {
 	public static String applicationName = FlexfluxROBA.class
 			.getSimpleName();
 
-	public static String message = applicationName
-			+ "[options...]\n"
-			+ "Computes Robustness of the network among a set of objective functions "
+	public static String message =  "Computes Robustness of the network among a set of objective functions "
 			+ "in front of random perturbations.";
 
 	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
@@ -188,15 +186,8 @@ public class FlexfluxROBA extends FFApplication {
 			r.plot();
 		}
 	}
-
-	@Override
+	
 	public String getMessage() {
 		return message;
 	}
-
-	@Override
-	public String getExample() {
-		return "";
-	}
-
 }

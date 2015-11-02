@@ -32,8 +32,7 @@ public class FlexfluxRSA extends FFApplication {
 
 	public static boolean requiresSolver = false;
 
-	public static String message = "FlexfluxRSA [options...]\n"
-			+ "Finds an attractor or the steady state of a given regulatory network with initial values.";
+	public static String message = "Finds an attractor or the steady state of a given regulatory network with initial values.";
 
 	public String example = "Example : FlexfluxRSA -reg int.sbml -plot -out out.txt";
 
@@ -93,14 +92,8 @@ public class FlexfluxRSA extends FFApplication {
 		}
 
 	}
-
-	@Override
+	
 	public String getMessage() {
 		return message;
-	}
-
-	@Override
-	public String getExample() {
-		return example;
 	}
 }

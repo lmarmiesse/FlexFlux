@@ -84,8 +84,7 @@ public class FlexfluxPareto extends FFApplication{
 	// order for the graphical version
 	public static int order = 10;	
 
-	public static String message = "FlexfluxPareto\n"
-			+ "The goal of this analysis is to determine what objective (or set of objectives) an organism is optimizing.\n"
+	public static String message =  "The goal of this analysis is to determine what objective (or set of objectives) an organism is optimizing.\n"
 
 			+ "It take as an argument a file containing the objective functions to test and"
 			+ " experimental values, and finds out\n (in one, two and three dimensions) what"
@@ -201,15 +200,9 @@ public class FlexfluxPareto extends FFApplication{
 		}
 		bind.end();
 	}
-
-	@Override
+	
 	public String getMessage() {
 		return message;
-	}
-
-	@Override
-	public String getExample() {
-		return example;
 	}
 
 }

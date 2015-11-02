@@ -58,11 +58,10 @@ public class FlexfluxFBA extends FFApplication {
 	// order for the graphical version
 	public static int order = 3;
 
-	public static String message = "FlexfluxFBA [options...]\n"
-			+ "Computes an FBA given a metabolic network, an objective function and constraints.\n"
+	public static String message = "Computes an FBA given a metabolic network, an objective function and constraints.\n"
 			+ "Constraints can be obtained with calculated steady-states of a given regulatory network.";
 
-	public String example = "Example : FlexfluxFBA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -states res.tab";
+	public static String example = "Example : FlexfluxFBA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -states res.tab";
 
 	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
@@ -128,17 +127,12 @@ public class FlexfluxFBA extends FFApplication {
 				System.exit(0);
 			}
 		} catch (UnsatisfiedLinkError e) {
-			System.err
-					.println("Error, the solver "
-							+ f.solver
-							+ " cannot be found. Check your solver installation and the configuration file, or choose a different solver (-sol).");
+			System.err.println("Error, the solver " + f.solver
+					+ " cannot be found. Check your solver installation and the configuration file, or choose a different solver (-sol).");
 			System.exit(0);
 		} catch (NoClassDefFoundError e) {
-			System.err
-					.println("Error, the solver "
-							+ f.solver
-							+ " cannot be found. There seems to be a problem with the .jar file of "
-							+ f.solver + ".");
+			System.err.println("Error, the solver " + f.solver
+					+ " cannot be found. There seems to be a problem with the .jar file of " + f.solver + ".");
 			System.exit(0);
 		}
 
@@ -166,7 +160,7 @@ public class FlexfluxFBA extends FFApplication {
 			result.writeToFile(f.outName);
 		}
 		if (f.web) {
-			result.writeHTML(f.outName+".html");
+			result.writeHTML(f.outName + ".html");
 		}
 
 		if (f.senFile != "") {
@@ -174,17 +168,12 @@ public class FlexfluxFBA extends FFApplication {
 		}
 
 		bind.end();
-		
+
 		Vars.writeInteractionNetworkStates = false;
 	}
-
-	@Override
+	
 	public String getMessage() {
 		return message;
 	}
 
-	@Override
-	public String getExample() {
-		return example;
-	}
 }
