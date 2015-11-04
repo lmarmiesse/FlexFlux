@@ -27,7 +27,7 @@ public class FlexfluxBECO extends FFApplication {
 	public String example = applicationName
 			+ " -s network.xml -c conditionFile.tab -o objectives.txt -int int.txt  -plot -out out.tab";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
+	@Option(name = "-s", usage = "Metabolic network file path (SBML format)", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
 	@Option(name = "-mdr", usage = "[OPTIONAL] Reaction metadata file used for heatmap analysis", metaVar = "File - in", required = false)

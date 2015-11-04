@@ -83,7 +83,7 @@ public class FlexfluxTDRFBA extends FFApplication{
 	public String example = "Example 1 : FlexfluxRFBA -s network.xml -cond cond.txt -int int.txt -bio R_Biomass -x 0.01 -plot -out out.txt\n"
 			+ "Example 2 : FlexfluxRFBA -s network.xml -cond cond.txt -int int.txt -bio R_Biomass -plot -out out.txt -x 0.01 -t 0.02 -it 400 -e \"R1 R2 G1 G2\"\n";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
+	@Option(name = "-s", usage = "Metabolic network file path (SBML format)", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
 	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File - in", required = true)

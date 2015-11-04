@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import parsebionet.biodata.BioEntity;
 
@@ -75,32 +76,30 @@ public class ThreadKO extends ResolveThread {
 
 	/**
 	 * 
-	 * Percentage of the KO that is completed.
+	 * For the output Thread safe integer
 	 * 
 	 */
-	private static int percentage = 0;
+	private static AtomicInteger nbPrintedStars = new AtomicInteger(0);
 
 	protected Set<BioEntity> entitiesInInteractionNetwork = new HashSet<BioEntity>();
 
 	protected List<Constraint> interactionNetworkConstraints = new ArrayList<Constraint>();
 
-	public ThreadKO(Bind b, Queue<BioEntity> entities, KOResult result,
-			Objective obj, Set<BioEntity> entitiesInInteractionNetwork,
-			List<Constraint> interactionNetwotkConstraints) {
+	public ThreadKO(Bind b, Queue<BioEntity> entities, KOResult result, Objective obj,
+			Set<BioEntity> entitiesInInteractionNetwork, List<Constraint> interactionNetwotkConstraints) {
 		super(b, obj);
 		this.todo = entities.size();
 		this.entities = entities;
 		this.result = result;
 		this.entitiesInInteractionNetwork = entitiesInInteractionNetwork;
 		this.interactionNetworkConstraints = interactionNetwotkConstraints;
-		percentage = 0;
 
 	}
 
 	public void run() {
 
 		BioEntity entity;
-		
+
 		while ((entity = entities.poll()) != null) {
 
 			Map<BioEntity, Double> entityMap = new HashMap<BioEntity, Double>();
@@ -137,21 +136,15 @@ public class ThreadKO extends ResolveThread {
 
 			result.addLine(entity, value.result);
 
-			if (Vars.verbose) {
-				System.err.println("Entity : " + entity.getId() + "\tValue : "
-						+ value.result);
-			}
 
 			bind.checkInteractionNetwork = true;
 
-			int percent = (int) Math.round((todo - entities.size()) / todo
-					* 100);
-			if (percent > percentage) {
-				percentage = percent;
-				if (percent % 2 == 0) {
-					if (Vars.verbose) {
-						System.err.print("*");
-					}
+			if (Vars.verbose) {
+				int percent = (int) Math.round((todo - entities.size()) / todo * 100);
+
+				while (nbPrintedStars.intValue() < (percent / 2)) {
+					System.err.print("*");
+					nbPrintedStars.incrementAndGet();
 				}
 			}
 
@@ -164,5 +157,6 @@ public class ThreadKO extends ResolveThread {
 		}
 
 		bind.end();
+		nbPrintedStars = new AtomicInteger(0);
 	}
 }

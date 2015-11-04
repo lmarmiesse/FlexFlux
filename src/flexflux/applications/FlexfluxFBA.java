@@ -63,13 +63,13 @@ public class FlexfluxFBA extends FFApplication {
 
 	public static String example = "Example : FlexfluxFBA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -states res.tab";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
+	@Option(name = "-s", usage = "Metabolic network file path (SBML format)", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
 	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File - in", required = true)
 	public String consFile = "";
 
-	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File - in")
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation network file path (SBML-Qual format)", metaVar = "File - in")
 	public String regFile = "";
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")

@@ -24,7 +24,7 @@ public class FlexfluxROBA extends FFApplication {
 	public static String message =  "Computes Robustness of the network among a set of objective functions "
 			+ "in front of random perturbations.";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
+	@Option(name = "-s", usage = "Metabolic network file path (SBML format)", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
 	@Option(name = "-cond", usage = "[OPTIONAL] " + ListOfConditions.fileFormat, metaVar = "File - in", required = false)

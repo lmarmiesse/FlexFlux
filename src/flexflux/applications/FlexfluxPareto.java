@@ -91,7 +91,7 @@ public class FlexfluxPareto extends FFApplication{
 			+ " objective optimization is closest to the experimental values.";
 	public String example = "Example : FlexfluxPareto -s network.xml -cond cond.txt -int int.txt -plot -e expFile";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
+	@Option(name = "-s", usage = "Metabolic network file path (SBML format)", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
 	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File - in")

@@ -102,19 +102,16 @@ public class FBAResult extends AnalysisResult {
 		if (!Double.isNaN(objValue)) {
 
 			for (BioEntity entity : bind.getInteractionNetwork().getEntities()) {
-				if (!entity.getId().contains(Vars.Irrev1)
-						&& !entity.getId().contains(Vars.Irrev2)) {
+				if (!entity.getId().contains(Vars.Irrev1) && !entity.getId().contains(Vars.Irrev2)) {
 
 					if (bind.constrainedEntities.contains(entity)) {
 
 						if (bind.getDeadReactions().contains(entity)) {
-							
-							entToResult.put(entity.getId() + " (Dead)", String
-									.valueOf(Vars.round(bind
-											.getSolvedValue(entity))));
+
+							entToResult.put(entity.getId() + " (Dead)",
+									String.valueOf(Vars.round(bind.getSolvedValue(entity))));
 						} else {
-							entToResult.put(entity.getId(), String.valueOf(Vars
-									.round(bind.getSolvedValue(entity))));
+							entToResult.put(entity.getId(), String.valueOf(Vars.round(bind.getSolvedValue(entity))));
 						}
 					} else {
 						entToResult.put(entity.getId(), "Not Constrained");
@@ -138,55 +135,65 @@ public class FBAResult extends AnalysisResult {
 			} else {
 
 				for (String entName : entToResult.keySet()) {
-
-					out.println(entName + "\t" + entToResult.get(entName));
-
+					if (bind.getBioNetwork().getBiochemicalReactionList().containsKey(entName)) {
+						out.println(entName + "\t" + entToResult.get(entName));
+					}
+				}
+				for (String entName : entToResult.keySet()) {
+					if (!bind.getBioNetwork().getBiochemicalReactionList().containsKey(entName)) {
+						out.println(entName + "\t" + entToResult.get(entName));
+					}
 				}
 			}
 			out.close();
 		} catch (IOException e) {
-			System.out.println("path " + path
-					+ " is not a valid path, or file could not be created.");
+			System.out.println("path " + path + " is not a valid path, or file could not be created.");
 		}
 
 	}
-	
+
 	public void writeHTML(String path) {
 
 		try {
 			PrintWriter out = new PrintWriter(new File(path));
-			
 
 			if (Double.isNaN(objValue)) {
 				out.println("<p>Unfeasible</p>");
 			} else {
-				out.println("<p>Objective function value: "+Vars.round(objValue)+"</p>");
+				out.println("<p>Objective function value: " + Vars.round(objValue) + "</p>");
 				out.println("<table>");
-				
+
 				out.println("<tr>");
 				out.println("<th>Entity name</th>");
 				out.println("<th>Value</th>");
 				out.println("</tr>");
 
-				//TODO order by name ?
-				
+				// Reactions first
 				for (String entName : entToResult.keySet()) {
-					out.println("<tr>");
-					out.println("<td>"+entName+"</td>");
-					out.println("<td>"+entToResult.get(entName)+"</td>");
-					out.println("</tr>");
 
+					if (bind.getBioNetwork().getBiochemicalReactionList().containsKey(entName)) {
+						out.println("<tr>");
+						out.println("<td>" + entName + "</td>");
+						out.println("<td>" + entToResult.get(entName) + "</td>");
+						out.println("</tr>");
+					}
+				}
+				for (String entName : entToResult.keySet()) {
+					if (!bind.getBioNetwork().getBiochemicalReactionList().containsKey(entName)) {
+						out.println("<tr>");
+						out.println("<td>" + entName + "</td>");
+						out.println("<td>" + entToResult.get(entName) + "</td>");
+						out.println("</tr>");
+					}
 				}
 				out.println("</table>");
 			}
 			out.close();
 		} catch (IOException e) {
-			System.out.println("path " + path
-					+ " is not a valid path, or file could not be created.");
+			System.out.println("path " + path + " is not a valid path, or file could not be created.");
 		}
 
 	}
-	
 
 	public void setObjValue(double d) {
 		this.objValue = d;
@@ -216,8 +223,7 @@ public class FBAResult extends AnalysisResult {
 			DefaultTableModel model = new MyTableModel(data, columnNames);
 			resultTable = new JTable(0, 2);
 			resultTable.setModel(model);
-			final MyTableRowSorter<TableModel> sorter = new MyTableRowSorter<TableModel>(
-					resultTable.getModel());
+			final MyTableRowSorter<TableModel> sorter = new MyTableRowSorter<TableModel>(resultTable.getModel());
 
 			resultTable.setRowSorter(sorter);
 
@@ -226,22 +232,21 @@ public class FBAResult extends AnalysisResult {
 			searchPanel.add(new JLabel("Search for an entity : "));
 
 			searchField = new JTextField(10);
-			searchField.getDocument().addDocumentListener(
-					new DocumentListener() {
+			searchField.getDocument().addDocumentListener(new DocumentListener() {
 
-						public void changedUpdate(DocumentEvent arg0) {
-							updateTable(sorter);
-						}
+				public void changedUpdate(DocumentEvent arg0) {
+					updateTable(sorter);
+				}
 
-						public void insertUpdate(DocumentEvent arg0) {
-							updateTable(sorter);
-						}
+				public void insertUpdate(DocumentEvent arg0) {
+					updateTable(sorter);
+				}
 
-						public void removeUpdate(DocumentEvent arg0) {
-							updateTable(sorter);
-						}
+				public void removeUpdate(DocumentEvent arg0) {
+					updateTable(sorter);
+				}
 
-					});
+			});
 
 			searchPanel.add(searchField);
 
@@ -270,8 +275,7 @@ public class FBAResult extends AnalysisResult {
 		String text = searchField.getText();
 		if (sorter.getModelRowCount() != 0) {
 			// case insensitive
-			sorter.setRowFilter(RowFilter.regexFilter(
-					"(?i)" + Pattern.quote(text), 0));
+			sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(text), 0));
 		}
 
 	}
@@ -288,7 +292,5 @@ public class FBAResult extends AnalysisResult {
 	public Double getObjValue() {
 		return objValue;
 	}
-
-
 
 }

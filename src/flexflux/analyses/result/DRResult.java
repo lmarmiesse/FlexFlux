@@ -147,6 +147,10 @@ public class DRResult extends FVAResult {
 		try {
 			PrintWriter out = new PrintWriter(new File(path));
 
+			
+			out.println("<p>"+map.size() + " dead reactions</p>");
+			
+			
 			out.println("<table>");
 
 			out.println("<tr>");

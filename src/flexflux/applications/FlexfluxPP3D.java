@@ -69,7 +69,7 @@ public class FlexfluxPP3D extends FFApplication{
 
 	public String example = "Example : FlexfluxTwoReacs -s network.xml -cond cond.txt -int int.txt -r R_EX_glc_e_ -init -20 -end 0 -r2 R_EX_o2_e_ _init2 -20 -end2 0 -f2 0.2 -plot -out out.txt";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
+	@Option(name = "-s", usage = "Metabolic network file path (SBML format)", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
 	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File - in", required = true)

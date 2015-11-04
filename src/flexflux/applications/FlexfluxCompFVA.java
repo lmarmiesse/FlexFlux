@@ -77,7 +77,7 @@ public class FlexfluxCompFVA extends FFApplication{
 	public String example = "Example 1 : FlexfluxCompFVA -s network.xml -cond cond.txt -cond2 cond2.txt -int int.txt -plot -out out.txt\n"
 			+ "Example 2 : FlexfluxCompFVA -s network.xml -cond cond.txt -cond2 cond2.txt -int int.txt -plot -out out.txt -e \"R1 R2 G1 G2\"\n";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
+	@Option(name = "-s", usage = "Metabolic network file path (SBML format)", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
 	@Option(name = "-cons", usage = "First constraint file path", metaVar = "File - in", required = true)
@@ -211,7 +211,13 @@ public class FlexfluxCompFVA extends FFApplication{
 			analysis = new FVAAnalysis(bind, null, null);
 			analysis2 = new FVAAnalysis(bind2, null, null);
 		}
+		if(Vars.verbose){
+			System.out.println("\nFirst FVA:");
+		}
 		FVAResult result = analysis.runAnalysis();
+		if(Vars.verbose){
+			System.out.println("\nSecond FVA:");
+		}
 		FVAResult result2 = analysis2.runAnalysis();
 
 		CompFVAAnalysis compAnalysis = new CompFVAAnalysis(null, result,

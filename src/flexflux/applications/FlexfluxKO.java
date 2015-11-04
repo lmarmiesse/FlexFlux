@@ -80,7 +80,7 @@ public class FlexfluxKO extends FFApplication{
 	public String example = "Example 1 : FlexfluxKO -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -mode 1\n"
 			+ "Example 2 : FlexfluxKO -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -e \"R1 R2 G1 G2\"\n";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
+	@Option(name = "-s", usage = "Metabolic network file path (SBML format)", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
 	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File - in", required = true)

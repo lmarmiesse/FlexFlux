@@ -73,7 +73,7 @@ public class FlexfluxDR extends FFApplication{
 	public String example = "Example 1 : FlexfluxDR -s network.xml -plot -out out.txt\n"
 			+ "Example 2 : FlexfluxDR -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -mode 1 -d 0.1\n";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
+	@Option(name = "-s", usage = "Metabolic network file path (SBML format)", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
 	@Option(name = "-cons", usage = "[OPTIONAL]Constraints file path", metaVar = "File - in")
@@ -95,7 +95,7 @@ public class FlexfluxDR extends FFApplication{
 	public int nThreads = Runtime.getRuntime().availableProcessors();
 
 	@Option(name = "-mode", usage = "[OPTIONAL, default = 0]Dead reactions mode : \n- Mode 0: Reactions fluxes are not changed.\n"
-			+ "- Mode 1: All reactions fluxes are set to a maximum value.\n", metaVar = "Integer")
+			+ "- Mode 1: All reactions fluxes are set to a maximum value.\n", metaVar = "[0,1]")
 	public int mode = 0;
 
 	@Option(name = "-d", usage = "[OPTIONAL, default = 0.000001]Maximal distance of the reaction flux from 0 to be considered as dead", metaVar = "Double")

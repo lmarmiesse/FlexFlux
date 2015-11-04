@@ -4,6 +4,8 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
+import flexflux.general.Vars;
+
 
 public abstract class FFApplication {
 
@@ -41,6 +43,7 @@ public abstract class FFApplication {
 	 */
 	public void parseArguments(String[] args) {
 
+		
 		try {
 			parser.parseArgument(args);
 		} catch (CmdLineException e) {
@@ -56,6 +59,8 @@ public abstract class FFApplication {
 			parser.printUsage(System.out);
 			System.exit(1);
 		}
+		
+		Vars.verbose=this.verbose;
 
 	}
 

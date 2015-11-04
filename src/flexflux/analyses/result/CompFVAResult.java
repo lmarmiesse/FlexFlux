@@ -341,15 +341,28 @@ public class CompFVAResult extends AnalysisResult {
 			out.println("<th>Max1</th>");
 			out.println("<th>Min2</th>");
 			out.println("<th>Max2</th>");
+			out.println("<th>Min difference</th>");
+			out.println("<th>Max difference</th>");
 			out.println("</tr>");
 
 			for (String entityName : map.keySet()) {
+				
+				double min1 = Vars.round(map.get(entityName)[0]);
+				double max1 = Vars.round(map.get(entityName)[1]);
+				double min2 = Vars.round(map.get(entityName)[2]);
+				double max2 = Vars.round(map.get(entityName)[3]);
+				
+				double minDiff = min2-min1;
+				double maxDiff = max2-max1;
+				
 				out.println("<tr>");
 				out.println("<td>" + entityName + "</td>");
-				out.println("<td>" + Vars.round(map.get(entityName)[0]) + "</td>");
-				out.println("<td>" + Vars.round(map.get(entityName)[1])+ "</td>");
-				out.println("<td>" + Vars.round(map.get(entityName)[2]) + "</td>");
-				out.println("<td>" + Vars.round(map.get(entityName)[3])+ "</td>");
+				out.println("<td>" + min1 + "</td>");
+				out.println("<td>" + max1 + "</td>");
+				out.println("<td>" + min2 + "</td>");
+				out.println("<td>" + max2 + "</td>");
+				out.println("<td>" + minDiff + "</td>");
+				out.println("<td>" + maxDiff + "</td>");
 				out.println("</tr>");
 			}
 

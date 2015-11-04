@@ -76,7 +76,7 @@ public class FlexfluxFVA extends FFApplication {
 	public static String example = "Example 1 : FlexfluxFVA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt\n"
 			+ "Example 2 : FlexfluxFVA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -e \"R1 R2 G1 G2\"\n";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File - in", required = true)
+	@Option(name = "-s", usage = "Metabolic network file path (SBML format)", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
 	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File - in", required = true)
