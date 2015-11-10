@@ -76,7 +76,7 @@ public class ThreadKO extends ResolveThread {
 
 	/**
 	 * 
-	 * Percentage of the KO that is completed.
+	 * For the output Thread safe integer
 	 * 
 	 */
 	private static AtomicInteger nbPrintedStars = new AtomicInteger(0);
@@ -85,9 +85,8 @@ public class ThreadKO extends ResolveThread {
 
 	protected List<Constraint> interactionNetworkConstraints = new ArrayList<Constraint>();
 
-	public ThreadKO(Bind b, Queue<BioEntity> entities, KOResult result,
-			Objective obj, Set<BioEntity> entitiesInInteractionNetwork,
-			List<Constraint> interactionNetwotkConstraints) {
+	public ThreadKO(Bind b, Queue<BioEntity> entities, KOResult result, Objective obj,
+			Set<BioEntity> entitiesInInteractionNetwork, List<Constraint> interactionNetwotkConstraints) {
 		super(b, obj);
 		this.todo = entities.size();
 		this.entities = entities;
@@ -159,9 +158,6 @@ public class ThreadKO extends ResolveThread {
 
 			DoubleResult value = bind.FBA(constraintsToAdd, false, true);
 			
-//			System.err.println("****\nGPR : for "+entity.getId()+":"+bind.getInteractionNetwork().getGPRInteractions());
-			
-
 			result.addLine(entity, value.result);
 
 			
@@ -184,7 +180,6 @@ public class ThreadKO extends ResolveThread {
 			if (removedConst == true) {
 				bind.getConstraints().add(toRemove);
 				bind.getSimpleConstraints().put(entity, toRemove);
-				// bind.prepareSolver();
 			}
 		}
 
