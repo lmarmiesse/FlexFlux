@@ -38,6 +38,9 @@ public class FlexfluxTDRNA extends FFApplication {
 	@Option(name = "-it", usage = "[OPTIONAL, default = 150]Number of iterations", metaVar = "Integer")
 	public int iterations = 150;
 	
+//	@Option(name = "-e", usage = "[OPTIONAL]Biological entities included in the results.\nIf empty, only concerned metabolites and cell density will be included", metaVar = "String")
+//	public String entities = "";
+	
 	
 	
 
@@ -67,6 +70,10 @@ public class FlexfluxTDRNA extends FFApplication {
 
 		if (!f.outName.equals("")) {
 			res.writeToFile(f.outName);
+		}
+		
+		if (f.web) {
+			res.writeHTML(f.outName + ".html");
 		}
 	}
 	

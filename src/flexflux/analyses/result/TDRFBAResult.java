@@ -229,7 +229,8 @@ public class TDRFBAResult extends AnalysisResult {
 
 			for (String s : entities) {
 
-				out.println("<p hidden class='2Dplot' data-plotname='"+s+"' data-xAxisName='Time (h)' data-yAxisName=''>");
+				out.println("<p hidden class='2Dplot' data-plotname='" + s
+						+ "' data-xAxisName='Time (h)' data-yAxisName=''>");
 
 				for (Double time : times) {
 					out.println("<a>" + time + ";" + resultMap.get(time).get(s) + "</a>");

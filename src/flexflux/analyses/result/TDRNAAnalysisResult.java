@@ -26,20 +26,19 @@ public class TDRNAAnalysisResult extends AnalysisResult {
 	public void setStatesList(List<Map<BioEntity, Integer>> sl) {
 		statesList = sl;
 	}
-	
-	public  List<Map<BioEntity, Integer>> getStatesList(){
+
+	public List<Map<BioEntity, Integer>> getStatesList() {
 		return statesList;
 	}
 
 	public void writeToFile(String path) {
 
-		
 		try {
 			PrintWriter out = new PrintWriter(new File(path));
 
 			String line = "Time\t";
 			for (BioEntity ent : entitiesToCheck) {
-				
+
 				String s = ent.getId();
 
 				line += s + "\t";
@@ -48,16 +47,15 @@ public class TDRNAAnalysisResult extends AnalysisResult {
 			out.println(line);
 
 			double time = 0;
-			
+
 			for (Map<BioEntity, Integer> state : statesList) {
 
-				
 				line = time + "\t";
 				for (BioEntity ent : entitiesToCheck) {
 					line += Vars.round(state.get(ent)) + "\t";
 				}
 				out.println(line);
-				time+=deltaT;
+				time += deltaT;
 
 			}
 			out.close();
@@ -74,8 +72,34 @@ public class TDRNAAnalysisResult extends AnalysisResult {
 
 	@Override
 	public void writeHTML(String path) {
-		// TODO Auto-generated method stub
-		
+		try {
+			PrintWriter out = new PrintWriter(new File(path));
+
+			for (BioEntity ent : entitiesToCheck) {
+
+				out.println("<p hidden class='2Dplot' data-plotname='" + ent.getId()
+						+ "' data-xAxisName='Time (h)' data-yAxisName=''>");
+
+				double time = 0;
+
+				for (Map<BioEntity, Integer> state : statesList) {
+
+					out.println("<a>" + time + ";" + Vars.round(state.get(ent)) + "</a>");
+					time += deltaT;
+
+				}
+				out.println("</p>");
+			}
+			out.close();
+		} catch (
+
+		IOException e)
+
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 }

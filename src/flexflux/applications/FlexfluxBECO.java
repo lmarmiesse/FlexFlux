@@ -11,7 +11,7 @@ import flexflux.objective.ListOfObjectives;
 
 public class FlexfluxBECO extends FFApplication {
 	
-	public Boolean graphicalVersion = false;
+//	public Boolean graphicalVersion = false;
 	
 	public FlexfluxBECO()
 	{

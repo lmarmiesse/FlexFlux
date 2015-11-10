@@ -37,6 +37,7 @@ import flexflux.analyses.result.PP2DResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.DoubleResult;
+import flexflux.general.Vars;
 import flexflux.objective.Objective;
 
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -61,9 +63,11 @@ import parsebionet.biodata.BioEntity;
 public class ThreadPP2D extends ResolveThread {
 
 	/**
-	 * Percentage of the analysis that is completed.
+	 * 
+	 * For the output Thread safe integer
+	 * 
 	 */
-	private static int percentage = 0;
+	private static AtomicInteger nbPrintedStars = new AtomicInteger(0);
 
 	/**
 	 * Number of fluxes already treated.
@@ -92,25 +96,21 @@ public class ThreadPP2D extends ResolveThread {
 	 */
 	private Map<BioEntity, Double> entities = new HashMap<BioEntity, Double>();
 
-	public ThreadPP2D(Bind b, Queue<Double> fluxesQueue,
-			Map<BioEntity, Double> entities, PP2DResult result,
+	public ThreadPP2D(Bind b, Queue<Double> fluxesQueue, Map<BioEntity, Double> entities, PP2DResult result,
 			Objective obj) {
 		super(b, obj);
 
 		this.result = result;
 		this.fluxesQueue = fluxesQueue;
 		this.entities = entities;
-		percentage = 0;
 	}
 
 	public void run() {
 		int todo = fluxesQueue.size();
-
-		Double value;
 		
-		while ((value = fluxesQueue.poll()) != null) {
-			
+		Double value;
 
+		while ((value = fluxesQueue.poll()) != null) {
 			
 			List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 			constraintsToAdd.add(new Constraint(entities, value, value));
@@ -120,39 +120,28 @@ public class ThreadPP2D extends ResolveThread {
 			if (res.flag != 0) {
 				done++;
 
-				int percent = (int) Math.round((double) done / (double) todo
-						* 100);
-				if (percent > percentage) {
+				if (Vars.verbose) {
 
-					percentage = percent;
-					if (percent % 2 == 0) {
-						System.out.print("*");
+					int percent = (int) Math.round((double) done / (double) todo * 100);
+					while (nbPrintedStars.intValue() < (percent / 2)) {
+						System.err.print("*");
+						nbPrintedStars.incrementAndGet();
 					}
 				}
-
-				continue;
+				
+				continue;	
 			}
 			
-
-
 			// calculation of shadowPrice
 			double shadowPrice = 0;
 
 			constraintsToAdd.clear();
-			constraintsToAdd.add(new Constraint(entities, value + 0.1,
-					value + 0.1));
-			
+			constraintsToAdd.add(new Constraint(entities, value + 0.1, value + 0.1));
 
-			DoubleResult resShadowPrice = bind.FBA(constraintsToAdd, false,
-					true);
-			
+			DoubleResult resShadowPrice = bind.FBA(constraintsToAdd, false, true);
 
-			
 			shadowPrice = resShadowPrice.result - res.result;
 			boolean add = true;
-			
-
-
 
 			lock.lock();
 			for (Double val : shadowPriceGroups.keySet()) {
@@ -173,23 +162,21 @@ public class ThreadPP2D extends ResolveThread {
 
 			lock.unlock();
 
-
 			result.addValue(value, res.result);
 
 			done++;
-			
-			int percent = (int) Math.round(((double) done / (double) todo) * 100);
-			
-			if (percent > percentage) {
 
-				percentage = percent;
-				if (percent % 2 == 0) {
-					System.out.print("*");
+			if (Vars.verbose) {
+				int percent = (int) Math.round(((double) done / (double) todo) * 100);
+
+				while (nbPrintedStars.intValue() < (percent / 2)) {
+					System.err.print("*");
+					nbPrintedStars.incrementAndGet();
 				}
 			}
 
 		}
-		
+
 	}
 
 	public void setShadowPriceGroups() {

@@ -80,9 +80,9 @@ public class TDRNAAnalysis extends Analysis {
 						// ////////// Need check that the entity doesn't already
 						// have a rule
 
-						if (iterationToStates.get(iteration).containsKey(
-								i.getConsequence().getEntity())) {
-
+//						if (iterationToStates.get(iteration).containsKey(
+//								i.getConsequence().getEntity())) {
+//
 //							System.out.println("PROBLEM");
 //							System.out.println("Iteration " + iteration + " "
 //									+ i.getConsequence().getEntity().getId());
@@ -90,13 +90,17 @@ public class TDRNAAnalysis extends Analysis {
 //									.get(i.getConsequence().getEntity()));
 //							System.out.println((int) i.getConsequence()
 //									.getValue());
-
-						} else {
+//							
+//							
+//							
+//							
+//							
+//						} else {
 
 							iterationToStates.get(iteration).put(
 									i.getConsequence().getEntity(),
 									(int) i.getConsequence().getValue());
-						}
+//						}
 
 					} else {
 
