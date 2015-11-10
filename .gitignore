@@ -4,7 +4,12 @@
 # Eclipse specific files/directories
 .classpath
 .project
-/bin
-/.fatjar
-/.gitignore
-/.Rhistory
+bin
+.fatjar
+.Rhistory
+.svn
+
+hs*log
+*.zip
+*~
+*.log
