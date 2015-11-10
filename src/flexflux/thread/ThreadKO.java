@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import parsebionet.biodata.BioEntity;
 
@@ -78,7 +79,7 @@ public class ThreadKO extends ResolveThread {
 	 * Percentage of the KO that is completed.
 	 * 
 	 */
-	private static int percentage = 0;
+	private static AtomicInteger nbPrintedStars = new AtomicInteger(0);
 
 	protected Set<BioEntity> entitiesInInteractionNetwork = new HashSet<BioEntity>();
 
@@ -93,7 +94,6 @@ public class ThreadKO extends ResolveThread {
 		this.result = result;
 		this.entitiesInInteractionNetwork = entitiesInInteractionNetwork;
 		this.interactionNetworkConstraints = interactionNetwotkConstraints;
-		percentage = 0;
 
 	}
 
@@ -110,21 +110,26 @@ public class ThreadKO extends ResolveThread {
 			Constraint toRemove = null;
 			// we remove a constraint that is already present on this entity
 			if (bind.getSimpleConstraints().containsKey(entity)) {
-
+				
+				if(Vars.verbose == true)
+				{
+					System.err.println("[Debug] Remove simple constraint on "+entity.getId());
+				}
+				
 				removedConst = true;
 
 				toRemove = bind.getSimpleConstraints().get(entity);
+				
 				bind.getSimpleConstraints().remove(entity);
 				bind.getConstraints().remove(toRemove);
-
-				 bind.prepareSolver();
+				bind.prepareSolver();
 			}
+
+				
 
 			List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 
 			Constraint newConstraint = new Constraint(entityMap, 0.0, 0.0);
-
-			constraintsToAdd.add(newConstraint);
 
 			// if the entity is not in the interaction network, we
 			// don't recompute the attractors
@@ -142,6 +147,10 @@ public class ThreadKO extends ResolveThread {
 			for(Constraint c : tmpConstraints) 
 			{
 				if(c.getEntityNames().containsKey(entity.getId())) {
+					if(Vars.verbose == true)
+					{
+						System.err.println("[Debug] Remove constraint on "+entity.getId());
+					}
 					constraintsToAdd.remove(c);
 				}
 			}
@@ -149,22 +158,23 @@ public class ThreadKO extends ResolveThread {
 			constraintsToAdd.add(newConstraint);
 
 			DoubleResult value = bind.FBA(constraintsToAdd, false, true);
+			
+//			System.err.println("****\nGPR : for "+entity.getId()+":"+bind.getInteractionNetwork().getGPRInteractions());
+			
 
 			result.addLine(entity, value.result);
 
+			
+			System.err.println("Entity : " + entity.getId() + "\tValue : "
+					+ value.result);
+			
 			if (Vars.verbose) {
-				System.err.println("Entity : " + entity.getId() + "\tValue : "
-						+ value.result);
-			}
+				
+				int percent = (int) Math.round((todo - entities.size()) / todo * 100);
 
-			int percent = (int) Math.round((todo - entities.size()) / todo
-					* 100);
-			if (percent > percentage) {
-				percentage = percent;
-				if (percent % 2 == 0) {
-					if (Vars.verbose) {
-						System.err.print("*");
-					}
+				while (nbPrintedStars.intValue() < (percent / 2)) {
+					System.err.print("*");
+					nbPrintedStars.incrementAndGet();
 				}
 			}
 
@@ -177,5 +187,8 @@ public class ThreadKO extends ResolveThread {
 				// bind.prepareSolver();
 			}
 		}
+
+		bind.end();
+		nbPrintedStars = new AtomicInteger(0);
 	}
 }

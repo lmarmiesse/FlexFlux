@@ -93,35 +93,35 @@ public class ConcurrentReactionsAnalysis extends Analysis {
 		ConcurrentReactionsResult result = new ConcurrentReactionsResult();
 		
 		// Change all the internal reaction bounds to extreme values
-		for (BioEntity e : b.getSimpleConstraints().keySet()) {
-
-			String id = e.getId();
-
-			if (b.getBioNetwork().getBiochemicalReactionList().containsKey(id)) {
-
-				BioChemicalReaction reaction = b.getBioNetwork()
-						.getBiochemicalReactionList().get(id);
-
-				// We limit the exchange reaction identification to one to
-				// one
-				// reactions
-				if (!(reaction.isExchangeReaction()
-						&& reaction.getLeftParticipantList().size() == 1 && reaction
-						.getRightParticipantList().size() == 1)) {
-					// if the reaction is not an exchange reaction we change
-					// its
-					// lower and upper bound to FVA max values.
-					Constraint constraint = b.getSimpleConstraints().get(e);
-					constraint.setUb(Vars.maxUpperBound);
-
-					if (reaction.isReversible()) {
-						constraint.setLb(Vars.minLowerBound);
-					} else {
-						constraint.setLb(0);
-					}
-				}
-			}
-		}
+//		for (BioEntity e : b.getSimpleConstraints().keySet()) {
+//
+//			String id = e.getId();
+//
+//			if (b.getBioNetwork().getBiochemicalReactionList().containsKey(id)) {
+//
+//				BioChemicalReaction reaction = b.getBioNetwork()
+//						.getBiochemicalReactionList().get(id);
+//
+//				// We limit the exchange reaction identification to one to
+//				// one
+//				// reactions
+//				if (!(reaction.isExchangeReaction()
+//						&& reaction.getLeftParticipantList().size() == 1 && reaction
+//						.getRightParticipantList().size() == 1)) {
+//					// if the reaction is not an exchange reaction we change
+//					// its
+//					// lower and upper bound to FVA max values.
+//					Constraint constraint = b.getSimpleConstraints().get(e);
+//					constraint.setUb(Vars.maxUpperBound);
+//
+//					if (reaction.isReversible()) {
+//						constraint.setLb(Vars.minLowerBound);
+//					} else {
+//						constraint.setLb(0);
+//					}
+//				}
+//			}
+//		}
 		
 		Queue<BioEntity> entQueue = new LinkedBlockingQueue<BioEntity>();
 		

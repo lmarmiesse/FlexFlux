@@ -136,7 +136,7 @@ public class TestFVA_KO_DR extends FFUnitTest {
 			fail("Solver error");
 		}
 
-		Vars.maxThread = 1;
+		Vars.maxThread = 8;
 
 		bind.loadSbmlNetwork(coliFileString, false);
 		n = bind.getBioNetwork();

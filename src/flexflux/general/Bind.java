@@ -341,6 +341,8 @@ public abstract class Bind {
 								if (simpleConstraints.containsKey(ent)) {
 									oldSimpleConstraints.put(ent,
 											simpleConstraints.get(ent));
+									
+									constraints.remove(simpleConstraints.get(ent));
 
 								} else {
 									hadNoSimpleConstraint.add(ent);
@@ -405,7 +407,7 @@ public abstract class Bind {
 					}
 					constraintsToAdd.addAll(intNetSteadyStateConstraints);
 				}
-
+				
 				List<Constraint> GPRConstraints = new ArrayList<Constraint>();
 				for (Interaction i : intNet.getGPRInteractions()) {
 					if (i.getCondition().isTrue(simpleConstraints)) {
@@ -444,6 +446,7 @@ public abstract class Bind {
 
 			}
 
+			
 			// /////////////////
 			// /////////////////
 			// if a constraint is an external metab set to 0, we change the
@@ -1473,14 +1476,42 @@ public abstract class Bind {
 			newBind.setObjective(null);
 		}
 
-		newBind.setNetwork(this.bioNet);
 
-		newBind.setInteractionNetwork(this.getInteractionNetwork().copy());
+		
+		/**
+		 * Adds the "normal" constraints
+		 */
+		for (Constraint c : this.constraints) {
+			Constraint newC;
 
-		newBind.simpleConstraints = new HashMap<BioEntity, Constraint>(
-				this.simpleConstraints);
+			if (c.getNot() && c.getLb() == c.getUb()) {
+				newC = new Constraint(c.getEntities(), c.getLb(), c.getNot());
+			} else {
+				newC = new Constraint(c.getEntities(), c.getLb(), c.getUb());
+			}
 
-		newBind.constraints = new ArrayList<Constraint>(this.constraints);
+			newBind.constraints.add(newC);
+
+			if (c.getEntities().size() == 1) {
+				newBind.simpleConstraints.put(c.getEntities().keySet().iterator().next(), newC);
+			}
+		}
+		
+//		newBind.simpleConstraints = new HashMap<BioEntity, Constraint>(
+//				this.simpleConstraints);
+		
+		/**
+		 * Adds the simple constraints
+		 */
+		for (BioEntity b : this.simpleConstraints.keySet()) {
+			Constraint c = this.simpleConstraints.get(b);
+
+			Constraint newC = new Constraint(c.getEntities(), c.getLb(), c.getUb());
+
+			newBind.addSimpleConstraint(b, newC);
+		}
+
+
 
 		newBind.exchangeInteractions = new HashMap<BioChemicalReaction, Map<BioEntity, Double>>();
 		for (BioChemicalReaction r : this.exchangeInteractions.keySet()) {
@@ -1492,11 +1523,30 @@ public abstract class Bind {
 
 		newBind.steadyStateConstraints = new HashMap<BioEntity, List<Constraint>>();
 		for (BioEntity e : this.steadyStateConstraints.keySet()) {
-			List<Constraint> constraints = new ArrayList<Constraint>(
-					this.steadyStateConstraints.get(e));
+			
+			List<Constraint> constraints = new ArrayList<Constraint>();
+			
+			for (Constraint c : this.steadyStateConstraints.get(e)) {
+				Constraint newC;
+
+				if (c.getNot() && c.getLb() == c.getUb()) {
+					newC = new Constraint(c.getEntities(), c.getLb(), c.getNot());
+				} else {
+					newC = new Constraint(c.getEntities(), c.getLb(), c.getUb());
+				}
+				
+				constraints.add(newC);
+
+			}
+			
 			newBind.steadyStateConstraints.put(e, constraints);
+			
 		}
 
+		newBind.setNetwork(this.bioNet);
+
+		newBind.setInteractionNetwork(this.getInteractionNetwork().copy());
+		
 		newBind.init();
 
 		return newBind;
