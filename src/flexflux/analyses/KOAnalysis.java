@@ -122,6 +122,7 @@ public class KOAnalysis extends Analysis {
 				Map<String, BioGene> networkEntities = b.getBioNetwork()
 						.getGeneList();
 				for (String name : networkEntities.keySet()) {
+					
 					entitiesMap.put(name, networkEntities.get(name));
 				}
 			}
