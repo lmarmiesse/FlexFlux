@@ -56,7 +56,7 @@ body {
 						<li><a
 							href="https://github.com/lmarmiesse/FlexFlux/wiki/Downloads">Download</a></li>
 						<li><a href="https://github.com/lmarmiesse/FlexFlux">Sources</a></li>
-						<li><a href="./javadoc/index.html">Javadoc</a></li>
+					<!--	<li><a href="./javadoc/index.html">Javadoc</a></li>  -->
 						<li><a href="mailto:Lucas.Marmiesse@toulouse.inra.fr">Contact</a></li>
 					</ul>
 				</div>
@@ -65,7 +65,7 @@ body {
 		</div>
 	</div>
 	<div class="container">
-		<!-- Main hero unit for a primary marketing message or call to action -->
+		 <!-- Main hero unit for a primary marketing message or call to action -->
 		<div class="hero-unit">
 			<h1>FlexFlux user documentation</h1>
 		</div>
@@ -427,8 +427,8 @@ d = 2*a + 3*c
 &lt;qual:qualitativeSpecies qual:id="A" qual:initialLevel="0" qual:maxLevel="2"&gt;
 	&lt;notes&gt;
 		&lt;body xmlns="http://www.w3.org/1999/"&gt;
-			&lt;p&gt;STATE 0:[0,0]&lt;/p&gt;
-			&lt;p&gt;STATE 1:[0,4.5]&lt;/p&gt;
+			&lt;p&gt;STATE 0:[0,1[&lt;/p&gt;
+			&lt;p&gt;STATE 1:]1,4.5]&lt;/p&gt;
 			&lt;p&gt;STATE 2:]4.5,+inf]&lt;/p&gt;
 		&lt;/body&gt;
 	&lt;/notes&gt;
@@ -499,13 +499,19 @@ d = 2*a + 3*c
 					</ul>
 
 					<p>Example :
+					
 					<pre class="prettyprint">FlexfluxRSA -reg regNetwork.xml -plot -out out.txt</pre>
 					</p>
 
 					<h4>Results</h4>
 
 
-					For this example, we used :
+					For this example, we search the attractor of a reconstructed regulatory model of the lac operon of <i>E.Coli</i> with both glucose and lactose
+					available.
+					
+					<br/>
+					
+					We used :
 					<ul>
 						<li>the regulation file <a target="_blank" href="results/lacOperon.sbml">lacOperon.sbml</a>,</li>
 						<li>the constraints file <a target="_blank" href="results/ConstraintsRSA.txt">ConstraintsRSA.txt</a>,</li>
@@ -552,6 +558,8 @@ allolactose	0	1	1	1	1	1.0	1.0
 					</p>
 
 
+					This results shows that the steady-state found in this analysis corresponds to the utilisation of glucose
+					by <i>E.Coli</i> and the repression of lactose utilisation.
 
 					<h3 id="fba">Simple FBA</h3>
 
@@ -591,7 +599,12 @@ allolactose	0	1	1	1	1	1.0	1.0
 					<h4>Results</h4>
 
 
-					For this example, we used :
+					For this example, we use the FBA function to calculate all reaction fluxes of <i>E.Coli</i> metabolic network 
+					after the lac regulatory network steady state has been found. 
+					
+					<br/>
+					
+					We used :
 					<ul>
 						<li>the SBML file <a target="_blank" href="results/coli.xml">coli.xml,</a></li>
 						<li>the constraint file <a target="_blank"
@@ -641,6 +654,8 @@ R_DXPRIi	0.001415
 							see the value of all other variables.</i>
 					</p>
 
+					In the output, we can see all the reaction fluxes corresponding to glucose utilisation by <i>E.Coli</i>. This particular phenotype is forced by the
+					regulatory network steady state.
 
 					<h3 id="fva">Flux Variability Analyses : FVA</h3>
 
@@ -696,7 +711,12 @@ R_DXPRIi	0.001415
 					<h4>Results</h4>
 
 
-					For this example, we used :
+					For this example, we use the FVA function to calculate the minimal and maximal flux values of all <i>E.Coli</i> biochemical reactions when optimising its 
+					growth with no constraint. 
+					
+					<br/>
+					
+					We used :
 					<ul>
 						<li>the SBML file <a target="_blank" href="results/coli_core.xml">coli_core.xml,</a></li>
 						<li>the constraint file <a target="_blank" href="results/constraintsFBA.txt">constraintsFBA.txt,</a></li>
@@ -777,7 +797,16 @@ R_EX_akg_e	0.0	1.430083
 
 
 					<h4>Results</h4>
-					For this example, we used :
+					For this example, we use the FVA comparison function to compare minimal and maximal 
+					flux values of all <i>E.Coli</i> biochemical reactions when optimising its growth under two different conditions :
+					<ul>
+						<li>No constraint.</li>
+						<li>Constrained glucose uptake.</li>
+					</ul> 
+					
+					<br/>
+					
+					We used :
 					<ul>
 						<li>the SBML file <a target="_blank"
 							href="results/coli_core.xml">coli_core.xml,</a></li>
@@ -886,7 +915,11 @@ R_EX_o2_e	-23.709518	-19.895962	-45.644797	-37.831242
 
 					<h4>Results</h4>
 
-					For this example, we used :
+					For this example, we use the KO function to see the effect of all individual genes KOs on the growth rate of <i>E.Coli</i>.
+					
+					<br/>
+					
+					We used :
 					<ul>
 						<li>the SBML file <a target="_blank"
 							href="results/coli_core.xml">coli_core.xml,</a></li>
@@ -897,13 +930,18 @@ R_EX_o2_e	-23.709518	-19.895962	-45.644797	-37.831242
 
 
 					Here is a part of the text result file <a target="_blank"
-						href="results/KO_result.txt">KO_result.txt</a> : KO results :
+						href="results/KO_result.txt">KO_result.txt</a> : 
+						
+					<pre class="prettyprint">KO results :
 
-					b2277 obj value : 0.211663 b1819 obj value : 0.873922 b3528 obj
-					value : 0.873922 b2296 obj value : 0.873922 b3612 obj value :
-					0.873922 b2285 obj value : 0.211663 b0720 obj value : 0.0 b2914 obj
-					value : 0.873922
-					</pre>
+b2277 obj value : 0.211663
+b1819 obj value : 0.873922
+b3528 obj value : 0.873922
+b2296 obj value : 0.873922
+b3612 obj value : 0.873922
+b2285 obj value : 0.211663
+b0720 obj value : 0.0
+b2914 obj value : 0.873922</pre>
 					<p>The graphical result :</p>
 					<img src="img/KO.png"></img>
 
@@ -969,7 +1007,11 @@ R_EX_o2_e	-23.709518	-19.895962	-45.644797	-37.831242
 
 					<h4>Results</h4>
 
-					For this example, we used :
+					For this example, we use the Time dependent FBA function to follow diauxic growth of <i>E.Coli</i> on gluocose and lactose over 15 hours.
+					
+					<br/>
+					
+					We used :
 					<ul>
 						<li>the SBML file <a target="_blank" href="results/coli.xml">coli.xml</a>,
 
@@ -1021,6 +1063,8 @@ Time	M_lcts_b	lacZ	X	M_glc_D_b
 					</p>
 
 
+					We can see that the lac regulatory network of <i>E.Coli</i> force utilisation of glucose first, and then when
+					it runs out, switches to lactose utilisation, with a lower growth rate.
 
 
 
@@ -1073,7 +1117,12 @@ Time	M_lcts_b	lacZ	X	M_glc_D_b
 
 					<h4>Results</h4>
 
-					For this example, we used :
+					For this example, we use the 2-D Phenotypic phase analysis function to see the differents metabolic network behaviours of <i>E.Coli</i> depending on 
+					the value of oxygen uptake.
+					
+					<br/>
+					
+					We used :
 					<ul>
 						<li>the SBML file <a target="_blank"
 							href="results/coli_core.xml">coli_core.xml</a>,
@@ -1109,11 +1158,13 @@ Flux	Objective
 					<p style="text-align: center">
 						<strong>FlexFlux 2-D Phenotypic phase analysis.</strong><i> We
 							can see the evolution of the maximum biomass production for
-							different values of oxygen uptake. We observe three distinctive
-							phenotypic phases.</i>
+							different values of oxygen uptake.</i>
 					</p>
 
+					We can observe three distinctive phenotypic phases. This shows that <i>E.Coli</i> can respond in three different ways to 
+					oxygen concentrations.
 
+				
 
 					<h3 id="tworeacs">3-D Phenotypic phase analysis</h3>
 
@@ -1168,7 +1219,12 @@ Flux	Objective
 
 					<h4>Results</h4>
 
-					For this example, we used :
+					For this example, we use the 3-D Phenotypic phase analysis function to see the differents metabolic network behaviours of <i>E.Coli</i> depending on 
+					the value of oxygen and glucose uptake.
+					
+					<br/>
+					
+					We used :
 					<ul>
 
 						<li>The SBML file <a target="_blank" href="results/coli_core.xml">coli_core.xml</a></li>
