@@ -1,4 +1,0 @@
-#The uptake of lactose can only be active when there is no glucose
-
-IF[M_glc_D_b>0]THEN[lacZ=0.001]
-IF[lacZ=0.001]THEN[R_EX_lac_D_e=0]
