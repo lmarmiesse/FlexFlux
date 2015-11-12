@@ -35,6 +35,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -42,7 +43,6 @@ import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.biodata.BioPhysicalEntity;
-import parsebionet.io.JSBMLToBionetwork;
 import parsebionet.io.Sbml2Bionetwork;
 import flexflux.analyses.result.KOResult;
 import flexflux.analyses.result.ClassificationResult;
@@ -60,27 +60,20 @@ import flexflux.general.Vars;
 import flexflux.objective.ListOfObjectives;
 import flexflux.objective.Objective;
 
-/**
- * 
- * Classifies reactions, genes and regulators in several conditions for several
- * objectives.
- * 
- * @author lcottret
- * 
- */
-
 public class BECOAnalysis extends Analysis {
 
+	String conditionFile = "";
+	String objectiveFile = "";
 	String regulationFile = "";
 	String constraintFile = "";
-
-	// Metadata files used for heatmaps
 	String reactionMetaDataFile = "";
 	String geneMetaDataFile = "";
 	String regulatorMetaDataFile = "";
 
+	String sbmlFile = "";
 	String inchlibPath = "";
 
+	Boolean extended = false;
 	String solver = "GLPK";
 	Boolean flag = true;
 	BioNetwork network = null;
@@ -107,7 +100,6 @@ public class BECOAnalysis extends Analysis {
 	public Boolean launchRegulatorAnalysis;
 
 	public Boolean fixConditions;
-	
 
 	public BECOAnalysis(Bind bind, String sbmlFile, String regulationFile,
 			String conditionFile, String constraintFile,
@@ -120,7 +112,10 @@ public class BECOAnalysis extends Analysis {
 
 		super(bind);
 
+		this.sbmlFile = sbmlFile;
+		this.extended = extended;
 		this.solver = solver;
+		this.conditionFile = conditionFile;
 		this.regulationFile = regulationFile;
 		this.constraintFile = constraintFile;
 		this.reactionMetaDataFile = reactionMetaDataFile;
@@ -154,14 +149,9 @@ public class BECOAnalysis extends Analysis {
 			/**
 			 * Reads the SBML file
 			 */
-			if (extended) {
-				JSBMLToBionetwork parser = new JSBMLToBionetwork(sbmlFile);
-				this.network = parser.getBioNetwork();
-
-			} else {
-				Sbml2Bionetwork parser = new Sbml2Bionetwork(sbmlFile, false);
-				this.network = parser.getBioNetwork();
-			}
+			Sbml2Bionetwork parser = new Sbml2Bionetwork(this.sbmlFile,
+					extended);
+			this.network = parser.getBioNetwork();
 
 		}
 	}
@@ -241,7 +231,7 @@ public class BECOAnalysis extends Analysis {
 				}
 			}
 		}
-
+		
 		/**
 		 * Loads interaction file
 		 */
@@ -288,10 +278,11 @@ public class BECOAnalysis extends Analysis {
 		 * Build list of constraints depending on the condition
 		 */
 
+		
 		for (SimplifiedConstraint c : condition.constraints.values()) {
-
+			
 			String id = c.entityId;
-
+			
 			BioEntity e = null;
 
 			if (b.getInteractionNetwork().getEntity(id) == null) {
@@ -307,8 +298,7 @@ public class BECOAnalysis extends Analysis {
 					c.getValue());
 
 			if (fixConditions == false) {
-				if (!b.getInteractionNetwork().getInteractionNetworkEntities()
-						.containsKey(id)) {
+				if (! b.getInteractionNetwork().getInteractionNetworkEntities().containsKey(id)) {
 					b.addSimpleConstraint(e, constraint);
 				} else {
 					b.getInteractionNetwork().addInitialConstraint(e,

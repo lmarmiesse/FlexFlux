@@ -41,6 +41,7 @@ import org.gnu.glpk.GLPK;
 import org.gnu.glpk.GLPKConstants;
 import org.gnu.glpk.SWIGTYPE_p_double;
 import org.gnu.glpk.SWIGTYPE_p_int;
+import org.gnu.glpk.glp_iocp;
 import org.gnu.glpk.glp_prob;
 import org.gnu.glpk.glp_smcp;
 
@@ -63,6 +64,7 @@ public class GLPKBind extends Bind {
 
 	private glp_prob model;
 	private glp_smcp parm;
+	private glp_iocp mipParm;
 
 	/**
 	 * 
@@ -87,6 +89,8 @@ public class GLPKBind extends Bind {
 		GLPK.glp_init_smcp(parm);
 		parm.setTol_bnd(Math.pow(10, -Vars.decimalPrecision));
 
+		// MIP params
+		mipParm = new glp_iocp();
 
 		GLPK.glp_term_out(GLPKConstants.GLP_OFF);
 
@@ -160,7 +164,7 @@ public class GLPKBind extends Bind {
 	// list and map are used to fill the constraints and old bounds
 	// to be able to come back to the previous state after
 	protected void createSolverConstraint(Constraint constraint,
-			List<Object> toRemoveFromModel) {
+			List<Object> toRemoveFromModel, Map<String, double[]> oldBounds) {
 
 		double ub = constraint.getUb();
 		double lb = constraint.getLb();
@@ -287,6 +291,9 @@ public class GLPKBind extends Bind {
 
 	protected DoubleResult go(boolean saveResults) {
 
+//		GLPK.glp_write_lp(model, null, "D:/Documents/lp.txt");
+//		GLPK.glp_write_mps(model, GLPK.GLP_MPS_FILE, null, "D:/Documents/mps.txt");
+		
 		int ret = GLPK.glp_simplex(model, parm);
 
 		if (isMIP()) {

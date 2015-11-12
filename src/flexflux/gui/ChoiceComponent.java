@@ -13,10 +13,6 @@ import javax.swing.JComboBox;
 public class ChoiceComponent extends ArgumentComponent{
 
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	JComboBox<String> choices = new JComboBox<String>();
 	
 	

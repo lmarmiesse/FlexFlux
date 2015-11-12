@@ -66,9 +66,6 @@ public class GuiRunAnalysis extends Thread {
 
 				// we kill the process
 				p.destroy();
-				/**
-				 * TODO : change this deprecated function
-				 */
 				stop();
 				running.dispose();
 				if (cancelAnalysis.getText().equals("Cancel analysis")) {

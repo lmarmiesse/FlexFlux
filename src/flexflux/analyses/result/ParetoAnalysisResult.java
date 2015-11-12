@@ -37,6 +37,8 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -183,9 +185,6 @@ public class ParetoAnalysisResult extends AnalysisResult {
 		plot.setDomainGridlinePaint(Color.GRAY);
 
 		XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-		/**
-		 * TODO : change these deprecated functions
-		 */
 		renderer.setLinesVisible(false);
 		renderer.setShapesVisible(true);
 		plot.setRenderer(renderer);
@@ -215,6 +214,12 @@ public class ParetoAnalysisResult extends AnalysisResult {
 
 		}
 
+	}
+
+	@Override
+	public void writeHTML(String path) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

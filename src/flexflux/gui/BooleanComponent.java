@@ -14,10 +14,6 @@ import javax.swing.JCheckBox;
 public class BooleanComponent extends ArgumentComponent{
 
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	JCheckBox checkbox = new JCheckBox();
 	
 	public BooleanComponent(String arg) {

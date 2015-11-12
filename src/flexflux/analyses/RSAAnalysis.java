@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.Set;
 
 import parsebionet.biodata.BioEntity;
+import parsebionet.biodata.BioPhysicalEntity;
 import flexflux.analyses.result.RSAAnalysisResult;
 import flexflux.general.Constraint;
-import flexflux.general.Vars;
 import flexflux.interaction.Interaction;
 import flexflux.interaction.InteractionNetwork;
 
@@ -18,13 +18,13 @@ public class RSAAnalysis extends Analysis {
 
 	private InteractionNetwork intNet;
 
-	private List<Map<BioEntity, Integer>> statesList;
+	private List<Map<BioEntity, Integer>> statesList = new ArrayList<Map<BioEntity, Integer>>();
 
-	private List<Map<BioEntity, Integer>> attractorStatesList;
+	private List<Map<BioEntity, Integer>> attractorStatesList = new ArrayList<Map<BioEntity, Integer>>();
 
-	private List<Constraint> finalConstraints;
+	private List<Constraint> finalConstraints = new ArrayList<Constraint>();
 
-	private Map<BioEntity, Constraint> simpleConstraints;
+	private Map<BioEntity, Constraint> simpleConstraints = new HashMap<BioEntity, Constraint>();
 
 	/**
 	 * Maximal number of iterations to find a steady state in the regulatory
@@ -38,17 +38,13 @@ public class RSAAnalysis extends Analysis {
 		this.intNet = intNetwork;
 		this.simpleConstraints = simpleConstraints;
 
-		this.statesList = new ArrayList<Map<BioEntity, Integer>>();
-		this.attractorStatesList = new ArrayList<Map<BioEntity, Integer>>();
-		this.finalConstraints = new ArrayList<Constraint>();
-
 	}
 
 	@Override
 	public RSAAnalysisResult runAnalysis() {
 
 		RSAAnalysisResult res = new RSAAnalysisResult();
-
+		
 		if (intNet.getTargetToInteractions().isEmpty()
 				&& intNet.getInitialConstraints().isEmpty()
 				&& intNet.getInitialStates().isEmpty()) {
@@ -61,13 +57,12 @@ public class RSAAnalysis extends Analysis {
 		for (BioEntity ent : intNet.getInitialStates().keySet()) {
 			res.addResultEntity(ent);
 		}
-
+		
 		// we set the values for the variables in the first state
-		Map<BioEntity, Integer> thisState = new HashMap<BioEntity, Integer>(
-				intNet.getInitialStates());
+		Map<BioEntity, Integer> thisState = intNet.getInitialStates();
 
 		for (BioEntity b : intNet.getInitialConstraints().keySet()) {
-
+			
 			// If the entity is in the regulatory network
 			if (intNet.getInteractionNetworkEntities().containsKey(b.getId())) {
 
@@ -197,7 +192,6 @@ public class RSAAnalysis extends Analysis {
 				}
 			}
 		}
-
 		//
 
 		int attractorSize = 0;
@@ -260,41 +254,37 @@ public class RSAAnalysis extends Analysis {
 			}
 
 			if (areTheSame) {
-				if (Vars.verbose) {
-					System.err.println("Steady state found in " + (it)
-							+ " iterations.");
-					System.err.println("Attractor size : " + attractorSize);
-				}
+				// if (Vars.verbose) {
+				// System.err.println("Steady state found in " + (it)
+				// + " iterations.");
+				// System.err.println("Attractor size : " + attractorSize);
+				// }
 				break;
 			}
 
 		}
+		
+		
 
 		statesList.add(thisState);
-
+		
 		Map<BioEntity, Double> meanAttractorStates = new HashMap<BioEntity, Double>();
+		
 
 		if (attractorStatesList.size() != 0) {
 
 			for (BioEntity b : attractorStatesList.get(0).keySet()) {
-
 				
-				/**
-				 * Ludo commented this external metab stuff : we don't use it
-				 */
 				// If it is an external metab, we set a constraint
-//				boolean isExtMetab = false;
-//
-//				if (b.getClass().getSimpleName().equals("BioPhysicalEntity")) {
-//					BioPhysicalEntity metab = (BioPhysicalEntity) b;
-//					// If it is external
-//					if (metab.getBoundaryCondition()) {
-//						isExtMetab = true;
-//					}
-//				}
-				/**
-				 * End comment Ludo
-				 */
+				boolean isExtMetab = false;
+
+				if (b.getClass().getSimpleName().equals("BioPhysicalEntity")) {
+					BioPhysicalEntity metab = (BioPhysicalEntity) b;
+					// If it is external
+					if (metab.getBoundaryCondition()) {
+						isExtMetab = true;
+					}
+				}
 
 				// if (intNet.getTargetToInteractions().containsKey(b)
 				// || isExtMetab) {
@@ -303,16 +293,16 @@ public class RSAAnalysis extends Analysis {
 				// attractor
 				double lb = 0;
 				double ub = 0;
-
+				
 				/**
 				 * Mean state value
 				 */
 				double meanStateValue = 0;
-
+				
 				for (int nb = 0; nb < attractorStatesList.size(); nb++) {
-
+					
 					meanStateValue += attractorStatesList.get(nb).get(b);
-
+					
 					if (intNet.canTranslate(b)) {
 						lb += intNet.getConstraintFromState(b,
 								attractorStatesList.get(nb).get(b)).getLb();
@@ -326,9 +316,9 @@ public class RSAAnalysis extends Analysis {
 				}
 
 				meanStateValue = meanStateValue / attractorStatesList.size();
-
+				
 				meanAttractorStates.put(b, meanStateValue);
-
+				
 				lb = lb / attractorStatesList.size();
 				ub = ub / attractorStatesList.size();
 
@@ -349,11 +339,11 @@ public class RSAAnalysis extends Analysis {
 		res.setAttractorStatesList(attractorStatesList);
 
 		res.setMeanAttractorStates(meanAttractorStates);
-
+		
 		// ////TRANSLATION
 
 		res.setSteadyStateConstraints(finalConstraints);
-
+		
 		// System.out.println("Attractor size : "+attractorSize);
 
 		return res;

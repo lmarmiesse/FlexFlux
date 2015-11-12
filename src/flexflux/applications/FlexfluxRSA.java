@@ -32,21 +32,20 @@ public class FlexfluxRSA extends FFApplication {
 
 	public static boolean requiresSolver = false;
 
-	public static String message = "FlexfluxRSA [options...]\n"
-			+ "Finds an attractor or the steady state of a given regulatory network with initial values.";
+	public static String message = "Finds an attractor or the steady state of a given regulatory network with initial values.";
 
 	public String example = "Example : FlexfluxRSA -reg int.sbml -plot -out out.txt";
 
-	@Option(name = "-reg", usage = "Regulation file path", metaVar = "File", required = true)
+	@Option(name = "-reg", usage = "Regulation file path", metaVar = "File - in", required = true)
 	public String regFile = "";
 
-	@Option(name = "-cons", usage = "[OPTIONAL]Constraints file path", metaVar = "File", required = false)
+	@Option(name = "-cons", usage = "[OPTIONAL]Constraints file path", metaVar = "File - in", required = false)
 	public String consFile = "";
 
 	@Option(name = "-plot", usage = "[OPTIONAL, default = false]Plots the results")
 	public boolean plot = false;
 
-	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File - out")
 	public String outName = "";
 
 	public static void main(String[] args) {
@@ -87,16 +86,14 @@ public class FlexfluxRSA extends FFApplication {
 		if (!f.outName.equals("")) {
 			res.writeToFile(f.outName);
 		}
+		
+		if (f.web) {
+			res.writeHTML(f.outName+".html");
+		}
 
 	}
-
-	@Override
+	
 	public String getMessage() {
 		return message;
-	}
-
-	@Override
-	public String getExample() {
-		return example;
 	}
 }

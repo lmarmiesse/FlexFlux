@@ -81,7 +81,7 @@
       <speciesReference species="D" stoichiometry="1"/>
     </listOfReactants>
     <listOfProducts>
-      <speciesReference species="D_ex" stoichiometry="1"/>
+      <speciesReference species="D_Ex" stoichiometry="1"/>
     </listOfProducts>
     <kineticLaw>
     <math xmlns="http://www.w3.org/1998/Math/MathML">

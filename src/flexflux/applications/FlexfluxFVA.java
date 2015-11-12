@@ -66,11 +66,8 @@ import parsebionet.biodata.BioEntity;
 public class FlexfluxFVA extends FFApplication {
 	// order for the graphical version
 	public static int order = 4;
-	
-	
-	public static String message = "FlexfluxFVA\n"
 
-			+ "Computes an FVA given a metabolic network, an objective function and constraints.\n"
+	public static String message =  "Computes an FVA given a metabolic network, an objective function and constraints.\n"
 			+ "Constraints can be obtained with calculated steady-states of a given regulatory network.\n"
 			+ "An FVA analysis consists in getting the optimal value for the objective function, setting this value as a\n"
 			+ "constraint and, given a list of entities, minimize and maximize their values.\n"
@@ -79,13 +76,13 @@ public class FlexfluxFVA extends FFApplication {
 	public static String example = "Example 1 : FlexfluxFVA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt\n"
 			+ "Example 2 : FlexfluxFVA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -e \"R1 R2 G1 G2\"\n";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
+	@Option(name = "-s", usage = "Metabolic network file path (SBML format)", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File", required = true)
+	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File - in", required = true)
 	public String consFile = "";
 
-	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File")
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File - in")
 	public String regFile = "";
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
@@ -97,7 +94,7 @@ public class FlexfluxFVA extends FFApplication {
 	@Option(name = "-e", usage = "[OPTIONAL]Biological entities to perfrom the FVA analysis on (Space-separated list of entities, example : \"R1 R2 G1 G2\"). If empty, FVA is done on all reactions", metaVar = "String")
 	public String entities = "";
 
-	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File - out")
 	public String outName = "";
 
 	@Option(name = "-n", usage = "[OPTIONAL, default = number of available processors]Number of threads", metaVar = "Integer")
@@ -109,7 +106,7 @@ public class FlexfluxFVA extends FFApplication {
 	@Option(name = "-pre", usage = "[OPTIONAL, default = 6]Number of decimals of precision for calculations and results", metaVar = "Integer")
 	public int precision = 6;
 
-	@Option(name = "-ext", usage = extParameterDescription)
+	@Option(name = "-ext", usage = "[OPTIONAL, default = false]Uses the extended SBML format")
 	public boolean extended = false;
 
 	public static void main(String[] args) {
@@ -135,8 +132,7 @@ public class FlexfluxFVA extends FFApplication {
 			System.exit(0);
 		}
 		if (!new File(f.consFile).isFile()) {
-			System.err.println("Error : condition file " + f.consFile
-					+ " not found");
+			System.err.println("Error : condition file " + f.consFile + " not found");
 			System.exit(0);
 		}
 
@@ -152,17 +148,12 @@ public class FlexfluxFVA extends FFApplication {
 				System.exit(0);
 			}
 		} catch (UnsatisfiedLinkError e) {
-			System.err
-					.println("Error, the solver "
-							+ f.solver
-							+ " cannot be found. Check your solver installation and the configuration file, or choose a different solver (-sol).");
+			System.err.println("Error, the solver " + f.solver
+					+ " cannot be found. Check your solver installation and the configuration file, or choose a different solver (-sol).");
 			System.exit(0);
 		} catch (NoClassDefFoundError e) {
-			System.err
-					.println("Error, the solver "
-							+ f.solver
-							+ " cannot be found. There seems to be a problem with the .jar file of "
-							+ f.solver + ".");
+			System.err.println("Error, the solver " + f.solver
+					+ " cannot be found. There seems to be a problem with the .jar file of " + f.solver + ".");
 			System.exit(0);
 		}
 
@@ -182,8 +173,7 @@ public class FlexfluxFVA extends FFApplication {
 			String[] entitiesArray = f.entities.split("\\s+");
 			for (int i = 0; i < entitiesArray.length; i++) {
 
-				BioEntity b = bind.getInteractionNetwork().getEntity(
-						entitiesArray[i]);
+				BioEntity b = bind.getInteractionNetwork().getEntity(entitiesArray[i]);
 				if (b == null) {
 					System.err.println("Unknown entity " + entitiesArray[i]);
 					f.parser.printUsage(System.err);
@@ -209,18 +199,15 @@ public class FlexfluxFVA extends FFApplication {
 		if (!f.outName.equals("")) {
 			result.writeToFile(f.outName);
 		}
+		if (f.web) {
+			result.writeHTML(f.outName + ".html");
+		}
 
 		bind.end();
 	}
-
-	@Override
+	
 	public String getMessage() {
 		return message;
-	}
-
-	@Override
-	public String getExample() {
-		return example;
 	}
 
 }

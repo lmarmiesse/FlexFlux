@@ -2,8 +2,10 @@ package flexflux.input;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -11,6 +13,9 @@ import java.util.TreeSet;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.sbml.jsbml.ASTNode;
 import org.sbml.jsbml.ASTNode.Type;
 import org.sbml.jsbml.Model;
@@ -23,8 +28,8 @@ import org.sbml.jsbml.ext.qual.QualModelPlugin;
 import org.sbml.jsbml.ext.qual.QualitativeSpecies;
 import org.sbml.jsbml.ext.qual.Transition;
 import org.sbml.jsbml.xml.XMLNode;
+import org.sbml.jsbml.xml.parsers.SBMLCoreParser;
 
-import parsebionet.biodata.BioEntity;
 import flexflux.general.Constraint;
 import flexflux.general.Vars;
 import flexflux.interaction.And;
@@ -41,6 +46,7 @@ import flexflux.operation.OperationGe;
 import flexflux.operation.OperationGt;
 import flexflux.operation.OperationLe;
 import flexflux.operation.OperationLt;
+import parsebionet.biodata.BioEntity;
 
 public class SBMLQualReader {
 
@@ -52,7 +58,7 @@ public class SBMLQualReader {
 		SBMLQualReader.intNet = intNet;
 
 		SBMLDocument document = null;
-
+		
 		try {
 			document = SBMLReader.read(new File(path));
 		} catch (XMLStreamException | IOException e) {
@@ -60,7 +66,7 @@ public class SBMLQualReader {
 			e.printStackTrace();
 			
 			return null;
-		}
+		} 
 
 		Model model = document.getModel();
 
@@ -272,9 +278,9 @@ public class SBMLQualReader {
 				} else {
 
 					ASTNode ast = ft.getMath();
-
+					
 					ifRelation = createRealtion(ast);
-
+					
 					thenRelation = new Unique(outEntity, new OperationEq(),
 							resValue);
 
@@ -438,14 +444,15 @@ public class SBMLQualReader {
 	private static Relation createRealtion(ASTNode ast) {
 
 		Relation rel = getRightRelation(ast);
-
+		
 		for (ASTNode astChild : ast.getListOfNodes()) {
 
 			try {
 				RelationWithList rel2 = (RelationWithList) rel;
 				if (rel2 != null) {
-
+					
 					rel2.addRelation(createRealtion(astChild));
+					
 				}
 			} catch (ClassCastException e) {
 
@@ -459,7 +466,7 @@ public class SBMLQualReader {
 	private static Relation getRightRelation(ASTNode ast) {
 
 		Type type = ast.getType();
-
+		
 		if (type.toString().equals("LOGICAL_AND")) {
 			return new And();
 		} else if (type.toString().equals("LOGICAL_OR")) {
@@ -471,6 +478,7 @@ public class SBMLQualReader {
 		} else if (type.toString().equals("RELATIONAL_EQ")) {
 
 			int value = 0;
+			
 
 			BioEntity ent = intNet.getEntity(ast.getChild(0).toString());
 
@@ -557,7 +565,7 @@ public class SBMLQualReader {
 			int value = 0;
 
 			BioEntity ent = intNet.getEntity(ast.getChild(0).toString());
-
+			
 			if (!intNet.getInteractionNetworkEntities()
 					.containsKey(ent.getId())) {
 				System.err.println("Error : entity " + ent.getId()
@@ -574,6 +582,9 @@ public class SBMLQualReader {
 			return unique;
 
 		}
+		
+		System.err.println("Error in rule : "+ast+", missing logical rule or mathematical sign");
+		System.exit(0);
 
 		return null;
 	}

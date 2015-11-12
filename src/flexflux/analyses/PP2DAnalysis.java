@@ -105,6 +105,7 @@ public class PP2DAnalysis extends Analysis {
 		this.deltaF = deltaF;
 		this.fva = fva;
 		this.entities = entities;
+		
 
 	}
 
@@ -158,7 +159,7 @@ public class PP2DAnalysis extends Analysis {
 		for (ResolveThread thread : threads) {
 			thread.start();
 		}
-
+		
 		for (ResolveThread thread : threads) {
 			// permits to wait for the threads to end
 			try {
@@ -167,6 +168,8 @@ public class PP2DAnalysis extends Analysis {
 				// e.printStackTrace();
 			}
 		}
+		
+		
 
 		if (Vars.verbose) {
 			System.err.print("]\n");
@@ -174,11 +177,12 @@ public class PP2DAnalysis extends Analysis {
 
 		if (fva) {
 			threads.get(0).setShadowPriceGroups();
-
+			
 			// we remove the threads to permit another analysis
 			while (threads.size() > 0) {
 				threads.remove(0);
 			}
+			
 			// now we calculate the shadow price groups
 			Map<Double, List<Double>> shadowPriceGroups = result
 					.getShadowPriceGroups();
@@ -189,13 +193,14 @@ public class PP2DAnalysis extends Analysis {
 			// group index => fvaresult
 			Map<Integer, FVAResult> fvaResults = new HashMap<Integer, FVAResult>();
 
-			if (Vars.verbose) {
+//			if (Vars.verbose) {
 				System.err.println("Starting an FVA analysis for each of the "
 						+ groupIndex.size() + " phenotypic phases found");
-			}
+//			}
 
+			
 			for (double group : groupIndex.keySet()) {
-
+				
 				int test = 5;
 				double value = shadowPriceGroups.get(group).get(test);
 
@@ -205,9 +210,11 @@ public class PP2DAnalysis extends Analysis {
 				FVAAnalysis analysis = new FVAAnalysis(b, null,
 						constraintsToAdd);
 				fvaResults.put(groupIndex.get(group), analysis.runAnalysis());
-
+				
 			}
 
+			
+			
 			PhenotypicPhaseComparator comparator = new PhenotypicPhaseComparator(
 					fvaResults);
 			result.setComparator(comparator);

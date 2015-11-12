@@ -48,8 +48,6 @@ import org.kohsuke.args4j.Option;
 
 import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioNetwork;
-import parsebionet.biodata.Flux;
-import parsebionet.io.JSBMLToBionetwork;
 import parsebionet.io.Sbml2Bionetwork;
 
 /**
@@ -69,21 +67,19 @@ public class FlexfluxDR extends FFApplication{
 	// order for the graphical version
 	public static int order = 11;	
 
-	public static String message = "FlexfluxDR\n"
-
-	+ "Finds dead reactions in a given metabolic network.\n"
+	public static String message =  "Finds dead reactions in a given metabolic network.\n"
 			+ "Dead reactions are those unable to carry a steady state flux.";
 
 	public String example = "Example 1 : FlexfluxDR -s network.xml -plot -out out.txt\n"
 			+ "Example 2 : FlexfluxDR -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -mode 1 -d 0.1\n";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
+	@Option(name = "-s", usage = "Metabolic network file path (SBML format)", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-cons", usage = "[OPTIONAL]Constraints file path", metaVar = "File")
+	@Option(name = "-cons", usage = "[OPTIONAL]Constraints file path", metaVar = "File - in")
 	public String condFile = "";
 
-	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File")
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File - in")
 	public String regFile = "";
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
@@ -92,14 +88,14 @@ public class FlexfluxDR extends FFApplication{
 	@Option(name = "-plot", usage = "[OPTIONAL, default = false]Plots the results")
 	public boolean plot = false;
 
-	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File - out")
 	public String outName = "";
 
 	@Option(name = "-n", usage = "[OPTIONAL, default = number of available processors]Number of threads", metaVar = "Integer")
 	public int nThreads = Runtime.getRuntime().availableProcessors();
 
 	@Option(name = "-mode", usage = "[OPTIONAL, default = 0]Dead reactions mode : \n- Mode 0: Reactions fluxes are not changed.\n"
-			+ "- Mode 1: All reactions fluxes are set to a maximum value.\n", metaVar = "Integer")
+			+ "- Mode 1: All reactions fluxes are set to a maximum value.\n", metaVar = "[0,1]")
 	public int mode = 0;
 
 	@Option(name = "-d", usage = "[OPTIONAL, default = 0.000001]Maximal distance of the reaction flux from 0 to be considered as dead", metaVar = "Double")
@@ -111,7 +107,7 @@ public class FlexfluxDR extends FFApplication{
 	@Option(name = "-pre", usage = "[OPTIONAL, default = 6]Number of decimals of precision for calculations and results", metaVar = "Integer")
 	public int precision = 6;
 
-	@Option(name = "-ext", usage = extParameterDescription)
+	@Option(name = "-ext", usage = "[OPTIONAL, default = false]Uses the extended SBML format")
 	public boolean extended = false;
 
 	public static void main(String[] args) {
@@ -176,38 +172,35 @@ public class FlexfluxDR extends FFApplication{
 							+ f.solver + ".");
 			System.exit(0);
 		}
-		
-		BioNetwork network;
-		
-		if (f.extended) {
-			JSBMLToBionetwork parser = new JSBMLToBionetwork(f.sbmlFile);
-			network = parser.getBioNetwork();
 
-		} else {
-			Sbml2Bionetwork parser = new Sbml2Bionetwork(f.sbmlFile, false);
-			network = parser.getBioNetwork();
-		}
+		Sbml2Bionetwork sbmlParser = new Sbml2Bionetwork(f.sbmlFile, f.extended);
+		BioNetwork network = sbmlParser.getBioNetwork();
+		Collection<BioChemicalReaction> trimed = network.trim();
+
+		bind.loadSbmlNetwork(f.sbmlFile, f.extended);
 
 		if (f.mode == 1) {
-			for (BioChemicalReaction reaction : network
-					.getBiochemicalReactionList().values()) {
+			for (String reac : bind.getBioNetwork()
+					.getBiochemicalReactionList().keySet()) {
 
-				if (reaction.isReversible()) {
-					reaction.setLowerBound(new Flux("-999999", network
-							.getUnitDefinitions().values().iterator().next()));
-				} else {
-					reaction.setLowerBound(new Flux("0", network
-							.getUnitDefinitions().values().iterator().next()));
+				BioChemicalReaction reaction = (BioChemicalReaction) bind
+						.getInteractionNetwork().getEntity(reac);
+
+				if (bind.getSimpleConstraints().containsKey(reaction)) {
+
+					Constraint c = bind.getSimpleConstraints().get(reaction);
+					c.setUb(999999);
+					if (reaction.isReversible()) {
+						c.setLb(-999999);
+					} else {
+						c.setLb(0);
+					}
+
 				}
-				
-				reaction.setUpperBound(new Flux("999999", network
-						.getUnitDefinitions().values().iterator().next()));
 
 			}
 
 		}
-		
-		bind.setNetworkAndConstraints(network);
 
 		if (f.condFile != "") {
 			bind.loadConstraintsFile(f.condFile);
@@ -220,24 +213,25 @@ public class FlexfluxDR extends FFApplication{
 		DRAnalysis analysis = new DRAnalysis(bind, f.d);
 		DRResult result = analysis.runAnalysis();
 
+		for (BioChemicalReaction trimedReac : trimed) {
+
+			result.addLine(trimedReac, new double[] { 0.0, 0.0 });
+
+		}
+
 		if (f.plot) {
 			result.plot();
 		}
 		if (!f.outName.equals("")) {
 			result.writeToFile(f.outName);
 		}
+		if (f.web) {
+			result.writeHTML(f.outName + ".html");
+		}
 
 		bind.end();
 	}
-
-	@Override
 	public String getMessage() {
 		return message;
 	}
-
-	@Override
-	public String getExample() {
-		return example;
-	}
-
 }

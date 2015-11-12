@@ -109,63 +109,37 @@ public class ThreadKO extends ResolveThread {
 			Constraint toRemove = null;
 			// we remove a constraint that is already present on this entity
 			if (bind.getSimpleConstraints().containsKey(entity)) {
-				
-				if(Vars.verbose == true)
-				{
-					System.err.println("[Debug] Remove simple constraint on "+entity.getId());
-				}
-				
 				removedConst = true;
 
 				toRemove = bind.getSimpleConstraints().get(entity);
-				
 				bind.getSimpleConstraints().remove(entity);
 				bind.getConstraints().remove(toRemove);
 				bind.prepareSolver();
 			}
 
-				
+			//
 
 			List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
 
 			Constraint newConstraint = new Constraint(entityMap, 0.0, 0.0);
 
+			constraintsToAdd.add(newConstraint);
+
 			// if the entity is not in the interaction network, we
 			// don't recompute the attractors
 			if (!entitiesInInteractionNetwork.contains(entity)) {
 				constraintsToAdd.addAll(interactionNetworkConstraints);
-				 bind.checkInteractionNetwork = false;
-			} else {
-				bind.checkInteractionNetwork = true;
-				
+				bind.checkInteractionNetwork = false;
 			}
-			
-
-			List<Constraint> tmpConstraints = new ArrayList<Constraint>(constraintsToAdd);
-			
-			for(Constraint c : tmpConstraints) 
-			{
-				if(c.getEntityNames().containsKey(entity.getId())) {
-					if(Vars.verbose == true)
-					{
-						System.err.println("[Debug] Remove constraint on "+entity.getId());
-					}
-					constraintsToAdd.remove(c);
-				}
-			}
-			
-			constraintsToAdd.add(newConstraint);
 
 			DoubleResult value = bind.FBA(constraintsToAdd, false, true);
-			
+
 			result.addLine(entity, value.result);
 
-			
-			System.err.println("Entity : " + entity.getId() + "\tValue : "
-					+ value.result);
-			
+
+			bind.checkInteractionNetwork = true;
+
 			if (Vars.verbose) {
-				
 				int percent = (int) Math.round((todo - entities.size()) / todo * 100);
 
 				while (nbPrintedStars.intValue() < (percent / 2)) {
@@ -174,13 +148,12 @@ public class ThreadKO extends ResolveThread {
 				}
 			}
 
-			// bind.getSimpleConstraints().remove(entity);
-			// bind.getConstraints().remove(newConstraint);
-
-			if (removedConst == true) {
+			if (removedConst) {
 				bind.getConstraints().add(toRemove);
 				bind.getSimpleConstraints().put(entity, toRemove);
+				bind.prepareSolver();
 			}
+
 		}
 
 		bind.end();

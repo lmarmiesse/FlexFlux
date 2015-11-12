@@ -58,19 +58,18 @@ public class FlexfluxFBA extends FFApplication {
 	// order for the graphical version
 	public static int order = 3;
 
-	public static String message = "FlexfluxFBA [options...]\n"
-			+ "Computes an FBA given a metabolic network, an objective function and constraints.\n"
+	public static String message = "Computes an FBA given a metabolic network, an objective function and constraints.\n"
 			+ "Constraints can be obtained with calculated steady-states of a given regulatory network.";
 
-	public String example = "Example : FlexfluxFBA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -states res.tab";
+	public static String example = "Example : FlexfluxFBA -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -states res.tab";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
+	@Option(name = "-s", usage = "Metabolic network file path (SBML format)", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File", required = true)
+	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File - in", required = true)
 	public String consFile = "";
 
-	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File")
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation network file path (SBML-Qual format)", metaVar = "File - in")
 	public String regFile = "";
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
@@ -79,10 +78,10 @@ public class FlexfluxFBA extends FFApplication {
 	@Option(name = "-plot", usage = "[OPTIONAL, default = false]Plots the results")
 	public boolean plot = false;
 
-	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File - out")
 	public String outName = "";
 
-	@Option(name = "-states", usage = "[OPTIONAL]The states of the regulatory network are saved in the indicated file name", metaVar = "File")
+	@Option(name = "-states", usage = "[OPTIONAL]The states of the regulatory network are saved in the indicated file name", metaVar = "File - out")
 	public String stateFile = "";
 
 	@Option(name = "-lib", usage = "[OPTIONAL, default = 0]Percentage of non optimality for new constraints", metaVar = "Double")
@@ -91,10 +90,10 @@ public class FlexfluxFBA extends FFApplication {
 	@Option(name = "-pre", usage = "[OPTIONAL, default = 6]Number of decimals of precision for calculations and results", metaVar = "Integer")
 	public int precision = 6;
 
-	@Option(name = "-ext", usage = extParameterDescription)
+	@Option(name = "-ext", usage = "[OPTIONAL, default = false]Uses the extended SBML format")
 	public boolean extended = false;
 
-	@Option(name = "-senFile", usage = "[OPTIONAL] A sensitivity analysis is performed and saved in the indicated file name", metaVar = "File")
+	@Option(name = "-senFile", usage = "[OPTIONAL] A sensitivity analysis is performed and saved in the indicated file name", metaVar = "File - out")
 	public String senFile = "";
 
 	public static void main(String[] args) {
@@ -128,17 +127,12 @@ public class FlexfluxFBA extends FFApplication {
 				System.exit(0);
 			}
 		} catch (UnsatisfiedLinkError e) {
-			System.err
-					.println("Error, the solver "
-							+ f.solver
-							+ " cannot be found. Check your solver installation and the configuration file, or choose a different solver (-sol).");
+			System.err.println("Error, the solver " + f.solver
+					+ " cannot be found. Check your solver installation and the configuration file, or choose a different solver (-sol).");
 			System.exit(0);
 		} catch (NoClassDefFoundError e) {
-			System.err
-					.println("Error, the solver "
-							+ f.solver
-							+ " cannot be found. There seems to be a problem with the .jar file of "
-							+ f.solver + ".");
+			System.err.println("Error, the solver " + f.solver
+					+ " cannot be found. There seems to be a problem with the .jar file of " + f.solver + ".");
 			System.exit(0);
 		}
 
@@ -165,21 +159,21 @@ public class FlexfluxFBA extends FFApplication {
 		if (!f.outName.equals("")) {
 			result.writeToFile(f.outName);
 		}
+		if (f.web) {
+			result.writeHTML(f.outName + ".html");
+		}
 
 		if (f.senFile != "") {
 			result.sensitivityAnalysis(f.senFile);
 		}
 
 		bind.end();
-	}
 
-	@Override
+		Vars.writeInteractionNetworkStates = false;
+	}
+	
 	public String getMessage() {
 		return message;
 	}
 
-	@Override
-	public String getExample() {
-		return example;
-	}
 }

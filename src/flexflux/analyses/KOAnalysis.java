@@ -158,6 +158,7 @@ public class KOAnalysis extends Analysis {
 		
 		
 		RSAAnalysis ssa = new RSAAnalysis(b.getInteractionNetwork(),b.getSimpleConstraints());
+		
 		RSAAnalysisResult res = ssa.runAnalysis();
 
 		List<Constraint> interactionNetworkConstraints = res.getSteadyStateConstraints();
@@ -186,7 +187,7 @@ public class KOAnalysis extends Analysis {
 				System.exit(1);
 			}
 			
-			ThreadKO threadKo = new ThreadKO(newBind, tasks, koResult, newBind.getObjective(),
+			ThreadKO threadKo = new ThreadKO(newBind, tasks, koResult, b.getObjective(),
 	                entitiesInInteractionNetwork, interactionNetworkConstraints); 
 			
 			threads.add(threadKo);
@@ -231,7 +232,6 @@ public class KOAnalysis extends Analysis {
 					+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
 					+ Vars.maxThread + " threads");
 		}
-		
 		return koResult;
 	}
 }

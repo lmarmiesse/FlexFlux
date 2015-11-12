@@ -78,6 +78,8 @@ public class TestSBMLQual extends FFUnitTest {
 		BioEntity entity1 = bind.getInteractionNetwork().getEntity("s_MYB30");
 		BioEntity entity2 = bind.getInteractionNetwork().getEntity("s_MYB96");
 		BioEntity entity3 = bind.getInteractionNetwork().getEntity("s_VLCFA");
+		BioEntity entity4 = bind.getInteractionNetwork()
+				.getEntity("s_Bacteria");
 
 		assertTrue(bind.getInteractionNetwork().getInitialState(entity1) == 3);
 

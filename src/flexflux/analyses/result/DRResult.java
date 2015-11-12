@@ -34,13 +34,13 @@
 package flexflux.analyses.result;
 
 import flexflux.general.Bind;
+import flexflux.general.Vars;
 
 import java.awt.BorderLayout;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -51,9 +51,7 @@ import javax.swing.JScrollPane;
 
 import org.jfree.ui.RefineryUtilities;
 
-import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
-
 
 /**
  * 
@@ -66,13 +64,6 @@ public class DRResult extends FVAResult {
 
 	public DRResult(double objValue, Bind b) {
 		super(objValue);
-		
-		/**
-		 * Add trimed reactions in the result
-		 */
-		for (BioChemicalReaction trimedReac : b.getDeadReactions()) {
-			this.addLine(trimedReac, new double[] { 0.0, 0.0 });
-		}
 	}
 
 	public void writeToFile(String path) {
@@ -96,16 +87,15 @@ public class DRResult extends FVAResult {
 
 	public void plot() {
 
-		JList<String> resultList = new JList<String>(new DefaultListModel<String>());
+		JList resultList = new JList(new DefaultListModel());
 
 		for (BioEntity ent : map.keySet()) {
 
-			((DefaultListModel<String>) resultList.getModel()).addElement(ent.getId());
+			((DefaultListModel) resultList.getModel()).addElement(ent.getId());
 		}
 
 		JFrame frame = new JFrame("Dead Reactions results");
-		frame.add(new JLabel(resultList.getModel().getSize()
-				+ " dead reactions"), BorderLayout.PAGE_START);
+		frame.add(new JLabel(resultList.getModel().getSize() + " dead reactions"), BorderLayout.PAGE_START);
 		frame.add(new JScrollPane(resultList), BorderLayout.CENTER);
 		frame.pack();
 		RefineryUtilities.centerFrameOnScreen(frame);
@@ -118,22 +108,19 @@ public class DRResult extends FVAResult {
 	 * 
 	 * @return The dead reactions.
 	 */
-	public HashMap<String,BioChemicalReaction> getDeadReactions() {
+	public List<BioEntity> getDeadReactions() {
 
-		HashMap<String, BioChemicalReaction> dead = new HashMap<String,BioChemicalReaction>();
+		List<BioEntity> dead = new ArrayList<BioEntity>();
 
-		for(BioEntity ent : map.keySet()) {
-			dead.put(ent.getId(), (BioChemicalReaction) ent);
-		}
-		
-		
+		dead.addAll(map.keySet());
+
 		return dead;
 	}
 
 	/**
 	 * 
 	 * Removes all reaction that are not considered dead.
-	 * 	 
+	 * 
 	 * @param minValue
 	 *            The minimal value to consider a reaction dead.
 	 */
@@ -143,14 +130,45 @@ public class DRResult extends FVAResult {
 
 		for (BioEntity ent : map.keySet()) {
 
-			if (Math.abs(map.get(ent)[0] - 0) > minValue
-					|| Math.abs(map.get(ent)[1] - 0) > minValue) {
+			if (Math.abs(map.get(ent)[0] - 0) > minValue || Math.abs(map.get(ent)[1] - 0) > minValue) {
 				toRemove.add(ent);
 			}
 		}
 
 		for (BioEntity b : toRemove) {
 			map.remove(b);
+		}
+
+	}
+
+	@Override
+	public void writeHTML(String path) {
+
+		try {
+			PrintWriter out = new PrintWriter(new File(path));
+
+			
+			out.println("<p>"+map.size() + " dead reactions</p>");
+			
+			
+			out.println("<table>");
+
+			out.println("<tr>");
+			out.println("<th>Dead reactions</th>");
+			out.println("</tr>");
+
+			for (BioEntity entity : map.keySet()) {
+
+				out.println("<tr>");
+				out.println("<td>" + entity.getId() + "</td>");
+				out.println("</tr>");
+			}
+			out.println("</table>");
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
 		}
 
 	}

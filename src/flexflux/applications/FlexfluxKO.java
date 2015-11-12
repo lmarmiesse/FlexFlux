@@ -70,9 +70,7 @@ public class FlexfluxKO extends FFApplication{
 	// order for the graphical version
 	public static int order = 6;
 
-	public static String message = "FlexfluxKO\n"
-
-			+ "Computes an KO analysis given a metabolic network, an objective function and constraints.\n"
+	public static String message =  "Computes an KO analysis given a metabolic network, an objective function and constraints.\n"
 			+ "A KO analysis consists in setting network entities values to 0, and observe the effect on the objective function.\n"
 			+ "There are 3 ways to perform this KO analysis : \n"
 			+ "- Mode 0: the KO analysis is performed on reactions.\n"
@@ -82,13 +80,13 @@ public class FlexfluxKO extends FFApplication{
 	public String example = "Example 1 : FlexfluxKO -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -mode 1\n"
 			+ "Example 2 : FlexfluxKO -s network.xml -cond cond.txt -int int.txt -plot -out out.txt -e \"R1 R2 G1 G2\"\n";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
+	@Option(name = "-s", usage = "Metabolic network file path (SBML format)", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File", required = true)
+	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File - in", required = true)
 	public String consFile = "";
 
-	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File")
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File - in")
 	public String regFile = "";
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
@@ -104,7 +102,7 @@ public class FlexfluxKO extends FFApplication{
 			+ "- Mode 1: the KO analysis is performed on genes.\n", metaVar = "[0,1]")
 	public int mode = 0;
 
-	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File - out")
 	public String outName = "";
 
 	@Option(name = "-n", usage = "[OPTIONAL, default = number of available processors]Number of threads", metaVar = "Integer")
@@ -116,7 +114,7 @@ public class FlexfluxKO extends FFApplication{
 	@Option(name = "-pre", usage = "[OPTIONAL, default = 6]Number of decimals of precision for calculations  and results", metaVar = "Integer")
 	public int precision = 6;
 
-	@Option(name = "-ext", usage = extParameterDescription)
+	@Option(name = "-ext", usage = "[OPTIONAL, default = false]Uses the extended SBML format")
 	public boolean extended = false;
 
 
@@ -181,10 +179,6 @@ public class FlexfluxKO extends FFApplication{
 			System.exit(0);
 		}
 
-		if (f.verbose) {
-			Vars.verbose = true;
-		}
-		
 		bind.loadSbmlNetwork(f.sbmlFile, f.extended);
 		if (f.consFile != "") {
 			bind.loadConstraintsFile(f.consFile);
@@ -203,9 +197,10 @@ public class FlexfluxKO extends FFApplication{
 				BioEntity b = bind.getInteractionNetwork().getEntity(
 						entitiesArray[i]);
 				if (b == null) {
-					System.err.println("Unknown entity " + entitiesArray[i]);
-					f.parser.printUsage(System.err);
-					System.exit(0);
+					System.err.println("Warning: Unknown entity " + entitiesArray[i]);
+//					f.parser.printUsage(System.err);
+//					System.exit(0);
+					continue;
 				}
 
 				entitiesMap.put(b.getId(), b);
@@ -226,17 +221,14 @@ public class FlexfluxKO extends FFApplication{
 		if (!f.outName.equals("")) {
 			result.writeToFile(f.outName);
 		}
+		if (f.web) {
+			result.writeHTML(f.outName+".html");
+		}
 		bind.end();
 	}
-
-	@Override
+	
 	public String getMessage() {
 		return message;
-	}
-
-	@Override
-	public String getExample() {
-		return example;
 	}
 
 }

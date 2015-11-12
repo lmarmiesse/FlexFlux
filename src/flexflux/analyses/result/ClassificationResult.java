@@ -22,9 +22,6 @@ public class ClassificationResult extends AnalysisResult {
 	public HashMap<String, BioEntity> objectiveIndependentReactions;
 	public HashMap<String, BioEntity> optimaReactions;
 	public HashMap<String, BioEntity> deadReactions;
-	public HashMap<String, BioEntity> unfeasibleKoReactions;
-	public HashMap<String, BioEntity> optimaZeroFluxReactions;
-	public HashMap<String, BioEntity> minFluxZeroFluxReactions;
 
 	public HashMap<String, BioEntity> essentialGenes;
 	public HashMap<String, BioEntity> zeroFluxGenes;
@@ -34,9 +31,7 @@ public class ClassificationResult extends AnalysisResult {
 	public HashMap<String, BioEntity> objectiveIndependentGenes;
 	public HashMap<String, BioEntity> optimaGenes;
 	public HashMap<String, BioEntity> redundantGenesForEssentialReactions;
-	public HashMap<String, BioEntity> genesInvolvedInDeadReactions;
 	public HashMap<String, BioEntity> deadGenes;
-	public HashMap<String, BioEntity> unfeasibleKoGenes;
 
 	public double objectiveValue = 0.0;
 	
@@ -53,9 +48,6 @@ public class ClassificationResult extends AnalysisResult {
 		objectiveIndependentReactions = new HashMap<String, BioEntity>();
 		optimaReactions = new HashMap<String, BioEntity>();
 		deadReactions = new HashMap<String, BioEntity>();
-		unfeasibleKoReactions = new HashMap<String, BioEntity>();
-		optimaZeroFluxReactions = new HashMap<String, BioEntity>();
-		minFluxZeroFluxReactions  = new HashMap<String, BioEntity>();
 
 		essentialGenes = new HashMap<String, BioEntity>();
 		zeroFluxGenes = new HashMap<String, BioEntity>();
@@ -66,8 +58,6 @@ public class ClassificationResult extends AnalysisResult {
 		optimaGenes = new HashMap<String, BioEntity>();
 		redundantGenesForEssentialReactions = new HashMap<String, BioEntity>();
 		deadGenes = new HashMap<String, BioEntity>();
-		unfeasibleKoGenes = new HashMap<String, BioEntity>();
-		genesInvolvedInDeadReactions = new HashMap<String, BioEntity>();
 		
 	}
 	
@@ -287,15 +277,18 @@ public class ClassificationResult extends AnalysisResult {
 			return deadGenes;
 		case "deadReactions":
 			return deadReactions;
-		case "unfeasibleKoReactions":
-			return unfeasibleKoReactions;
-		case "unfeasibleKoGenes":
-			return unfeasibleKoGenes;
 		default:
 			System.err.println("This field does not exist");
 			return null;
 		}
 
+	}
+
+
+	@Override
+	public void writeHTML(String path) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

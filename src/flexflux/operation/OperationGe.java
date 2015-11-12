@@ -54,6 +54,11 @@ public class OperationGe extends Operation {
 	public String toString() {
 		return " >= ";
 	}
+	
+	public String toFormula() {
+
+		return (" >= ");
+	}
 
 	public List<Constraint> makeConstraint(BioEntity entity, double value) {
 

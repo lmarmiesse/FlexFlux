@@ -34,7 +34,10 @@
 package flexflux.unit_tests;
 
 import static org.junit.Assert.fail;
+import flexflux.analyses.Analysis;
+import flexflux.analyses.FBAAnalysis;
 import flexflux.analyses.TDRFBAAnalysis;
+import flexflux.analyses.result.AnalysisResult;
 import flexflux.analyses.result.TDRFBAResult;
 import flexflux.general.Bind;
 import flexflux.general.CplexBind;
@@ -55,6 +58,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.unit_tests.utils.TestUtils;
 
@@ -184,13 +188,11 @@ public class TestTDRFBA extends FFUnitTest {
 
 					double resultToTest = values.get(entities.get(i - 1));
 
-					Assert.assertEquals(trueResult,resultToTest,0.001);
+					Assert.assertTrue(Math.abs(trueResult - resultToTest) < 0.001);
 
 				}
 
 			}
-			
-			in.close();
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

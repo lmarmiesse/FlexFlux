@@ -16,7 +16,6 @@ import flexflux.analyses.result.KOResult;
 import flexflux.general.Bind;
 import flexflux.general.CplexBind;
 import flexflux.general.GLPKBind;
-import flexflux.general.Vars;
 
 public class TestKoWithInteractions extends FFUnitTest{
 
@@ -26,9 +25,6 @@ public class TestKoWithInteractions extends FFUnitTest{
 
 	@Test
 	public void test() {
-		
-		Vars.verbose = true;
-		Vars.maxThread = 1;
 
 		String solver = "GLPK";
 		if (System.getProperties().containsKey("solver")) {

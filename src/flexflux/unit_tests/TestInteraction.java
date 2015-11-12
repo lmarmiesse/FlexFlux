@@ -40,12 +40,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import flexflux.analyses.Analysis;
+import flexflux.analyses.FBAAnalysis;
+import flexflux.analyses.result.AnalysisResult;
 import flexflux.analyses.result.FBAResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.CplexBind;
 import flexflux.general.DoubleResult;
 import flexflux.general.GLPKBind;
+import flexflux.general.Vars;
 import flexflux.interaction.And;
 import flexflux.interaction.IfThenInteraction;
 import flexflux.interaction.Interaction;
@@ -158,6 +162,12 @@ public class TestInteraction extends FFUnitTest{
 		assertTrue(i1
 				.toString()
 				.equals("IF : (a >= 0.0 AND (b >= 0.0 OR c >= 0.0)) THEN : f <= 5.0 Begins after 0.0h, lasts 0.0h."));
+
+		Unique u1 = new Unique(b);
+		Unique u2 = new Unique(f);
+		// Interaction i2 = new EqInteraction(u1,u2);
+
+		// System.out.println(i2);
 
 		Bind bind = null;
 

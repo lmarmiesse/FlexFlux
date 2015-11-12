@@ -48,6 +48,7 @@ import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.DoubleResult;
 import flexflux.general.Vars;
+import flexflux.interaction.Interaction;
 
 /**
  * 
@@ -101,6 +102,7 @@ public class TDRFBAAnalysis extends Analysis {
 		// warning list to tell when the model was unfeasible
 		List<Integer> unfeasibleSteps = new ArrayList<Integer>();
 
+		
 		double startTime = System.currentTimeMillis();
 
 		Map<BioEntity, Constraint> simpleConstraints = b.getSimpleConstraints();
@@ -112,6 +114,7 @@ public class TDRFBAAnalysis extends Analysis {
 					.get(ent);
 
 			if (b.getInteractionNetwork().canTranslate(ent)) {
+
 				simpleConstraints.put(ent, b.getInteractionNetwork()
 						.getConstraintFromState(ent, state));
 
@@ -120,13 +123,14 @@ public class TDRFBAAnalysis extends Analysis {
 						(double) state));
 			}
 		}
+		
 		for (BioEntity ent : b.getInteractionNetwork().getInitialConstraints()
 				.keySet()) {
 
 			simpleConstraints.put(ent, b.getInteractionNetwork()
 					.getInitialConstraints().get(ent));
 		}
-
+		
 		Map<BioChemicalReaction, Map<BioEntity, Double>> exchangeInteractions = b
 				.getExchangeInteractions();
 
@@ -139,7 +143,7 @@ public class TDRFBAAnalysis extends Analysis {
 		TDRFBAResult rFBAResult = new TDRFBAResult();
 
 		for (int i = 0; i < iterations; i++) {
-
+			
 			// we save the results
 			Map<String, Double> valuesMap = new HashMap<String, Double>();
 			valuesMap.put("X", X);
@@ -151,7 +155,7 @@ public class TDRFBAAnalysis extends Analysis {
 				System.err.println("it number " + i);
 			}
 
-			// translation
+//			// translation
 			Map<BioEntity, Integer> networkState = new HashMap<BioEntity, Integer>();
 
 			for (BioEntity enti : simpleConstraints.keySet()) {
@@ -181,12 +185,17 @@ public class TDRFBAAnalysis extends Analysis {
 				Map<Constraint, double[]> nextStepStates = ssa
 						.goToNextInteractionNetworkState(networkState,
 								entitiesToCheck);
+			
 
 				Map<Constraint, double[]> nextStepConsMap = new HashMap<Constraint, double[]>();
 
+//				System.out.println("\n"+i+"\n");
+				
 				// translation
 				for (Constraint c1 : nextStepStates.keySet()) {
-
+					
+//					System.out.println(c1);
+					
 					BioEntity enti = (BioEntity) c1.getEntities().keySet()
 							.toArray()[0];
 
@@ -200,9 +209,8 @@ public class TDRFBAAnalysis extends Analysis {
 					} else {
 
 						nextStepConsMap.put(c1, nextStepStates.get(c1));
-
+						
 					}
-
 				}
 
 				for (Constraint c : nextStepConsMap.keySet()) {
@@ -218,7 +226,7 @@ public class TDRFBAAnalysis extends Analysis {
 					for (int iter = iterBegin; iter <= iterEnd; iter++) {
 						if (iter < iterations) {
 							timeConstraintMap.get(iter).add(c);
-
+							
 						}
 					}
 				}
@@ -229,7 +237,10 @@ public class TDRFBAAnalysis extends Analysis {
 			Set<BioEntity> hasConstraint = new HashSet<BioEntity>();
 			// we add the constraints for the current iteration
 			for (Constraint c : timeConstraintMap.get(i)) {
+				
 				if (c.getEntities().size() == 1) {
+					
+					
 
 					BioEntity ent = null;
 
@@ -238,7 +249,7 @@ public class TDRFBAAnalysis extends Analysis {
 					}
 
 					if (hasConstraint.contains(ent)) {
-
+						
 						Constraint c1 = c;
 						Constraint c2 = simpleConstraints.get(ent);
 
@@ -249,6 +260,7 @@ public class TDRFBAAnalysis extends Analysis {
 								newUb));
 
 					} else {
+						
 						simpleConstraints.put(ent, c);
 						hasConstraint.add(ent);
 					}
@@ -258,6 +270,7 @@ public class TDRFBAAnalysis extends Analysis {
 					.getInteractionNetworkEntities().values()) {
 				if (simpleConstraints.containsKey(ent)) {
 					Constraint c = simpleConstraints.get(ent);
+		
 					constraintsToAdd.add(c);
 
 				}
@@ -327,13 +340,26 @@ public class TDRFBAAnalysis extends Analysis {
 
 			}
 
+			double fbaResult = 0;
 			double mu = 0;
 			DoubleResult result;
-
-
+			
+			
+			///////// We check the GPR constraints
+			List<Constraint> GPRConstraints = new ArrayList<Constraint>();
+			for (Interaction inter : b.getInteractionNetwork().getGPRInteractions()) {
+				if (inter.getCondition().isTrue(simpleConstraints)) {
+					GPRConstraints.addAll(b.getInteractionNetwork().getInteractionToConstraints().get(inter));
+				}
+			}
+			constraintsToAdd.addAll(GPRConstraints);
+			/////////
+			
 			try {
 				result = b.FBA(new ArrayList<Constraint>(constraintsToAdd),
 						true, false);
+
+				fbaResult = result.result;
 
 			} catch (Exception e) {
 				System.err.println("rFBA stopped");
@@ -353,6 +379,8 @@ public class TDRFBAAnalysis extends Analysis {
 				mu = b.getSolvedValue(b.getInteractionNetwork().getEntity(
 						biomassReac));
 			}
+			
+//			System.out.println(mu);
 
 			// we add the results for this iteration
 			for (String s : toPlot) {
@@ -370,6 +398,7 @@ public class TDRFBAAnalysis extends Analysis {
 					}
 				} else {
 					unfeasibleSteps.add(i);
+					
 					if (Vars.verbose) {
 						System.err.println(timeToString(i * deltaT) + " X = "
 								+ Vars.round(X) + " no growth : unfeasible");
@@ -453,6 +482,7 @@ public class TDRFBAAnalysis extends Analysis {
 					// new ub = ub + uptake*X*deltat
 
 					ub += uptake * X * deltaT;
+					
 				}
 
 				if (Double.isNaN(ub)) {

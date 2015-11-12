@@ -49,29 +49,18 @@ public class RSAAnalysisResult extends AnalysisResult {
 
 	private JTable resultTable;
 
-	private List<Map<BioEntity, Integer>> statesList;
+	private List<Map<BioEntity, Integer>> statesList = new ArrayList<Map<BioEntity, Integer>>();
 
-	private List<Constraint> finalConstraints;
+	private List<Constraint> finalConstraints = new ArrayList<Constraint>();
 
-	private Set<BioEntity> resultEntities;
+	private Set<BioEntity> resultEntities = new HashSet<BioEntity>();
 
-	private List<Map<BioEntity, Integer>> attractorStatesList;
-	
-	public RSAAnalysisResult() {
-		statesList = new ArrayList<Map<BioEntity, Integer>>();
-		finalConstraints = new ArrayList<Constraint>();
+	private List<Map<BioEntity, Integer>> attractorStatesList = new ArrayList<Map<BioEntity, Integer>>();
 
-		resultEntities = new HashSet<BioEntity>();
-
-		attractorStatesList = new ArrayList<Map<BioEntity, Integer>>();
-	}
-	
-	
 	/**
 	 * Mean state values
 	 */
 	private Map<BioEntity, Double> meanAttractorStates;
-	
 
 	public void addResultEntity(BioEntity ent) {
 		resultEntities.add(ent);
@@ -96,13 +85,13 @@ public class RSAAnalysisResult extends AnalysisResult {
 		return finalConstraints;
 
 	}
-	
+
 	public List<Map<BioEntity, Integer>> getAttractorStatesList() {
 
 		return attractorStatesList;
 
 	}
-	
+
 	public List<Map<BioEntity, Integer>> getStatesList() {
 
 		return statesList;
@@ -112,6 +101,13 @@ public class RSAAnalysisResult extends AnalysisResult {
 	@Override
 	public void writeToFile(String path) {
 
+		if (resultEntities.size() == 0) {
+
+			System.err.println(
+					"No component has a steady state value. Check that some of your components have initial values.");
+			// System.exit(0);
+		}
+
 		try {
 			PrintWriter out = new PrintWriter(new File(path));
 			out.println("Steady state analysis result\n");
@@ -120,10 +116,9 @@ public class RSAAnalysisResult extends AnalysisResult {
 			for (int j = 0; j < statesList.size() - 1; j++) {
 
 				int limit = statesList.size() - attractorStatesList.size();
-				if (j+1 >= limit) {
+				if (j + 1 >= limit) {
 					out.print("State " + (j + 1) + "(Attractor)\t");
-				} else
-				{
+				} else {
 					out.print("State " + (j + 1) + "\t");
 				}
 			}
@@ -169,12 +164,18 @@ public class RSAAnalysisResult extends AnalysisResult {
 	@Override
 	public void plot() {
 
+		if (resultEntities.size() == 0) {
+
+			System.err.println(
+					"Error : no component has a steady state value. Check that some of your components have initial values.");
+			System.exit(0);
+		}
+
 		JFrame frame = new JFrame("Steady state analysis results");
 
 		resultTable = new JTable(0, statesList.size());
 
-		resultTable.getTableHeader().setDefaultRenderer(
-				new DefaultTableHeaderCellRenderer());
+		resultTable.getTableHeader().setDefaultRenderer(new DefaultTableHeaderCellRenderer());
 
 		String[] columnNames = new String[statesList.size() + 2];
 
@@ -221,18 +222,14 @@ public class RSAAnalysisResult extends AnalysisResult {
 		DefaultTableModel model = new MyTableModel(data, columnNames);
 		resultTable.setModel(model);
 
-		resultTable.getColumnModel().getColumn(statesList.size())
-				.setPreferredWidth(130);
-		resultTable.getColumnModel().getColumn(statesList.size() + 1)
-				.setPreferredWidth(130);
+		resultTable.getColumnModel().getColumn(statesList.size()).setPreferredWidth(130);
+		resultTable.getColumnModel().getColumn(statesList.size() + 1).setPreferredWidth(130);
 
-		final MyTableRowSorter<TableModel> sorter = new MyTableRowSorter<TableModel>(
-				resultTable.getModel());
+		final MyTableRowSorter<TableModel> sorter = new MyTableRowSorter<TableModel>(resultTable.getModel());
 
 		resultTable.setRowSorter(sorter);
 
-		resultTable.setPreferredScrollableViewportSize(resultTable
-				.getPreferredSize());
+		resultTable.setPreferredScrollableViewportSize(resultTable.getPreferredSize());
 
 		JPanel searchPanel = new JPanel(new FlowLayout());
 
@@ -260,8 +257,7 @@ public class RSAAnalysisResult extends AnalysisResult {
 		JPanel centerPanel = new JPanel();
 		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.PAGE_AXIS));
 		centerPanel.add(searchPanel);
-		centerPanel.add(new JLabel("Attractor of size "
-				+ attractorStatesList.size()));
+		centerPanel.add(new JLabel("Attractor of size " + attractorStatesList.size()));
 
 		centerPanel.add(new JScrollPane(resultTable));
 
@@ -281,15 +277,13 @@ public class RSAAnalysisResult extends AnalysisResult {
 		if (sorter.getModelRowCount() != 0) {
 
 			// case insensitive
-			sorter.setRowFilter(RowFilter.regexFilter(
-					"(?i)" + Pattern.quote(text), 0));
+			sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(text), 0));
 		}
 
 	}
 
 	// http://www.camick.com/java/source/DefaultTableHeaderCellRenderer.java
-	private class DefaultTableHeaderCellRenderer extends
-			DefaultTableCellRenderer {
+	private class DefaultTableHeaderCellRenderer extends DefaultTableCellRenderer {
 
 		/**
 		 * 
@@ -334,11 +328,9 @@ public class RSAAnalysisResult extends AnalysisResult {
 		 * @return the default table header cell renderer
 		 */
 		@Override
-		public Component getTableCellRendererComponent(JTable table,
-				Object value, boolean isSelected, boolean hasFocus, int row,
-				int column) {
-			Component c = super.getTableCellRendererComponent(table, value,
-					isSelected, hasFocus, row, column);
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			JTableHeader tableHeader = table.getTableHeader();
 			if (tableHeader != null) {
 				setForeground(tableHeader.getForeground());
@@ -371,14 +363,11 @@ public class RSAAnalysisResult extends AnalysisResult {
 		 */
 		protected Icon getIcon(JTable table, int column) {
 			SortKey sortKey = getSortKey(table, column);
-			if (sortKey != null
-					&& table.convertColumnIndexToView(sortKey.getColumn()) == column) {
+			if (sortKey != null && table.convertColumnIndexToView(sortKey.getColumn()) == column) {
 				switch (sortKey.getSortOrder()) {
 				case ASCENDING:
 					return UIManager.getIcon("Table.ascendingSortIcon");
 				case DESCENDING:
-					return UIManager.getIcon("Table.descendingSortIcon");
-				default:
 					return UIManager.getIcon("Table.descendingSortIcon");
 				}
 			}
@@ -395,12 +384,12 @@ public class RSAAnalysisResult extends AnalysisResult {
 		 * @return the SortKey, or null if the column is unsorted
 		 */
 		protected SortKey getSortKey(JTable table, int column) {
-			RowSorter<?> rowSorter = table.getRowSorter();
+			RowSorter rowSorter = table.getRowSorter();
 			if (rowSorter == null) {
 				return null;
 			}
 
-			List<?> sortedColumns = rowSorter.getSortKeys();
+			List sortedColumns = rowSorter.getSortKeys();
 			if (sortedColumns.size() > 0) {
 				return (SortKey) sortedColumns.get(0);
 			}
@@ -416,7 +405,65 @@ public class RSAAnalysisResult extends AnalysisResult {
 		this.meanAttractorStates = meanAttractorStates;
 	}
 
-	
-	
-	
+	@Override
+	public void writeHTML(String path) {
+		
+		try {
+			PrintWriter out = new PrintWriter(new File(path));
+
+			out.println("<table>");
+			out.println("<tr>");
+			
+			out.print("<th>Entity name</th>");
+			for (int j = 0; j < statesList.size() - 1; j++) {
+
+				int limit = statesList.size() - attractorStatesList.size();
+				if (j + 1 >= limit) {
+					out.print("<th>State " + (j + 1) + "(Attractor)</th>");
+				} else {
+					out.print("<th>State " + (j + 1) + "</th>");
+				}
+			}
+			
+			out.print("<th>Final constraint lower bound</th>");
+			out.print("<th>Final constraint upper bound</th>");
+			out.println("</tr>");
+
+			for (BioEntity ent : resultEntities) {
+
+				out.println("<tr>");
+				
+				out.print("<td>"+ent.getId()+"</td>");
+				for (int j = 0; j < statesList.size() - 1; j++) {
+
+					if (statesList.get(j).containsKey(ent)) {
+
+						out.print("<td>" + statesList.get(j).get(ent)+"</td>");
+					} else {
+						out.print("<td>" + "?</td>");
+					}
+
+				}
+
+				for (Constraint c : finalConstraints) {
+					if (c.getEntities().keySet().contains(ent)) {
+						out.print("<td>"+c.getLb() + "</td>");
+						out.print("<td>"+c.getUb() + "</td>");
+						break;
+					}
+				}
+				
+				out.println("</tr>");
+
+			}
+			
+			out.println("</table>");
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
 }

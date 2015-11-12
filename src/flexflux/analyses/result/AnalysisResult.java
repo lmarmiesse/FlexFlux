@@ -55,5 +55,10 @@ public abstract class AnalysisResult {
 	 * Plots the results.
 	 */
 	public abstract void plot();
+	
+	/**
+	 * Writes a html version of the results;
+	 */
+	public abstract void writeHTML(String path);
 
 }

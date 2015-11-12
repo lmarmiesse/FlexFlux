@@ -75,9 +75,7 @@ public class FlexfluxTDRFBA extends FFApplication{
 	// order for the graphical version
 	public static int order = 7;
 
-	public static String message = "FlexfluxTDRFBA\n"
-
-			+ "Computes a time dependent analysis given a metabolic network, an objective function and constraints.\n"
+	public static String message =  "Computes a time dependent analysis given a metabolic network, an objective function and constraints.\n"
 			+ "This analysis is based on external metabolic concentrations and cell density.\n"
 			+ "Given initial metabolite concentrations, cell density, a time step and a number of iterations, this "
 			+ "\nanalysis returns the value of each metabolite and cell density for each time";
@@ -85,13 +83,13 @@ public class FlexfluxTDRFBA extends FFApplication{
 	public String example = "Example 1 : FlexfluxRFBA -s network.xml -cond cond.txt -int int.txt -bio R_Biomass -x 0.01 -plot -out out.txt\n"
 			+ "Example 2 : FlexfluxRFBA -s network.xml -cond cond.txt -int int.txt -bio R_Biomass -plot -out out.txt -x 0.01 -t 0.02 -it 400 -e \"R1 R2 G1 G2\"\n";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
+	@Option(name = "-s", usage = "Metabolic network file path (SBML format)", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File", required = true)
+	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File - in", required = true)
 	public String consFile = "";
 
-	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File")
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File - in")
 	public String regFile = "";
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
@@ -103,7 +101,7 @@ public class FlexfluxTDRFBA extends FFApplication{
 	@Option(name = "-e", usage = "[OPTIONAL]Biological entities included in the results.\nIf empty, only concerned metabolites and cell density will be included", metaVar = "String")
 	public String entities = "";
 
-	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File - out")
 	public String outName = "";
 
 	@Option(name = "-x", usage = "Cell density initial value in g/L", metaVar = "Double", required = true)
@@ -124,7 +122,7 @@ public class FlexfluxTDRFBA extends FFApplication{
 	@Option(name = "-pre", usage = "[OPTIONAL, default = 6]Number of decimals of precision for calculations and results", metaVar = "Integer")
 	public int precision = 6;
 
-	@Option(name = "-ext", usage = extParameterDescription)
+	@Option(name = "-ext", usage = "[OPTIONAL, default = false]Uses the extended SBML format")
 	public boolean extended = false;
 
 	public static void main(String[] args) {
@@ -209,7 +207,7 @@ public class FlexfluxTDRFBA extends FFApplication{
 				toDisplay.add(b.getId());
 			}
 		}
-
+		
 		Analysis analysis = new TDRFBAAnalysis(bind, f.biomassReac, f.X,
 				f.deltaT, f.iterations, toDisplay);
 		AnalysisResult result = analysis.runAnalysis();
@@ -220,18 +218,15 @@ public class FlexfluxTDRFBA extends FFApplication{
 		if (!f.outName.equals("")) {
 			result.writeToFile(f.outName);
 		}
+		if (f.web) {
+			result.writeHTML(f.outName+".html");
+		}
 
 		bind.end();
 	}
-
-	@Override
+	
 	public String getMessage() {
 		return message;
-	}
-
-	@Override
-	public String getExample() {
-		return example;
 	}
 
 }

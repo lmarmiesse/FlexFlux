@@ -58,6 +58,11 @@ public class OperationLt extends Operation {
 		return (" < ");
 
 	}
+	
+	public String toFormula() {
+
+		return (" < ");
+	}
 
 	public List<Constraint> makeConstraint(BioEntity entity, double value) {
 

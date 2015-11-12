@@ -413,9 +413,9 @@ public class PP3DResult extends AnalysisResult {
 
 			int size = 0;
 			for (double objValue : expValues.keySet()) {
-				
-				size =+ expValues.get(objValue).size();
-				
+				for (double[] point : expValues.get(objValue)) {
+					size++;
+				}
 			}
 
 			double[][] data = new double[size][3];
@@ -894,6 +894,12 @@ public class PP3DResult extends AnalysisResult {
 	 */
 	public Double getScore() {
 		return score;
+	}
+
+	@Override
+	public void writeHTML(String path) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

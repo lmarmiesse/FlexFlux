@@ -11,6 +11,7 @@ import flexflux.analyses.randomConditions.InputRandomParameters;
 import flexflux.analyses.randomConditions.ListOfInputRandomParameters;
 import flexflux.analyses.result.RandomConditionsResult;
 import flexflux.condition.Condition;
+import flexflux.condition.ListOfConditions;
 import flexflux.general.ConstraintType;
 import flexflux.general.Vars;
 import flexflux.utils.maths.RandomGaussian;

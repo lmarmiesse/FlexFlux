@@ -64,20 +64,18 @@ public class FlexfluxPP3D extends FFApplication{
 	// order for the graphical version
 	public static int order = 9;	
 
-	public static String message = "FlexfluxPP3D\n"
-
-			+ "Computes different FBA analysis given a metabolic network, an objective function and constraints, "
+	public static String message =  "Computes different FBA analysis given a metabolic network, an objective function and constraints, "
 			+ "by making two reactions fluxes change.";
 
 	public String example = "Example : FlexfluxTwoReacs -s network.xml -cond cond.txt -int int.txt -r R_EX_glc_e_ -init -20 -end 0 -r2 R_EX_o2_e_ _init2 -20 -end2 0 -f2 0.2 -plot -out out.txt";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
+	@Option(name = "-s", usage = "Metabolic network file path (SBML format)", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File", required = true)
+	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File - in", required = true)
 	public String consFile = "";
 
-	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File")
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File - in")
 	public String regFile = "";
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
@@ -92,7 +90,7 @@ public class FlexfluxPP3D extends FFApplication{
 	@Option(name = "-r2", usage = "Name of the second reaction to test", metaVar = "String", required = true)
 	public String reac2 = "";
 
-	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL]Output file name", metaVar = "File - out")
 	public String outName = "";
 
 	@Option(name = "-init", usage = "Initial flux value of the first reaction to test", metaVar = "Double", required = true)
@@ -122,7 +120,7 @@ public class FlexfluxPP3D extends FFApplication{
 	@Option(name = "-pre", usage = "[OPTIONAL, default = 6]Number of decimals of precision for calculations and results", metaVar = "Integer")
 	public int precision = 6;
 
-	@Option(name = "-ext", usage = extParameterDescription)
+	@Option(name = "-ext", usage = "[OPTIONAL, default = false]Uses the extended SBML format")
 	public boolean extended = false;
 
 	public static void main(String[] args) {
@@ -228,15 +226,9 @@ public class FlexfluxPP3D extends FFApplication{
 
 		bind.end();
 	}
-
-	@Override
+	
 	public String getMessage() {
 		return message;
-	}
-
-	@Override
-	public String getExample() {
-		return example;
 	}
 
 }

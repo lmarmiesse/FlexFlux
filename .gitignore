@@ -13,3 +13,7 @@ hs*log
 *.zip
 *~
 *.log
+/bin
+/.fatjar
+/.gitignore
+/.Rhistory

@@ -1,6 +1,5 @@
 package flexflux.analyses;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,21 +9,40 @@ import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioGene;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.utils.graphe.ScopeCompounds;
-import flexflux.analyses.result.ConcurrentReactionsResult;
 import flexflux.analyses.result.FBAResult;
 import flexflux.analyses.result.FVAResult;
 import flexflux.analyses.result.KOResult;
 import flexflux.analyses.result.ClassificationResult;
 import flexflux.general.Bind;
+import flexflux.general.Constraint;
 import flexflux.general.Vars;
 import flexflux.objective.Objective;
 
 public class ClassificationAnalysis extends Analysis {
-	
-	ClassificationResult classificationResult;
-	
-	
+
 	private HashMap<String, BioEntity> remainReactions;
+	private HashMap<String, BioEntity> essentialReactions;
+	private HashMap<String, BioEntity> zeroFluxReactions;
+	private HashMap<String, BioEntity> optimaZeroFluxReactions;
+	private HashMap<String, BioEntity> mleReactions;
+	private HashMap<String, BioEntity> concurrentReactions;
+	private HashMap<String, BioEntity> eleReactions;
+	private HashMap<String, BioEntity> objectiveIndependantReactions;
+	private HashMap<String, BioEntity> optimaReactions;
+	private HashMap<String, BioEntity> minFluxZeroFluxReactions;
+	private HashMap<String, BioEntity> deadReactions;
+
+	private HashMap<String, BioEntity> essentialGenes;
+	private HashMap<String, BioEntity> redundantGenesForEssentialReactions;
+	private HashMap<String, BioEntity> zeroFluxGenes;
+	private HashMap<String, BioEntity> mleGenes;
+	private HashMap<String, BioEntity> concurrentGenes;
+	private HashMap<String, BioEntity> eleGenes;
+	private HashMap<String, BioEntity> objectiveIndependantGenes;
+	private HashMap<String, BioEntity> optimaGenes;
+	private HashMap<String, BioEntity> deadGenes;
+
+	private HashMap<String, BioEntity> genesInvolvedInDeadReactions;
 
 	private Objective mainObjective;
 
@@ -43,8 +61,28 @@ public class ClassificationAnalysis extends Analysis {
 				.getBiochemicalReactionList().values()) {
 			remainReactions.put(reaction.getId(), (BioEntity) reaction);
 		}
-		
-		classificationResult = new ClassificationResult();
+
+		essentialReactions = new HashMap<String, BioEntity>();
+		zeroFluxReactions = new HashMap<String, BioEntity>();
+		mleReactions = new HashMap<String, BioEntity>();
+		concurrentReactions = new HashMap<String, BioEntity>();
+		eleReactions = new HashMap<String, BioEntity>();
+		objectiveIndependantReactions = new HashMap<String, BioEntity>();
+		optimaReactions = new HashMap<String, BioEntity>();
+		minFluxZeroFluxReactions = new HashMap<String, BioEntity>();
+		deadReactions = new HashMap<String, BioEntity>();
+
+		essentialGenes = new HashMap<String, BioEntity>();
+		redundantGenesForEssentialReactions = new HashMap<String, BioEntity>();
+		zeroFluxGenes = new HashMap<String, BioEntity>();
+		mleGenes = new HashMap<String, BioEntity>();
+		eleGenes = new HashMap<String, BioEntity>();
+		concurrentGenes = new HashMap<String, BioEntity>();
+		objectiveIndependantGenes = new HashMap<String, BioEntity>();
+		optimaGenes = new HashMap<String, BioEntity>();
+		deadGenes = new HashMap<String, BioEntity>();
+
+		genesInvolvedInDeadReactions = new HashMap<String, BioEntity>();
 
 	}
 
@@ -52,9 +90,9 @@ public class ClassificationAnalysis extends Analysis {
 	public ClassificationResult runAnalysis() {
 
 		for (BioChemicalReaction reaction : b.getDeadReactions()) {
-			classificationResult.deadReactions.put(reaction.getId(), reaction);
+			this.deadReactions.put(reaction.getId(), reaction);
 			for (BioGene gene : reaction.getListOfGenes().values()) {
-				classificationResult.genesInvolvedInDeadReactions.put(gene.getId(), gene);
+				this.genesInvolvedInDeadReactions.put(gene.getId(), gene);
 			}
 		}
 
@@ -66,12 +104,12 @@ public class ClassificationAnalysis extends Analysis {
 					+ remainReactions.size());
 		}
 
-		if (opt != 0 && ! Double.isNaN(opt)) {
+		if (opt != 0) {
 
 			if (performGeneAnalysis) {
 				this.geneKoAnalysis();
 			}
-
+			
 			this.reactionDeletionAnalysis();
 
 			this.fvaWithNoConstraint();
@@ -86,14 +124,14 @@ public class ClassificationAnalysis extends Analysis {
 
 			for (String reactionId : b.getBioNetwork()
 					.getBiochemicalReactionList().keySet()) {
-				if (!classificationResult.essentialReactions.containsKey(reactionId)
-						&& !classificationResult.zeroFluxReactions.containsKey(reactionId)
-						&& !classificationResult.mleReactions.containsKey(reactionId)
-						&& !classificationResult.concurrentReactions.containsKey(reactionId)
-						&& !classificationResult.eleReactions.containsKey(reactionId)
-						&& !classificationResult.objectiveIndependentReactions
+				if (!essentialReactions.containsKey(reactionId)
+						&& !zeroFluxReactions.containsKey(reactionId)
+						&& !mleReactions.containsKey(reactionId)
+						&& !concurrentReactions.containsKey(reactionId)
+						&& !eleReactions.containsKey(reactionId)
+						&& !objectiveIndependantReactions
 								.containsKey(reactionId)
-						&& !classificationResult.optimaReactions.containsKey(reactionId)) {
+						&& !optimaReactions.containsKey(reactionId)) {
 					System.err.println("[PFBA Error] Reaction " + reactionId
 							+ " is not classified");
 				}
@@ -103,18 +141,33 @@ public class ClassificationAnalysis extends Analysis {
 				this.classifyGenes();
 			}
 		}
-		else {
-			if(Vars.verbose)
-			{
-				System.err.println("opt = "+opt+" : classification not done");
-			}
-		}
 
-		classificationResult.objectiveValue = opt;
+		ClassificationResult res = new ClassificationResult();
 
-		classificationResult.network = b.getBioNetwork();
+		res.concurrentReactions = concurrentReactions;
+		res.eleReactions = eleReactions;
+		res.essentialReactions = essentialReactions;
+		res.mleReactions = mleReactions;
+		res.objectiveIndependentReactions = objectiveIndependantReactions;
+		res.optimaReactions = optimaReactions;
+		res.zeroFluxReactions = zeroFluxReactions;
+		res.deadReactions = deadReactions;
 
-		return classificationResult;
+		res.objectiveValue = opt;
+
+		res.concurrentGenes = concurrentGenes;
+		res.eleGenes = eleGenes;
+		res.essentialGenes = essentialGenes;
+		res.mleGenes = mleGenes;
+		res.objectiveIndependentGenes = objectiveIndependantGenes;
+		res.optimaGenes = optimaGenes;
+		res.zeroFluxGenes = zeroFluxGenes;
+		res.redundantGenesForEssentialReactions = redundantGenesForEssentialReactions;
+		res.deadGenes = deadGenes;
+		
+		res.network = b.getBioNetwork();
+
+		return res;
 
 	}
 
@@ -123,21 +176,7 @@ public class ClassificationAnalysis extends Analysis {
 	 */
 	private double fba() {
 
-		Bind newBind = null;
-
-		try {
-			newBind = b.copy();
-		} catch (ClassNotFoundException | NoSuchMethodException
-				| SecurityException | InstantiationException
-				| IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-
-		newBind.prepareSolver();
-
-		FBAAnalysis a = new FBAAnalysis(newBind);
+		FBAAnalysis a = new FBAAnalysis(b);
 		FBAResult r = a.runAnalysis();
 
 		return r.getObjValue();
@@ -153,45 +192,25 @@ public class ClassificationAnalysis extends Analysis {
 			System.err.println("[PFBA] Reaction Deletion Analysis");
 		}
 
-		Bind newBind = null;
-
-		try {
-			newBind = b.copy();
-		} catch (ClassNotFoundException | NoSuchMethodException
-				| SecurityException | InstantiationException
-				| IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-
-		KOAnalysis koAnalysis = new KOAnalysis(newBind, 0,
+		KOAnalysis koAnalysis = new KOAnalysis(b, 0,
 				(HashMap<String, BioEntity>) remainReactions);
 
 		KOResult koResult = koAnalysis.runAnalysis();
 
-		classificationResult.essentialReactions = koResult.getEssentialEntities();
+		essentialReactions = koResult.getEssentialEntities();
 		
-		classificationResult.unfeasibleKoReactions = koResult.getUnfeasibleKos();
-		
-
 		if (Vars.verbose) {
-			System.err.println("essential Reactions : " + classificationResult.essentialReactions);
-			System.err.println("unfeasible ko Reactions : " + classificationResult.unfeasibleKoReactions);
+			System.err.println("essential Reactions : "+essentialReactions);
 		}
-		// We remove the essential and the unfeasible reactions from the remain reactions
-		for (String id : classificationResult.essentialReactions.keySet()) {
-			remainReactions.remove(id);
-		}
-		
-		for (String id : classificationResult.unfeasibleKoReactions.keySet()) {
+		// We remove the reactions from the remain reactions
+		for (String id : essentialReactions.keySet()) {
 			remainReactions.remove(id);
 		}
 
 		if (Vars.verbose) {
 
 			System.err.println("[PFBA] Number of essential reactions : "
-					+ classificationResult.essentialReactions.size());
+					+ essentialReactions.size());
 		}
 
 	}
@@ -205,41 +224,26 @@ public class ClassificationAnalysis extends Analysis {
 			System.err.println("[PFBA] FVA with no constraint");
 		}
 
-		Bind newBind = null;
-
-		try {
-			newBind = b.copy();
-		} catch (ClassNotFoundException | NoSuchMethodException
-				| SecurityException | InstantiationException
-				| IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-
-		newBind.prepareSolver();
-
 		double oldLibertyPercentage = Vars.libertyPercentage;
 
 		// We remove the constraint on the objective
 		Vars.libertyPercentage = 100;
 
-		FVAAnalysis fvaAnalysis = new FVAAnalysis(newBind, remainReactions,
-				null);
+		FVAAnalysis fvaAnalysis = new FVAAnalysis(b, remainReactions, null);
 
 		fvaWithNoConstraintResult = fvaAnalysis.runAnalysis();
-		
-		classificationResult.zeroFluxReactions = fvaWithNoConstraintResult.getZeroFluxReactions();
+
+		zeroFluxReactions = fvaWithNoConstraintResult.getZeroFluxReactions();
 
 		// We remove the zero flux reactions from the remain reactions
-		for (String id : classificationResult.zeroFluxReactions.keySet()) {
+		for (String id : zeroFluxReactions.keySet()) {
 			remainReactions.remove(id);
 		}
 
 		if (Vars.verbose) {
 
 			System.err.println("[PFBA] Number of zero flux reactions : "
-					+ classificationResult.zeroFluxReactions.size());
+					+ zeroFluxReactions.size());
 		}
 
 		Vars.libertyPercentage = oldLibertyPercentage;
@@ -247,7 +251,7 @@ public class ClassificationAnalysis extends Analysis {
 	}
 
 	/**
-	 * Get the optima Zero flux reactions
+	 * Get the mle reactions and the concurrent reactions
 	 */
 	private void fvaWithConstraint() {
 
@@ -255,34 +259,19 @@ public class ClassificationAnalysis extends Analysis {
 			System.err.println("[PFBA] FVA with constraint");
 		}
 
-		Bind newBind = null;
-
-		try {
-			newBind = b.copy();
-		} catch (ClassNotFoundException | NoSuchMethodException
-				| SecurityException | InstantiationException
-				| IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-
-		newBind.prepareSolver();
-
-		FVAAnalysis fvaAnalysis = new FVAAnalysis(newBind, remainReactions,
-				null);
+		FVAAnalysis fvaAnalysis = new FVAAnalysis(b, remainReactions, null);
 
 		FVAResult fvaResult = fvaAnalysis.runAnalysis();
 
-		classificationResult.optimaZeroFluxReactions = fvaResult.getZeroFluxReactions();
+		optimaZeroFluxReactions = fvaResult.getZeroFluxReactions();
 
 		if (Vars.verbose) {
 			System.err.println("[PFBA] Number of optimaZeroFluxReactions : "
-					+ classificationResult.optimaZeroFluxReactions.size());
+					+ optimaZeroFluxReactions.size());
 		}
 
 		// We remove the zero flux reactions from the remain reactions
-		for (String id : classificationResult.optimaZeroFluxReactions.keySet()) {
+		for (String id : optimaZeroFluxReactions.keySet()) {
 			remainReactions.remove(id);
 		}
 
@@ -297,38 +286,26 @@ public class ClassificationAnalysis extends Analysis {
 			System.err.println("[PFBA] FVA with flux sum constraints");
 		}
 
-		Bind newBind = null;
-
-		try {
-			newBind = b.copy();
-		} catch (ClassNotFoundException | NoSuchMethodException
-				| SecurityException | InstantiationException
-				| IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-
 		// Set minimum flux as objective
-		BioEntity fluxSumEnt = newBind.createFluxesSummation();
+		b.solverPrepared = false;
+		BioEntity fluxSumEnt = b.createFluxesSummation();
 		BioEntity fluxSumEntArray[] = { fluxSumEnt };
 		double fluxSumCoeff[] = { 1.0 };
 
 		Objective objMinFluxSum = new Objective(fluxSumEntArray, fluxSumCoeff,
 				"fluxSum", false);
 
-		newBind.constraintObjectives.add(newBind.getObjective());
+		b.setObjective(objMinFluxSum);
 
-		newBind.setObjective(objMinFluxSum);
+		b.constraintObjectives.add(this.mainObjective);
 
-		newBind.prepareSolver();
+		b.prepareSolver();
 
-		FVAAnalysis fvaAnalysis = new FVAAnalysis(newBind, remainReactions,
-				null);
+		FVAAnalysis fvaAnalysis = new FVAAnalysis(b, remainReactions, null);
 
 		FVAResult fvaResult = fvaAnalysis.runAnalysis();
 
-		classificationResult.minFluxZeroFluxReactions = fvaResult.getZeroFluxReactions();
+		minFluxZeroFluxReactions = fvaResult.getZeroFluxReactions();
 
 		// fvaResult.plot();
 		//
@@ -337,21 +314,21 @@ public class ClassificationAnalysis extends Analysis {
 		// }
 
 		// We remove the zero flux reactions from the remain reactions
-		for (String id : classificationResult.minFluxZeroFluxReactions.keySet()) {
+		for (String id : minFluxZeroFluxReactions.keySet()) {
 			remainReactions.remove(id);
 		}
 
 		if (Vars.verbose) {
 			System.err.println("[PFBA] Number of minFluxZeroFluxReactions : "
-					+ classificationResult.minFluxZeroFluxReactions.size());
+					+ minFluxZeroFluxReactions.size());
 		}
 
-		classificationResult.optimaReactions = new HashMap<String, BioEntity>(remainReactions);
+		optimaReactions = new HashMap<String, BioEntity>(remainReactions);
 
 	}
 
 	/**
-	 * Split minFluxZeroFluxReactions in ele reactions and objective Independent
+	 * Split minFluxZeroFluxReactions in ele reactions and objective independant
 	 * reactions
 	 */
 	private void scopeTest() {
@@ -372,9 +349,9 @@ public class ClassificationAnalysis extends Analysis {
 			}
 		}
 
-		for (String id : classificationResult.minFluxZeroFluxReactions.keySet()) {
+		for (String id : minFluxZeroFluxReactions.keySet()) {
 
-			if (!classificationResult.objectiveIndependentReactions.containsKey(id)) {
+			if (!objectiveIndependantReactions.containsKey(id)) {
 
 				BioChemicalReaction reaction = network
 						.getBiochemicalReactionList().get(id);
@@ -402,18 +379,18 @@ public class ClassificationAnalysis extends Analysis {
 				}
 
 				if (flag) {
-					classificationResult.eleReactions.put(id, classificationResult.minFluxZeroFluxReactions.get(id));
+					eleReactions.put(id, minFluxZeroFluxReactions.get(id));
 				} else {
 					// We put also all the reactions that are in the scope in
 					// the
 					// objective independent reactions
-					classificationResult.objectiveIndependentReactions.put(id,
-							classificationResult.minFluxZeroFluxReactions.get(id));
+					objectiveIndependantReactions.put(id,
+							minFluxZeroFluxReactions.get(id));
 					for (String idScope : scopeNetwork
 							.getBiochemicalReactionList().keySet()) {
-						if (classificationResult.minFluxZeroFluxReactions.containsKey(idScope)) {
-							classificationResult.objectiveIndependentReactions.put(idScope,
-									classificationResult.minFluxZeroFluxReactions.get(idScope));
+						if (minFluxZeroFluxReactions.containsKey(idScope)) {
+							objectiveIndependantReactions.put(idScope,
+									minFluxZeroFluxReactions.get(idScope));
 						}
 					}
 				}
@@ -422,9 +399,9 @@ public class ClassificationAnalysis extends Analysis {
 
 		if (Vars.verbose) {
 			System.err.println("[PFBA] Number of ele reactions : "
-					+ classificationResult.eleReactions.size());
+					+ eleReactions.size());
 			System.err.println("[PFBA] Number of independent reactions : "
-					+ classificationResult.objectiveIndependentReactions.size());
+					+ objectiveIndependantReactions.size());
 		}
 	}
 
@@ -442,166 +419,143 @@ public class ClassificationAnalysis extends Analysis {
 		if (Vars.verbose) {
 			System.err.println("[PFBA] Get concurrent reactions");
 			System.err.println("[PFBA] Number of reactions to treat : "
-					+ classificationResult.optimaZeroFluxReactions.size());
+					+ optimaZeroFluxReactions.size());
 			System.err.print("[");
 		}
 
-		Bind newBind = null;
+		int n = 0;
 
-		try {
-			newBind = b.copy();
-		} catch (ClassNotFoundException | NoSuchMethodException
-				| SecurityException | InstantiationException
-				| IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
-			e.printStackTrace();
-			System.exit(1);
+		// Change all the internal reaction bounds to extreme values
+		for (BioEntity e : b.getSimpleConstraints().keySet()) {
+
+			String id = e.getId();
+
+			if (b.getBioNetwork().getBiochemicalReactionList().containsKey(id)) {
+
+				BioChemicalReaction reaction = b.getBioNetwork()
+						.getBiochemicalReactionList().get(id);
+
+				// We limit the exchange reaction identification to one to
+				// one
+				// reactions
+				if (!(reaction.isExchangeReaction()
+						&& reaction.getLeftParticipantList().size() == 1 && reaction
+						.getRightParticipantList().size() == 1)) {
+					// if the reaction is not an exchange reaction we change
+					// its
+					// lower and upper bound to FVA max values.
+					Constraint constraint = b.getSimpleConstraints().get(e);
+					constraint.setUb(Vars.maxUpperBound);
+
+					if (reaction.isReversible()) {
+						constraint.setLb(Vars.minLowerBound);
+					} else {
+						constraint.setLb(0);
+					}
+				}
+			}
+
 		}
 
-		newBind.prepareSolver();
+		double sumFBA1 = 0.0;
+		double sumFBA2 = 0.0;
+		int n2 = 0;
 
-		ConcurrentReactionsAnalysis a = new ConcurrentReactionsAnalysis(
-				newBind, classificationResult.optimaZeroFluxReactions, fvaWithNoConstraintResult);
-		ConcurrentReactionsResult r = a.runAnalysis();
+		for (BioEntity e : optimaZeroFluxReactions.values()) {
 
-		classificationResult.concurrentReactions = r.getConcurrentReactions();
-		classificationResult.mleReactions = r.getOtherReactions();
+			long startTime = System.currentTimeMillis();
 
-		// int n = 0;
-		//
-		// // Change all the internal reaction bounds to extreme values
-		// for (BioEntity e : newBind.getSimpleConstraints().keySet()) {
-		//
-		// String id = e.getId();
-		//
-		// if
-		// (newBind.getBioNetwork().getBiochemicalReactionList().containsKey(id))
-		// {
-		//
-		// BioChemicalReaction reaction = newBind.getBioNetwork()
-		// .getBiochemicalReactionList().get(id);
-		//
-		// // We limit the exchange reaction identification to one to
-		// // one
-		// // reactions
-		// if (!(reaction.isExchangeReaction()
-		// && reaction.getLeftParticipantList().size() == 1 && reaction
-		// .getRightParticipantList().size() == 1)) {
-		// // if the reaction is not an exchange reaction we change
-		// // its
-		// // lower and upper bound to FVA max values.
-		// Constraint constraint = newBind.getSimpleConstraints().get(e);
-		// constraint.setUb(Vars.maxUpperBound);
-		//
-		// if (reaction.isReversible()) {
-		// constraint.setLb(Vars.minLowerBound);
-		// } else {
-		// constraint.setLb(0);
-		// }
-		// }
-		// }
-		//
-		// }
-		//
-		// double sumFBA1 = 0.0;
-		// double sumFBA2 = 0.0;
-		// int n2 = 0;
-		//
-		// for (BioEntity e : optimaZeroFluxReactions.values()) {
-		//
-		// long startTime = System.currentTimeMillis();
-		//
-		// n++;
-		//
-		// String id = e.getId();
-		//
-		// BioChemicalReaction reaction = newBind.getBioNetwork()
-		// .getBiochemicalReactionList().get(id);
-		//
-		// Double min = 0.0;
-		// Double max = 0.0;
-		//
-		// Constraint constraint = newBind.getSimpleConstraints().get(e);
-		//
-		// double oldLb = constraint.getLb();
-		// double oldUb = constraint.getUb();
-		//
-		// max = fvaWithNoConstraintResult.getMap().get(e)[1];
-		// min = fvaWithNoConstraintResult.getMap().get(e)[0];
-		//
-		// constraint.setUb(max);
-		// constraint.setLb(max);
-		//
-		// // We compute the optimal value of the main objective. If the
-		// // optimal value equals to 0, the reaction is concurrent
-		// newBind.prepareSolver();
-		//
-		// FBAAnalysis fbaAnalysis = new FBAAnalysis(newBind);
-		// FBAResult res = fbaAnalysis.runAnalysis();
-		//
-		// long stopTime = System.currentTimeMillis();
-		// long elapsedTime = stopTime - startTime;
-		//
-		// sumFBA1 += elapsedTime;
-		//
-		// // System.err.println("First FBA : "+elapsedTime);
-		//
-		// if (res.getObjValue().isNaN() || res.getObjValue() == 0) {
-		// concurrentReactions.put(e.getId(), e);
-		// } else {
-		// if (reaction.isReversible()) {
-		//
-		// n2++;
-		//
-		// startTime = System.currentTimeMillis();
-		//
-		// constraint.setUb(min);
-		// constraint.setLb(min);
-		//
-		// newBind.prepareSolver();
-		//
-		// fbaAnalysis = new FBAAnalysis(newBind);
-		// res = fbaAnalysis.runAnalysis();
-		//
-		// stopTime = System.currentTimeMillis();
-		// elapsedTime = stopTime - startTime;
-		//
-		// sumFBA2 += elapsedTime;
-		//
-		// // System.err.println("Second FBA : "+elapsedTime);
-		//
-		// if (res.getObjValue().isNaN() || res.getObjValue() == 0) {
-		// concurrentReactions.put(e.getId(), e);
-		// } else {
-		// mleReactions.put(e.getId(), e);
-		// }
-		// } else {
-		// mleReactions.put(e.getId(), e);
-		// }
-		// }
-		//
-		// constraint.setUb(oldUb);
-		// constraint.setLb(oldLb);
-		//
-		// if (Vars.verbose) {
-		// if (n % 10 == 0) {
-		// System.err.print("*");
-		// }
-		// }
-		//
-		// }
-		// if (Vars.verbose) {
-		// System.err.println("First FBA mean time : " + sumFBA1 / n);
-		// System.err.println("First FBA 2 mean time : " + sumFBA2 / n2);
-		// }
-		//
-		// if (Vars.verbose) {
-		// System.err.println("]");
-		// System.err.println("[PFBA] Number of mle reactions : "
-		// + mleReactions.size());
-		// System.err.println("[PFBA] Number of concurrent reactions : "
-		// + concurrentReactions.size());
-		// }
+			n++;
+
+			String id = e.getId();
+
+			BioChemicalReaction reaction = b.getBioNetwork()
+					.getBiochemicalReactionList().get(id);
+
+			Double min = 0.0;
+			Double max = 0.0;
+
+			Constraint constraint = b.getSimpleConstraints().get(e);
+
+			double oldLb = constraint.getLb();
+			double oldUb = constraint.getUb();
+
+			max = fvaWithNoConstraintResult.getMap().get(e)[1];
+			min = fvaWithNoConstraintResult.getMap().get(e)[0];
+
+			constraint.setUb(max);
+			constraint.setLb(max);
+
+			// We compute the optimal value of the main objective. If the
+			// optimal value equals to 0, the reaction is concurrent
+			b.prepareSolver();
+
+			FBAAnalysis fbaAnalysis = new FBAAnalysis(b);
+			FBAResult res = fbaAnalysis.runAnalysis();
+
+			long stopTime = System.currentTimeMillis();
+			long elapsedTime = stopTime - startTime;
+
+			sumFBA1 += elapsedTime;
+
+			// System.err.println("First FBA : "+elapsedTime);
+
+			if (res.getObjValue().isNaN() || res.getObjValue() == 0) {
+				concurrentReactions.put(e.getId(), e);
+			} else {
+				if (reaction.isReversible()) {
+
+					n2++;
+
+					startTime = System.currentTimeMillis();
+
+					constraint.setUb(min);
+					constraint.setLb(min);
+
+					b.prepareSolver();
+
+					fbaAnalysis = new FBAAnalysis(b);
+					res = fbaAnalysis.runAnalysis();
+
+					stopTime = System.currentTimeMillis();
+					elapsedTime = stopTime - startTime;
+
+					sumFBA2 += elapsedTime;
+
+					// System.err.println("Second FBA : "+elapsedTime);
+
+					if (res.getObjValue().isNaN() || res.getObjValue() == 0) {
+						concurrentReactions.put(e.getId(), e);
+					} else {
+						mleReactions.put(e.getId(), e);
+					}
+				} else {
+					mleReactions.put(e.getId(), e);
+				}
+			}
+
+			constraint.setUb(oldUb);
+			constraint.setLb(oldLb);
+
+			if (Vars.verbose) {
+				if (n % 10 == 0) {
+					System.err.print("*");
+				}
+			}
+
+		}
+		if (Vars.verbose) {
+			System.err.println("First FBA mean time : " + sumFBA1 / n);
+			System.err.println("First FBA 2 mean time : " + sumFBA2 / n2);
+		}
+
+		if (Vars.verbose) {
+			System.err.println("]");
+			System.err.println("[PFBA] Number of mle reactions : "
+					+ mleReactions.size());
+			System.err.println("[PFBA] Number of concurrent reactions : "
+					+ concurrentReactions.size());
+		}
 
 	}
 
@@ -613,27 +567,12 @@ public class ClassificationAnalysis extends Analysis {
 		if (Vars.verbose) {
 			System.err.println("[PFBA] Gene Ko Analysis");
 		}
-		Bind newBind = null;
 
-		try {
-			newBind = b.copy();
-		} catch (ClassNotFoundException | NoSuchMethodException
-				| SecurityException | InstantiationException
-				| IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-
-		KOAnalysis koAnalysis = new KOAnalysis(newBind, 1, null);
+		KOAnalysis koAnalysis = new KOAnalysis(b, 1, null);
 
 		KOResult res = koAnalysis.runAnalysis();
 
-		classificationResult.essentialGenes = res.getEssentialEntities();
-		
-		System.err.println("Nb of essential genes : "+classificationResult.essentialGenes.size());
-		
-		classificationResult.unfeasibleKoGenes = res.getUnfeasibleKos();
+		essentialGenes = res.getEssentialEntities();
 
 		return;
 
@@ -654,67 +593,67 @@ public class ClassificationAnalysis extends Analysis {
 
 			String geneId = gene.getId();
 
-			if (!classificationResult.essentialGenes.containsKey(geneId) && !classificationResult.unfeasibleKoGenes.containsKey(geneId)) {
+			if (!essentialGenes.containsKey(geneId)) {
 
 				Set<String> reactionIds = network.getReactionsFromGene(geneId);
 
-				Set<String> essentialReactionIds = classificationResult.essentialReactions.keySet();
+				Set<String> essentialReactionIds = essentialReactions.keySet();
 
 				Set<String> intersection = new HashSet<String>(reactionIds);
 				intersection.retainAll(essentialReactionIds);
 
 				if (intersection.size() != 0) {
-					classificationResult.redundantGenesForEssentialReactions.put(geneId, gene);
+					redundantGenesForEssentialReactions.put(geneId, gene);
 				} else {
 
-					Set<String> optimaReactionIds = classificationResult.optimaReactions.keySet();
+					Set<String> optimaReactionIds = optimaReactions.keySet();
 
 					intersection = new HashSet<String>(reactionIds);
 					intersection.retainAll(optimaReactionIds);
 
 					if (intersection.size() != 0) {
-						classificationResult.optimaGenes.put(geneId, gene);
+						optimaGenes.put(geneId, gene);
 					} else {
-						Set<String> concurrentReactionIds = classificationResult.concurrentReactions
+						Set<String> concurrentReactionIds = concurrentReactions
 								.keySet();
 						intersection = new HashSet<String>(reactionIds);
 						intersection.retainAll(concurrentReactionIds);
 
 						if (intersection.size() != 0) {
-							classificationResult.concurrentGenes.put(geneId, gene);
+							concurrentGenes.put(geneId, gene);
 						} else {
-							Set<String> mleReactionIds = classificationResult.mleReactions.keySet();
+							Set<String> mleReactionIds = mleReactions.keySet();
 							intersection = new HashSet<String>(reactionIds);
 							intersection.retainAll(mleReactionIds);
 							if (intersection.size() != 0) {
-								classificationResult.mleGenes.put(geneId, gene);
+								mleGenes.put(geneId, gene);
 							} else {
-								Set<String> eleReactionIds = classificationResult.eleReactions
+								Set<String> eleReactionIds = eleReactions
 										.keySet();
 								intersection = new HashSet<String>(reactionIds);
 								intersection.retainAll(eleReactionIds);
 								if (intersection.size() != 0) {
-									classificationResult.eleGenes.put(geneId, gene);
+									eleGenes.put(geneId, gene);
 								} else {
-									Set<String> oirReactionIds = classificationResult.objectiveIndependentReactions
+									Set<String> oirReactionIds = objectiveIndependantReactions
 											.keySet();
 									intersection = new HashSet<String>(
 											reactionIds);
 									intersection.retainAll(oirReactionIds);
 									if (intersection.size() != 0) {
-										classificationResult.objectiveIndependentGenes.put(geneId,
+										objectiveIndependantGenes.put(geneId,
 												gene);
 									} else {
-										Set<String> zfReactionIds = classificationResult.zeroFluxReactions
+										Set<String> zfReactionIds = zeroFluxReactions
 												.keySet();
 										intersection = new HashSet<String>(
 												reactionIds);
 										intersection.retainAll(zfReactionIds);
 										if (intersection.size() != 0) {
-											classificationResult.zeroFluxGenes.put(geneId, gene);
-										} else if (classificationResult.genesInvolvedInDeadReactions
+											zeroFluxGenes.put(geneId, gene);
+										} else if (genesInvolvedInDeadReactions
 												.containsKey(geneId)) {
-											classificationResult.deadGenes.put(geneId, gene);
+											deadGenes.put(geneId, gene);
 										} else {
 											System.err
 													.println("[ERROR] PFBA: The gene "
@@ -740,11 +679,11 @@ public class ClassificationAnalysis extends Analysis {
 	 */
 	public void addDeadReactions(
 			HashMap<String, BioChemicalReaction> deadReactions) {
-		classificationResult.deadReactions.putAll(deadReactions);
+		this.deadReactions.putAll(deadReactions);
 
 		for (BioChemicalReaction reaction : deadReactions.values()) {
 			for (BioGene gene : reaction.getListOfGenes().values()) {
-				classificationResult.genesInvolvedInDeadReactions.put(gene.getId(), gene);
+				this.genesInvolvedInDeadReactions.put(gene.getId(), gene);
 			}
 		}
 	}

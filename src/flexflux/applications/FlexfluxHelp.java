@@ -32,14 +32,9 @@ public class FlexfluxHelp extends FFApplication {
 			}
 		}
 	}
-
-	@Override
+	
 	public String getMessage() {
 		return message;
 	}
 
-	@Override
-	public String getExample() {
-		return "";
-	}
 }

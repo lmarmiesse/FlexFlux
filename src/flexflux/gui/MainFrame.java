@@ -112,8 +112,8 @@ public class MainFrame extends JFrame {
 		}
 		// removes classes with no simpleName and with the option
 		// graphicalVersion = false;
-		List<Class<?>> toRemove = new ArrayList<Class<?>>();
-		for (Class<?> c : executableClasses) {
+		List<Class> toRemove = new ArrayList<Class>();
+		for (Class c : executableClasses) {
 
 			Field field = null;
 			Boolean graphicalVersion = null;
@@ -336,7 +336,7 @@ public class MainFrame extends JFrame {
 	private ArgumentComponent getRightComponent(String metaVar, String name) {
 
 		if (!metaVar.equals("")) {
-			if (metaVar.equals("File")) {
+			if (metaVar.contains("File")) {
 				return new FileComponent(name);
 			} else if (metaVar.equals("Solver")) {
 

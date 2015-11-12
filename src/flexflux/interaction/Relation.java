@@ -33,6 +33,7 @@
  */
 package flexflux.interaction;
 
+import flexflux.general.Bind;
 import flexflux.general.Constraint;
 
 import java.util.List;
@@ -53,6 +54,8 @@ import parsebionet.biodata.BioEntity;
 public abstract class Relation {
 
 	public abstract String toString();
+
+	public abstract String toFormula();
 
 	protected boolean probabilityRelation = false;
 
@@ -110,4 +113,18 @@ public abstract class Relation {
 	public abstract boolean isUndeterminedVariable(Map<BioEntity, Constraint> simpleConstraints);
 
 	public abstract boolean isInverseTrue(Map<BioEntity, Constraint> simpleConstraints);
+
+	/**
+	 * Calculates "an expression value" of the relation given omics data results
+	 * in one condition
+	 * 
+	 * @param sampleValues
+	 * 
+	 * @param method
+	 * 1 => And : sum ; or : mean
+	 * 2 => all mean
+	 * 
+	 * 
+	 */
+	public abstract double calculateRelationQuantitativeValue(Map<BioEntity, Double> sampleValues, int method);
 }

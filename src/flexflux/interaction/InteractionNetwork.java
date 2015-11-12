@@ -40,8 +40,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import parsebionet.biodata.BioEntity;
 import flexflux.general.Constraint;
+import flexflux.operation.OperationFactory;
+import parsebionet.biodata.BioChemicalReaction;
+import parsebionet.biodata.BioComplex;
+import parsebionet.biodata.BioEntity;
+import parsebionet.biodata.BioGene;
+import parsebionet.biodata.BioNetwork;
+import parsebionet.biodata.BioPhysicalEntity;
+import parsebionet.biodata.BioProtein;
 
 /**
  * 
@@ -378,43 +385,37 @@ public class InteractionNetwork {
 	public InteractionNetwork copy() {
 		InteractionNetwork newInteractionNetwork = new InteractionNetwork();
 
-		newInteractionNetwork.binaryEntities = new HashMap<String, BioEntity>(this.getBinaryEntities());
-		
-		newInteractionNetwork.entityStateConstraintTranslation = new HashMap<BioEntity, Map<Integer, Constraint>>();
-		for(BioEntity e : this.entityStateConstraintTranslation.keySet())
-		{
-			HashMap<Integer, Constraint> constraint = new HashMap<Integer, Constraint>(this.entityStateConstraintTranslation.get(e));
-			newInteractionNetwork.entityStateConstraintTranslation.put(e, constraint);
+		newInteractionNetwork.setBinaryEntities(this.getBinaryEntities());
+		newInteractionNetwork.setIntEntities(this.getIntEntities());
+		newInteractionNetwork.setNumEntities(this.getNumEntities());
+
+		for (Interaction gprInt : this.getGPRInteractions()) {
+			newInteractionNetwork.addGPRIntercation(gprInt);
 		}
-		
-		newInteractionNetwork.GPRInteractions = new ArrayList<Interaction>(this.GPRInteractions);
-		
-		newInteractionNetwork.initialConstraints = new HashMap<BioEntity, Constraint>(this.initialConstraints);
-		
-		newInteractionNetwork.initialStates = new HashMap<BioEntity, Integer>(this.initialStates);
-		
-		newInteractionNetwork.intEntities = new HashMap<String, BioEntity>(this.intEntities);
-		
-		newInteractionNetwork.interactionNetworkEntities = new HashMap<String, BioEntity>(this.interactionNetworkEntities);
-		
-		newInteractionNetwork.interactionNetworkEntitiesStates = new HashMap<BioEntity, int[]>();
-		for(BioEntity e : this.interactionNetworkEntitiesStates.keySet())
-		{
-			int newStates[] = this.interactionNetworkEntitiesStates.get(e).clone();
-			newInteractionNetwork.interactionNetworkEntitiesStates.put(e, newStates);
+
+		for (BioEntity ent : initialConstraints.keySet()) {
+			newInteractionNetwork.addInitialConstraint(ent,
+					initialConstraints.get(ent));
+
 		}
-		
-		newInteractionNetwork.interactionToConstraints = new HashMap<Interaction, List<Constraint>>();
-		for(Interaction i : this.interactionToConstraints.keySet())
-		{
-			List<Constraint> constraints = new ArrayList<Constraint>(this.interactionToConstraints.get(i));
-			newInteractionNetwork.interactionToConstraints.put(i, constraints);
+
+		for (BioEntity ent : initialStates.keySet()) {
+			newInteractionNetwork.addInitialState(ent, initialStates.get(ent));
 		}
-		
-		newInteractionNetwork.numEntities = new HashMap<String, BioEntity> (this.numEntities);
-		
-		newInteractionNetwork.targetToInteractions = new HashMap<BioEntity, FFTransition>(this.targetToInteractions);
-		
+
+		newInteractionNetwork.interactionNetworkEntitiesStates = this
+				.getInteractionNetworkEntitiesStates();
+
+		newInteractionNetwork.setInteractionToConstraints(this
+				.getInteractionToConstraints());
+		newInteractionNetwork.setTargetToInteractions(this
+				.getTargetToInteractions());
+		newInteractionNetwork.setInteractionNetworkEntities(this
+				.getInteractionNetworkEntities());
+
+		newInteractionNetwork.entityStateConstraintTranslation = this
+				.getEntityStateConstraintTranslation();
+
 		return newInteractionNetwork;
 	}
 
@@ -460,6 +461,168 @@ public class InteractionNetwork {
 	public Map<String, BioEntity> getNumEntities() {
 		return numEntities;
 	}
+	
+	
+	/**
+	 * 
+	 * Adds entities to the problem from the metaboblic network.
+	 * 
+	 */
+	public void addNetworkEntities(BioNetwork bioNet) {
+
+		List<BioEntity> entities = new ArrayList<BioEntity>();
+		// we add the reactions
+		Map<String, BioChemicalReaction> reactionsMap = bioNet.getBiochemicalReactionList();
+
+		for (String reacName : reactionsMap.keySet()) {
+			entities.add(reactionsMap.get(reacName));
+		}
+
+		// we add the metabolites
+		Map<String, BioPhysicalEntity> metabolitesMap = bioNet.getPhysicalEntityList();
+
+		for (String metabName : metabolitesMap.keySet()) {
+			entities.add(metabolitesMap.get(metabName));
+		}
+
+		// we add the genes
+		Map<String, BioGene> genesMap = bioNet.getGeneList();
+		for (String geneName : genesMap.keySet()) {
+			entities.add(genesMap.get(geneName));
+		}
+
+		// we add the proteins
+		Map<String, BioProtein> proteinsMap = bioNet.getProteinList();
+		for (String protName : proteinsMap.keySet()) {
+			entities.add(proteinsMap.get(protName));
+		}
+
+		for (BioEntity be : entities) {
+			this.addNumEntity(be);
+		}
+	}
+	
+	/**
+	 * 
+	 * Adds GPR interactions to the problem.
+	 * 
+	 */
+	public void gprInteractions(BioNetwork bioNet, RelationFactory relationFactory, OperationFactory operationFactory) {
+
+		Map<String, BioChemicalReaction> reactionsMap = bioNet.getBiochemicalReactionList();
+
+		for (String name : reactionsMap.keySet()) {
+
+			// genes invovled in this GPR, to add the interaction to the
+			// interactionsToCheck
+			List<BioGene> involvedGenes = new ArrayList<BioGene>();
+
+			// we crate the interaction : if gene = 0 then reaction = 0
+			// so we transform the gpr from R = G1 AND G2
+			// to : if G1=0 OR G2=0 then R=0
+			// so we invert AND and OR
+
+			Map<String, BioPhysicalEntity> enzymes = reactionsMap.get(name).getEnzList();
+
+			if (enzymes.size() != 0) {
+
+				Relation rel1 = null;
+
+				// if the genes are here
+				Relation rel1Active = null;
+				
+				
+				// if there are more than 1 enzyme, we create a And
+				if (enzymes.size() > 1) {
+					rel1 = (And) relationFactory.makeAnd();
+					rel1Active = (Or) relationFactory.makeOr();
+
+				}
+
+				for (String enzName : enzymes.keySet()) {
+					
+					BioPhysicalEntity enzyme = enzymes.get(enzName);
+
+					String classe = enzyme.getClass().getSimpleName();
+
+					HashMap<String, BioGene> listOfGenes = new HashMap<String, BioGene>();
+
+					// HashMap<String, BioProtein> listOfProteins = new
+					// HashMap<String, BioProtein>();
+
+					if (classe.compareTo("BioProtein") == 0) {
+						// listOfProteins.put(enzyme.getId(),
+						// (BioProtein)enzyme);
+
+						listOfGenes = ((BioProtein) enzyme).getGeneList();
+
+					} else if (classe.compareTo("BioComplex") == 0) {
+
+						listOfGenes = ((BioComplex) enzyme).getGeneList();
+
+					}
+
+					Relation rel2 = null;
+
+					Relation rel2Active = null;
+					if (listOfGenes.size() > 1) {
+						rel2 = (Or) relationFactory.makeOr();
+						rel2Active = (And) relationFactory.makeAnd();
+					}
+
+					for (String geneName : listOfGenes.keySet()) {
+
+						involvedGenes.add((BioGene) this.getEntity(geneName));
+
+						Unique unique = (Unique) relationFactory.makeUnique(this.getEntity(geneName),
+								operationFactory.makeEq(), 0);
+
+						Unique uniqueActive = (Unique) relationFactory.makeUnique(this.getEntity(geneName),
+								operationFactory.makeGt(), 0.0);
+
+						if (rel2 != null) {
+							((Or) rel2).addRelation(unique);
+						} else {
+							rel2 = unique;
+						}
+
+						if (rel2Active != null) {
+							((And) rel2Active).addRelation(uniqueActive);
+						} else {
+							rel2Active = uniqueActive;
+						}
+
+					}
+
+					if (rel1 != null) {
+						((And) rel1).addRelation(rel2);
+					} else {
+						rel1 = rel2;
+					}
+
+					if (rel1Active != null) {
+						((Or) rel1Active).addRelation(rel2Active);
+					} else {
+						rel1Active = rel2Active;
+					}
+
+				}
+
+				// if the genes are not there, the reaction is not there
+
+				Unique reacEqZero = (Unique) relationFactory.makeUnique(this.getEntity(name),
+						operationFactory.makeEq(), 0.0);
+
+				Interaction inter = relationFactory.makeIfThenInteraction(reacEqZero, rel1);
+
+				this.addGPRIntercation(inter);
+				inter.setTimeInfos(new double[] { 0.0, 0.0 });
+
+			}
+
+		}
+
+	}
 
 	/**
 	 * returns a string describing the network in a human readable format
@@ -502,26 +665,5 @@ public class InteractionNetwork {
 		return str;
 
 	}
-	
-	/**
-	 * Make null all fields
-	 */
-	public void allNull() {
-		
-		interactionNetworkEntities = null;
-		interactionNetworkEntitiesStates = null;
-		numEntities = null;
-		intEntities = null;
-		binaryEntities = null;
-		GPRInteractions = null;
-		initialConstraints = null;
-		initialStates = null;
-		interactionToConstraints = null;
-		targetToInteractions = null;
-		entityStateConstraintTranslation = null;
-		
-		
-	}
-	
 
 }

@@ -31,10 +31,13 @@
 package flexflux.thread;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+import parsebionet.biodata.BioEntity;
 import flexflux.analyses.result.ROBAResult;
 import flexflux.condition.Condition;
 import flexflux.general.Bind;

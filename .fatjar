@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Thu Jul 10 10:11:16 CEST 2014
+onejar.license.required=false
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=false
+jarname=/home/lmarmiesse/Documents/FBA/FlexFlux/new_FlexFlux/FlexFlux.jar
+manifest.mergeall=true
+manifest.mainclass=
+manifest.file=<createnew>
+jarname.isextern=true
+onejar.expand=
+excludes=<po|FlexFlux>~flexflux/~unit_tests/;<po|FlexFlux>~.gitignore;<jar|cplex.jar>;<jar|junit.jar>;<jar|org.hamcrest.core_1.3.0.v201303031735.jar>
+includes=

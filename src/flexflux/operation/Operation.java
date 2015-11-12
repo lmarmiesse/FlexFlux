@@ -84,4 +84,6 @@ public abstract class Operation {
 
 	public abstract boolean isInverseTrue(Constraint cons, double value);
 
+	public abstract String toFormula();
+
 }

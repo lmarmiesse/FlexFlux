@@ -40,7 +40,7 @@ import flexflux.general.Bind;
  * 
  * Superclass of all analyses.
  * 
- * @author lmarmiesse 5 apr. 2013
+ * @author lmarmiesse 5 avr. 2013
  * 
  */
 public abstract class Analysis {
@@ -53,10 +53,6 @@ public abstract class Analysis {
 	 */
 	protected Bind b;
 
-	/**
-	 * Constructor. 
-	 * @param b : {@link Bind}
-	 */
 	public Analysis(Bind b) {
 
 		this.b = b;
@@ -67,7 +63,7 @@ public abstract class Analysis {
 	 * 
 	 * Runs the analysis.
 	 * 
-	 * @return an {@link AnalysisResult} : object containing the result of the analysis.
+	 * @return An object containing the result of the analysis.
 	 */
 	public abstract AnalysisResult runAnalysis();
 

@@ -42,6 +42,7 @@ import flexflux.objective.Objective;
 import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import parsebionet.biodata.BioEntity;
 
@@ -57,7 +58,7 @@ public class ThreadFVA extends ResolveThread {
 	/**
 	 * Number of entities to treat.
 	 */
-	private int todo;
+	private double todo;
 
 	/**
 	 * Contains all entities to treat.
@@ -72,19 +73,18 @@ public class ThreadFVA extends ResolveThread {
 
 	/**
 	 * 
-	 * Percentage of the FVA that is completed.
+	 * For the output
+	 * Thread safe integer
 	 * 
 	 */
-	private static int percentage = 0;
+	private static AtomicInteger nbPrintedStars = new AtomicInteger(0);
 
-	public ThreadFVA(Bind b, Queue<BioEntity> ents, Queue<BioEntity> entsCopy,
-			FVAResult result) {
+	public ThreadFVA(Bind b, Queue<BioEntity> ents, Queue<BioEntity> entsCopy, FVAResult result) {
 		super(b);
 		this.todo = ents.size();
 		this.entities = ents;
 		this.entitiesCopy = entsCopy;
 		this.result = result;
-		percentage = 0;
 	}
 
 	/**
@@ -93,48 +93,53 @@ public class ThreadFVA extends ResolveThread {
 	public void run() {
 		bind.setObjective(new Objective());
 		bind.makeSolverObjective();
-		
-		
+
 		// we do all the minimize
 		bind.setObjSense(false);
-		
+
 		BioEntity entity;
-		
+
 		while ((entity = entities.poll()) != null) {
-			
+
 			bind.changeObjVarValue(entity, 1.0);
-			result.setMin(entity, bind.FBA(new ArrayList<Constraint>(),false, false).result);
+			result.setMin(entity, bind.FBA(new ArrayList<Constraint>(), false, false).result);
 			bind.changeObjVarValue(entity, 0.0);
 
-			int percent = (int) Math.round((todo - entities.size()) / todo * 50);
-			if (percent > percentage) {
+			if (Vars.verbose) {
 
-				percentage = percent;
-				if (Vars.verbose && percent % 2 == 0) {
+				int percent = (int) Math.round(((todo - entities.size()) / todo) * 50);
+
+				while (nbPrintedStars.intValue() < (percent / 2)) {
 					System.err.print("*");
+					nbPrintedStars.incrementAndGet();
 				}
 			}
 
 		}
 		// and all the maximize
 		bind.setObjSense(true);
-		
+
 		while ((entity = entitiesCopy.poll()) != null) {
 
 			bind.changeObjVarValue(entity, 1.0);
-			result.setMax(entity, bind.FBA(new ArrayList<Constraint>(),false, false).result);
+			result.setMax(entity, bind.FBA(new ArrayList<Constraint>(), false, false).result);
 			bind.changeObjVarValue(entity, 0.0);
 
-			int percent = (int) Math.round((todo - entitiesCopy.size()) / todo * 50) + 50;
-			if (percent > percentage) {
-				percentage = percent;
-				if (Vars.verbose && percent % 2 == 0 && percentage != 0) {
+			if (Vars.verbose) {
+
+				int percent = (int) Math.round(((todo - entitiesCopy.size()) / todo) * 50) + 50;
+
+				while (nbPrintedStars.intValue() < (percent / 2)) {
 					System.err.print("*");
+					nbPrintedStars.incrementAndGet();
 				}
+
 			}
+
 		}
 
 		bind.end();
+		nbPrintedStars = new AtomicInteger(0);
 	}
 
 }

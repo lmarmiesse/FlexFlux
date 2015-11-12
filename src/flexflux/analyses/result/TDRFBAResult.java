@@ -138,8 +138,12 @@ public class TDRFBAResult extends AnalysisResult {
 				line = time + "\t";
 				for (String s : entities) {
 
-					line += Vars.round(resultMap.get(time).get(s)) + "\t";
+					if (resultMap.get(time).containsKey(s) && resultMap.get(time).get(s) != null) {
+						line += Vars.round(resultMap.get(time).get(s)) + "\t";
+					} else {
+						System.err.println("Error for variable " + s + ", no calculated value.");
 
+					}
 				}
 				out.println(line);
 
@@ -180,7 +184,7 @@ public class TDRFBAResult extends AnalysisResult {
 					true, // include legend
 					true, // tooltips
 					false // urls
-					);
+			);
 
 			chart.setBackgroundPaint(Color.white);
 
@@ -215,6 +219,33 @@ public class TDRFBAResult extends AnalysisResult {
 		RefineryUtilities.centerFrameOnScreen(frame);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+
+	}
+
+	@Override
+	public void writeHTML(String path) {
+		try {
+			PrintWriter out = new PrintWriter(new File(path));
+
+			for (String s : entities) {
+
+				out.println("<p hidden class='2Dplot' data-plotname='" + s
+						+ "' data-xAxisName='Time (h)' data-yAxisName=''>");
+
+				for (Double time : times) {
+					out.println("<a>" + time + ";" + resultMap.get(time).get(s) + "</a>");
+				}
+				out.println("</p>");
+			}
+			out.close();
+		} catch (
+
+		IOException e)
+
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

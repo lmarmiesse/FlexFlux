@@ -58,21 +58,25 @@ public class OperationNotEq extends Operation {
 		return (" != ");
 	}
 
+	public String toFormula() {
+
+		return (" != ");
+	}
+
 	public boolean isTrue(Constraint cons, double value) {
-		if (cons.getLb() > value && cons.getUb() > value){
+		if (cons.getLb() > value && cons.getUb() > value) {
+			return true;
+		} else if (cons.getLb() < value && cons.getUb() < value) {
 			return true;
 		}
-		else if (cons.getLb() < value && cons.getUb() < value){
-			return true;
-		}
-		
+
 		return false;
 	}
 
 	public boolean isInverseTrue(Constraint cons, double value) {
 		return cons.getLb() == value && cons.getUb() == value;
 	}
-	
+
 	public List<Constraint> makeConstraint(BioEntity entity, double value) {
 
 		List<Constraint> constraints = new ArrayList<Constraint>();
@@ -124,5 +128,5 @@ public class OperationNotEq extends Operation {
 
 		return null;
 	}
-	
+
 }

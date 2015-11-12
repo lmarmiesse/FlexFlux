@@ -37,13 +37,12 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import parsebionet.biodata.BioEntity;
@@ -54,7 +53,6 @@ import parsebionet.unit_tests.utils.TestUtils;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.CplexBind;
-import flexflux.general.DoubleResult;
 import flexflux.general.GLPKBind;
 import flexflux.interaction.And;
 import flexflux.interaction.Interaction;
@@ -77,8 +75,8 @@ public class TestBind extends FFUnitTest {
 	static String condTestString = "";
 	static String intTestString = "";
 
-	@Before
-	public void init() {
+	@BeforeClass
+	public static void init() {
 
 		File file;
 		try {
@@ -123,6 +121,7 @@ public class TestBind extends FFUnitTest {
 				bind = new GLPKBind();
 			}
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			fail("Solver error");
 		}
 
@@ -143,14 +142,10 @@ public class TestBind extends FFUnitTest {
 		// all the reaction are loaded
 		Assert.assertEquals(2214, n.getBiochemicalReactionList().size());
 
-		int nb = n
+		Assert.assertTrue("Network entities are not added correctly", n
 				.getPhysicalEntityList().size()
 				+ n.getBiochemicalReactionList().size()
-				+ n.getProteinList().size() + n.getGeneList().size() +  bind.getDeadReactions().size();
-		
-		System.err.println("n : "+nb+"\nnum: "+i.getNumEntities().size());
-		
-		Assert.assertTrue("Network entities are not added correctly", nb >= i
+				+ n.getProteinList().size() + n.getGeneList().size() >= i
 				.getNumEntities().size());
 
 		// entities are added
@@ -221,10 +216,7 @@ public class TestBind extends FFUnitTest {
 					.equals("R_GLCptspp")) {
 				List<Relation> rels = ((And) interaction.getCondition())
 						.getList();
-				/**
-				 * TODO : we only test if there is a relation, not enough !
-				 */
-				if(rels.size()> 0 ) {
+				for (Relation r : rels) {
 					gpr = true;
 				}
 			}
@@ -237,7 +229,7 @@ public class TestBind extends FFUnitTest {
 		BioNetwork network = parser.getBioNetwork();
 		bind.setNetworkAndConstraints(network);
 
-		Assert.assertEquals(bind.getConstraints().size(), 13);
+		Assert.assertTrue(bind.getConstraints().size() == 13);
 		Assert.assertTrue(bind.getInteractionNetwork().getNumEntities().size() == 17);
 
 		// starting tests on analysis and parsing files
@@ -293,43 +285,5 @@ public class TestBind extends FFUnitTest {
 		Assert.assertTrue(bind2.getSolvedValue(new BioEntity("e")) == 4.0);
 
 	}
-	
-	@Test
-	public void testCopy() {
-
-		// starting tests on analysis and parsing files
-		
-		Sbml2Bionetwork parser = new Sbml2Bionetwork(testFileString, false);
-
-		BioNetwork network = parser.getBioNetwork();
-		bind.setNetworkAndConstraints(network);
-
-		bind.loadConstraintsFile(condTestString);
-		bind.loadRegulationFile(intTestString);
-
-		bind.prepareSolver();
-		
-		Bind newBind = null;
-		
-		try {
-			newBind = bind.copy();
-		} catch (ClassNotFoundException | NoSuchMethodException
-				| SecurityException | InstantiationException
-				| IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-
-		newBind.prepareSolver();
-		
-		DoubleResult res = newBind.FBA(new ArrayList<Constraint>(), true, true);
-		System.err.println("Flag : "+res.flag);
-		
-		
-		Assert.assertEquals("Test FBA", 14.0, res.result, 0.001);
-		
-	}
-	
 
 }

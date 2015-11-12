@@ -1,9 +1,7 @@
 package flexflux.unit_tests;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Scanner;
 
 import junitx.framework.FileAssert;
 
@@ -16,6 +14,7 @@ import parsebionet.unit_tests.utils.TestUtils;
 import flexflux.analyses.BECOAnalysis;
 import flexflux.analyses.result.beco.BECOResult;
 import flexflux.applications.FlexfluxBECO;
+import flexflux.general.ConstraintType;
 import flexflux.general.Vars;
 import flexflux.objective.ListOfObjectives;
 
@@ -104,8 +103,8 @@ public class TestBECO extends FFUnitTest{
 
 		Vars.writeInteractionNetworkStates = false;
 		
-//		Vars.maxThread = 20;
-		Vars.maxThread = 1;
+		Vars.maxThread = 20;
+//		Vars.maxThread = 2;
 		
 		
 
@@ -510,21 +509,7 @@ public class TestBECO extends FFUnitTest{
 		String pathFileTest = basePath + "/concurrentReactions.tsv";
 		File fileTest = new File(pathFileTest);
 		File fileRef = new File(referenceConcurrentFile);
-		
-		
-		Scanner sc;
-		try {
-			sc = new Scanner(fileTest);
-			
-			while(sc.hasNextLine()){
-			    System.err.println(sc.nextLine());                     
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
+
 		FileAssert.assertEquals(
 				"Concurrent reactions are different from the reference",
 				fileRef, fileTest);
@@ -745,7 +730,7 @@ public class TestBECO extends FFUnitTest{
 	@AfterClass
 	public static void afterTest() {
 
-		 tempDir.delete();
+//		 tempDir.delete();
 
 	}
 

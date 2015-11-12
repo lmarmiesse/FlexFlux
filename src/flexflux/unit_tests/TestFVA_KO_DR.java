@@ -51,13 +51,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.unit_tests.utils.TestUtils;
@@ -136,7 +139,7 @@ public class TestFVA_KO_DR extends FFUnitTest {
 			fail("Solver error");
 		}
 
-		Vars.maxThread = 8;
+		Vars.maxThread = 1;
 
 		bind.loadSbmlNetwork(coliFileString, false);
 		n = bind.getBioNetwork();
@@ -156,6 +159,11 @@ public class TestFVA_KO_DR extends FFUnitTest {
 	}
 
 	public void go() {
+
+		Map<String, BioChemicalReaction> networkReacs = n
+				.getBiochemicalReactionList();
+
+		BioChemicalReaction reaction = null;
 
 		FVAAnalysis fva = new FVAAnalysis(bind, null, null);
 		FVAResult result = fva.runAnalysis();
@@ -181,8 +189,6 @@ public class TestFVA_KO_DR extends FFUnitTest {
 
 			}
 
-			in.close();
-			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -212,8 +218,6 @@ public class TestFVA_KO_DR extends FFUnitTest {
 						.getInteractionNetwork().getEntity(name)) - value) < 0.001);
 
 			}
-			
-			in.close();
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -260,9 +264,6 @@ public class TestFVA_KO_DR extends FFUnitTest {
 				Assert.assertTrue((simuResult - value) < 0.001);
 
 			}
-			
-			in.close();
-			
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -276,22 +277,23 @@ public class TestFVA_KO_DR extends FFUnitTest {
 		DRAnalysis dr = new DRAnalysis(bind, 0.000001);
 		DRResult resultDr = dr.runAnalysis();
 
-		Set<String> dead = resultDr.getDeadReactions().keySet();
-		
+		List<BioEntity> dead = resultDr.getDeadReactions();
+
+		System.err.println(dead.size());
 		Assert.assertTrue(dead.size() == 8);
 
-		Set<String> testDead = new HashSet<String>();
+		List<BioEntity> testDead = new ArrayList<BioEntity>();
 
-		testDead.add("R_EX_mal_L_e");
-		testDead.add("R_EX_fru_e");
-		testDead.add("R_EX_fum_e");
-		testDead.add("R_EX_gln_L_e");
-		testDead.add("R_GLNabc");
-		testDead.add("R_MALt2_2");
-		testDead.add("R_FUMt2_2");
-		testDead.add("R_FRUpts2");
+		testDead.add(bind.getInteractionNetwork().getEntity("R_EX_mal_L_e"));
+		testDead.add(bind.getInteractionNetwork().getEntity("R_EX_fru_e"));
+		testDead.add(bind.getInteractionNetwork().getEntity("R_EX_fru_e"));
+		testDead.add(bind.getInteractionNetwork().getEntity("R_EX_gln_L_e"));
+		testDead.add(bind.getInteractionNetwork().getEntity("R_GLNabc"));
+		testDead.add(bind.getInteractionNetwork().getEntity("R_MALt2_2"));
+		testDead.add(bind.getInteractionNetwork().getEntity("R_FUMt2_2"));
+		testDead.add(bind.getInteractionNetwork().getEntity("R_FRUpts2"));
 
-		Assert.assertEquals(testDead, dead);
+		Assert.assertTrue(dead.containsAll(testDead));
 
 	}
 }

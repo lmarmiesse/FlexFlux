@@ -84,24 +84,23 @@ public class FlexfluxPareto extends FFApplication{
 	// order for the graphical version
 	public static int order = 10;	
 
-	public static String message = "FlexfluxPareto\n"
-			+ "The goal of this analysis is to determine what objective (or set of objectives) an organism is optimizing.\n"
+	public static String message =  "The goal of this analysis is to determine what objective (or set of objectives) an organism is optimizing.\n"
 
 			+ "It take as an argument a file containing the objective functions to test and"
 			+ " experimental values, and finds out\n (in one, two and three dimensions) what"
 			+ " objective optimization is closest to the experimental values.";
 	public String example = "Example : FlexfluxPareto -s network.xml -cond cond.txt -int int.txt -plot -e expFile";
 
-	@Option(name = "-s", usage = "Sbml file path", metaVar = "File", required = true)
+	@Option(name = "-s", usage = "Metabolic network file path (SBML format)", metaVar = "File - in", required = true)
 	public String sbmlFile = "";
 
-	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File")
+	@Option(name = "-cons", usage = "Constraints file path", metaVar = "File - in")
 	public String consFile = "";
 
-	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File")
+	@Option(name = "-reg", usage = "[OPTIONAL]Regulation file path", metaVar = "File - in")
 	public String regFile = "";
 
-	@Option(name = "-exp", usage = "Path of file containing objective functions and experimental values", metaVar = "File", required = true)
+	@Option(name = "-exp", usage = "Path of file containing objective functions and experimental values", metaVar = "File - in", required = true)
 	public String expFile = "";
 
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
@@ -110,7 +109,7 @@ public class FlexfluxPareto extends FFApplication{
 	@Option(name = "-plot", usage = "[OPTIONAL, default = false]Plots the results")
 	public boolean plot = false;
 
-	@Option(name = "-out", usage = "[OPTIONAL]Output folder name", metaVar = "File")
+	@Option(name = "-out", usage = "[OPTIONAL]Output folder name", metaVar = "File - out")
 	public String outName = "";
 
 	@Option(name = "-lib", usage = "[OPTIONAL, default = 0]Percentage of non optimality for new constraints", metaVar = "Double")
@@ -119,7 +118,7 @@ public class FlexfluxPareto extends FFApplication{
 	@Option(name = "-pre", usage = "[OPTIONAL, default = 6]Number of decimals of precision for calculations and results", metaVar = "Integer")
 	public int precision = 6;
 
-	@Option(name = "-ext", usage = extParameterDescription)
+	@Option(name = "-ext", usage = "[OPTIONAL, default = false]Uses the extended SBML format")
 	public boolean extended = false;
 
 	@Option(name = "-all", usage = "[OPTIONAL, default = false]Plots all results. If false, plots 1D results and only the best result for 2D and 3D results")
@@ -201,15 +200,9 @@ public class FlexfluxPareto extends FFApplication{
 		}
 		bind.end();
 	}
-
-	@Override
+	
 	public String getMessage() {
 		return message;
-	}
-
-	@Override
-	public String getExample() {
-		return example;
 	}
 
 }

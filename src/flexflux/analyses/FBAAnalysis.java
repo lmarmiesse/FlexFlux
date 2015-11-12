@@ -37,6 +37,7 @@ import flexflux.analyses.result.FBAResult;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.DoubleResult;
+import flexflux.general.Vars;
 
 import java.util.ArrayList;
 
@@ -61,6 +62,11 @@ public class FBAAnalysis extends Analysis {
 
 		if (objValue.flag != 0) {
 
+			if (Vars.verbose) {
+				System.err.println(objValue.result);
+
+				System.err.println("Unfeasible");
+			}
 			result.setObjValue(Double.NaN);
 
 		} else {

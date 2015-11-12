@@ -33,11 +33,12 @@
  */
 package flexflux.interaction;
 
-import flexflux.general.Constraint;
-
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
+import flexflux.general.Constraint;
 import parsebionet.biodata.BioEntity;
 
 /**
@@ -73,6 +74,25 @@ public class Or extends RelationWithList {
 		return s;
 	}
 
+	public String toFormula() {
+		String s = "";
+		s += "(";
+
+		int i = 0;
+		for (Relation rel : list) {
+			if (i != 0) {
+				s += " || ";
+			}
+
+			s += rel.toFormula();
+
+			i++;
+		}
+
+		s += (")");
+		return s;
+	}
+
 	public boolean isTrue(Map<BioEntity, Constraint> simpleConstraints) {
 
 		for (Relation rel : list) {
@@ -83,7 +103,7 @@ public class Or extends RelationWithList {
 		return false;
 
 	}
-	
+
 	public boolean isInverseTrue(Map<BioEntity, Constraint> simpleConstraints) {
 
 		for (Relation rel : list) {
@@ -96,12 +116,72 @@ public class Or extends RelationWithList {
 
 	protected void makeConstraints() {
 
-		System.err
-				.println("Error: Unsupported condition when interactions not in solver : "
-						+ this);
+		System.err.println("Error: Unsupported condition when interactions not in solver : " + this);
 
 		constraints = new ArrayList<Constraint>();
 
+	}
+
+	/**
+	 * Calculates "an expression value" of the relation given omics data results
+	 * in one condition
+	 * 
+	 * @param sampleValues
+	 * 
+	 * @param method
+	 *            1 => And : sum ; or : mean <br/>
+	 *            2 => all mean
+	 * 
+	 * 
+	 */
+	public double calculateRelationQuantitativeValue(Map<BioEntity, Double> sampleValues, int method) {
+		
+		//mean
+		if (method == 1 || method == 2) {
+
+			double expr = 0;
+			boolean allNaN = true;
+			for (Relation rel : list) {
+
+				double expr2 = rel.calculateRelationQuantitativeValue(sampleValues, method);
+
+				if (!Double.isNaN(expr2)) {
+					allNaN = false;
+					expr += expr2;
+				}
+
+			}
+			if (!allNaN) {
+				return expr / list.size();
+			} else {
+				return Double.NaN;
+			}
+		}
+		// minimum value
+		else if (method == 3) {
+
+			List<Double> exprs = new ArrayList<Double>();
+			
+			boolean allNaN = true;
+			for (Relation rel : list) {
+
+				double expr2 = rel.calculateRelationQuantitativeValue(sampleValues, method);
+				if (!Double.isNaN(expr2)) {
+					allNaN = false;
+					exprs.add(expr2);
+				}
+
+			}
+			if (!allNaN) {
+				return Collections.min(exprs);
+			} else {
+				return Double.NaN;
+			}
+
+		}
+		System.err.println("Error : unknow gpr calculation method : " + method);
+		System.exit(0);
+		return 0;
 	}
 
 }

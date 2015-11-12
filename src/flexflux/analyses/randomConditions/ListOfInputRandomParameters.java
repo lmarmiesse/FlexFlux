@@ -58,11 +58,14 @@ public class ListOfInputRandomParameters implements
 				String activationValueStr = tab[2];
 				String weightStr = tab[3];
 
+				double inhibitionValue;
+				double activationValue;
 				int weight;
 
 				if (inhibitionValueStr.compareTo("NA") != 0) {
 					try {
-						Double.parseDouble(inhibitionValueStr);
+						inhibitionValue = Double
+								.parseDouble(inhibitionValueStr);
 					} catch (NumberFormatException e) {
 						System.err
 								.println("Inhibition value badly formatted line "
@@ -73,7 +76,8 @@ public class ListOfInputRandomParameters implements
 
 				if (activationValueStr.compareTo("NA") != 0) {
 					try {
-						Double.parseDouble(activationValueStr);
+						activationValue = Double
+								.parseDouble(activationValueStr);
 					} catch (NumberFormatException e) {
 						System.err
 								.println("Activation value badly formatted line "

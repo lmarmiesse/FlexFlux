@@ -33,6 +33,7 @@
  */
 package flexflux.interaction;
 
+import flexflux.general.Bind;
 import flexflux.general.Constraint;
 
 import java.util.ArrayList;
@@ -72,6 +73,27 @@ public class And extends RelationWithList {
 		return s;
 	}
 
+	@Override
+	public String toFormula() {
+		String s = "(";
+		s += "";
+
+		int i = 0;
+		for (Relation rel : list) {
+
+			if (i != 0) {
+				s += " && ";
+			}
+
+			s += rel.toFormula();
+
+			i++;
+		}
+
+		s += ")";
+		return s;
+	}
+
 	public boolean isTrue(Map<BioEntity, Constraint> simpleConstraints) {
 
 		for (Relation rel : list) {
@@ -81,7 +103,7 @@ public class And extends RelationWithList {
 		}
 		return true;
 	}
-	
+
 	public boolean isInverseTrue(Map<BioEntity, Constraint> simpleConstraints) {
 		for (Relation rel : list) {
 			if (rel.isInverseTrue(simpleConstraints)) {
@@ -90,7 +112,6 @@ public class And extends RelationWithList {
 		}
 		return false;
 	}
-
 
 	protected void makeConstraints() {
 
@@ -101,4 +122,53 @@ public class And extends RelationWithList {
 		}
 
 	}
+
+	/**
+	 * Calculates "an expression value" of the relation given omics data results
+	 * in one condition
+	 * 
+	 * @param sampleValues
+	 */
+	public double calculateRelationQuantitativeValue(Map<BioEntity, Double> sampleValues, int method) {
+
+		// sum
+		if (method == 1 || method == 3) {
+			double expr = 0;
+			boolean allNaN = true;
+			for (Relation rel : list) {
+				double expr2 = rel.calculateRelationQuantitativeValue(sampleValues, method);
+				if (!Double.isNaN(expr2)) {
+					allNaN = false;
+					expr += expr2;
+				}
+			}
+			if (!allNaN) {
+				return expr;
+			} else {
+				return Double.NaN;
+			}
+		}
+		// mean
+		else if (method == 2) {
+			double expr = 0;
+			boolean allNaN = true;
+			for (Relation rel : list) {
+				double expr2 = rel.calculateRelationQuantitativeValue(sampleValues, method);
+				if (!Double.isNaN(expr2)) {
+					allNaN = false;
+					expr += expr2;
+				}
+			}
+			if (!allNaN) {
+				return expr / list.size();
+			} else {
+				return Double.NaN;
+			}
+		}
+
+		System.err.println("Error : unknow gpr calculation method : " + method);
+		System.exit(0);
+		return 0;
+	}
+
 }

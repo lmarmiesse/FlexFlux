@@ -171,6 +171,11 @@ public class ParetoAnalysis extends Analysis {
 			oneDResults.put(obj, normalizedResults);
 
 		}
+		
+		for (Objective obj : objectivesBounds.keySet()){
+			System.out.println(obj);
+			System.out.println(objectivesBounds.get(obj)[0]+"\t"+objectivesBounds.get(obj)[1]);
+		}
 
 		//
 

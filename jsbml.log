@@ -4163,17 +4163,3 @@
 [13:12:41,399 ERROR IdentifierException:62] - An element with the id "c" is already present in the SBML model. The identifier of qualitativeSpecies will not be set to this value.
 [13:12:41,400 ERROR AbstractReaderWriter:83] - org.sbml.jsbml.IdentifierException: Cannot set duplicate identifier c for qualitativeSpecies.
 [13:12:41,400  WARN AbstractReaderWriter:97] - processAttribute: The attribute 'id' on the element qualitativeSpecies is not part of the SBML specifications.
-[15:34:54,233  WARN SBMLCoreParser:400] - No Species matches the speciesID '' of speciesReference.
-[15:47:27,767 ERROR Model:3938] - An element of type model with the id "NA" is already present in this model "NA". The new element will not be added to the model.
-[15:47:27,895 ERROR IdentifierException:62] - An element with the id "NA" is already present in the SBML model. The identifier of compartment will not be set to this value.
-[15:47:27,896 ERROR SBMLCoreParser:181] - org.sbml.jsbml.IdentifierException: Cannot set duplicate identifier NA for compartment.
-[15:47:27,896  INFO SBMLCoreParser:182] - Attribute = id, element = compartment
-[15:47:27,896  WARN SBMLCoreParser:209] - Could not recognize the attribute "id" on the element compartment. Please check the specification for SBML.
-[15:47:27,899  WARN SBMLCoreParser:461] - No Compartment matches the compartmentID of species.
-[15:47:27,899  WARN SBMLCoreParser:461] - No Compartment matches the compartmentID of species.
-[15:47:27,899  WARN SBMLCoreParser:461] - No Compartment matches the compartmentID of species.
-[15:47:27,900  WARN SBMLCoreParser:461] - No Compartment matches the compartmentID of species.
-[15:47:27,900  WARN SBMLCoreParser:461] - No Compartment matches the compartmentID of species.
-[15:47:27,900  WARN SBMLCoreParser:461] - No Compartment matches the compartmentID of species.
-[15:47:27,900  WARN SBMLCoreParser:461] - No Compartment matches the compartmentID of species.
-[15:47:27,901  WARN SBMLCoreParser:461] - No Compartment matches the compartmentID of species.

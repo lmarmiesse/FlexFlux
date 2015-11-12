@@ -33,14 +33,13 @@
  */
 package flexflux.interaction;
 
-import flexflux.general.Constraint;
-import flexflux.operation.Operation;
-import flexflux.operation.OperationGe;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import flexflux.general.Constraint;
+import flexflux.operation.Operation;
+import flexflux.operation.OperationGe;
 import parsebionet.biodata.BioEntity;
 
 /**
@@ -75,6 +74,7 @@ public class Unique extends Relation {
 	// probability is used to set the max value to the entity to it's upper
 	// bound / probability
 
+	
 	/**
 	 * Operation of the relation.
 	 */
@@ -115,6 +115,16 @@ public class Unique extends Relation {
 		s += entity.getId();
 
 		s += operation;
+
+		s += value;
+		return s;
+	}
+	
+	public String toFormula() {
+		String s = "";
+		s += entity.getId();
+
+		s += operation.toFormula();
 
 		s += value;
 		return s;
@@ -179,6 +189,21 @@ public class Unique extends Relation {
 		List<BioEntity> entities = new ArrayList<BioEntity>();
 		entities.add(entity);
 		return entities;
+	}
+
+	/**
+	 * Calculates "an expression value" of the relation given omics data results in one condition
+	 * @param sampleValues 
+	 */
+	public double calculateRelationQuantitativeValue(Map<BioEntity, Double> sampleValues,int method) {
+		
+		if (sampleValues.containsKey(entity)){
+			return sampleValues.get(entity);
+		}else{
+			return Double.NaN;
+		}
+		
+		
 	}
 
 
