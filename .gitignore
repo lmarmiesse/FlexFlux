@@ -7,8 +7,8 @@
 bin
 .fatjar
 .Rhistory
-.svn*
-*.svn*
+.svn/
+*.svn
 hs*log
 *.zip
 *~
