@@ -166,7 +166,7 @@ public class CplexBind extends Bind {
 	}
 
 	public void createSolverConstraint(Constraint constraint,
-			List<Object> toRemoveFromModel, Map<String, double[]> oldBounds) {
+			List<Object> toRemoveFromModel) {
 
 		try {
 			double ub = constraint.getUb();

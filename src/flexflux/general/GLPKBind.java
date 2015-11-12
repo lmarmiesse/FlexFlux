@@ -164,7 +164,7 @@ public class GLPKBind extends Bind {
 	// list and map are used to fill the constraints and old bounds
 	// to be able to come back to the previous state after
 	protected void createSolverConstraint(Constraint constraint,
-			List<Object> toRemoveFromModel, Map<String, double[]> oldBounds) {
+			List<Object> toRemoveFromModel) {
 
 		double ub = constraint.getUb();
 		double lb = constraint.getLb();
