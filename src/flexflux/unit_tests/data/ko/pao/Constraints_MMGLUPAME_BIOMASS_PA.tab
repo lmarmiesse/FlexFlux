@@ -1,0 +1,14 @@
+# Objective functions
+
+obj : MAX(EX_EC9324)
+
+# Exchange fluxes constraints, measured fluxes
+EX_EC0179	-5	999999
+
+# Non-Growth associated maintenance
+
+# Exchange fluxes open, i.e. medium composition : compounds present in the medium
+
+BINARY
+
+EQUATIONS
