@@ -129,15 +129,27 @@ public class ThreadKO extends ResolveThread {
 			// don't recompute the attractors
 			if (!entitiesInInteractionNetwork.contains(entity)) {
 				constraintsToAdd.addAll(interactionNetworkConstraints);
-				bind.checkInteractionNetwork = false;
+				 bind.checkInteractionNetwork = false;
+			} else {
+				bind.checkInteractionNetwork = true;
+				
 			}
+			
+
+			List<Constraint> tmpConstraints = new ArrayList<Constraint>(constraintsToAdd);
+			
+			for(Constraint c : tmpConstraints) 
+			{
+				if(c.getEntityNames().containsKey(entity.getId())) {
+					constraintsToAdd.remove(c);
+				}
+			}
+			
+			constraintsToAdd.add(newConstraint);
 
 			DoubleResult value = bind.FBA(constraintsToAdd, false, true);
 
 			result.addLine(entity, value.result);
-
-
-			bind.checkInteractionNetwork = true;
 
 			if (Vars.verbose) {
 				int percent = (int) Math.round((todo - entities.size()) / todo * 100);
@@ -151,7 +163,6 @@ public class ThreadKO extends ResolveThread {
 			if (removedConst) {
 				bind.getConstraints().add(toRemove);
 				bind.getSimpleConstraints().put(entity, toRemove);
-				bind.prepareSolver();
 			}
 
 		}
