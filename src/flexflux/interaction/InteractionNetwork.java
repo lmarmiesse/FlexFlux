@@ -40,8 +40,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import flexflux.general.Constraint;
-import flexflux.operation.OperationFactory;
 import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioComplex;
 import parsebionet.biodata.BioEntity;
@@ -49,6 +47,8 @@ import parsebionet.biodata.BioGene;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.biodata.BioPhysicalEntity;
 import parsebionet.biodata.BioProtein;
+import flexflux.general.Constraint;
+import flexflux.operation.OperationFactory;
 
 /**
  * 
@@ -385,37 +385,43 @@ public class InteractionNetwork {
 	public InteractionNetwork copy() {
 		InteractionNetwork newInteractionNetwork = new InteractionNetwork();
 
-		newInteractionNetwork.setBinaryEntities(this.getBinaryEntities());
-		newInteractionNetwork.setIntEntities(this.getIntEntities());
-		newInteractionNetwork.setNumEntities(this.getNumEntities());
-
-		for (Interaction gprInt : this.getGPRInteractions()) {
-			newInteractionNetwork.addGPRIntercation(gprInt);
+		newInteractionNetwork.binaryEntities = new HashMap<String, BioEntity>(this.getBinaryEntities());
+		
+		newInteractionNetwork.entityStateConstraintTranslation = new HashMap<BioEntity, Map<Integer, Constraint>>();
+		for(BioEntity e : this.entityStateConstraintTranslation.keySet())
+		{
+			HashMap<Integer, Constraint> constraint = new HashMap<Integer, Constraint>(this.entityStateConstraintTranslation.get(e));
+			newInteractionNetwork.entityStateConstraintTranslation.put(e, constraint);
 		}
-
-		for (BioEntity ent : initialConstraints.keySet()) {
-			newInteractionNetwork.addInitialConstraint(ent,
-					initialConstraints.get(ent));
-
+		
+		newInteractionNetwork.GPRInteractions = new ArrayList<Interaction>(this.GPRInteractions);
+		
+		newInteractionNetwork.initialConstraints = new HashMap<BioEntity, Constraint>(this.initialConstraints);
+		
+		newInteractionNetwork.initialStates = new HashMap<BioEntity, Integer>(this.initialStates);
+		
+		newInteractionNetwork.intEntities = new HashMap<String, BioEntity>(this.intEntities);
+		
+		newInteractionNetwork.interactionNetworkEntities = new HashMap<String, BioEntity>(this.interactionNetworkEntities);
+		
+		newInteractionNetwork.interactionNetworkEntitiesStates = new HashMap<BioEntity, int[]>();
+		for(BioEntity e : this.interactionNetworkEntitiesStates.keySet())
+		{
+			int newStates[] = this.interactionNetworkEntitiesStates.get(e).clone();
+			newInteractionNetwork.interactionNetworkEntitiesStates.put(e, newStates);
 		}
-
-		for (BioEntity ent : initialStates.keySet()) {
-			newInteractionNetwork.addInitialState(ent, initialStates.get(ent));
+		
+		newInteractionNetwork.interactionToConstraints = new HashMap<Interaction, List<Constraint>>();
+		for(Interaction i : this.interactionToConstraints.keySet())
+		{
+			List<Constraint> constraints = new ArrayList<Constraint>(this.interactionToConstraints.get(i));
+			newInteractionNetwork.interactionToConstraints.put(i, constraints);
 		}
-
-		newInteractionNetwork.interactionNetworkEntitiesStates = this
-				.getInteractionNetworkEntitiesStates();
-
-		newInteractionNetwork.setInteractionToConstraints(this
-				.getInteractionToConstraints());
-		newInteractionNetwork.setTargetToInteractions(this
-				.getTargetToInteractions());
-		newInteractionNetwork.setInteractionNetworkEntities(this
-				.getInteractionNetworkEntities());
-
-		newInteractionNetwork.entityStateConstraintTranslation = this
-				.getEntityStateConstraintTranslation();
-
+		
+		newInteractionNetwork.numEntities = new HashMap<String, BioEntity> (this.numEntities);
+		
+		newInteractionNetwork.targetToInteractions = new HashMap<BioEntity, FFTransition>(this.targetToInteractions);
+		
 		return newInteractionNetwork;
 	}
 
@@ -665,5 +671,26 @@ public class InteractionNetwork {
 		return str;
 
 	}
+	
+	/**
+	 * Make null all fields
+	 */
+	public void allNull() {
+		
+		interactionNetworkEntities = null;
+		interactionNetworkEntitiesStates = null;
+		numEntities = null;
+		intEntities = null;
+		binaryEntities = null;
+		GPRInteractions = null;
+		initialConstraints = null;
+		initialStates = null;
+		interactionToConstraints = null;
+		targetToInteractions = null;
+		entityStateConstraintTranslation = null;
+		
+		
+	}
+	
 
 }
