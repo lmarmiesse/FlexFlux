@@ -121,6 +121,14 @@ public class TestPAO extends FFUnitTest {
 		
 		Double val = resultKoGenes.getValueForEntity(n.getGeneList().get("PA0018"));
 		
+		
+		for(Double value : resultKoGenes.getMap().values()) {
+			if(value > 0.3)
+			{
+				Assert.fail(value+" : Value greater than the optimal !");
+			}
+		}
+		
 		Assert.assertEquals(0.0, Vars.round(val));
 		
 	}
