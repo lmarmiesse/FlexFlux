@@ -212,6 +212,37 @@ public class Condition {
 		return;
 
 	}
+	
+	/**
+	 * Remove from the bind the constraints stored in the condition
+	 * @param bind
+	 * @param fixConditions
+	 */
+	public void removeListOfConstraintsToBind(Bind bind, Boolean fixConditions) {
+
+		for (String entityId : this.constraints.keySet()) {
+
+			if (bind.getInteractionNetwork().getEntity(entityId) != null) {
+			
+			BioEntity e = bind.getInteractionNetwork().getEntity(entityId);
+
+			if (fixConditions == false) {
+				if (!bind.getInteractionNetwork()
+						.getInteractionNetworkEntities().containsKey(entityId)) {
+					bind.getSimpleConstraints().remove(e);
+				} else {
+					bind.getInteractionNetwork().getInitialConstraints().remove(e);
+				}
+			} else {
+				bind.getSimpleConstraints().remove(e);
+			}
+		}
+		}
+
+		return;
+
+	}
+	
 
 	/**
 	 * 

@@ -338,7 +338,7 @@ public class ROBAResult extends AnalysisResult {
 		}
 	}
 
-	public HashMap<String, Integer> getObjSimCount() {
+	public HashMap<String, Integer> getObjCondCount() {
 		return objCondCount;
 	}
 

@@ -91,6 +91,9 @@ public class TestPAO extends FFUnitTest {
 		
 		Vars.maxThread = 1;
 		
+		// If below, the test crashes
+		Vars.decimalPrecision = 9;
+		
 		try {
 			if (solver.equals("CPLEX")) {
 				bind = new CplexBind();

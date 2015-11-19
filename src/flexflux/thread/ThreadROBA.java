@@ -31,13 +31,10 @@
 package flexflux.thread;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import parsebionet.biodata.BioEntity;
 import flexflux.analyses.result.ROBAResult;
 import flexflux.condition.Condition;
 import flexflux.general.Bind;
@@ -135,7 +132,9 @@ public class ThreadROBA extends ResolveThread {
 				Boolean maximize = o.getMaximize();
 				
 				if ((maximize && value > 0) || (!maximize && value < 0)) {
+					
 					result.incrementObjCondCount(objName);
+					
 					for (String inputId : inputsWithPositiveValue) {
 						result.incrementObjInputMatrix(objName, inputId);
 					}
@@ -153,6 +152,9 @@ public class ThreadROBA extends ResolveThread {
 					System.err.print("*");
 				}
 			}
+			
+			
+			condition.removeListOfConstraintsToBind(bind, fixConditions);
 		}
 	}
 
