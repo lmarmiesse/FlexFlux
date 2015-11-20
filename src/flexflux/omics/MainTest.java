@@ -29,7 +29,7 @@ public class MainTest {
 		 * 2 => all mean
 		 * 3 => And : sum ; or : min <br/>
 		 */
-		int gprCalculationMethod = 1;
+		int gprCalculationMethod = 2;
 
 		// SampleName => (fba1 => (ReactionName => value)
 		// (fbaCorrected => (ReactionName => value)
@@ -45,15 +45,12 @@ public class MainTest {
 //				+ "correctFBA/resultsSclero.txt";
 //		String[] sampleNames = new String[] { "RNAseq_MM", "RNAseq_PDB", "RNAseq_SCL", "RNAseq_MMGln", "RNAseq_IC","RNAseq_FRT","RNAseq_NEC" };
 
-		String metabolicNetworkPath = "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/home/users/GRP_DR/lmarmiesse/Documents/scripts/transcripto-metabolism/"
-				+ "correctFBA/AraGEM_Cobra_modif.xml";
-		String omicsDataPath = "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/home/users/GRP_DR/lmarmiesse/Documents/scripts/transcripto-metabolism/"
-				+ "correctFBA/MYBSEQ_TIME.txt";
-		String constraintsFilePath = "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/home/users/GRP_DR/lmarmiesse/Documents/scripts/transcripto-metabolism/"
-				+ "correctFBA/obj";
-		String resultsPath = "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/home/users/GRP_DR/lmarmiesse/Documents/scripts/transcripto-metabolism/"
-				+ "correctFBA/resultsArabido.txt";
-		String[] sampleNames = new String[] { "Col0Hpi", "Col1Hpi", "Col2Hpi", "Col4Hpi", "Col6Hpi" };
+		String metabolicNetworkPath = "Data/AraGEM_Cobra_modif.xml";
+		String omicsDataPath = "Data/MYBSEQ_TIME.txt";
+		String constraintsFilePath = "Data/obj";
+		String resultsPath ="/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/resultsAT.txt";
+		String[] sampleNames = new String[] { "Col0Hpi", "Col1Hpi", "Col2Hpi"};
+//		tring[] sampleNames = new String[] { "Col0Hpi", "Col1Hpi", "Col2Hpi", "Col4Hpi", "Col6Hpi" };
 
 //		String metabolicNetworkPath = "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/home/users/GRP_DR/lmarmiesse/Documents/scripts/transcripto-metabolism/"
 //				+ "correctFBA/toyModel/Toy_model.xml";
@@ -64,11 +61,20 @@ public class MainTest {
 //		String resultsPath = "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/home/users/GRP_DR/lmarmiesse/Documents/scripts/transcripto-metabolism/"
 //				+ "correctFBA/toyModel/results.txt";
 //		String[] sampleNames = new String[] { "Test_1","Test_2","Test_3" };
+		
+		
+		
+		
+//		String metabolicNetworkPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/toyModel.xml";
+//		String omicsDataPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/exprData.txt";
+//		String constraintsFilePath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/constraints.txt";
+//		String resultsPath ="/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/results.txt";
+//		String[] sampleNames = new String[] { "Cond1" , "Cond2" , "Cond3"};
 
 		// TODO Auto-generated method stub
 
-		 Bind bind = new GLPKBind();
-//		Bind bind = new CplexBind();
+//		 Bind bind = new GLPKBind();
+		Bind bind = new CplexBind();
 
 		bind.loadSbmlNetwork(metabolicNetworkPath, false);
 
@@ -93,6 +99,8 @@ public class MainTest {
 			BioChemicalReaction reac = (BioChemicalReaction) inter.getConsequence().getEntity();
 
 			for (Sample s : samples) {
+				
+				
 				double expr = inter.getCondition()
 						.calculateRelationQuantitativeValue(omicsData.getDataValuesForSample(s), gprCalculationMethod);
 				reactionExpressionValues.get(s).put(reac, expr);
@@ -167,6 +175,8 @@ public class MainTest {
 			///////////// Reaction expression values are scaled
 			double scalingFactor = reactionExpressionValuesSum / fluxSumNoNan;
 			scalingFactor *= 10;
+			
+//			scalingFactor = 1;
 			System.out.println("Flux sum FBA1 : "+fluxSumNoNan);
 			System.out.println(reactionExpressionValuesSum);
 			System.out.println("sclaing factor : "+scalingFactor);

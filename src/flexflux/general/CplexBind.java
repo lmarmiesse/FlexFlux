@@ -44,6 +44,7 @@ import ilog.concert.IloNumVarType;
 import ilog.concert.IloObjective;
 import ilog.concert.IloObjectiveSense;
 import ilog.concert.IloRange;
+import ilog.cplex.CpxException;
 import ilog.cplex.IloCplex;
 import ilog.cplex.IloCplexModeler;
 
@@ -190,7 +191,13 @@ public class CplexBind extends Bind {
 				if (toRemoveFromModel != null) {
 					toRemoveFromModel.add(cplexConstraint);
 				}
-				model.add(cplexConstraint);
+				try{
+					model.add(cplexConstraint);
+				}catch(CpxException e){
+					System.out.println("Error: "+e.getMessage());
+					System.out.println(cplexConstraint);
+				}
+				
 
 			} else {
 				cplexConstraint = cplex.not(model.range(lb, cplex.sum(somme),

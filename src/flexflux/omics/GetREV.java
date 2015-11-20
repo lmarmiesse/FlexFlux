@@ -19,15 +19,21 @@ import parsebionet.io.Sbml2Bionetwork;
 public class GetREV {
 
 	public static Map<Sample, Map<BioChemicalReaction, Double>> reactionExpressionValues = new HashMap<Sample, Map<BioChemicalReaction, Double>>();
-//	public static String metabolicNetworkPath = "Data/AraGEM_Cobra_modif.xml";
-	public static String metabolicNetworkPath = "/home/lmarmiesse/rocks1/work/lucas/recon2/Recon2.v02_with_anno-MODEL1109130000.xml";
+
+		public static String metabolicNetworkPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/AraGEM_Cobra_modif.xml";
+//	public static String metabolicNetworkPath = "/home/lmarmiesse/rocks1/work/lucas/recon2/Recon2.v02_with_anno-MODEL1109130000.xml";
+//	public static String metabolicNetworkPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/toyModel.xml";
 	
-//	public static String omicsDataPath = "Data/MYBSEQ_TIME.txt";
-	public static String omicsDataPath = "/home/lmarmiesse/rocks1/work/lucas/recon2/test.txt";
 	
 	
-//	public static String outputFile = "/home/lmarmiesse/Documents/revRes.txt";
-	public static String outputFile = "/home/lmarmiesse/rocks1/work/lucas/recon2/revRes.txt";
+	public static String omicsDataPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/MYBSEQ_TIME.txt";
+//	public static String omicsDataPath = "/home/lmarmiesse/rocks1/work/lucas/recon2/test.txt";
+//	public static String omicsDataPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/exprData.txt";
+	
+	
+	public static String outputFile = "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/resultsAT.txt";
+//	public static String outputFile = "/home/lmarmiesse/rocks1/work/lucas/recon2/revRes.txt";
+//	public static String outputFile = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/rev.txt";
 	
 	// rev = reaction expression value
 

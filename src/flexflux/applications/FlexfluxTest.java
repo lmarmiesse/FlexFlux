@@ -24,6 +24,7 @@ import flexflux.unit_tests.TestInteraction;
 import flexflux.unit_tests.TestKoWithInteractions;
 import flexflux.unit_tests.TestListOfConditions;
 import flexflux.unit_tests.TestMultiRSA;
+import flexflux.unit_tests.TestPAO;
 import flexflux.unit_tests.TestROBA;
 import flexflux.unit_tests.TestRSA;
 import flexflux.unit_tests.TestRandomConditions;
@@ -106,10 +107,15 @@ public class FlexfluxTest extends FFApplication {
 
 		if (okSolvers.size() > 0 && doUnitTests) {
 			
-			String solver = okSolvers.get(0);
+//			String solver = okSolvers.get(0);
 			
 			
-			System.setProperty("solver", solver);
+//			System.setProperty("solver", solver);
+			
+			String solver = "GLPK";
+			if (System.getProperties().containsKey("solver")) {
+				solver = System.getProperty("solver");
+			}
 
 			// ////////////////////// Unit tests
 			JUnitCore junit = new JUnitCore();
@@ -124,6 +130,7 @@ public class FlexfluxTest extends FFApplication {
 			classes.add(TestCondition.class);
 			classes.add(TestExternalMetaboliteConstraints.class);
 			classes.add(TestFVA_KO_DR.class);
+//			classes.add(TestPAO.class);
 			classes.add(TestInteraction.class);
 			classes.add(TestKoWithInteractions.class);
 			classes.add(TestListOfConditions.class);
