@@ -247,37 +247,29 @@ public class MainTest {
 				}
 				// reversible reactions
 				else {
-					BioEntity irrevReac1 = bind.getInteractionNetwork().getEntity(reac.getId() + Vars.Irrev1);
-					BioEntity irrevReac2 = bind.getInteractionNetwork().getEntity(reac.getId() + Vars.Irrev2);
+					BioEntity reacAbs = bind.getInteractionNetwork().getEntity(reac.getId() + Vars.absolute);
 
-					// we create the constraints : (R1irrev1-R1irrev2) - R1exp
-					// <=
-					// R'1
-					// R1exp - (R1irrev1-R1irrev2) <= R'1
+					// we create the constraints :
+					// reacAbs - R1exp <= R'1
+					// R1exp - reacAbs <= R'1
 
-					// Const 1 : -inf < R1irrev1-R1irrev2 - R1exp - R'1 <= 0
-					// <=> -inf < R1irrev1-R1irrev2 - R'1 <= R1exp
+					// Const 1 : -inf < reacAbs - R1exp - R'1 <= 0
+					// <=> -inf < reacAbs - R'1 <= R1exp
 					Map<BioEntity, Double> cMap1 = new HashMap<BioEntity, Double>();
-					cMap1.put(irrevReac1, 1.0);
-					cMap1.put(irrevReac2, 1.0);
+					cMap1.put(reacAbs, 1.0);
 					cMap1.put(reacPrime, -1.0);
 					c1 = new Constraint(cMap1, -Double.MAX_VALUE, scaledRactionExpressionValues_MM.get(reac));
 					// System.out.println(c1);
 
-					// Const 2 : -inf < R1exp - (R1irrev1-R1irrev2) - R'1 <= 0
-					// <=> -inf < -(R1irrev1-R1irrev2) - R'1 <= - R1exp
-					// <=> -inf < - R1irrev1 + R1irrev2 - R'1 <= - R1exp
+					// Const 2 : -inf < R1exp - reacAbs - R'1 <= 0
+					// <=> -inf < - reacAbs - R'1 <= - R1exp
 					Map<BioEntity, Double> cMap2 = new HashMap<BioEntity, Double>();
-					cMap2.put(irrevReac1, -1.0);
-					cMap2.put(irrevReac2, -1.0);
+					cMap2.put(reacAbs, -1.0);
 					cMap2.put(reacPrime, -1.0);
 					c2 = new Constraint(cMap2, -Double.MAX_VALUE, -scaledRactionExpressionValues_MM.get(reac));
 
-					/////////////////// Then we make sure that the summ of the 2
-					/////////////////// components
-					/////////////////// of a reversible reaction is = to the
-					/////////////////// absolute flux
-					/////////////////// values of the reaction (not more)
+					/////////////////// Then we make sure that reacAbs is not >
+					/////////////////// than absolute value of reaction
 
 					///////////// Need to add two boolean variables : b and a =
 					///////////// 1-b
@@ -294,13 +286,12 @@ public class MainTest {
 					constraintsToAdd.add(integerConstraint);
 
 					////////////// We add an entity Y that is R1a + R1b
-					////////////// <=> Y-Raa-R1b = 0
+					////////////// <=> Y-R1a-R1b = 0
 					BioEntity y = new BioEntity("Y_" + reac.getId());
 					bind.getInteractionNetwork().addNumEntity(y);
 					Map<BioEntity, Double> yConstraintMap = new HashMap<BioEntity, Double>();
 					yConstraintMap.put(y, 1.0);
-					yConstraintMap.put(irrevReac1, -1.0);
-					yConstraintMap.put(irrevReac2, -1.0);
+					yConstraintMap.put(reacAbs, -1.0);
 					Constraint yConstraint = new Constraint(yConstraintMap, 0.0, 0.0);
 					constraintsToAdd.add(yConstraint);
 

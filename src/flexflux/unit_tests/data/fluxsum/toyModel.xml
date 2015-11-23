@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" level="3" version="1">
+  <model>
+    <listOfCompartments>
+      <compartment id="c" constant="true"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="A_b" name="A_b" compartment="c" boundaryCondition="true"/>
+      <species id="B_b" name="B_b" compartment="c" boundaryCondition="true"/>
+      <species id="F_b" name="F_b" compartment="c" boundaryCondition="true"/>
+      <species id="G_b" name="G_b" compartment="c" boundaryCondition="true"/>
+      <species id="A" name="A" compartment="c"/>
+      <species id="B" name="B" compartment="c"/>
+      <species id="C" name="C" compartment="c"/>
+      <species id="D" name="D" compartment="c"/>
+      <species id="E" name="E" compartment="c"/>
+      <species id="F" name="F" compartment="c"/>
+      <species id="G" name="G" compartment="c"/>
+    </listOfSpecies>
+    <listOfReactions>
+      <reaction id="R4" name="R4" reversible="false" compartment="c">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>GENE_ASSOCIATION: G4</p>
+            <p>GENE_LIST: </p>
+            <p>SUBSYSTEM: </p>
+            <p>Gene Name: </p>
+            <p>Enzyme Name: </p>
+            <p>EC: </p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference species="B" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="E" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="R5" name="R5" reversible="true" compartment="c">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>GENE_ASSOCIATION: G5</p>
+            <p>GENE_LIST: </p>
+            <p>SUBSYSTEM: </p>
+            <p>Gene Name: </p>
+            <p>Enzyme Name: </p>
+            <p>EC: </p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference species="C" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="D" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="R6" name="R6" reversible="true" compartment="c">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>GENE_ASSOCIATION: G6</p>
+            <p>GENE_LIST: </p>
+            <p>SUBSYSTEM: </p>
+            <p>Gene Name: </p>
+            <p>Enzyme Name: </p>
+            <p>EC: </p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference species="D" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="E" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="R7" name="R7" reversible="false" compartment="c">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>GENE_ASSOCIATION: G7</p>
+            <p>GENE_LIST: </p>
+            <p>SUBSYSTEM: </p>
+            <p>Gene Name: </p>
+            <p>Enzyme Name: </p>
+            <p>EC: </p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference species="C" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="F" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="R1" name="R1" reversible="false" compartment="c">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>GENE_ASSOCIATION: G1</p>
+            <p>GENE_LIST: </p>
+            <p>SUBSYSTEM: </p>
+            <p>Gene Name: </p>
+            <p>Enzyme Name: </p>
+            <p>EC: </p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference species="A" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="C" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="R2" name="R2" reversible="false" compartment="c">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>GENE_ASSOCIATION: G2</p>
+            <p>GENE_LIST: </p>
+            <p>SUBSYSTEM: </p>
+            <p>Gene Name: </p>
+            <p>Enzyme Name: </p>
+            <p>EC: </p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference species="A" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="D" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="R3" name="R3" reversible="false" compartment="c">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>GENE_ASSOCIATION: G3</p>
+            <p>GENE_LIST: </p>
+            <p>SUBSYSTEM: </p>
+            <p>Gene Name: </p>
+            <p>Enzyme Name: </p>
+            <p>EC: </p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference species="B" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="D" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="R8" name="R8" reversible="false" compartment="c">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>GENE_ASSOCIATION: G8</p>
+            <p>GENE_LIST: </p>
+            <p>SUBSYSTEM: </p>
+            <p>Gene Name: </p>
+            <p>Enzyme Name: </p>
+            <p>EC: </p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference species="D" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="F" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="R9" name="R9" reversible="false" compartment="c">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>GENE_ASSOCIATION: G9</p>
+            <p>GENE_LIST: </p>
+            <p>SUBSYSTEM: </p>
+            <p>Gene Name: </p>
+            <p>Enzyme Name: </p>
+            <p>EC: </p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference species="D" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="G" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="R10" name="R10" reversible="false" compartment="c">
+        <notes>
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <p>GENE_ASSOCIATION: G10</p>
+            <p>GENE_LIST: </p>
+            <p>SUBSYSTEM: </p>
+            <p>Gene Name: </p>
+            <p>Enzyme Name: </p>
+            <p>EC: </p>
+          </html>
+        </notes>
+        <listOfReactants>
+          <speciesReference species="E" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="G" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="R_EX_G" name="R_EX_G" reversible="false" compartment="c">
+        <listOfReactants>
+          <speciesReference species="G" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="G_b" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="R_EX_F" name="R_EX_F" reversible="false" compartment="c">
+        <listOfReactants>
+          <speciesReference species="F" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="F_b" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="R_EX_A" name="R_EX_A" reversible="false" compartment="c">
+        <listOfReactants>
+          <speciesReference species="A_b" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="A" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="R_EX_B" name="R_EX_B" reversible="false" compartment="c">
+        <listOfReactants>
+          <speciesReference species="B_b" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="B" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>

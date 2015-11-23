@@ -33,41 +33,48 @@ public class TestFreeFluxes {
 		Map<String, Map<String, Double>> revResults = new HashMap<String, Map<String, Double>>();
 		Map<String, Map<String, Double>> fbaResults = new HashMap<String, Map<String, Double>>();
 
-//		String metabolicNetworkPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/AraGEM_Cobra_modif.xml";
-//		String omicsDataPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/MYBSEQ_TIME.txt";
-//		String revResultsPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/resultsAT_time_rev.txt";
-//		String fbaResultsPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/resultsAT_time_fba.txt";
-		
-//		String omicsDataPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/MYBSEQ_GTYPE_tps0.txt";
-//		String revResultsPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/resultsAT_gtype_rev.txt";
-//		String fbaResultsPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/resultsAT_gtype_fba.txt";
-		
-		
-//		String metabolicNetworkPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/toyModel.xml";
-//		String omicsDataPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/exprData.txt";
-//		String revResultsPath ="/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/resultsRev.txt";
-//		String fbaResultsPath ="/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/resultsFBA.txt";
-		String metabolicNetworkPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/toyModel2.xml";
-		String omicsDataPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/exprData2.txt";
-		String revResultsPath ="/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/resultsRev2.txt";
-		String fbaResultsPath ="/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/resultsFBA2.txt";		
-		
-		
-		
-		
-		
-		
-		//RECON 2
-//		String metabolicNetworkPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/Recon2.v02_with_anno-MODEL1109130000.xml";
-//		String omicsDataPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/test.txt";
-//		String revResultsPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/results_recon2_rev.txt";
-//		String fbaResultsPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/results_recon2_fba.txt";
-		
-		
-		
-		
+		 String metabolicNetworkPath =
+		 "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/AraGEM_Cobra_modif.xml";
+		 String omicsDataPath =
+		 "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/MYBSEQ_TIME.txt";
+		 String revResultsPath =
+		 "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/resultsAT_time_rev.txt";
+		 String fbaResultsPath =
+		 "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/resultsAT_time_fba.txt";
 
-//		 Bind bind = new GLPKBind();
+		// String omicsDataPath =
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/MYBSEQ_GTYPE_tps0.txt";
+		// String revResultsPath =
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/resultsAT_gtype_rev.txt";
+		// String fbaResultsPath =
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/resultsAT_gtype_fba.txt";
+
+		// String metabolicNetworkPath =
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/toyModel.xml";
+		// String omicsDataPath =
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/exprData.txt";
+		// String revResultsPath
+		// ="/home/lmarmiesse/rocks1-compneur/work/lucas/Toy
+		// model/resultsRev.txt";
+		// String fbaResultsPath
+		// ="/home/lmarmiesse/rocks1-compneur/work/lucas/Toy
+		// model/resultsFBA.txt";
+//		String metabolicNetworkPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/toyModel2.xml";
+//		String omicsDataPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/exprData2.txt";
+//		String revResultsPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/resultsRev2.txt";
+//		String fbaResultsPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/resultsFBA2.txt";
+
+		// RECON 2
+		// String metabolicNetworkPath =
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/Recon2.v02_with_anno-MODEL1109130000.xml";
+		// String omicsDataPath =
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/test.txt";
+		// String revResultsPath =
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/results_recon2_rev.txt";
+		// String fbaResultsPath =
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/results_recon2_fba.txt";
+
+		// Bind bind = new GLPKBind();
 		Bind bind = new CplexBind();
 
 		bind.loadSbmlNetwork(metabolicNetworkPath, false);
@@ -77,54 +84,41 @@ public class TestFreeFluxes {
 			if (!bind.getDeadReactions().contains(bioEntity)) {
 				Constraint toDelete = null;
 				for (Constraint c : bind.getConstraints()) {
-					
+
 					Map<BioEntity, Double> entities = c.getEntities();
 
 					if (entities.size() == 1 && entities.containsKey(bioEntity)) {
-						
+
 						if (entities.get(bioEntity) == 1) {
-							
+
 							toDelete = c;
-							
-//							if (c.getLb()<0)
-//							{
-//								System.out.println(c);
-//							}
-//							c.setLb(-100);
-//							c.setUb(100);
-//							
-							
 							break;
 						}
 					}
 				}
 				if (toDelete != null) {
-					
-					// System.out.println(toDelete);
-					
+
 					bind.getConstraints().remove(toDelete);
 					bind.getSimpleConstraints().remove(bioEntity);
-					
-					
-					double lb = -70000;
-					double ub = 70000;
+
+					double lb = -99999;
+					double ub = 99999;
 
 					Map<BioEntity, Double> constraintMap = new HashMap<BioEntity, Double>();
 					constraintMap.put(bioEntity, 1.0);
-					
-					if (!((BioChemicalReaction) bioEntity).isReversible()){
-						lb=0;
+
+					if (!((BioChemicalReaction) bioEntity).isReversible()) {
+						lb = 0;
 					}
-					
+
 					Constraint c = new Constraint(constraintMap, lb, ub);
-					
+
 					bind.getConstraints().add(c);
 					bind.getSimpleConstraints().put(bioEntity, c);
-					
+
 				}
 			}
 		}
-		
 
 		OmicsData omicsData = OmicsDataReader.loadOmicsData(omicsDataPath, bind.getInteractionNetwork().getEntities());
 
@@ -132,13 +126,10 @@ public class TestFreeFluxes {
 
 		Map<Sample, Map<BioChemicalReaction, Double>> reactionExpressionValues = new HashMap<Sample, Map<BioChemicalReaction, Double>>();
 
+		double maxRev = 0;
+
 		for (Sample s : samples) {
 			reactionExpressionValues.put(s, new HashMap<BioChemicalReaction, Double>());
-		}
-
-		
-		
-		for (Sample s : samples) {
 			revResults.put(s.getName(), new HashMap<String, Double>());
 
 			for (Interaction inter : bind.getInteractionNetwork().getGPRInteractions()) {
@@ -148,21 +139,28 @@ public class TestFreeFluxes {
 						.calculateRelationQuantitativeValue(omicsData.getDataValuesForSample(s), gprCalculationMethod);
 
 				if (!Double.isNaN(expr)) {
-					
-					expr/=100;
-					
+
 					revResults.get(s.getName()).put(reac.getId(), expr);
 					reactionExpressionValues.get(s).put(reac, expr);
+
+					if (expr > maxRev) {
+						maxRev = expr;
+					}
+
 				}
 			}
 		}
 		
-		writeFbaResults(revResultsPath, revResults,samples);
+		System.out.println("Max rev: "+maxRev);
+		System.out.println("Scaling factor :"+maxRev/25);
+		double scalingFactor = maxRev/25;
+
+		writeFbaResults(revResultsPath, revResults, samples);
 
 		BioEntity fluxSum = bind.createFluxesSummation();
 
 		for (Sample sample : samples) {
-			
+
 			System.out.println(sample.getName());
 
 			fbaResults.put(sample.getName(), new HashMap<String, Double>());
@@ -192,8 +190,10 @@ public class TestFreeFluxes {
 
 				Constraint c1, c2;
 				
+				double reactionExpressionValue = reactionExpressionValues_sample.get(reac)/scalingFactor;
+
 				if (bind.getSimpleConstraints().get(reac).getLb() >= 0) {
-					
+
 					// we create the constraints : R1 - R1exp <= R'1
 					// R1exp - R1 <= R'1
 
@@ -202,7 +202,7 @@ public class TestFreeFluxes {
 					Map<BioEntity, Double> cMap1 = new HashMap<BioEntity, Double>();
 					cMap1.put(reac, 1.0);
 					cMap1.put(reacPrime, -1.0);
-					c1 = new Constraint(cMap1, -Double.MAX_VALUE, reactionExpressionValues_sample.get(reac));
+					c1 = new Constraint(cMap1, -Double.MAX_VALUE, reactionExpressionValue);
 					// System.out.println(c1);
 
 					// Const 2 : -inf < R1exp - R1 - R'1 <= 0
@@ -210,43 +210,35 @@ public class TestFreeFluxes {
 					Map<BioEntity, Double> cMap2 = new HashMap<BioEntity, Double>();
 					cMap2.put(reac, -1.0);
 					cMap2.put(reacPrime, -1.0);
-					c2 = new Constraint(cMap2, -Double.MAX_VALUE, -reactionExpressionValues_sample.get(reac));
+					c2 = new Constraint(cMap2, -Double.MAX_VALUE, -reactionExpressionValue);
 					// System.out.println(c2);
 
 				}
 				// reversible reactions
 				else {
-					BioEntity irrevReac1 = bind.getInteractionNetwork().getEntity(reac.getId() + Vars.Irrev1);
-					BioEntity irrevReac2 = bind.getInteractionNetwork().getEntity(reac.getId() + Vars.Irrev2);
+					BioEntity reacAbs = bind.getInteractionNetwork().getEntity(reac.getId() + Vars.absolute);
 
-					// we create the constraints : (R1irrev1-R1irrev2) - R1exp
-					// <=
-					// R'1
-					// R1exp - (R1irrev1-R1irrev2) <= R'1
+					// we create the constraints :
+					// reacAbs - R1exp <= R'1
+					// R1exp - reacAbs <= R'1
 
-					// Const 1 : -inf < R1irrev1-R1irrev2 - R1exp - R'1 <= 0
-					// <=> -inf < R1irrev1-R1irrev2 - R'1 <= R1exp
+					// Const 1 : -inf < reacAbs - R1exp - R'1 <= 0
+					// <=> -inf < reacAbs - R'1 <= R1exp
 					Map<BioEntity, Double> cMap1 = new HashMap<BioEntity, Double>();
-					cMap1.put(irrevReac1, 1.0);
-					cMap1.put(irrevReac2, 1.0);
+					cMap1.put(reacAbs, 1.0);
 					cMap1.put(reacPrime, -1.0);
-					c1 = new Constraint(cMap1, -Double.MAX_VALUE, reactionExpressionValues_sample.get(reac));
+					c1 = new Constraint(cMap1, -Double.MAX_VALUE, reactionExpressionValue);
 					// System.out.println(c1);
 
-					// Const 2 : -inf < R1exp - (R1irrev1-R1irrev2) - R'1 <= 0
-					// <=> -inf < -(R1irrev1-R1irrev2) - R'1 <= - R1exp
-					// <=> -inf < - R1irrev1 + R1irrev2 - R'1 <= - R1exp
+					// Const 2 : -inf < R1exp - reacAbs - R'1 <= 0
+					// <=> -inf < - reacAbs - R'1 <= - R1exp
 					Map<BioEntity, Double> cMap2 = new HashMap<BioEntity, Double>();
-					cMap2.put(irrevReac1, -1.0);
-					cMap2.put(irrevReac2, -1.0);
+					cMap2.put(reacAbs, -1.0);
 					cMap2.put(reacPrime, -1.0);
-					c2 = new Constraint(cMap2, -Double.MAX_VALUE, -reactionExpressionValues_sample.get(reac));
+					c2 = new Constraint(cMap2, -Double.MAX_VALUE, -reactionExpressionValue);
 
-					/////////////////// Then we make sure that the summ of the 2
-					/////////////////// components
-					/////////////////// of a reversible reaction is = to the
-					/////////////////// absolute flux
-					/////////////////// values of the reaction (not more)
+					/////////////////// Then we make sure that reacAbs is not >
+					/////////////////// than absolute value of reaction
 
 					///////////// Need to add two boolean variables : b and a =
 					///////////// 1-b
@@ -263,13 +255,12 @@ public class TestFreeFluxes {
 					constraintsToAdd.add(integerConstraint);
 
 					////////////// We add an entity Y that is R1a + R1b
-					////////////// <=> Y-Raa-R1b = 0
+					////////////// <=> Y-R1a-R1b = 0
 					BioEntity y = new BioEntity("Y_" + reac.getId());
 					bind.getInteractionNetwork().addNumEntity(y);
 					Map<BioEntity, Double> yConstraintMap = new HashMap<BioEntity, Double>();
 					yConstraintMap.put(y, 1.0);
-					yConstraintMap.put(irrevReac1, -1.0);
-					yConstraintMap.put(irrevReac2, -1.0);
+					yConstraintMap.put(reacAbs, -1.0);
 					Constraint yConstraint = new Constraint(yConstraintMap, 0.0, 0.0);
 					constraintsToAdd.add(yConstraint);
 
@@ -316,7 +307,7 @@ public class TestFreeFluxes {
 			double resFBA = bind.FBA(constraintsToAdd, true, false).result;
 
 			System.out.println(resFBA);
-			
+
 			// write results
 			for (String reacName : bind.getBioNetwork().getBiochemicalReactionList().keySet()) {
 				BioChemicalReaction reac = bind.getBioNetwork().getBiochemicalReactionList().get(reacName);
@@ -325,10 +316,11 @@ public class TestFreeFluxes {
 
 		}
 
-		writeFbaResults(fbaResultsPath, fbaResults,samples);
+		writeFbaResults(fbaResultsPath, fbaResults, samples);
 	}
 
-	public static void writeFbaResults(String resultsPath, Map<String, Map<String, Double>> fbaResults,List<Sample> samples) {
+	public static void writeFbaResults(String resultsPath, Map<String, Map<String, Double>> fbaResults,
+			List<Sample> samples) {
 
 		try {
 			PrintWriter out = new PrintWriter(new File(resultsPath));
@@ -338,7 +330,7 @@ public class TestFreeFluxes {
 			List<String> sampleNames = new ArrayList<>();
 			List<String> reacNames = new ArrayList<>();
 
-			for (Sample sample: samples) {
+			for (Sample sample : samples) {
 				sampleNames.add(sample.getName());
 				firstLine += sample.getName() + "\t";
 			}
@@ -365,7 +357,8 @@ public class TestFreeFluxes {
 
 	}
 
-	public static void writeRevResults(String resultsPath, Map<String, Map<String, Double>> revResults,List<Sample> samples) {
+	public static void writeRevResults(String resultsPath, Map<String, Map<String, Double>> revResults,
+			List<Sample> samples) {
 
 		try {
 			PrintWriter out = new PrintWriter(new File(resultsPath));
@@ -375,7 +368,7 @@ public class TestFreeFluxes {
 			List<String> sampleNames = new ArrayList<>();
 			List<String> reacNames = new ArrayList<>();
 
-			for (Sample sample: samples) {
+			for (Sample sample : samples) {
 				sampleNames.add(sample.getName());
 				firstLine += sample.getName() + "\t";
 			}

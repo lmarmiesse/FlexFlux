@@ -48,10 +48,8 @@ public class ConstraintsFileReader {
 
 	}
 
-	public ConstraintsFileReader(String path, InteractionNetwork intNet,
-			List<Constraint> constraints,
-			Map<BioEntity, Constraint> simpleConstraints,
-			Map<BioEntity, List<Constraint>> steadyStateConstraints,
+	public ConstraintsFileReader(String path, InteractionNetwork intNet, List<Constraint> constraints,
+			Map<BioEntity, Constraint> simpleConstraints, Map<BioEntity, List<Constraint>> steadyStateConstraints,
 			BioNetwork bioNet, boolean loadObjective) {
 
 		this.path = path;
@@ -108,8 +106,7 @@ public class ConstraintsFileReader {
 						maximize = false;
 					}
 
-					String expr = (String) line.subSequence(
-							line.indexOf("(") + 1, line.indexOf(")"));
+					String expr = (String) line.subSequence(line.indexOf("(") + 1, line.indexOf(")"));
 
 					objString.add(expr);
 					objStringMap.put(expr, maximize);
@@ -127,10 +124,8 @@ public class ConstraintsFileReader {
 
 							if (expr.length < 1 || expr.length > 3) {
 
-								System.err
-										.println("Warning : Error in constraints file line "
-												+ nbLine
-												+ " , binary misformed");
+								System.err.println(
+										"Warning : Error in constraints file line " + nbLine + " , binary misformed");
 								nbLine++;
 								continue;
 							}
@@ -138,9 +133,7 @@ public class ConstraintsFileReader {
 
 							if (expr.length < 2 || expr.length > 3) {
 
-								System.err
-										.println("Warning : Error in constraints file line "
-												+ nbLine);
+								System.err.println("Warning : Error in constraints file line " + nbLine);
 								// we go to the next line
 								nbLine++;
 								continue;
@@ -179,10 +172,8 @@ public class ConstraintsFileReader {
 						}
 
 						if (fileEntities.contains(entity)) {
-							System.err
-									.println("Error in constraints file line "
-											+ nbLine + ", entity " + expr[0]
-											+ " is set more than once");
+							System.err.println("Error in constraints file line " + nbLine + ", entity " + expr[0]
+									+ " is set more than once");
 
 							isError = true;
 						}
@@ -193,15 +184,16 @@ public class ConstraintsFileReader {
 						for (Constraint c : constraints) {
 							Map<BioEntity, Double> entities = c.getEntities();
 
-							if (entities.size() == 1
-									&& entities.containsKey(entity)) {
+							if (entities.size() == 1 && entities.containsKey(entity)) {
 
 								if (entities.get(entity) == 1) {
 									// System.err
-									// .println("Warning : constraints file line "
+									// .println("Warning : constraints file line
+									// "
 									// + nbLine
 									// +
-									// " : this constraint removes an existing one");
+									// " : this constraint removes an existing
+									// one");
 									toDelete = c;
 
 									break;
@@ -233,29 +225,23 @@ public class ConstraintsFileReader {
 								ub = Double.parseDouble(expr[2]);
 							}
 						} catch (NumberFormatException e) {
-							System.err
-									.println("Warning : Error in constraints file line "
-											+ nbLine);
+							System.err.println("Warning : Error in constraints file line " + nbLine);
 							nbLine++;
 							continue;
 						}
 
 						if (binary) {
 							if ((lb != 1 && lb != 0) || (ub != 1 && ub != 0)) {
-								System.err
-										.println("Warning : Error in constraints file line "
-												+ nbLine
-												+ " , binary bounds must be 0 or 1");
+								System.err.println("Warning : Error in constraints file line " + nbLine
+										+ " , binary bounds must be 0 or 1");
 								nbLine++;
 								continue;
 							}
 						}
 
 						if (lb > ub) {
-							System.err
-									.println("Warning : Error in constraints file line "
-											+ nbLine
-											+ " , lower bound is higher than upper bound");
+							System.err.println("Warning : Error in constraints file line " + nbLine
+									+ " , lower bound is higher than upper bound");
 							nbLine++;
 							continue;
 						}
@@ -278,13 +264,11 @@ public class ConstraintsFileReader {
 					// when the "EQUATIONS" line was passed
 					else {
 
-						String[] equation = line.replaceAll("\\s", "").split(
-								"<=|>=|=|<|>");
+						String[] equation = line.replaceAll("\\s", "").split("<=|>=|=|<|>");
 
 						if (equation.length != 2) {
-							System.err
-									.println("Warning : Error in constraints file line "
-											+ nbLine + " missformed equation");
+							System.err.println(
+									"Warning : Error in constraints file line " + nbLine + " missformed equation");
 							nbLine++;
 							continue;
 						}
@@ -313,31 +297,26 @@ public class ConstraintsFileReader {
 						// order is important
 						if (line.contains("<=")) {
 
-							Constraint c = new Constraint(finalEquation,
-									-Double.MAX_VALUE, bound);
+							Constraint c = new Constraint(finalEquation, -Double.MAX_VALUE, bound);
 							constraints.add(c);
 
 						} else if (line.contains(">=")) {
 
-							Constraint c = new Constraint(finalEquation, bound,
-									Double.MAX_VALUE);
+							Constraint c = new Constraint(finalEquation, bound, Double.MAX_VALUE);
 							constraints.add(c);
 						}
 
 						else if (line.contains("=")) {
-							Constraint c = new Constraint(finalEquation, bound,
-									bound);
+							Constraint c = new Constraint(finalEquation, bound, bound);
 							constraints.add(c);
 						} else if (line.contains("<")) {
 							if (Vars.cheat) {
 
-								Constraint c = new Constraint(finalEquation,
-										-Double.MAX_VALUE, bound - Vars.epsilon);
+								Constraint c = new Constraint(finalEquation, -Double.MAX_VALUE, bound - Vars.epsilon);
 								constraints.add(c);
 
 							} else {
-								Constraint c = new Constraint(finalEquation,
-										-Double.MAX_VALUE, bound);
+								Constraint c = new Constraint(finalEquation, -Double.MAX_VALUE, bound);
 								constraints.add(c);
 								c = new Constraint(finalEquation, bound, true);
 								constraints.add(c);
@@ -346,13 +325,11 @@ public class ConstraintsFileReader {
 						} else if (line.contains(">")) {
 							if (Vars.cheat) {
 
-								Constraint c = new Constraint(finalEquation,
-										bound + Vars.epsilon, Double.MAX_VALUE);
+								Constraint c = new Constraint(finalEquation, bound + Vars.epsilon, Double.MAX_VALUE);
 								constraints.add(c);
 
 							} else {
-								Constraint c = new Constraint(finalEquation,
-										bound, Double.MAX_VALUE);
+								Constraint c = new Constraint(finalEquation, bound, Double.MAX_VALUE);
 								constraints.add(c);
 
 								c = new Constraint(finalEquation, bound, true);
@@ -370,15 +347,13 @@ public class ConstraintsFileReader {
 
 				String realObjString = objString.get(objString.size() - 1);
 
-				obj = makeObjectiveFromString(realObjString,
-						objStringMap.get(realObjString), realObjString);
+				obj = makeObjectiveFromString(realObjString, objStringMap.get(realObjString), realObjString);
 
 				objString.remove(realObjString);
 				objStringMap.remove(realObjString);
 
 				for (String objStr : objString) {
-					constraintObjectives.add(makeObjectiveFromString(objStr,
-							objStringMap.get(objStr), objStr));
+					constraintObjectives.add(makeObjectiveFromString(objStr, objStringMap.get(objStr), objStr));
 				}
 
 			}
@@ -429,8 +404,7 @@ public class ConstraintsFileReader {
 					map.put(null, coeff);
 
 				} catch (Exception e) {
-					System.err.println("Error : in constraints file variable "
-							+ members[0] + " unknown");
+					System.err.println("Error : in constraints file variable " + members[0] + " unknown");
 					System.exit(0);
 				}
 
@@ -449,9 +423,7 @@ public class ConstraintsFileReader {
 						if (entity != null) {
 							map.put(entity, 1.0);
 						} else {
-							System.err
-									.println("Error : in constraints file variable "
-											+ parts[0] + " unknown");
+							System.err.println("Error : in constraints file variable " + parts[0] + " unknown");
 							System.exit(0);
 						}
 
@@ -469,9 +441,7 @@ public class ConstraintsFileReader {
 								map.put(entity, coeff);
 							} else {
 
-								System.err
-										.println("Error : in constraints file variable "
-												+ parts[1] + " unknown");
+								System.err.println("Error : in constraints file variable " + parts[1] + " unknown");
 								System.exit(0);
 							}
 
@@ -479,8 +449,7 @@ public class ConstraintsFileReader {
 						// and then on the right
 						catch (Exception e) {
 
-							System.err
-									.println("Error :  in constraints file, coefficient must be on the left side");
+							System.err.println("Error :  in constraints file, coefficient must be on the left side");
 							System.exit(0);
 
 						}
@@ -513,63 +482,34 @@ public class ConstraintsFileReader {
 
 			if (simpleConstraints.get(ent).getLb() < 0) {
 
-				for (Constraint c : steadyStateConstraints.get(ent)) {
+				// In this case we create the absolute value of the reaction
+				// with reacAbs
+				BioEntity reacAbs = new BioEntity(ent.getId() + Vars.absolute);
+				intNet.addNumEntity(reacAbs);
 
-					double coeff = c.getEntities().get(ent);
-					c.getEntities().remove(ent);
+				// we create the constraints : R <= Rabs
+				// -R <= Rabs
 
-					BioEntity irrevReac1 = new BioEntity(ent.getId()
-							+ Vars.Irrev1);
+				// Const 1 : -inf < R - Rabs <= 0
+				Map<BioEntity, Double> cMap1 = new HashMap<BioEntity, Double>();
+				cMap1.put(ent, 1.0);
+				cMap1.put(reacAbs, -1.0);
+				Constraint c1 = new Constraint(cMap1, -Double.MAX_VALUE, 0.0);
+				constraints.add(c1);
 
-					intNet.addNumEntity(irrevReac1);
+				// Const 2 : -inf < - R - Rabs <= 0
 
-					c.getEntities().put(irrevReac1, coeff);
+				Map<BioEntity, Double> cMap2 = new HashMap<BioEntity, Double>();
+				cMap2.put(ent, -1.0);
+				cMap2.put(reacAbs, -1.0);
+				Constraint c2 = new Constraint(cMap2, -Double.MAX_VALUE, 0.0);
+				constraints.add(c2);
 
-					BioEntity irrevReac2 = new BioEntity(ent.getId()
-							+ Vars.Irrev2);
+				summationEntities.put(reacAbs, 1.0);
 
-					intNet.addNumEntity(irrevReac2);
-
-					c.getEntities().put(irrevReac2, coeff * -1);
-
-					Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
-
-					constMap.put(irrevReac1, 1.0);
-
-					Constraint c1 = new Constraint(constMap, 0.0,
-							simpleConstraints.get(ent).getUb());
-
-					Map<BioEntity, Double> constMap2 = new HashMap<BioEntity, Double>();
-
-					constMap2.put(irrevReac2, 1.0);
-
-					Constraint c2 = new Constraint(constMap2, 0.0,
-							simpleConstraints.get(ent).getLb() * -1);
-
-					constraints.add(c1);
-					simpleConstraints.put(irrevReac1, c1);
-					constraints.add(c2);
-					simpleConstraints.put(irrevReac2, c2);
-
-					Map<BioEntity, Double> constMap3 = new HashMap<BioEntity, Double>();
-
-					constMap3.put(ent, 1.0);
-					constMap3.put(irrevReac1, -1.0);
-					constMap3.put(irrevReac2, 1.0);
-
-					Constraint c3 = new Constraint(constMap3, 0.0, 0.0);
-
-					constraints.add(c3);
-
-					summationEntities.put(irrevReac1, 1.0);
-
-					summationEntities.put(irrevReac2, 1.0);
-
-				}
 			} else {
 
-				summationEntities.put(
-						bioNet.getBiochemicalReactionList().get(entName), 1.0);
+				summationEntities.put(bioNet.getBiochemicalReactionList().get(entName), 1.0);
 
 			}
 
@@ -578,11 +518,10 @@ public class ConstraintsFileReader {
 		// the entity is equal to the summ of all fluxes
 		summationEntities.put(FluxesSummation, -1.0);
 
-		Constraint summationConstraint = new Constraint(summationEntities, 0.0,
-				0.0);
+		Constraint summationConstraint = new Constraint(summationEntities, 0.0, 0.0);
 
 		constraints.add(summationConstraint);
-		
+
 		return FluxesSummation;
 
 	}
@@ -624,8 +563,7 @@ public class ConstraintsFileReader {
 	 *            If it is a binary entity.
 	 */
 
-	private void setRightEntityType(BioEntity entity, boolean integer,
-			boolean binary) {
+	private void setRightEntityType(BioEntity entity, boolean integer, boolean binary) {
 
 		intNet.removeNumEntity(entity);
 
@@ -652,8 +590,7 @@ public class ConstraintsFileReader {
 	 *            The name of the objective.
 	 * @return The created objective.
 	 */
-	public Objective makeObjectiveFromString(String expr, boolean maximize,
-			String name) {
+	public Objective makeObjectiveFromString(String expr, boolean maximize, String name) {
 
 		String vars[] = expr.split("\\+");
 
@@ -679,8 +616,7 @@ public class ConstraintsFileReader {
 					}
 
 					else {
-						System.err.println("Error : a member of the objective "
-								+ parts[0] + " is unknown");
+						System.err.println("Error : a member of the objective " + parts[0] + " is unknown");
 
 						System.exit(0);
 
@@ -712,8 +648,7 @@ public class ConstraintsFileReader {
 
 					else {
 
-						System.err.println("Error : a member of the objective "
-								+ parts[1] + " is unknown");
+						System.err.println("Error : a member of the objective " + parts[1] + " is unknown");
 
 						System.exit(0);
 					}
@@ -722,8 +657,7 @@ public class ConstraintsFileReader {
 				try {
 					coeffs[i] = Double.parseDouble(parts[0]);
 				} catch (Exception e) {
-					System.err
-							.println("Error in constraints file line, objective coefficient must be a number");
+					System.err.println("Error in constraints file line, objective coefficient must be a number");
 
 					System.exit(0);
 				}

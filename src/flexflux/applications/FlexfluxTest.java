@@ -20,11 +20,11 @@ import flexflux.unit_tests.TestClassification;
 import flexflux.unit_tests.TestCondition;
 import flexflux.unit_tests.TestExternalMetaboliteConstraints;
 import flexflux.unit_tests.TestFVA_KO_DR;
+import flexflux.unit_tests.TestFluxSum;
 import flexflux.unit_tests.TestInteraction;
 import flexflux.unit_tests.TestKoWithInteractions;
 import flexflux.unit_tests.TestListOfConditions;
 import flexflux.unit_tests.TestMultiRSA;
-import flexflux.unit_tests.TestPAO;
 import flexflux.unit_tests.TestROBA;
 import flexflux.unit_tests.TestRSA;
 import flexflux.unit_tests.TestRandomConditions;
@@ -125,6 +125,7 @@ public class FlexfluxTest extends FFApplication {
 			classes.add(TestRSA.class);
 			classes.add(TestMultiRSA.class);
 			classes.add(TestBind.class);
+			classes.add(TestFluxSum.class);
 			classes.add(TestBECO.class);
 			classes.add(TestClassification.class);
 			classes.add(TestCondition.class);
@@ -143,6 +144,8 @@ public class FlexfluxTest extends FFApplication {
 			System.out.println("Running unit tests : ");
 
 			for (Class cl : classes) {
+				
+//				System.out.println("Solver : "+solver);
 
 				try{
 

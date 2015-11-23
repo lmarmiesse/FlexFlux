@@ -75,8 +75,7 @@ public class Vars {
 	 */
 	public static String FluxSumKeyWord = "FluxSum";
 
-	public static String Irrev1 = "FlexFluxIrrev1";
-	public static String Irrev2 = "FlexFluxIrrev2";
+	public static String absolute = "FlexFluxAbs";
 
 	/**
 	 * Percentage of liberty for constraints created by objective functions.

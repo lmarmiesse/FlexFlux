@@ -1,0 +1,4 @@
+obj : MIN(FluxSum)
+
+R5	-5
+R6	-12

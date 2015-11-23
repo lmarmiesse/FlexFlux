@@ -102,7 +102,7 @@ public class FBAResult extends AnalysisResult {
 		if (!Double.isNaN(objValue)) {
 
 			for (BioEntity entity : bind.getInteractionNetwork().getEntities()) {
-				if (!entity.getId().contains(Vars.Irrev1) && !entity.getId().contains(Vars.Irrev2)) {
+				if (!entity.getId().contains(Vars.absolute)) {
 
 					if (bind.constrainedEntities.contains(entity)) {
 
