@@ -9,7 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.kohsuke.args4j.Option;
+
 import flexflux.analyses.FBAAnalysis;
+import flexflux.applications.FFApplication;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
 import flexflux.general.CplexBind;
@@ -20,27 +23,85 @@ import flexflux.objective.Objective;
 import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
 
-public class TestFreeFluxes {
+public class TestFreeFluxes extends FFApplication {
 
+	public static String message = "Finds closest fba fluxes to experimental data by freeing every metabolic flux.";
+	
+	@Option(name = "-s", usage = "Metabolic network file path (SBML format)", metaVar = "File - in", required = true)
+	public String metabolicNetworkPath = "";
+
+	@Option(name = "-omics", usage = "Gene expression data file path", metaVar = "File - in", required = true)
+	public String omicsDataPath = "";
+	
+	@Option(name = "-outRev", usage = "Reaction expression values output file path", metaVar = "File - out", required = true)
+	public String revResultsPath = "";
+	
+	@Option(name = "-outFba", usage = "FBA result output file path", metaVar = "File - out", required = true)
+	public String fbaResultsPath = "";
+	
+	/**
+	 * 1 => And : sum ; or : mean <br/>
+	 * 2 => all mean 3 => And : sum ; or : min <br/>
+	 */
+	@Option(name = "-calcGPR", usage = "GPR calculation method", metaVar = "Integer")
+	public int gprCalculationMethod = 2;
+	
+	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
+	public String solver = "CPLEX";
+	
 	public static void main(String[] args) {
+		
+	
+		TestFreeFluxes f = new TestFreeFluxes();
+	
+		f.parseArguments(args);
+		
+		if (!new File(f.metabolicNetworkPath).isFile()) {
+			System.err.println("Error : file " + f.metabolicNetworkPath + " not found");
+			System.exit(0);
+		}
+		if (!new File(f.omicsDataPath).isFile()) {
+			System.err.println("Error : file " + f.omicsDataPath + " not found");
+			System.exit(0);
+		}
+		
+		Bind bind = null;
+		
+		try {
+			if (f.solver.equals("CPLEX")) {
+				bind = new CplexBind();
+			} else if (f.solver.equals("GLPK")) {
+				bind = new GLPKBind();
+			} else {
+				System.err.println("Unknown solver name");
+				f.parser.printUsage(System.err);
+				System.exit(0);
+			}
+		} catch (UnsatisfiedLinkError e) {
+			System.err.println("Error, the solver " + f.solver
+					+ " cannot be found. Check your solver installation and the configuration file, or choose a different solver (-sol).");
+			System.exit(0);
+		} catch (NoClassDefFoundError e) {
+			System.err.println("Error, the solver " + f.solver
+					+ " cannot be found. There seems to be a problem with the .jar file of " + f.solver + ".");
+			System.exit(0);
+		}
 
-		/**
-		 * 1 => And : sum ; or : mean <br/>
-		 * 2 => all mean 3 => And : sum ; or : min <br/>
-		 */
-		int gprCalculationMethod = 2;
+		
 
+		
+		
 		Map<String, Map<String, Double>> revResults = new HashMap<String, Map<String, Double>>();
 		Map<String, Map<String, Double>> fbaResults = new HashMap<String, Map<String, Double>>();
 
-		 String metabolicNetworkPath =
-		 "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/AraGEM_Cobra_modif.xml";
-		 String omicsDataPath =
-		 "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/MYBSEQ_TIME.txt";
-		 String revResultsPath =
-		 "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/resultsAT_time_rev.txt";
-		 String fbaResultsPath =
-		 "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/resultsAT_time_fba.txt";
+		// String metabolicNetworkPath =
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/AraGEM_Cobra_modif.xml";
+		// String omicsDataPath =
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/MYBSEQ_TIME.txt";
+		// String revResultsPath =
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/resultsAT_time_rev.txt";
+		// String fbaResultsPath =
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/resultsAT_time_fba.txt";
 
 		// String omicsDataPath =
 		// "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/MYBSEQ_GTYPE_tps0.txt";
@@ -59,25 +120,26 @@ public class TestFreeFluxes {
 		// String fbaResultsPath
 		// ="/home/lmarmiesse/rocks1-compneur/work/lucas/Toy
 		// model/resultsFBA.txt";
-//		String metabolicNetworkPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/toyModel2.xml";
-//		String omicsDataPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/exprData2.txt";
-//		String revResultsPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/resultsRev2.txt";
-//		String fbaResultsPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/resultsFBA2.txt";
+		// String metabolicNetworkPath =
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy
+		// model/toyModel2.xml";
+		// String omicsDataPath =
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy
+		// model/exprData2.txt";
+		// String revResultsPath =
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy
+		// model/resultsRev2.txt";
+		// String fbaResultsPath =
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy
+		// model/resultsFBA2.txt";
 
 		// RECON 2
-		// String metabolicNetworkPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/Recon2.v02_with_anno-MODEL1109130000.xml";
-		// String omicsDataPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/test.txt";
-		// String revResultsPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/results_recon2_rev.txt";
-		// String fbaResultsPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/results_recon2_fba.txt";
+//		String metabolicNetworkPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/Recon2.v02_with_anno-MODEL1109130000.xml";
+//		String omicsDataPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/test.txt";
+//		String revResultsPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/results_recon2_rev.txt";
+//		String fbaResultsPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/results_recon2_fba.txt";
 
-		// Bind bind = new GLPKBind();
-		Bind bind = new CplexBind();
-
-		bind.loadSbmlNetwork(metabolicNetworkPath, false);
+		bind.loadSbmlNetwork(f.metabolicNetworkPath, false);
 
 		// need to "free" every flux
 		for (BioEntity bioEntity : bind.getInteractionNetwork().getEntities()) {
@@ -120,7 +182,7 @@ public class TestFreeFluxes {
 			}
 		}
 
-		OmicsData omicsData = OmicsDataReader.loadOmicsData(omicsDataPath, bind.getInteractionNetwork().getEntities());
+		OmicsData omicsData = OmicsDataReader.loadOmicsData(f.omicsDataPath, bind.getInteractionNetwork().getEntities());
 
 		List<Sample> samples = omicsData.getSamples();
 
@@ -136,7 +198,7 @@ public class TestFreeFluxes {
 				BioChemicalReaction reac = (BioChemicalReaction) inter.getConsequence().getEntity();
 
 				double expr = inter.getCondition()
-						.calculateRelationQuantitativeValue(omicsData.getDataValuesForSample(s), gprCalculationMethod);
+						.calculateRelationQuantitativeValue(omicsData.getDataValuesForSample(s), f.gprCalculationMethod);
 
 				if (!Double.isNaN(expr)) {
 
@@ -150,12 +212,12 @@ public class TestFreeFluxes {
 				}
 			}
 		}
-		
-		System.out.println("Max rev: "+maxRev);
-		System.out.println("Scaling factor :"+maxRev/25);
-		double scalingFactor = maxRev/25;
 
-		writeFbaResults(revResultsPath, revResults, samples);
+		System.out.println("Max rev: " + maxRev);
+		System.out.println("Scaling factor :" + maxRev / 25);
+		double scalingFactor = maxRev / 25;
+
+		writeFbaResults(f.revResultsPath, revResults, samples);
 
 		BioEntity fluxSum = bind.createFluxesSummation();
 
@@ -189,8 +251,8 @@ public class TestFreeFluxes {
 				objectiveCoeffs[index] = 1.0;
 
 				Constraint c1, c2;
-				
-				double reactionExpressionValue = reactionExpressionValues_sample.get(reac)/scalingFactor;
+
+				double reactionExpressionValue = reactionExpressionValues_sample.get(reac) / scalingFactor;
 
 				if (bind.getSimpleConstraints().get(reac).getLb() >= 0) {
 
@@ -316,7 +378,7 @@ public class TestFreeFluxes {
 
 		}
 
-		writeFbaResults(fbaResultsPath, fbaResults, samples);
+		writeFbaResults(f.fbaResultsPath, fbaResults, samples);
 	}
 
 	public static void writeFbaResults(String resultsPath, Map<String, Map<String, Double>> fbaResults,
@@ -393,6 +455,10 @@ public class TestFreeFluxes {
 			System.out.println("path " + resultsPath + " is not a valid path, or file could not be created.");
 		}
 
+	}
+
+	public String getMessage() {
+		return message;
 	}
 
 }

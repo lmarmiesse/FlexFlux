@@ -12,7 +12,7 @@ public abstract class FFApplication {
 	// order for the graphical version. Default : -1 : no particular order
 	public static int order = -1;
 
-	@Option(name = "-verbose", usage = "[default=false] Activates the verbose mode", hidden=true)
+	@Option(name = "-verbose", usage = "[default=false] Activates the verbose mode")
 	public Boolean verbose = false;
 
 	@Option(name = "-h", usage = "Prints this help")

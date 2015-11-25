@@ -32,8 +32,7 @@ public class RSAAnalysis extends Analysis {
 	 */
 	private int steadyStatesIterations = 10000;
 
-	public RSAAnalysis(InteractionNetwork intNetwork,
-			Map<BioEntity, Constraint> simpleConstraints) {
+	public RSAAnalysis(InteractionNetwork intNetwork, Map<BioEntity, Constraint> simpleConstraints) {
 		super(null);
 		this.intNet = intNetwork;
 		this.simpleConstraints = simpleConstraints;
@@ -44,9 +43,8 @@ public class RSAAnalysis extends Analysis {
 	public RSAAnalysisResult runAnalysis() {
 
 		RSAAnalysisResult res = new RSAAnalysisResult();
-		
-		if (intNet.getTargetToInteractions().isEmpty()
-				&& intNet.getInitialConstraints().isEmpty()
+
+		if (intNet.getTargetToInteractions().isEmpty() && intNet.getInitialConstraints().isEmpty()
 				&& intNet.getInitialStates().isEmpty()) {
 			return res;
 		}
@@ -57,43 +55,35 @@ public class RSAAnalysis extends Analysis {
 		for (BioEntity ent : intNet.getInitialStates().keySet()) {
 			res.addResultEntity(ent);
 		}
-		
+
 		// we set the values for the variables in the first state
-		Map<BioEntity, Integer> thisState = intNet.getInitialStates();
+		Map<BioEntity, Integer> thisState = new HashMap<BioEntity, Integer>(intNet.getInitialStates());
 
 		for (BioEntity b : intNet.getInitialConstraints().keySet()) {
-			
+
 			// If the entity is in the regulatory network
 			if (intNet.getInteractionNetworkEntities().containsKey(b.getId())) {
 
 				// TRANSLATION
 				if (intNet.canTranslate(b)) {
-					thisState.put(
-							b,
-							intNet.getStateFromValue(b, intNet
-									.getInitialConstraints().get(b).getLb()));
+					thisState.put(b, intNet.getStateFromValue(b, intNet.getInitialConstraints().get(b).getLb()));
 				} else {
 
-					int stateMin = intNet.getInteractionNetworkEntitiesStates()
-							.get(b)[0];
+					int stateMin = intNet.getInteractionNetworkEntitiesStates().get(b)[0];
 
-					int stateMax = intNet.getInteractionNetworkEntitiesStates()
-							.get(b)[1];
+					int stateMax = intNet.getInteractionNetworkEntitiesStates().get(b)[1];
 
-					double value = intNet.getInitialConstraints().get(b)
-							.getLb();
+					double value = intNet.getInitialConstraints().get(b).getLb();
 
 					// If the value is an integer AND is between min and max
 					// states
-					if (value <= stateMax && value >= stateMin
-							&& value == Math.floor(value)) {
+					if (value <= stateMax && value >= stateMin && value == Math.floor(value)) {
 
 						thisState.put(b, (int) value);
 
 					} else {
-						System.err
-								.println("Error : no translation available for variable "
-										+ b.getId() + " and value " + value);
+						System.err.println(
+								"Error : no translation available for variable " + b.getId() + " and value " + value);
 						System.exit(0);
 					}
 
@@ -104,40 +94,28 @@ public class RSAAnalysis extends Analysis {
 				// overwrite it
 
 				if (simpleConstraints.containsKey(b)) {
-					if (simpleConstraints.get(b).getLb() != simpleConstraints
-							.get(b).getUb()) {
+					if (simpleConstraints.get(b).getLb() != simpleConstraints.get(b).getUb()) {
 
 						if (intNet.canTranslate(b)) {
-							thisState.put(
-									b,
-									intNet.getStateFromValue(b, intNet
-											.getInitialConstraints().get(b)
-											.getLb()));
+							thisState.put(b,
+									intNet.getStateFromValue(b, intNet.getInitialConstraints().get(b).getLb()));
 						} else {
-							int stateMin = intNet
-									.getInteractionNetworkEntitiesStates().get(
-											b)[0];
+							int stateMin = intNet.getInteractionNetworkEntitiesStates().get(b)[0];
 
-							int stateMax = intNet
-									.getInteractionNetworkEntitiesStates().get(
-											b)[1];
+							int stateMax = intNet.getInteractionNetworkEntitiesStates().get(b)[1];
 
 							double value = simpleConstraints.get(b).getLb();
 
 							// If the value is an integer AND is between min and
 							// max
 							// states
-							if (value <= stateMax && value >= stateMin
-									&& value == Math.floor(value)) {
+							if (value <= stateMax && value >= stateMin && value == Math.floor(value)) {
 
 								thisState.put(b, (int) value);
 
 							} else {
-								System.err
-										.println("Error : no translation available for variable "
-												+ b.getId()
-												+ " and value "
-												+ value);
+								System.err.println("Error : no translation available for variable " + b.getId()
+										+ " and value " + value);
 								System.exit(0);
 							}
 						}
@@ -153,35 +131,29 @@ public class RSAAnalysis extends Analysis {
 
 				// if the entity is already set by a constraint, we remove the
 				// interactions that have this entity as a target
-				if (simpleConstraints.get(b).getLb() == simpleConstraints
-						.get(b).getUb()) {
+				if (simpleConstraints.get(b).getLb() == simpleConstraints.get(b).getUb()) {
 
 					// TRANSLATION
 					if (intNet.canTranslate(b)) {
 
-						thisState.put(b, intNet.getStateFromValue(b,
-								simpleConstraints.get(b).getLb()));
+						thisState.put(b, intNet.getStateFromValue(b, simpleConstraints.get(b).getLb()));
 					} else {
-						int stateMin = intNet
-								.getInteractionNetworkEntitiesStates().get(b)[0];
+						int stateMin = intNet.getInteractionNetworkEntitiesStates().get(b)[0];
 
-						int stateMax = intNet
-								.getInteractionNetworkEntitiesStates().get(b)[1];
+						int stateMax = intNet.getInteractionNetworkEntitiesStates().get(b)[1];
 
 						double value = simpleConstraints.get(b).getLb();
 
 						// If the value is an integer AND is between min and
 						// max
 						// states
-						if (value <= stateMax && value >= stateMin
-								&& value == Math.floor(value)) {
+						if (value <= stateMax && value >= stateMin && value == Math.floor(value)) {
 
 							thisState.put(b, (int) value);
 
 						} else {
-							System.err
-									.println("Error : no translation available for variable "
-											+ b.getId() + " and value " + value);
+							System.err.println("Error : no translation available for variable " + b.getId()
+									+ " and value " + value);
 							System.exit(0);
 						}
 					}
@@ -205,13 +177,11 @@ public class RSAAnalysis extends Analysis {
 				newState.put(b, thisState.get(b));
 			}
 
-			Map<Constraint, double[]> newtStepConstraints = goToNextInteractionNetworkState(
-					thisState, entitiesToCheck);
+			Map<Constraint, double[]> newtStepConstraints = goToNextInteractionNetworkState(thisState, entitiesToCheck);
 
 			// we update the values
 			for (Constraint c : newtStepConstraints.keySet()) {
-				newState.put((BioEntity) c.getEntities().keySet().toArray()[0],
-						(int) Math.round(c.getLb()));
+				newState.put((BioEntity) c.getEntities().keySet().toArray()[0], (int) Math.round(c.getLb()));
 			}
 
 			thisState = newState;
@@ -263,18 +233,15 @@ public class RSAAnalysis extends Analysis {
 			}
 
 		}
-		
-		
 
 		statesList.add(thisState);
-		
+
 		Map<BioEntity, Double> meanAttractorStates = new HashMap<BioEntity, Double>();
-		
 
 		if (attractorStatesList.size() != 0) {
 
 			for (BioEntity b : attractorStatesList.get(0).keySet()) {
-				
+
 				// If it is an external metab, we set a constraint
 				boolean isExtMetab = false;
 
@@ -293,21 +260,19 @@ public class RSAAnalysis extends Analysis {
 				// attractor
 				double lb = 0;
 				double ub = 0;
-				
+
 				/**
 				 * Mean state value
 				 */
 				double meanStateValue = 0;
-				
+
 				for (int nb = 0; nb < attractorStatesList.size(); nb++) {
-					
+
 					meanStateValue += attractorStatesList.get(nb).get(b);
-					
+
 					if (intNet.canTranslate(b)) {
-						lb += intNet.getConstraintFromState(b,
-								attractorStatesList.get(nb).get(b)).getLb();
-						ub += intNet.getConstraintFromState(b,
-								attractorStatesList.get(nb).get(b)).getUb();
+						lb += intNet.getConstraintFromState(b, attractorStatesList.get(nb).get(b)).getLb();
+						ub += intNet.getConstraintFromState(b, attractorStatesList.get(nb).get(b)).getUb();
 					} else {
 						lb += attractorStatesList.get(nb).get(b);
 						ub += attractorStatesList.get(nb).get(b);
@@ -316,9 +281,9 @@ public class RSAAnalysis extends Analysis {
 				}
 
 				meanStateValue = meanStateValue / attractorStatesList.size();
-				
+
 				meanAttractorStates.put(b, meanStateValue);
-				
+
 				lb = lb / attractorStatesList.size();
 				ub = ub / attractorStatesList.size();
 
@@ -330,35 +295,32 @@ public class RSAAnalysis extends Analysis {
 			}
 
 		} else {
-			System.err
-					.println("Warning, no regulatory network attractor was found in "
-							+ steadyStatesIterations + " iterations.");
+			System.err.println(
+					"Warning, no regulatory network attractor was found in " + steadyStatesIterations + " iterations.");
 
 		}
 		res.setStatesList(statesList);
 		res.setAttractorStatesList(attractorStatesList);
 
 		res.setMeanAttractorStates(meanAttractorStates);
-		
+
 		// ////TRANSLATION
 
 		res.setSteadyStateConstraints(finalConstraints);
-		
+
 		// System.out.println("Attractor size : "+attractorSize);
 
 		return res;
 
 	}
 
-	public Map<Constraint, double[]> goToNextInteractionNetworkState(
-			Map<BioEntity, Integer> networkState,
+	public Map<Constraint, double[]> goToNextInteractionNetworkState(Map<BioEntity, Integer> networkState,
 			List<BioEntity> entitiesToCheck) {
 		Map<BioEntity, Constraint> netConstraints = new HashMap<BioEntity, Constraint>();
 		for (BioEntity ent : networkState.keySet()) {
 
 			netConstraints.put(ent,
-					new Constraint(ent, (double) networkState.get(ent),
-							(double) networkState.get(ent)));
+					new Constraint(ent, (double) networkState.get(ent), (double) networkState.get(ent)));
 		}
 
 		Map<Constraint, double[]> contToTimeInfos = new HashMap<Constraint, double[]>();
@@ -369,25 +331,21 @@ public class RSAAnalysis extends Analysis {
 
 		for (BioEntity entity : entitiesToCheck) {
 
-			for (Interaction i : intNet.getTargetToInteractions().get(entity)
-					.getConditionalInteractions()) {
+			for (Interaction i : intNet.getTargetToInteractions().get(entity).getConditionalInteractions()) {
 
 				if (i.getCondition().isTrue(netConstraints)) {
 
 					// we go through all the consequences (there should be only
 					// one)
 					if (intNet.getInteractionToConstraints().containsKey(i)) {
-						for (Constraint consequence : this.intNet
-								.getInteractionToConstraints().get(i)) {
+						for (Constraint consequence : this.intNet.getInteractionToConstraints().get(i)) {
 
 							// we check it's a simple constraint
 							if (consequence.getEntities().size() == 1) {
-								for (BioEntity ent : consequence.getEntities()
-										.keySet()) {
+								for (BioEntity ent : consequence.getEntities().keySet()) {
 									if (consequence.getEntities().get(ent) == 1.0) {
 
-										contToTimeInfos.put(consequence,
-												i.getTimeInfos());
+										contToTimeInfos.put(consequence, i.getTimeInfos());
 										nextStepState.put(ent, consequence);
 
 										setEntities.add(ent);
@@ -404,18 +362,15 @@ public class RSAAnalysis extends Analysis {
 		for (BioEntity entity : entitiesToCheck) {
 			if (!setEntities.contains(entity)) {
 
-				Interaction defaultInt = intNet.getTargetToInteractions()
-						.get(entity).getdefaultInteraction();
+				Interaction defaultInt = intNet.getTargetToInteractions().get(entity).getdefaultInteraction();
 
 				// we go through all the consequences (there should be only
 				// one)
-				for (Constraint consequence : defaultInt.getConsequence()
-						.createConstraints()) {
+				for (Constraint consequence : defaultInt.getConsequence().createConstraints()) {
 
 					for (BioEntity ent : consequence.getEntities().keySet()) {
 						if (consequence.getEntities().get(ent) == 1.0) {
-							contToTimeInfos.put(consequence,
-									defaultInt.getTimeInfos());
+							contToTimeInfos.put(consequence, defaultInt.getTimeInfos());
 							nextStepState.put(ent, consequence);
 
 							setEntities.add(ent);
@@ -432,8 +387,7 @@ public class RSAAnalysis extends Analysis {
 		for (BioEntity ent : nextStepState.keySet()) {
 
 			if (intNet.getTargetToInteractions().containsKey(ent)) {
-				steadyStateConstraints.put(nextStepState.get(ent),
-						contToTimeInfos.get(nextStepState.get(ent)));
+				steadyStateConstraints.put(nextStepState.get(ent), contToTimeInfos.get(nextStepState.get(ent)));
 			}
 		}
 

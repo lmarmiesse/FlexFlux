@@ -33,9 +33,11 @@ package flexflux.thread;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import parsebionet.biodata.BioEntity;
 import flexflux.analyses.result.ROBAResult;
@@ -52,7 +54,7 @@ public class ThreadROBA extends ResolveThread {
 	/**
 	 * Number of simulations to treat.
 	 */
-	private int todo;
+	private double todo;
 
 	/**
 	 * Contains all the conditions to treat
@@ -71,19 +73,19 @@ public class ThreadROBA extends ResolveThread {
 
 	/**
 	 * 
-	 * Percentage of the analysis that is completed.
+	 * For the output Thread safe integer
 	 * 
 	 */
-	private static long percentage = 0;
-	
-	/**
-	 * If true, the conditions set in the condition file are fixed and can not be updated by the regulation network
-	 */
-	Boolean fixConditions=false;
+	private static AtomicInteger nbPrintedStars = new AtomicInteger(0);
 
-	public ThreadROBA(Bind b, Queue<Condition> conditions,
-			ListOfObjectives objectives,
-			ROBAResult result, Boolean fixConditions) {
+	/**
+	 * If true, the conditions set in the condition file are fixed and can not
+	 * be updated by the regulation network
+	 */
+	Boolean fixConditions = false;
+
+	public ThreadROBA(Bind b, Queue<Condition> conditions, ListOfObjectives objectives, ROBAResult result,
+			Boolean fixConditions) {
 
 		super(b);
 		this.todo = conditions.size();
@@ -91,8 +93,8 @@ public class ThreadROBA extends ResolveThread {
 		this.result = result;
 		this.objectives = objectives;
 		this.fixConditions = fixConditions;
-		percentage = 0;
-		
+		nbPrintedStars = new AtomicInteger(0);
+
 	}
 
 	/**
@@ -101,40 +103,45 @@ public class ThreadROBA extends ResolveThread {
 	public void run() {
 
 		Condition condition;
-		
-		while ((condition=conditions.poll()) != null) {
+		while ((condition = conditions.poll()) != null) {
 
 			Set<String> inputsWithPositiveValue = new HashSet<String>();
-			
-			condition.addListOfConstraintsToBind(bind, fixConditions);
-			
-			for(String entityId : condition.constraints.keySet()) {
+
+			// condition.addListOfConstraintsToBind(bind, fixConditions);
+
+			List<Constraint> constraints = condition.getConstraints(bind, fixConditions);
+
+			for (String entityId : condition.constraints.keySet()) {
 				Double value = condition.getConstraint(entityId).getValue();
-				
-				if(value > 0)
-				{
+
+				if (value > 0) {
 					inputsWithPositiveValue.add(entityId);
 				}
 			}
-			
-			bind.prepareSolver();
+			// With prepare solver, the constraints are still there in the next
+			// conditions
+			// bind.prepareSolver();
 
 			// the value in ObjSimCount for an objective function and the value
 			// for the activated inputs
 			// in ObjInputMatrix are incremented if the new set of conditions
 			// activates it
+
 			for (String objName : objectives.objectives.keySet()) {
+
 				this.setObjective(objName);
 
-				DoubleResult res = bind.FBA(new ArrayList<Constraint>(), false,
-						true);
+				List<Constraint> constraintsToAdd = new ArrayList<Constraint>(constraints);
+
+				DoubleResult res = bind.FBA(constraintsToAdd, false, true);
 
 				double value = Vars.round(res.result);
-				
+
 				Objective o = bind.getObjective();
 				Boolean maximize = o.getMaximize();
-				
+
 				if ((maximize && value > 0) || (!maximize && value < 0)) {
+
 					result.incrementObjCondCount(objName);
 					for (String inputId : inputsWithPositiveValue) {
 						result.incrementObjInputMatrix(objName, inputId);
@@ -142,18 +149,18 @@ public class ThreadROBA extends ResolveThread {
 				}
 			}
 
-			int percent = (int) Math
-					.round(((double) todo - (double) conditions.size())
-							/ (double) todo * 100);
+			if (Vars.verbose) {
+				int percent = (int) Math.round(((todo - conditions.size()) / todo) * 100);
 
-			if (percent > percentage) {
-
-				percentage = percent;
-				if (Vars.verbose && percent % 2 == 0) {
+				while (nbPrintedStars.intValue() < (percent / 2)) {
 					System.err.print("*");
+					nbPrintedStars.incrementAndGet();
 				}
 			}
 		}
+
+		bind.end();
+		
 	}
 
 	/**
@@ -162,8 +169,7 @@ public class ThreadROBA extends ResolveThread {
 	 */
 	private void setObjective(String objName) {
 		String expr = objectives.get(objName);
-		String objString = (String) expr.subSequence(expr.indexOf("(") + 1,
-				expr.indexOf(")"));
+		String objString = (String) expr.subSequence(expr.indexOf("(") + 1, expr.indexOf(")"));
 
 		Boolean maximize = false;
 
@@ -173,8 +179,7 @@ public class ThreadROBA extends ResolveThread {
 			maximize = true;
 		}
 
-		Objective obj = bind.makeObjectiveFromString(objString, maximize,
-				objName);
+		Objective obj = bind.makeObjectiveFromString(objString, maximize, objName);
 		bind.setObjective(obj);
 	}
 

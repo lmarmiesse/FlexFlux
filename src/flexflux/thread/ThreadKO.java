@@ -93,6 +93,8 @@ public class ThreadKO extends ResolveThread {
 		this.result = result;
 		this.entitiesInInteractionNetwork = entitiesInInteractionNetwork;
 		this.interactionNetworkConstraints = interactionNetwotkConstraints;
+		
+		nbPrintedStars = new AtomicInteger(0);
 
 	}
 
@@ -168,6 +170,6 @@ public class ThreadKO extends ResolveThread {
 		}
 
 		bind.end();
-		nbPrintedStars = new AtomicInteger(0);
+		
 	}
 }

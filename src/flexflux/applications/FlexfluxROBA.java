@@ -16,7 +16,7 @@ import flexflux.objective.ListOfObjectives;
 
 public class FlexfluxROBA extends FFApplication {
 
-	public Boolean graphicalVersion = false;
+//	public Boolean graphicalVersion = false;
 	
 	public static String applicationName = FlexfluxROBA.class
 			.getSimpleName();
@@ -172,7 +172,7 @@ public class FlexfluxROBA extends FFApplication {
 			bind.loadRegulationFile(f.regFile);
 		}
 
-		bind.prepareSolver();
+//		bind.prepareSolver();
 
 		ROBAAnalysis a = new ROBAAnalysis(bind, objectives, conditions, f.fixConditions);
 
