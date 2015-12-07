@@ -13,7 +13,7 @@ public abstract class FFApplication {
 	public static int order = -1;
 
 	@Option(name = "-verbose", usage = "[default=false] Activates the verbose mode")
-	public Boolean verbose = false;
+	public Boolean verbose = true;
 
 	@Option(name = "-h", usage = "Prints this help")
 	public Boolean h = false;

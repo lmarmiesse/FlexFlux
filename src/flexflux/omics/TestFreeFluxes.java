@@ -87,10 +87,7 @@ public class TestFreeFluxes extends FFApplication {
 			System.exit(0);
 		}
 
-		
 
-		
-		
 		Map<String, Map<String, Double>> revResults = new HashMap<String, Map<String, Double>>();
 		Map<String, Map<String, Double>> fbaResults = new HashMap<String, Map<String, Double>>();
 
