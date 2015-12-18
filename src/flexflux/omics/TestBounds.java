@@ -24,26 +24,34 @@ public class TestBounds {
 		 * 1 => And : sum ; or : mean <br/>
 		 * 2 => all mean 3 => And : sum ; or : min <br/>
 		 */
-		int gprCalculationMethod = 2;
+		int gprCalculationMethod = 3;
 
 		Map<String, Map<String, Double>> revResults = new HashMap<String, Map<String, Double>>();
 		Map<String, Map<String, Double>> fbaResults = new HashMap<String, Map<String, Double>>();
 
+		String metabolicNetworkPath = "/home/lmarmiesse/rocks1-compneur/FBA-stemcells/transcriptome/NaivePrimed/Recon2.v04-sbml-jsbml.xml";
+		String omicsDataPath = "/home/lmarmiesse/rocks1-compneur/FBA-stemcells/transcriptome/NaivePrimed/primed-naive-rpkm-mapped-to-recon2-reduced-FF.txt";
+		String constraintsFilePath = "/home/lmarmiesse/rocks1-compneur/FBA-stemcells/transcriptome/NaivePrimed/FlexFlux/cons.txt";
+		
+		String revResultsPath = "/home/lmarmiesse/rocks1-compneur/FBA-stemcells/transcriptome/NaivePrimed/FlexFlux/rev_3.txt";
+		String fbaResultsPath = "/home/lmarmiesse/rocks1-compneur/FBA-stemcells/transcriptome/NaivePrimed/FlexFlux/results_recon2_fba.txt";
+		
 		// String metabolicNetworkPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/Recon2.v02_with_anno-MODEL1109130000.xml";
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy
+		// model/toyModel2.xml";
 		// String omicsDataPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/test.txt";
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy
+		// model/exprData2.txt";
+		// String constraintsFilePath =
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy
+		// model/constraints2.txt";
+		//
 		// String revResultsPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/results_recon2_rev.txt";
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy
+		// model/resultsRev2.txt";
 		// String fbaResultsPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/results_recon2_fba.txt";
-
-		String metabolicNetworkPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/toyModel2.xml";
-		String omicsDataPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/exprData2.txt";
-		String constraintsFilePath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/constraints2.txt";
-
-		String revResultsPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/resultsRev2.txt";
-		String fbaResultsPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/resultsFBA2.txt";
+		// "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy
+		// model/resultsFBA2.txt";
 
 		Bind bind = new CplexBind();
 
@@ -91,12 +99,12 @@ public class TestBounds {
 			fbaResults.put(sample.getName(), new HashMap<String, Double>());
 
 			int flag = 1;
-			double relaxFlux = 0; 
-			
+			double relaxFlux = 0;
+
 			while (flag != 0) {
-				
+
 				List<Constraint> constraintsToAdd = new ArrayList<Constraint>();
-				
+
 				for (BioChemicalReaction reac : reactionExpressionValues_sample.keySet()) {
 
 					double reactionExpressionValue = reactionExpressionValues_sample.get(reac);
@@ -114,8 +122,8 @@ public class TestBounds {
 					Map<BioEntity, Double> entityMap = new HashMap<BioEntity, Double>();
 					entityMap.put(reac, 1.0);
 
-					Constraint newConstraint = new Constraint(entityMap, reactionExpressionValue-relaxFlux,
-							reactionExpressionValue+relaxFlux);
+					Constraint newConstraint = new Constraint(entityMap, reactionExpressionValue - relaxFlux,
+							reactionExpressionValue + relaxFlux);
 					constraintsToAdd.add(newConstraint);
 
 				}
@@ -128,16 +136,16 @@ public class TestBounds {
 
 				if (flag == 0) {
 
-					for (Constraint c : constraintsToAdd){
+					for (Constraint c : constraintsToAdd) {
 						System.out.println(c);
 					}
-					
+
 					System.out.println(resFBA);
 				} else {
 					System.out.println("Unfeasible");
 				}
-				
-				relaxFlux+=10;
+
+				relaxFlux += 10;
 
 			}
 

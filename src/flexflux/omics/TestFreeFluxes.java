@@ -211,7 +211,7 @@ public class TestFreeFluxes extends FFApplication {
 		}
 
 		System.out.println("Max rev: " + maxRev);
-		System.out.println("Scaling factor :" + maxRev / 25);
+		System.out.println("Scaling factor: " + maxRev / 25);
 		double scalingFactor = maxRev / 25;
 
 		writeFbaResults(f.revResultsPath, revResults, samples);

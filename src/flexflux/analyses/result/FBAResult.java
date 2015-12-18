@@ -34,7 +34,10 @@
 package flexflux.analyses.result;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -44,6 +47,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -266,6 +270,20 @@ public class FBAResult extends AnalysisResult {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 
+
+		Dimension size = frame.getSize ();
+        BufferedImage img = new BufferedImage (size.width, size.height, BufferedImage.TYPE_3BYTE_BGR);
+        Graphics g = img.getGraphics ();
+        frame.paint (g);
+        g.dispose ();
+        try
+        {
+            ImageIO.write (img, "png", new File ("screenshot.png"));
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace ();
+        }
 	}
 
 	/**
