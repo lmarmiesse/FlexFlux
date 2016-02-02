@@ -52,30 +52,28 @@ public class SBMLQualReader {
 
 	private static InteractionNetwork intNet;
 
-	public static InteractionNetwork loadSbmlQual(String path,
-			InteractionNetwork intNet, RelationFactory relationFactory) {
+	public static InteractionNetwork loadSbmlQual(String path, InteractionNetwork intNet,
+			RelationFactory relationFactory) {
 
 		SBMLQualReader.intNet = intNet;
 
 		SBMLDocument document = null;
-		
+
 		try {
 			document = SBMLReader.read(new File(path));
 		} catch (XMLStreamException | IOException e) {
-			System.err.println("Error while reading the sbml qual file "+path);
+			System.err.println("Error while reading the sbml qual file " + path);
 			e.printStackTrace();
-			
+
 			return null;
-		} 
+		}
 
 		Model model = document.getModel();
 
-		QualModelPlugin qualPlugin = (QualModelPlugin) model
-				.getExtension("qual");
+		QualModelPlugin qualPlugin = (QualModelPlugin) model.getExtension("qual");
 
 		// ////////////////////////////////initial values
-		for (QualitativeSpecies species : qualPlugin
-				.getListOfQualitativeSpecies()) {
+		for (QualitativeSpecies species : qualPlugin.getListOfQualitativeSpecies()) {
 			if (intNet.getEntity(species.getId()) == null) {
 
 				intNet.addNumEntity(new BioEntity(species.getId()));
@@ -100,52 +98,38 @@ public class SBMLQualReader {
 
 							intervalString = intervalString.replaceAll(" ", "");
 
-							int stateNumber = Integer.parseInt(stateString
-									.split(" ")[1]);
+							int stateNumber = Integer.parseInt(stateString.split(" ")[1]);
 
 							if (intervalString.equals("ND")) {
-								intNet.addEntityStateConstraintTranslation(ent,
-										stateNumber, null);
+								intNet.addEntityStateConstraintTranslation(ent, stateNumber, null);
 							} else {
 								try {
 									double lb = 0;
 									double ub = 0;
 
-									String lbIncludedString = intervalString
-											.substring(0, 1);
-									String ubIncludedString = intervalString
-											.substring(intervalString.length() - 1);
+									String lbIncludedString = intervalString.substring(0, 1);
+									String ubIncludedString = intervalString.substring(intervalString.length() - 1);
 
-									boolean lbIncluded = lbIncludedString
-											.equals("[");
-									boolean ubIncluded = ubIncludedString
-											.equals("]");
+									boolean lbIncluded = lbIncludedString.equals("[");
+									boolean ubIncluded = ubIncludedString.equals("]");
 
-									intervalString = intervalString.replace(
-											"[", "");
-									intervalString = intervalString.replace(
-											"]", "");
+									intervalString = intervalString.replace("[", "");
+									intervalString = intervalString.replace("]", "");
 
-									if (intervalString.split(",")[0]
-											.equals("-inf")) {
+									if (intervalString.split(",")[0].equals("-inf")) {
 										lb = -Double.MAX_VALUE;
-									} else if (intervalString.split(",")[0]
-											.equals("+inf")) {
+									} else if (intervalString.split(",")[0].equals("+inf")) {
 										lb = Double.MAX_VALUE;
 									} else {
-										lb = Double.parseDouble(intervalString
-												.split(",")[0]);
+										lb = Double.parseDouble(intervalString.split(",")[0]);
 									}
 
-									if (intervalString.split(",")[1]
-											.equals("-inf")) {
+									if (intervalString.split(",")[1].equals("-inf")) {
 										ub = -Double.MAX_VALUE;
-									} else if (intervalString.split(",")[1]
-											.equals("+inf")) {
+									} else if (intervalString.split(",")[1].equals("+inf")) {
 										ub = Double.MAX_VALUE;
 									} else {
-										ub = Double.parseDouble(intervalString
-												.split(",")[1]);
+										ub = Double.parseDouble(intervalString.split(",")[1]);
 									}
 
 									if (!lbIncluded) {
@@ -155,15 +139,11 @@ public class SBMLQualReader {
 										ub -= Vars.epsilon;
 									}
 
-									intNet.addEntityStateConstraintTranslation(
-											ent, stateNumber, new Constraint(
-													ent, lb, ub));
+									intNet.addEntityStateConstraintTranslation(ent, stateNumber,
+											new Constraint(ent, lb, ub));
 								} catch (Exception e) {
-									System.err
-											.println("Error in the description of the translation for state "
-													+ stateNumber
-													+ " of species "
-													+ ent.getId());
+									System.err.println("Error in the description of the translation for state "
+											+ stateNumber + " of species " + ent.getId());
 									System.exit(0);
 
 								}
@@ -179,26 +159,23 @@ public class SBMLQualReader {
 			// check that max level is specified
 			if (!species.isSetMaxLevel()) {
 
-				System.err.println("Error : no max value set for species "
-						+ species.getId());
+				System.err.println("Error : no max value set for species " + species.getId());
 				System.exit(0);
 
 			} else {
-				intNet.setInteractionNetworkEntityState(ent,
-						species.getMaxLevel());
+				intNet.setInteractionNetworkEntityState(ent, species.getMaxLevel());
 			}
 
 			if (species.isSetInitialLevel()) {
 
 				if (species.getInitialLevel() > species.getMaxLevel()) {
 
-					System.err.println("Error : in species " + species.getId()
-							+ ", initial level is greater than max level.");
+					System.err.println(
+							"Error : in species " + species.getId() + ", initial level is greater than max level.");
 					System.exit(0);
 
 				}
-				intNet.updateInteractionNetworkEntityState(ent,
-						species.getInitialLevel());
+				intNet.updateInteractionNetworkEntityState(ent, species.getInitialLevel());
 
 				Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
 				constMap.put(ent, 1.0);
@@ -225,10 +202,8 @@ public class SBMLQualReader {
 
 			Map<BioEntity, Double> constMap = new HashMap<BioEntity, Double>();
 			constMap.put(ent, 1.0);
-			intNet.addInitialConstraint(
-					ent,
-					new Constraint(constMap, sp.getInitialConcentration(), sp
-							.getInitialConcentration()));
+			intNet.addInitialConstraint(ent,
+					new Constraint(constMap, sp.getInitialConcentration(), sp.getInitialConcentration()));
 
 		}
 
@@ -241,10 +216,8 @@ public class SBMLQualReader {
 
 			BioEntity outEntity = intNet.getEntity(outEntityName);
 
-			if (!intNet.getInteractionNetworkEntities().containsKey(
-					outEntityName)) {
-				System.err.println("Error : entity " + outEntityName
-						+ " is not described as a qualitative species.");
+			if (!intNet.getInteractionNetworkEntities().containsKey(outEntityName)) {
+				System.err.println("Error : entity " + outEntityName + " is not described as a qualitative species.");
 				System.exit(0);
 			}
 
@@ -256,7 +229,7 @@ public class SBMLQualReader {
 				double starts = 0;
 				double lasts = 0;
 				String interID = "";
-				
+
 				Interaction inter;
 
 				int resValue = 0;
@@ -267,25 +240,21 @@ public class SBMLQualReader {
 
 				if (ft.isDefaultTerm()) {
 
-					elseRelation = new Unique(outEntity, new OperationEq(),
-							resValue);
+					elseRelation = new Unique(outEntity, new OperationEq(), resValue);
 
-					inter = relationFactory.makeIfThenInteraction(elseRelation,
-							null);
+					inter = relationFactory.makeIfThenInteraction(elseRelation, null);
 
 					intNet.setTargetDefaultInteraction(outEntity, inter);
 
 				} else {
 
 					ASTNode ast = ft.getMath();
-					
-					ifRelation = createRealtion(ast);
-					
-					thenRelation = new Unique(outEntity, new OperationEq(),
-							resValue);
 
-					inter = relationFactory.makeIfThenInteraction(thenRelation,
-							ifRelation);
+					ifRelation = createRealtion(ast);
+
+					thenRelation = new Unique(outEntity, new OperationEq(), resValue);
+
+					inter = relationFactory.makeIfThenInteraction(thenRelation, ifRelation);
 
 					intNet.addTargetConditionalInteraction(outEntity, inter);
 
@@ -321,6 +290,11 @@ public class SBMLQualReader {
 
 				inter.setTimeInfos(new double[] { starts, lasts });
 				inter.setName(interID);
+				if (ft.isSetMetaId()) {
+					inter.setName(ft.getMetaId());
+				}
+				
+				
 
 			}
 
@@ -337,16 +311,13 @@ public class SBMLQualReader {
 	private static void checkConsistency() {
 
 		// check a quantitative value is not in two states
-		for (BioEntity ent : intNet.getEntityStateConstraintTranslation()
-				.keySet()) {
+		for (BioEntity ent : intNet.getEntityStateConstraintTranslation().keySet()) {
 
 			Set<Double> thresholds = new HashSet<Double>();
 
-			for (Integer state : intNet.getEntityStateConstraintTranslation()
-					.get(ent).keySet()) {
+			for (Integer state : intNet.getEntityStateConstraintTranslation().get(ent).keySet()) {
 
-				Constraint c = intNet.getEntityStateConstraintTranslation()
-						.get(ent).get(state);
+				Constraint c = intNet.getEntityStateConstraintTranslation().get(ent).get(state);
 
 				if (c == null) {
 					continue;
@@ -360,11 +331,9 @@ public class SBMLQualReader {
 			for (double val : thresholds) {
 
 				boolean belongsToAState = false;
-				for (Integer i : intNet.getEntityStateConstraintTranslation()
-						.get(ent).keySet()) {
+				for (Integer i : intNet.getEntityStateConstraintTranslation().get(ent).keySet()) {
 
-					Constraint c = intNet.getEntityStateConstraintTranslation()
-							.get(ent).get(i);
+					Constraint c = intNet.getEntityStateConstraintTranslation().get(ent).get(i);
 
 					if (c == null) {
 						continue;
@@ -374,12 +343,8 @@ public class SBMLQualReader {
 						if (!belongsToAState) {
 							belongsToAState = true;
 						} else {
-							System.err
-									.println("Error : for variable "
-											+ ent.getId()
-											+ ", the value "
-											+ val
-											+ " belongs to more than one qualitative state.");
+							System.err.println("Error : for variable " + ent.getId() + ", the value " + val
+									+ " belongs to more than one qualitative state.");
 							System.exit(0);
 						}
 
@@ -392,20 +357,17 @@ public class SBMLQualReader {
 		}
 
 		// check the quantitative values are in ascending order
-		for (BioEntity ent : intNet.getEntityStateConstraintTranslation()
-				.keySet()) {
+		for (BioEntity ent : intNet.getEntityStateConstraintTranslation().keySet()) {
 
 			SortedSet<Integer> s = new TreeSet<Integer>();
-			s.addAll(intNet.getEntityStateConstraintTranslation().get(ent)
-					.keySet());
+			s.addAll(intNet.getEntityStateConstraintTranslation().get(ent).keySet());
 
 			double old_ub = -Double.MAX_VALUE;
 			;
 			int old_state = 0;
 			for (int state : s) {
 
-				Constraint c = intNet.getEntityStateConstraintTranslation()
-						.get(ent).get(state);
+				Constraint c = intNet.getEntityStateConstraintTranslation().get(ent).get(state);
 
 				if (c == null) {
 					continue;
@@ -415,20 +377,15 @@ public class SBMLQualReader {
 				double ub = c.getUb();
 
 				if (ub < lb) {
-					System.err
-							.println("Error : for variable "
-									+ ent.getId()
-									+ " and state "
-									+ state
-									+ ", upper bound of translation is smaller than lower bound ");
+					System.err.println("Error : for variable " + ent.getId() + " and state " + state
+							+ ", upper bound of translation is smaller than lower bound ");
 					System.exit(0);
 				}
 
 				if (lb < old_ub) {
-					System.err.println("Error : for variable " + ent.getId()
-							+ ". lower bound of state " + state
-							+ " is smaller thean upper bound of state "
-							+ old_state + ". They must be in ascending order.");
+					System.err.println("Error : for variable " + ent.getId() + ". lower bound of state " + state
+							+ " is smaller thean upper bound of state " + old_state
+							+ ". They must be in ascending order.");
 					System.exit(0);
 				}
 
@@ -444,15 +401,15 @@ public class SBMLQualReader {
 	private static Relation createRealtion(ASTNode ast) {
 
 		Relation rel = getRightRelation(ast);
-		
+
 		for (ASTNode astChild : ast.getListOfNodes()) {
 
 			try {
 				RelationWithList rel2 = (RelationWithList) rel;
 				if (rel2 != null) {
-					
+
 					rel2.addRelation(createRealtion(astChild));
-					
+
 				}
 			} catch (ClassCastException e) {
 
@@ -466,7 +423,7 @@ public class SBMLQualReader {
 	private static Relation getRightRelation(ASTNode ast) {
 
 		Type type = ast.getType();
-		
+
 		if (type.toString().equals("LOGICAL_AND")) {
 			return new And();
 		} else if (type.toString().equals("LOGICAL_OR")) {
@@ -478,14 +435,11 @@ public class SBMLQualReader {
 		} else if (type.toString().equals("RELATIONAL_EQ")) {
 
 			int value = 0;
-			
 
 			BioEntity ent = intNet.getEntity(ast.getChild(0).toString());
 
-			if (!intNet.getInteractionNetworkEntities()
-					.containsKey(ent.getId())) {
-				System.err.println("Error : entity " + ent.getId()
-						+ " is not described as a qualitative species.");
+			if (!intNet.getInteractionNetworkEntities().containsKey(ent.getId())) {
+				System.err.println("Error : entity " + ent.getId() + " is not described as a qualitative species.");
 				System.exit(0);
 			}
 
@@ -503,10 +457,8 @@ public class SBMLQualReader {
 
 			BioEntity ent = intNet.getEntity(ast.getChild(0).toString());
 
-			if (!intNet.getInteractionNetworkEntities()
-					.containsKey(ent.getId())) {
-				System.err.println("Error : entity " + ent.getId()
-						+ " is not described as a qualitative species.");
+			if (!intNet.getInteractionNetworkEntities().containsKey(ent.getId())) {
+				System.err.println("Error : entity " + ent.getId() + " is not described as a qualitative species.");
 				System.exit(0);
 			}
 
@@ -524,10 +476,8 @@ public class SBMLQualReader {
 
 			BioEntity ent = intNet.getEntity(ast.getChild(0).toString());
 
-			if (!intNet.getInteractionNetworkEntities()
-					.containsKey(ent.getId())) {
-				System.err.println("Error : entity " + ent.getId()
-						+ " is not described as a qualitative species.");
+			if (!intNet.getInteractionNetworkEntities().containsKey(ent.getId())) {
+				System.err.println("Error : entity " + ent.getId() + " is not described as a qualitative species.");
 				System.exit(0);
 			}
 
@@ -545,10 +495,8 @@ public class SBMLQualReader {
 
 			BioEntity ent = intNet.getEntity(ast.getChild(0).toString());
 
-			if (!intNet.getInteractionNetworkEntities()
-					.containsKey(ent.getId())) {
-				System.err.println("Error : entity " + ent.getId()
-						+ " is not described as a qualitative species.");
+			if (!intNet.getInteractionNetworkEntities().containsKey(ent.getId())) {
+				System.err.println("Error : entity " + ent.getId() + " is not described as a qualitative species.");
 				System.exit(0);
 			}
 
@@ -565,11 +513,9 @@ public class SBMLQualReader {
 			int value = 0;
 
 			BioEntity ent = intNet.getEntity(ast.getChild(0).toString());
-			
-			if (!intNet.getInteractionNetworkEntities()
-					.containsKey(ent.getId())) {
-				System.err.println("Error : entity " + ent.getId()
-						+ " is not described as a qualitative species.");
+
+			if (!intNet.getInteractionNetworkEntities().containsKey(ent.getId())) {
+				System.err.println("Error : entity " + ent.getId() + " is not described as a qualitative species.");
 				System.exit(0);
 			}
 
@@ -582,8 +528,8 @@ public class SBMLQualReader {
 			return unique;
 
 		}
-		
-		System.err.println("Error in rule : "+ast+", missing logical rule or mathematical sign");
+
+		System.err.println("Error in rule : " + ast + ", missing logical rule or mathematical sign");
 		System.exit(0);
 
 		return null;

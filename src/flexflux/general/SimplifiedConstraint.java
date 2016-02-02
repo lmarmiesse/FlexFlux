@@ -13,6 +13,7 @@ public class SimplifiedConstraint {
 	public ConstraintType type;
 
 	public SimplifiedConstraint(String e, Double value, ConstraintType t) {
+		
 		this.entityId = e;
 		this.value = value;
 		this.type = t;

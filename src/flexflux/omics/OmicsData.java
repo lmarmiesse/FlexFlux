@@ -93,5 +93,13 @@ public class OmicsData {
 		return data.get(sample);
 
 	}
+	
+	public void scaleVariable(BioEntity variable,int factor){
+		
+		for (Sample s : samples){
+			data.get(s).put(variable,data.get(s).get(variable)/factor); 
+		}
+		
+	}
 
 }

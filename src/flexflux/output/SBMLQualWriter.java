@@ -107,6 +107,7 @@ public class SBMLQualWriter {
 
 				FunctionTerm term = tr.createFunctionTerm();
 				term.setResultLevel((int) inter.getConsequence().getValue());
+				term.setMetaId(inter.getName());
 
 				String conditionMathString = inter.getCondition().toFormula();
 

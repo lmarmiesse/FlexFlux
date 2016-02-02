@@ -475,7 +475,7 @@ public abstract class Bind {
 
 									//
 									if (simpleConstraints.containsKey(reac)) {
-
+										
 										if (reac.getLeftList().containsKey(metab.getId())
 												&& reac.getLeftList().size() == 1) {
 

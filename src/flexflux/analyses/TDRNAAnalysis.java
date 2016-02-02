@@ -30,9 +30,8 @@ public class TDRNAAnalysis extends Analysis {
 		this.intNet = intNetwork;
 		this.deltaT = deltaT;
 		this.iterations = iter;
-		
-		
-//		System.out.println(intNet);
+
+		// System.out.println(intNet);
 
 	}
 
@@ -40,12 +39,10 @@ public class TDRNAAnalysis extends Analysis {
 
 		entitiesToCheck = intNet.getInitialStates().keySet();
 
-		TDRNAAnalysisResult res = new TDRNAAnalysisResult(deltaT,
-				entitiesToCheck);
+		TDRNAAnalysisResult res = new TDRNAAnalysisResult(deltaT, entitiesToCheck);
 
 		// // check regulatory network not empty
-		if (intNet.getTargetToInteractions().isEmpty()
-				&& intNet.getInitialConstraints().isEmpty()
+		if (intNet.getTargetToInteractions().isEmpty() && intNet.getInitialConstraints().isEmpty()
 				&& intNet.getInitialStates().isEmpty()) {
 			return res;
 		}
@@ -56,13 +53,14 @@ public class TDRNAAnalysis extends Analysis {
 
 		Map<Integer, Map<BioEntity, Integer>> iterationToStates = new HashMap<Integer, Map<BioEntity, Integer>>();
 
-		for (int it = 1; it <= iterations+1; it++) {
+		for (int it = 1; it <= iterations + 1; it++) {
 
 			statesList.add(thisState);
 
 			List<Interaction> trueInteractions = getLogicalUpdates(thisState);
 
 			for (Interaction i : trueInteractions) {
+				
 
 				double begins = i.getTimeInfos()[0];
 				double lasts = i.getTimeInfos()[1];
@@ -80,33 +78,33 @@ public class TDRNAAnalysis extends Analysis {
 						// ////////// Need check that the entity doesn't already
 						// have a rule
 
-//						if (iterationToStates.get(iteration).containsKey(
-//								i.getConsequence().getEntity())) {
-//
-//							System.out.println("PROBLEM");
-//							System.out.println("Iteration " + iteration + " "
-//									+ i.getConsequence().getEntity().getId());
-//							System.out.println(iterationToStates.get(iteration)
-//									.get(i.getConsequence().getEntity()));
-//							System.out.println((int) i.getConsequence()
-//									.getValue());
-//							
-//							
-//							
-//							
-//							
-//						} else {
+						if (iterationToStates.get(iteration).containsKey(i.getConsequence().getEntity())) {
 
-							iterationToStates.get(iteration).put(
-									i.getConsequence().getEntity(),
+							if (iterationToStates.get(iteration)
+									.get(i.getConsequence().getEntity()) != (int) i.getConsequence().getValue()) {
+
+//								if (i.getConsequence().getEntity().getId().equals("KCR1")) {
+//
+//									System.out.println("PROBLEM");
+//									System.out.println(
+//											"Iteration " + iteration + " " + i.getConsequence().getEntity().getId());
+//									System.out.println(
+//											iterationToStates.get(iteration).get(i.getConsequence().getEntity()));
+//									System.out.println((int) i.getConsequence().getValue());
+//								}
+
+							}
+
+						} else {
+
+							iterationToStates.get(iteration).put(i.getConsequence().getEntity(),
 									(int) i.getConsequence().getValue());
-//						}
+						}
 
 					} else {
 
 						Map<BioEntity, Integer> map = new HashMap<BioEntity, Integer>();
-						map.put(i.getConsequence().getEntity(), (int) i
-								.getConsequence().getValue());
+						map.put(i.getConsequence().getEntity(), (int) i.getConsequence().getValue());
 
 						iterationToStates.put(iteration, map);
 					}
@@ -137,8 +135,7 @@ public class TDRNAAnalysis extends Analysis {
 		return res;
 	}
 
-	public List<Interaction> getLogicalUpdates(
-			Map<BioEntity, Integer> networkState) {
+	public List<Interaction> getLogicalUpdates(Map<BioEntity, Integer> networkState) {
 
 		// list of interactions that are true (contain the time infos)
 		List<Interaction> trueInteractions = new ArrayList<Interaction>();
@@ -147,15 +144,13 @@ public class TDRNAAnalysis extends Analysis {
 		for (BioEntity ent : networkState.keySet()) {
 
 			netConstraints.put(ent,
-					new Constraint(ent, (double) networkState.get(ent),
-							(double) networkState.get(ent)));
+					new Constraint(ent, (double) networkState.get(ent), (double) networkState.get(ent)));
 		}
 
 		Set<BioEntity> setEntities = new HashSet<BioEntity>();
 
 		for (BioEntity entity : entitiesToCheck) {
-			for (Interaction i : intNet.getTargetToInteractions().get(entity)
-					.getConditionalInteractions()) {
+			for (Interaction i : intNet.getTargetToInteractions().get(entity).getConditionalInteractions()) {
 				if (i.getCondition().isTrue(netConstraints)) {
 					trueInteractions.add(i);
 					setEntities.add(entity);
@@ -166,8 +161,7 @@ public class TDRNAAnalysis extends Analysis {
 
 		for (BioEntity entity : entitiesToCheck) {
 			if (!setEntities.contains(entity)) {
-				Interaction defaultInt = intNet.getTargetToInteractions()
-						.get(entity).getdefaultInteraction();
+				Interaction defaultInt = intNet.getTargetToInteractions().get(entity).getdefaultInteraction();
 				trueInteractions.add(defaultInt);
 			}
 		}

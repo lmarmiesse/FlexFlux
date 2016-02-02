@@ -368,11 +368,12 @@ public class TDRFBAAnalysis extends Analysis {
 						+ "s");
 				return rFBAResult;
 			}
-
+			
 			// if it's unfeasbile : no growth
 			if (result.flag != 0) {
 				
 				mu = 0;
+				
 			} else {
 				lastSolve = b.getLastSolve();
 

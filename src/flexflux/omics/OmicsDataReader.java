@@ -34,6 +34,7 @@ public class OmicsDataReader {
 
 			int nbLine = 2;
 			while ((line = in.readLine()) != null) {
+				
 				if (line.equals("")) {
 					nbLine++;
 					continue;

@@ -7,16 +7,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.kohsuke.args4j.Option;
 
-import flexflux.analyses.FBAAnalysis;
 import flexflux.applications.FFApplication;
+import flexflux.condition.Condition;
+import flexflux.condition.ListOfConditions;
 import flexflux.general.Bind;
 import flexflux.general.Constraint;
+import flexflux.general.ConstraintType;
 import flexflux.general.CplexBind;
 import flexflux.general.GLPKBind;
+import flexflux.general.SimplifiedConstraint;
 import flexflux.general.Vars;
 import flexflux.interaction.Interaction;
 import flexflux.objective.Objective;
@@ -38,6 +40,9 @@ public class TestFreeFluxes extends FFApplication {
 	
 	@Option(name = "-outFba", usage = "FBA result output file path", metaVar = "File - out", required = true)
 	public String fbaResultsPath = "";
+	
+	@Option(name = "-cond", usage = "[OPTIONAL] " + ListOfConditions.fileFormat, metaVar = "File - in", required = false)
+	public String conditionFile = "";
 	
 	/**
 	 * 1 => And : sum ; or : mean <br/>
@@ -61,6 +66,10 @@ public class TestFreeFluxes extends FFApplication {
 			System.exit(0);
 		}
 		if (!new File(f.omicsDataPath).isFile()) {
+			System.err.println("Error : file " + f.omicsDataPath + " not found");
+			System.exit(0);
+		}
+		if (!new File(f.conditionFile).isFile()) {
 			System.err.println("Error : file " + f.omicsDataPath + " not found");
 			System.exit(0);
 		}
@@ -90,51 +99,6 @@ public class TestFreeFluxes extends FFApplication {
 
 		Map<String, Map<String, Double>> revResults = new HashMap<String, Map<String, Double>>();
 		Map<String, Map<String, Double>> fbaResults = new HashMap<String, Map<String, Double>>();
-
-		// String metabolicNetworkPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/AraGEM_Cobra_modif.xml";
-		// String omicsDataPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/MYBSEQ_TIME.txt";
-		// String revResultsPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/resultsAT_time_rev.txt";
-		// String fbaResultsPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/resultsAT_time_fba.txt";
-
-		// String omicsDataPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/MYBSEQ_GTYPE_tps0.txt";
-		// String revResultsPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/resultsAT_gtype_rev.txt";
-		// String fbaResultsPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/AT/resultsAT_gtype_fba.txt";
-
-		// String metabolicNetworkPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/toyModel.xml";
-		// String omicsDataPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy model/exprData.txt";
-		// String revResultsPath
-		// ="/home/lmarmiesse/rocks1-compneur/work/lucas/Toy
-		// model/resultsRev.txt";
-		// String fbaResultsPath
-		// ="/home/lmarmiesse/rocks1-compneur/work/lucas/Toy
-		// model/resultsFBA.txt";
-		// String metabolicNetworkPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy
-		// model/toyModel2.xml";
-		// String omicsDataPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy
-		// model/exprData2.txt";
-		// String revResultsPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy
-		// model/resultsRev2.txt";
-		// String fbaResultsPath =
-		// "/home/lmarmiesse/rocks1-compneur/work/lucas/Toy
-		// model/resultsFBA2.txt";
-
-		// RECON 2
-//		String metabolicNetworkPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/Recon2.v02_with_anno-MODEL1109130000.xml";
-//		String omicsDataPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/test.txt";
-//		String revResultsPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/results_recon2_rev.txt";
-//		String fbaResultsPath = "/home/lmarmiesse/rocks1-compneur/work/lucas/recon2/results_recon2_fba.txt";
 
 		bind.loadSbmlNetwork(f.metabolicNetworkPath, false);
 
@@ -178,16 +142,65 @@ public class TestFreeFluxes extends FFApplication {
 				}
 			}
 		}
+		
+		
 
 		OmicsData omicsData = OmicsDataReader.loadOmicsData(f.omicsDataPath, bind.getInteractionNetwork().getEntities());
 
+		for (BioEntity gene : omicsData.getVariables()){
+			
+			int nbReac = 0;
+			
+			for (Interaction interaction : bind.getInteractionNetwork().getGPRInteractions()){
+				for (BioEntity involvedEnt : interaction.getCondition().getInvolvedEntities()){
+					if (gene==involvedEnt){
+						nbReac++;
+						break;
+					}
+				}
+			}
+//			omicsData.scaleVariable(gene,nbReac);
+			
+		}
+		
 		List<Sample> samples = omicsData.getSamples();
+		
+		
+		/**
+		 * Load the condition file
+		 */
+		ListOfConditions conditions = new ListOfConditions();
+		
+		Boolean flag = conditions.loadConditionFile(f.conditionFile, ConstraintType.DOUBLE);
+		
+		if (flag == false) {
+			System.err.println("Error in reading the condition file "
+					+ f.conditionFile);
+			System.exit(0);
+		}
+		
+		
+		for (Condition cond: conditions.conditions){
+			
+			Sample s = omicsData.getSample(cond.name);
+			
+			if (s!=null){
+				s.setCondition(cond);
+			}
+			else{
+				System.err.println("Warning: condition "+cond.name+" in the condition file is not recognised.");
+			}
+			
+			
+		}
+		
 
 		Map<Sample, Map<BioChemicalReaction, Double>> reactionExpressionValues = new HashMap<Sample, Map<BioChemicalReaction, Double>>();
 
 		double maxRev = 0;
 
 		for (Sample s : samples) {
+			
 			reactionExpressionValues.put(s, new HashMap<BioChemicalReaction, Double>());
 			revResults.put(s.getName(), new HashMap<String, Double>());
 
@@ -213,15 +226,16 @@ public class TestFreeFluxes extends FFApplication {
 		System.out.println("Max rev: " + maxRev);
 		System.out.println("Scaling factor: " + maxRev / 25);
 		double scalingFactor = maxRev / 25;
+		//scaler pour etre < M
 
 		writeFbaResults(f.revResultsPath, revResults, samples);
 
 		BioEntity fluxSum = bind.createFluxesSummation();
 
 		for (Sample sample : samples) {
-
+			
 			System.out.println(sample.getName());
-
+			
 			fbaResults.put(sample.getName(), new HashMap<String, Double>());
 
 			///////////// We create FBA variables that correspond to the
@@ -363,6 +377,25 @@ public class TestFreeFluxes extends FFApplication {
 			Objective p = new Objective(objectiveEntities, objectiveCoeffs, "", false);
 			bind.setObjective(p);
 
+			for (String constraintName: sample.getCondition().constraints.keySet()){
+				
+				if (sample.getCondition().constraints.get(constraintName).value == 0.0){
+					
+					BioEntity ent = bind.getInteractionNetwork().getEntity(sample.getCondition().constraints.get(constraintName).entityId);
+					
+					if (ent==null){
+						System.err.println("Warning, entity "+sample.getCondition().constraints.get(constraintName).entityId+" is unknown. It might belong to a dead reaction.");
+					}
+					else{
+						Map<BioEntity,Double> newConstraintMap = new HashMap<BioEntity,Double>();
+						newConstraintMap.put(ent, 1.0);
+						constraintsToAdd.add(new Constraint(newConstraintMap,0.0,0.0));
+						
+					}
+				}
+			}
+			
+			
 			double resFBA = bind.FBA(constraintsToAdd, true, false).result;
 
 			System.out.println(resFBA);
