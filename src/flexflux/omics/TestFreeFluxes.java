@@ -28,39 +28,36 @@ import parsebionet.biodata.BioEntity;
 public class TestFreeFluxes extends FFApplication {
 
 	public static String message = "Finds closest fba fluxes to experimental data by freeing every metabolic flux.";
-	
+
 	@Option(name = "-s", usage = "Metabolic network file path (SBML format)", metaVar = "File - in", required = true)
 	public String metabolicNetworkPath = "";
 
 	@Option(name = "-omics", usage = "Gene expression data file path", metaVar = "File - in", required = true)
 	public String omicsDataPath = "";
-	
-	@Option(name = "-outRev", usage = "Reaction expression values output file path", metaVar = "File - out", required = true)
-	public String revResultsPath = "";
-	
-	@Option(name = "-outFba", usage = "FBA result output file path", metaVar = "File - out", required = true)
-	public String fbaResultsPath = "";
-	
-	@Option(name = "-cond", usage = "[OPTIONAL] " + ListOfConditions.fileFormat, metaVar = "File - in", required = false)
+
+	@Option(name = "-out", usage = "Path for the forlder containing the output", metaVar = "File - out", required = true)
+	public String ResultsFolderPath = "";
+
+	@Option(name = "-cond", usage = "[OPTIONAL] "
+			+ ListOfConditions.fileFormat, metaVar = "File - in", required = false)
 	public String conditionFile = "";
-	
+
 	/**
 	 * 1 => And : sum ; or : mean <br/>
 	 * 2 => all mean 3 => And : sum ; or : min <br/>
 	 */
 	@Option(name = "-calcGPR", usage = "GPR calculation method", metaVar = "Integer")
 	public int gprCalculationMethod = 2;
-	
+
 	@Option(name = "-sol", usage = "Solver name", metaVar = "Solver")
 	public String solver = "CPLEX";
-	
+
 	public static void main(String[] args) {
-		
-	
+
 		TestFreeFluxes f = new TestFreeFluxes();
-	
+
 		f.parseArguments(args);
-		
+
 		if (!new File(f.metabolicNetworkPath).isFile()) {
 			System.err.println("Error : file " + f.metabolicNetworkPath + " not found");
 			System.exit(0);
@@ -69,13 +66,15 @@ public class TestFreeFluxes extends FFApplication {
 			System.err.println("Error : file " + f.omicsDataPath + " not found");
 			System.exit(0);
 		}
-		if (!new File(f.conditionFile).isFile()) {
-			System.err.println("Error : file " + f.omicsDataPath + " not found");
-			System.exit(0);
+
+		if (f.conditionFile != "") {
+			if (!new File(f.conditionFile).isFile()) {
+				System.err.println("Error : file " + f.conditionFile + " not found");
+				System.exit(0);
+			}
 		}
-		
 		Bind bind = null;
-		
+
 		try {
 			if (f.solver.equals("CPLEX")) {
 				bind = new CplexBind();
@@ -95,7 +94,6 @@ public class TestFreeFluxes extends FFApplication {
 					+ " cannot be found. There seems to be a problem with the .jar file of " + f.solver + ".");
 			System.exit(0);
 		}
-
 
 		Map<String, Map<String, Double>> revResults = new HashMap<String, Map<String, Double>>();
 		Map<String, Map<String, Double>> fbaResults = new HashMap<String, Map<String, Double>>();
@@ -142,73 +140,68 @@ public class TestFreeFluxes extends FFApplication {
 				}
 			}
 		}
-		
-		
 
-		OmicsData omicsData = OmicsDataReader.loadOmicsData(f.omicsDataPath, bind.getInteractionNetwork().getEntities());
+		OmicsData omicsData = OmicsDataReader.loadOmicsData(f.omicsDataPath,
+				bind.getInteractionNetwork().getEntities());
 
-		for (BioEntity gene : omicsData.getVariables()){
-			
+		for (BioEntity gene : omicsData.getVariables()) {
+
 			int nbReac = 0;
-			
-			for (Interaction interaction : bind.getInteractionNetwork().getGPRInteractions()){
-				for (BioEntity involvedEnt : interaction.getCondition().getInvolvedEntities()){
-					if (gene==involvedEnt){
+
+			for (Interaction interaction : bind.getInteractionNetwork().getGPRInteractions()) {
+				for (BioEntity involvedEnt : interaction.getCondition().getInvolvedEntities()) {
+					if (gene == involvedEnt) {
 						nbReac++;
 						break;
 					}
 				}
 			}
-//			omicsData.scaleVariable(gene,nbReac);
-			
+			// omicsData.scaleVariable(gene,nbReac);
+
 		}
-		
+
 		List<Sample> samples = omicsData.getSamples();
-		
-		
-		/**
-		 * Load the condition file
-		 */
-		ListOfConditions conditions = new ListOfConditions();
-		
-		Boolean flag = conditions.loadConditionFile(f.conditionFile, ConstraintType.DOUBLE);
-		
-		if (flag == false) {
-			System.err.println("Error in reading the condition file "
-					+ f.conditionFile);
-			System.exit(0);
-		}
-		
-		
-		for (Condition cond: conditions.conditions){
-			
-			Sample s = omicsData.getSample(cond.name);
-			
-			if (s!=null){
-				s.setCondition(cond);
+
+		if (f.conditionFile != "") {
+			/**
+			 * Load the condition file
+			 */
+			ListOfConditions conditions = new ListOfConditions();
+
+			Boolean flag = conditions.loadConditionFile(f.conditionFile, ConstraintType.DOUBLE);
+
+			if (flag == false) {
+				System.err.println("Error in reading the condition file " + f.conditionFile);
+				System.exit(0);
 			}
-			else{
-				System.err.println("Warning: condition "+cond.name+" in the condition file is not recognised.");
+
+			for (Condition cond : conditions.conditions) {
+
+				Sample s = omicsData.getSample(cond.name);
+
+				if (s != null) {
+					s.setCondition(cond);
+				} else {
+					System.err.println("Warning: condition " + cond.name + " in the condition file is not recognised.");
+				}
+
 			}
-			
-			
 		}
-		
 
 		Map<Sample, Map<BioChemicalReaction, Double>> reactionExpressionValues = new HashMap<Sample, Map<BioChemicalReaction, Double>>();
 
 		double maxRev = 0;
 
 		for (Sample s : samples) {
-			
+
 			reactionExpressionValues.put(s, new HashMap<BioChemicalReaction, Double>());
 			revResults.put(s.getName(), new HashMap<String, Double>());
 
 			for (Interaction inter : bind.getInteractionNetwork().getGPRInteractions()) {
 				BioChemicalReaction reac = (BioChemicalReaction) inter.getConsequence().getEntity();
 
-				double expr = inter.getCondition()
-						.calculateRelationQuantitativeValue(omicsData.getDataValuesForSample(s), f.gprCalculationMethod);
+				double expr = inter.getCondition().calculateRelationQuantitativeValue(
+						omicsData.getDataValuesForSample(s), f.gprCalculationMethod);
 
 				if (!Double.isNaN(expr)) {
 
@@ -226,16 +219,20 @@ public class TestFreeFluxes extends FFApplication {
 		System.out.println("Max rev: " + maxRev);
 		System.out.println("Scaling factor: " + maxRev / 25);
 		double scalingFactor = maxRev / 25;
-		//scaler pour etre < M
+		// scaler pour etre < M
 
-		writeFbaResults(f.revResultsPath, revResults, samples);
+		writeRevResults(f.ResultsFolderPath + "/outRev.txt", revResults, samples);
 
 		BioEntity fluxSum = bind.createFluxesSummation();
 
+		// to write the results into a file
+		Map<String, Double> sampleToMinimisationRes = new HashMap<String, Double>();
+		//
+
 		for (Sample sample : samples) {
-			
+
 			System.out.println(sample.getName());
-			
+
 			fbaResults.put(sample.getName(), new HashMap<String, Double>());
 
 			///////////// We create FBA variables that correspond to the
@@ -377,28 +374,32 @@ public class TestFreeFluxes extends FFApplication {
 			Objective p = new Objective(objectiveEntities, objectiveCoeffs, "", false);
 			bind.setObjective(p);
 
-			for (String constraintName: sample.getCondition().constraints.keySet()){
-				
-				if (sample.getCondition().constraints.get(constraintName).value == 0.0){
-					
-					BioEntity ent = bind.getInteractionNetwork().getEntity(sample.getCondition().constraints.get(constraintName).entityId);
-					
-					if (ent==null){
-						System.err.println("Warning, entity "+sample.getCondition().constraints.get(constraintName).entityId+" is unknown. It might belong to a dead reaction.");
-					}
-					else{
-						Map<BioEntity,Double> newConstraintMap = new HashMap<BioEntity,Double>();
-						newConstraintMap.put(ent, 1.0);
-						constraintsToAdd.add(new Constraint(newConstraintMap,0.0,0.0));
-						
+			if (sample.getHasCondtition()) {
+				for (String constraintName : sample.getCondition().constraints.keySet()) {
+
+					if (sample.getCondition().constraints.get(constraintName).value == 0.0) {
+
+						BioEntity ent = bind.getInteractionNetwork()
+								.getEntity(sample.getCondition().constraints.get(constraintName).entityId);
+
+						if (ent == null) {
+							System.err.println(
+									"Warning, entity " + sample.getCondition().constraints.get(constraintName).entityId
+											+ " is unknown. It might belong to a dead reaction.");
+						} else {
+							Map<BioEntity, Double> newConstraintMap = new HashMap<BioEntity, Double>();
+							newConstraintMap.put(ent, 1.0);
+							constraintsToAdd.add(new Constraint(newConstraintMap, 0.0, 0.0));
+
+						}
 					}
 				}
 			}
-			
-			
+
 			double resFBA = bind.FBA(constraintsToAdd, true, false).result;
 
 			System.out.println(resFBA);
+			sampleToMinimisationRes.put(sample.getName(), resFBA);
 
 			// write results
 			for (String reacName : bind.getBioNetwork().getBiochemicalReactionList().keySet()) {
@@ -408,7 +409,34 @@ public class TestFreeFluxes extends FFApplication {
 
 		}
 
-		writeFbaResults(f.fbaResultsPath, fbaResults, samples);
+		writeFbaResults(f.ResultsFolderPath + "/outFBA.txt", fbaResults, samples);
+
+		writeStatsResults(f.ResultsFolderPath + "/stats.txt", scalingFactor, sampleToMinimisationRes);
+		
+		
+//		generatePlots(f.ResultsFolderPath,scalingFactor,revResults,fbaResults);
+
+	}
+
+	private static void writeStatsResults(String path, double scalingFactor,
+			Map<String, Double> sampleToMinimisationRes) {
+		try {
+			PrintWriter out = new PrintWriter(new File(path));
+
+			out.println("Scaling factor\t"+scalingFactor);
+			
+			out.println("");
+			
+			for (String sampleName : sampleToMinimisationRes.keySet()){
+				out.println(sampleName+"\t"+sampleToMinimisationRes.get(sampleName));
+			}
+			
+
+			out.close();
+		} catch (IOException e) {
+			System.out.println("path " + path + " is not a valid path, or file could not be created.");
+		}
+
 	}
 
 	public static void writeFbaResults(String resultsPath, Map<String, Map<String, Double>> fbaResults,

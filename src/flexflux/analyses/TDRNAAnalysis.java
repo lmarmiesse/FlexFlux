@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.plaf.synth.SynthScrollBarUI;
+
 import parsebionet.biodata.BioEntity;
 import flexflux.analyses.result.TDRNAAnalysisResult;
 import flexflux.general.Constraint;
@@ -59,7 +61,14 @@ public class TDRNAAnalysis extends Analysis {
 
 			List<Interaction> trueInteractions = getLogicalUpdates(thisState);
 
+			
+//			System.out.println(it);
+			
 			for (Interaction i : trueInteractions) {
+				
+//				if(i.getConsequence().getEntity().getId().equals("MYB30_p")){
+//					System.out.println(i);
+//				}
 				
 
 				double begins = i.getTimeInfos()[0];

@@ -9,6 +9,7 @@ public class Sample {
 	
 	private String name="";
 	private String description="";
+	private boolean hasCondition=false;
 	
 	private Condition condition;
 	
@@ -26,7 +27,12 @@ public class Sample {
 	}
 
 	public void setCondition(Condition cond) {
-		this.condition=cond;	
+		this.condition=cond;
+		hasCondition=true;
+	}
+	
+	public boolean getHasCondtition(){
+		return hasCondition;
 	}
 	
 	public Condition getCondition() {
