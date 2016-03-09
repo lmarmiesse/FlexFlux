@@ -130,7 +130,7 @@ public class DRResult extends FVAResult {
 
 		for (BioEntity ent : map.keySet()) {
 
-			if (Math.abs(map.get(ent)[0] - 0) > minValue || Math.abs(map.get(ent)[1] - 0) > minValue) {
+			if (Math.abs(Vars.round(map.get(ent)[0])) > minValue || Math.abs(Vars.round(map.get(ent)[1])) > minValue) {
 				toRemove.add(ent);
 			}
 		}
