@@ -228,6 +228,8 @@ public class SBMLQualReader {
 			for (FunctionTerm ft : tr.getListOfFunctionTerms()) {
 				double starts = 0;
 				double lasts = 0;
+				int priority = 1;
+				boolean isPrioritySet = false;
 				String interID = "";
 
 				Interaction inter;
@@ -240,7 +242,7 @@ public class SBMLQualReader {
 
 				if (ft.isDefaultTerm()) {
 
-					elseRelation = new Unique(outEntity, new OperationEq(), resValue);
+					elseRelation = new Unique(outEntity, new OperationEq(), resValue, 0);
 
 					inter = relationFactory.makeIfThenInteraction(elseRelation, null);
 
@@ -252,7 +254,7 @@ public class SBMLQualReader {
 
 					ifRelation = createRealtion(ast);
 
-					thenRelation = new Unique(outEntity, new OperationEq(), resValue);
+					thenRelation = new Unique(outEntity, new OperationEq(), resValue, priority);
 
 					inter = relationFactory.makeIfThenInteraction(thenRelation, ifRelation);
 
@@ -283,6 +285,13 @@ public class SBMLQualReader {
 								interID = text.split(":")[1].trim();
 
 							}
+
+							if (text.startsWith("PRIORITY")) {
+
+								priority = Integer.parseInt(text.split(":")[1].trim());
+								isPrioritySet = true;
+
+							}
 						}
 					}
 
@@ -290,11 +299,12 @@ public class SBMLQualReader {
 
 				inter.setTimeInfos(new double[] { starts, lasts });
 				inter.setName(interID);
+				if (isPrioritySet) {
+					inter.getConsequence().setPriority(priority);
+				}
 				if (ft.isSetMetaId()) {
 					inter.setName(ft.getMetaId());
 				}
-				
-				
 
 			}
 

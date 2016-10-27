@@ -71,8 +71,16 @@ public class Unique extends Relation {
 	 * Value of the relation.
 	 */
 	protected double value;
-	// probability is used to set the max value to the entity to it's upper
-	// bound / probability
+	
+	
+	
+	/**
+	 * Priority when two uniques are true at the same time (used in TDRNA)
+	 * 
+	 * The higher the value, the higher the priority
+	 */
+	private int priority = 1;
+
 
 	
 	/**
@@ -86,6 +94,14 @@ public class Unique extends Relation {
 		this.value = value;
 	}
 
+	
+	public Unique(BioEntity entity, Operation op, double value,int priority) {
+		this.operation = op;
+		this.entity = entity;
+		this.value = value;
+		this.priority = priority;
+	}
+	
 	/**
 	 * By default, operation is Greater or equal and the value is 0.
 	 * 
@@ -204,6 +220,16 @@ public class Unique extends Relation {
 		}
 		
 		
+	}
+	
+	
+	
+	public int getPriority(){
+		return priority;
+	}
+	
+	public void setPriority(int pr){
+		this.priority=pr;
 	}
 
 

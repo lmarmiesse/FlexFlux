@@ -18,12 +18,13 @@ import flexflux.general.Constraint;
 import flexflux.general.ConstraintType;
 import flexflux.general.CplexBind;
 import flexflux.general.GLPKBind;
-import flexflux.general.SimplifiedConstraint;
 import flexflux.general.Vars;
 import flexflux.interaction.Interaction;
 import flexflux.objective.Objective;
 import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
+import parsebionet.biodata.BioNetwork;
+import parsebionet.io.JSBMLToBionetwork;
 
 public class TestFreeFluxes extends FFApplication {
 
@@ -53,7 +54,7 @@ public class TestFreeFluxes extends FFApplication {
 	public String solver = "CPLEX";
 
 	public static void main(String[] args) {
-
+		
 		TestFreeFluxes f = new TestFreeFluxes();
 
 		f.parseArguments(args);
@@ -97,11 +98,27 @@ public class TestFreeFluxes extends FFApplication {
 
 		Map<String, Map<String, Double>> revResults = new HashMap<String, Map<String, Double>>();
 		Map<String, Map<String, Double>> fbaResults = new HashMap<String, Map<String, Double>>();
-
+		
 		bind.loadSbmlNetwork(f.metabolicNetworkPath, false);
+
+//		JSBMLToBionetwork parser = new JSBMLToBionetwork(f.metabolicNetworkPath);
+		
+//		BioNetwork allNetwork = parser.getBioNetwork();
+		
+//		BioNetwork reducedNetwork = ReduceNetwork.findCouples(allNetwork);
+//		bind.setNetworkAndConstraints(reducedNetwork);
+		
+		
+//		BioNetwork reducedNetwork = ReduceNetwork.incrementTechnique(allNetwork);
+		
+		
+		
+//		System.exit(0);
+		
 
 		// need to "free" every flux
 		for (BioEntity bioEntity : bind.getInteractionNetwork().getEntities()) {
+			
 			if (!bind.getDeadReactions().contains(bioEntity)) {
 				Constraint toDelete = null;
 				for (Constraint c : bind.getConstraints()) {
@@ -156,7 +173,7 @@ public class TestFreeFluxes extends FFApplication {
 					}
 				}
 			}
-			// omicsData.scaleVariable(gene,nbReac);
+			 omicsData.scaleVariable(gene,nbReac);
 
 		}
 
@@ -202,6 +219,9 @@ public class TestFreeFluxes extends FFApplication {
 
 				double expr = inter.getCondition().calculateRelationQuantitativeValue(
 						omicsData.getDataValuesForSample(s), f.gprCalculationMethod);
+				
+//				expr = Math.pow(expr, 1.55);
+				
 
 				if (!Double.isNaN(expr)) {
 
@@ -378,7 +398,7 @@ public class TestFreeFluxes extends FFApplication {
 				for (String constraintName : sample.getCondition().constraints.keySet()) {
 
 					if (sample.getCondition().constraints.get(constraintName).value == 0.0) {
-
+						
 						BioEntity ent = bind.getInteractionNetwork()
 								.getEntity(sample.getCondition().constraints.get(constraintName).entityId);
 

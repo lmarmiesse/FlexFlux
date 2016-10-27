@@ -78,15 +78,14 @@ public class FVAAnalysis extends Analysis {
 	 */
 	protected List<ResolveThread> threads = new ArrayList<ResolveThread>();
 
-	
 	/**
 	 * Constructor
+	 * 
 	 * @param b
 	 * @param mapEntities
 	 * @param constraints
 	 */
-	public FVAAnalysis(Bind b, Map<String, BioEntity> mapEntities,
-			List<Constraint> constraints) {
+	public FVAAnalysis(Bind b, Map<String, BioEntity> mapEntities, List<Constraint> constraints) {
 		super(b);
 		this.mapEntities = mapEntities;
 
@@ -101,10 +100,8 @@ public class FVAAnalysis extends Analysis {
 	public FVAResult runAnalysis() {
 
 		double startTime = System.currentTimeMillis();
-		
 
 		DoubleResult result = b.FBA(constraints, false, true);
-		
 
 		FVAResult fvaResult = null;
 
@@ -127,33 +124,35 @@ public class FVAAnalysis extends Analysis {
 
 		Map<BioEntity, Double> constraintMap = new HashMap<BioEntity, Double>();
 
-		BioEntity[] entities = b.getObjective().getEntities();
-		double[] coeffs = b.getObjective().getCoeffs();
+		Constraint c = null;
+		if (b.getObjective() != null) {
 
-		for (int i = 0; i < entities.length; i++) {
-			constraintMap.put(entities[i], coeffs[i]);
+			BioEntity[] entities = b.getObjective().getEntities();
+			double[] coeffs = b.getObjective().getCoeffs();
+
+			for (int i = 0; i < entities.length; i++) {
+				constraintMap.put(entities[i], coeffs[i]);
+			}
+
+			double lb = result.result;
+			double ub = result.result;
+			double delta = Math.abs(result.result) * Vars.libertyPercentage / 100;
+
+			c = new Constraint(constraintMap, lb - delta, ub + delta);
+
+			if (Vars.verbose) {
+				System.err.println(Vars.libertyPercentage + "% of non optimality");
+				System.err.println("FVA initial constraint : \n" + c);
+			}
+
+			b.getConstraints().add(c);
 		}
-
-		double lb = result.result;
-		double ub = result.result;
-		double delta = Math.abs(result.result) * Vars.libertyPercentage / 100;
-
-		Constraint c = new Constraint(constraintMap, lb - delta, ub + delta);
-
-		if (Vars.verbose) {
-			System.err.println(Vars.libertyPercentage + "% of non optimality");
-			System.err.println("FVA initial constraint : \n" + c);
-		}
-
-		b.getConstraints().add(c);
 
 		Map<String, BioEntity> FVAMap = new HashMap<String, BioEntity>();
 
 		if (mapEntities == null) {
-			for (String reactionName : b.getBioNetwork()
-					.getBiochemicalReactionList().keySet()) {
-				FVAMap.put(reactionName, b.getBioNetwork()
-						.getBiochemicalReactionList().get(reactionName));
+			for (String reactionName : b.getBioNetwork().getBiochemicalReactionList().keySet()) {
+				FVAMap.put(reactionName, b.getBioNetwork().getBiochemicalReactionList().get(reactionName));
 			}
 		} else {
 			FVAMap = mapEntities;
@@ -174,16 +173,13 @@ public class FVAAnalysis extends Analysis {
 
 			try {
 				newBind = b.copy();
-			} catch (ClassNotFoundException | NoSuchMethodException
-					| SecurityException | InstantiationException
-					| IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException e) {
+			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
+					| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				e.printStackTrace();
 				System.exit(1);
 			}
 
-			ThreadFVA threadFva = new ThreadFVA(newBind, entQueue,
-					entQueueCopy, fvaResult);
+			ThreadFVA threadFva = new ThreadFVA(newBind, entQueue, entQueueCopy, fvaResult);
 
 			threads.add(threadFva);
 		}
@@ -223,13 +219,14 @@ public class FVAAnalysis extends Analysis {
 
 		// we remove the constraints that sets the objective and interactions
 		// to permit other analysis
-		b.getConstraints().remove(c);
+		if (b.getObjective() != null) {
+			b.getConstraints().remove(c);
+		}
 		b.getConstraints().removeAll(constraintsToAdd);
 
 		if (Vars.verbose) {
-			System.err.println("FVA over "
-					+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
-					+ Vars.maxThread + " threads");
+			System.err.println("FVA over " + ((System.currentTimeMillis() - startTime) / 1000) + "s " + Vars.maxThread
+					+ " threads");
 		}
 		return fvaResult;
 
