@@ -1,0 +1,83 @@
+#ON MY MACHINE
+
+# Arabidopsis
+
+-omics "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_SPID/GRP_SPID/lmarmiesse/Documents/babraham/work/AT/MYBSEQ_TIME.txt"
+-out "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_SPID/GRP_SPID/lmarmiesse/Documents/babraham/work/AT/"
+-s "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_SPID/GRP_SPID/lmarmiesse/Documents/babraham/work/AT/AraGEM_Cobra_modif.xml"
+-calcGPR 2
+
+
+-omics "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_SPID/GRP_SPID/lmarmiesse/Documents/babraham/work/AT/MYBSEQ_GTYPE.txt"
+-out "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_SPID/GRP_SPID/lmarmiesse/Documents/babraham/work/AT/"
+-s "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_SPID/GRP_SPID/lmarmiesse/Documents/babraham/work/AT/AraGEM_Cobra_modif.xml"
+-calcGPR 2
+
+-omics "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_SPID/GRP_SPID/lmarmiesse/Documents/babraham/work/AT/MYBSEQ_ALL_rpkm.txt"
+-out "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_SPID/GRP_SPID/lmarmiesse/Documents/babraham/work/AT/"
+-s "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_SPID/GRP_SPID/lmarmiesse/Documents/babraham/work/AT/AraGEM_Cobra_modif.xml"
+-calcGPR 2
+
+-omics "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_SPID/GRP_SPID/lmarmiesse/Documents/babraham/work/Toy model/exprData2.txt"
+-outFba "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_SPID/GRP_SPID/lmarmiesse/Documents/babraham/work/Toy model/outFBA"
+-outRev "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_SPID/GRP_SPID/lmarmiesse/Documents/babraham/work/Toy model/outRev"
+-s "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_SPID/GRP_SPID/lmarmiesse/Documents/babraham/work/Toy model/toyModel2.xml"
+
+
+
+
+#ralsto
+
+-omics "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/work/ralsto/Expression_data_Ralsto.tab"
+-out "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/work/ralsto/"
+-cond "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/work/ralsto/Environmental_conditions_Ralsto.tab"
+-s "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/work/ralsto/Ralsto_Biochem_network_2015_01_20_RM.sbml"
+-calcGPR 1
+
+
+-omics "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/NaivePrimed/primed-naive-rpkm-mapped-to-recon2-reduced-FF.txt"
+-outFba "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/NaivePrimed/FlexFlux/outFBA"
+-outRev "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/NaivePrimed/FlexFlux/outRev"
+-s "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/NaivePrimed/Recon2.v04-sbml-jsbml.xml"
+-calcGPR 1
+
+
+
+
+#methylo
+
+-omics "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/home/users/GRP_DR/lmarmiesse/Documents/babraham/work/methylo/Methylo_proteomics.tab"
+-out "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/work/methylo/"
+-s "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/work/methylo/iRPAM1.xml"
+-cond "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/work/methylo/Environmental_conditions_Meoh.tab"
+-calcGPR 1
+
+
+#sclero
+
+-omics "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/home/users/GRP_DR/lmarmiesse/Documents/babraham/work/sclero/Expression_data_ajusted.tab"
+-out "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/work/sclero/"
+-s "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/work/sclero/Sclero_central_2016_02_11_for_omics.xml"
+-cond "/run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/work/sclero/Environmental_conditions.tab"
+-calcGPR 1
+
+
+cat /run/user/91148/gvfs/sftp:host=147.100.166.10,user=lmarmiesse/home/users/GRP_DR/lmarmiesse/Documents/babraham/work/sclero/Expression_data.tab
+
+
+#FOR LIPM CALCUL
+
+
+go in /home/users/GRP_DR/lmarmiesse/Documents/FF_omicsmapping/
+
+#ralsto
+FlexFlux/Flexflux_omics.sh -omics "/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/work/ralsto/omics_data_ralsto_RNAseq_inplant_vs_CM.tab" -outFba "/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/work/ralsto/outFBA" -outRev "/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/work/ralsto/outRev" -s "/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/work/ralsto/Ralsto_Biochem_network_Ralstonia_solanacearum_iRP1476.sbml" -calcGPR 1 
+
+
+
+#recon2
+FlexFlux/Flexflux_omics.sh -omics "/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/NaivePrimed/primed-naive-rpkm-mapped-to-recon2-reduced-FF.txt" -out "/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/NaivePrimed/FlexFlux/" -s "/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/NaivePrimed/Recon2.v04-sbml-jsbml.xml" -calcGPR 1
+FlexFlux/Flexflux_omics.sh -omics "/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/NaivePrimed/primed-naive-rpkm-mapped-to-recon2-reduced-FF_test.txt" -out "/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/NaivePrimed/FlexFlux/" -s "/mnt/GRP_DR/GRP_DR/lmarmiesse/Documents/babraham/NaivePrimed/Recon2.v04-sbml-jsbml.xml" -calcGPR 1
+
+
+
