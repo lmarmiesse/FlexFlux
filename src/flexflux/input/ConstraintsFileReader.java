@@ -309,6 +309,7 @@ public class ConstraintsFileReader {
 						else if (line.contains("=")) {
 							Constraint c = new Constraint(finalEquation, bound, bound);
 							constraints.add(c);
+							System.out.println(c);
 						} else if (line.contains("<")) {
 							if (Vars.cheat) {
 

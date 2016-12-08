@@ -197,7 +197,7 @@ public abstract class Bind {
 		constrainedEntities.addAll(c.getEntities().keySet());
 
 		createSolverConstraint(c, toRemoveFromModel);
-
+		
 	}
 
 	protected abstract void createSolverConstraint(Constraint c,

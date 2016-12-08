@@ -320,25 +320,8 @@ public class TDRFBAAnalysis extends Analysis {
 			constraintsToAdd.addAll(GPRConstraints);
 			/////////
 
-			for (Constraint c : constraintsToAdd) {
 
-				BioEntity b = c.getEntities().keySet().iterator().next();
-
-				if (b.getId().startsWith("R_")) {
-
-					if (!b.getId().contains("_acc")) {
-
-						if (c.getLb() > -1) {
-
-							System.out.println(b.getId() + "\t" + c.getLb() + "\t" + c.getUb());
-							// System.out.println(c);
-						}
-					}
-
-				}
-
-			}
-
+			
 			try {
 				result = b.FBA(new ArrayList<Constraint>(constraintsToAdd), true, false);
 

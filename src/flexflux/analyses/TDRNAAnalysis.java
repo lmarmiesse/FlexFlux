@@ -14,6 +14,7 @@ import flexflux.analyses.result.TDRNAAnalysisResult;
 import flexflux.general.Constraint;
 import flexflux.interaction.Interaction;
 import flexflux.interaction.InteractionNetwork;
+import flexflux.interaction.Unique;
 
 public class TDRNAAnalysis extends Analysis {
 
@@ -53,7 +54,7 @@ public class TDRNAAnalysis extends Analysis {
 		// we set the values for the variables in the first state
 		Map<BioEntity, Integer> thisState = intNet.getInitialStates();
 
-		Map<Integer, Map<BioEntity, Integer>> iterationToStates = new HashMap<Integer, Map<BioEntity, Integer>>();
+		Map<Integer, Map<BioEntity, Unique>> iterationToStates = new HashMap<Integer, Map<BioEntity, Unique>>();
 
 		for (int it = 1; it <= iterations + 1; it++) {
 
@@ -61,15 +62,13 @@ public class TDRNAAnalysis extends Analysis {
 
 			List<Interaction> trueInteractions = getLogicalUpdates(thisState);
 
-			
-//			System.out.println(it);
-			
+			// System.out.println(it);
+
 			for (Interaction i : trueInteractions) {
-				
-//				if(i.getConsequence().getEntity().getId().equals("MYB30_p")){
-//					System.out.println(i);
-//				}
-				
+
+				// if(i.getConsequence().getEntity().getId().equals("MYB30_p")){
+				// System.out.println(i);
+				// }
 
 				double begins = i.getTimeInfos()[0];
 				double lasts = i.getTimeInfos()[1];
@@ -89,31 +88,37 @@ public class TDRNAAnalysis extends Analysis {
 
 						if (iterationToStates.get(iteration).containsKey(i.getConsequence().getEntity())) {
 
-							if (iterationToStates.get(iteration)
-									.get(i.getConsequence().getEntity()) != (int) i.getConsequence().getValue()) {
+							if (iterationToStates.get(iteration).get(i.getConsequence().getEntity()).getValue() != i
+									.getConsequence().getValue()) {
 
-//								if (i.getConsequence().getEntity().getId().equals("KCR1")) {
-//
-//									System.out.println("PROBLEM");
-//									System.out.println(
-//											"Iteration " + iteration + " " + i.getConsequence().getEntity().getId());
-//									System.out.println(
-//											iterationToStates.get(iteration).get(i.getConsequence().getEntity()));
-//									System.out.println((int) i.getConsequence().getValue());
-//								}
+								// System.out.println(iteration);
+								// System.out.println(i.getConsequence().getEntity().getId());
+								// System.out.println(i.getConsequence().getValue());
+								// System.out.println(iterationToStates.get(iteration).get(i.getConsequence().getEntity())
+								// .getValue());
+								//
+								// System.out.println(i.getConsequence().getPriority());
+								// System.out.println(iterationToStates.get(iteration).get(i.getConsequence().getEntity())
+								// .getPriority());
 
+								if (i.getConsequence().getPriority() >= iterationToStates.get(iteration)
+										.get(i.getConsequence().getEntity()).getPriority()) {
+
+									iterationToStates.get(iteration).put(i.getConsequence().getEntity(),
+											i.getConsequence());
+
+								} 
 							}
 
 						} else {
 
-							iterationToStates.get(iteration).put(i.getConsequence().getEntity(),
-									(int) i.getConsequence().getValue());
+							iterationToStates.get(iteration).put(i.getConsequence().getEntity(), i.getConsequence());
 						}
 
 					} else {
 
-						Map<BioEntity, Integer> map = new HashMap<BioEntity, Integer>();
-						map.put(i.getConsequence().getEntity(), (int) i.getConsequence().getValue());
+						Map<BioEntity, Unique> map = new HashMap<BioEntity, Unique>();
+						map.put(i.getConsequence().getEntity(), i.getConsequence());
 
 						iterationToStates.put(iteration, map);
 					}
@@ -130,7 +135,7 @@ public class TDRNAAnalysis extends Analysis {
 			if (iterationToStates.containsKey(it)) {
 
 				for (BioEntity b : iterationToStates.get(it).keySet()) {
-					newState.put(b, iterationToStates.get(it).get(b));
+					newState.put(b, (int) iterationToStates.get(it).get(b).getValue());
 				}
 
 			}
@@ -159,6 +164,11 @@ public class TDRNAAnalysis extends Analysis {
 		Set<BioEntity> setEntities = new HashSet<BioEntity>();
 
 		for (BioEntity entity : entitiesToCheck) {
+			if (intNet.getTargetToInteractions().get(entity)==null){
+				System.err.println("Error: no update rule for variable "+entity.getId());
+				System.exit(0);
+			}
+			
 			for (Interaction i : intNet.getTargetToInteractions().get(entity).getConditionalInteractions()) {
 				if (i.getCondition().isTrue(netConstraints)) {
 					trueInteractions.add(i);

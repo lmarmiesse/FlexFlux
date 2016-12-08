@@ -4163,3 +4163,7 @@
 [13:12:41,399 ERROR IdentifierException:62] - An element with the id "c" is already present in the SBML model. The identifier of qualitativeSpecies will not be set to this value.
 [13:12:41,400 ERROR AbstractReaderWriter:83] - org.sbml.jsbml.IdentifierException: Cannot set duplicate identifier c for qualitativeSpecies.
 [13:12:41,400  WARN AbstractReaderWriter:97] - processAttribute: The attribute 'id' on the element qualitativeSpecies is not part of the SBML specifications.
+[10:54:02,159 ERROR Model:3938] - An element of type compartment with the id "c" is already present in this model. The new element will not be added to the model.
+[10:54:02,179 ERROR IdentifierException:62] - An element with the id "c" is already present in the SBML model. The identifier of qualitativeSpecies will not be set to this value.
+[10:54:02,179 ERROR AbstractReaderWriter:83] - org.sbml.jsbml.IdentifierException: Cannot set duplicate identifier c for qualitativeSpecies.
+[10:54:02,180  WARN AbstractReaderWriter:97] - processAttribute: The attribute 'id' on the element qualitativeSpecies is not part of the SBML specifications.
