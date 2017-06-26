@@ -43,11 +43,13 @@ import flexflux.general.Vars;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.kohsuke.args4j.Option;
 
 import parsebionet.biodata.BioEntity;
+import parsebionet.biodata.BioPhysicalEntity;
 
 /**
  * 
@@ -191,7 +193,7 @@ public class FlexfluxTDRFBA extends FFApplication{
 		}
 
 		List<String> toDisplay = new ArrayList<String>();
-		if (!f.entities.equals("")) {
+		if (!f.entities.equals("") && !f.entities.equals("all")) {
 			String[] entitiesArray = f.entities.split("\\s+");
 			for (int i = 0; i < entitiesArray.length; i++) {
 
@@ -205,6 +207,16 @@ public class FlexfluxTDRFBA extends FFApplication{
 				}
 
 				toDisplay.add(b.getId());
+			}
+		}
+		else if (f.entities.equals("all")) {
+			for(BioEntity b : bind.getInteractionNetwork().getEntities()) {
+				// test if it is an internal biophysical entity 
+				BioPhysicalEntity cpd = bind.getBioNetwork().getPhysicalEntityList().get(b.getId());
+				if(cpd == null || cpd.getBoundaryCondition() == true)
+				{
+					toDisplay.add(b.getId());
+				}
 			}
 		}
 		

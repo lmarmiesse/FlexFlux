@@ -41,6 +41,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -122,11 +123,15 @@ public class TDRFBAResult extends AnalysisResult {
 
 	public void writeToFile(String path) {
 
+		ArrayList<String> entitiesArray = new ArrayList<String>(this.entities);
+		
+		Collections.sort(entitiesArray);
+		
 		try {
 			PrintWriter out = new PrintWriter(new File(path));
 
 			String line = "Time\t";
-			for (String s : entities) {
+			for (String s : entitiesArray) {
 
 				line += s + "\t";
 
@@ -136,7 +141,7 @@ public class TDRFBAResult extends AnalysisResult {
 			for (Double time : times) {
 
 				line = time + "\t";
-				for (String s : entities) {
+				for (String s : entitiesArray) {
 
 					if (resultMap.get(time).containsKey(s) && resultMap.get(time).get(s) != null) {
 						line += Vars.round(resultMap.get(time).get(s)) + "\t";
@@ -156,6 +161,10 @@ public class TDRFBAResult extends AnalysisResult {
 	}
 
 	public void plot() {
+		
+		ArrayList<String> entitiesArray = new ArrayList<String>(this.entities);
+
+		Collections.sort(entitiesArray);
 
 		JPanel panel = new JPanel();
 		JScrollPane sp = new JScrollPane(panel);
@@ -165,7 +174,7 @@ public class TDRFBAResult extends AnalysisResult {
 
 		Color[] colors = new Color[] { Color.RED, Color.GREEN, Color.BLUE };
 		int index = 0;
-		for (String s : entities) {
+		for (String s : entitiesArray) {
 
 			XYSeriesCollection dataset = new XYSeriesCollection();
 
@@ -224,10 +233,15 @@ public class TDRFBAResult extends AnalysisResult {
 
 	@Override
 	public void writeHTML(String path) {
+		
+		ArrayList<String> entitiesArray = new ArrayList<String>(this.entities);
+		
+		Collections.sort(entitiesArray);
+		
 		try {
 			PrintWriter out = new PrintWriter(new File(path));
 
-			for (String s : entities) {
+			for (String s : entitiesArray) {
 
 				out.println("<p hidden class='2Dplot' data-plotname='" + s
 						+ "' data-xAxisName='Time (h)' data-yAxisName=''>");

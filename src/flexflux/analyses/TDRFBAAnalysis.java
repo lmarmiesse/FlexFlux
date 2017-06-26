@@ -150,7 +150,9 @@ public class TDRFBAAnalysis extends Analysis {
 			Map<BioEntity, Integer> networkState = new HashMap<BioEntity, Integer>();
 
 			for (BioEntity enti : simpleConstraints.keySet()) {
+
 				if (b.getInteractionNetwork().canTranslate(enti)) {
+
 					networkState.put(enti,
 							b.getInteractionNetwork().getStateFromValue(enti, simpleConstraints.get(enti).getLb()));
 
@@ -161,9 +163,14 @@ public class TDRFBAAnalysis extends Analysis {
 
 			if (i != 0) {
 
+
 				RSAAnalysis ssa = new RSAAnalysis(b.getInteractionNetwork(), new HashMap<BioEntity, Constraint>());
 				List<BioEntity> entitiesToCheck = new ArrayList<BioEntity>();
 				entitiesToCheck.addAll(b.getInteractionNetwork().getTargetToInteractions().keySet());
+
+				for (BioEntity e : networkState.keySet()) {
+					Integer val = networkState.get(e);
+				}
 
 				Map<Constraint, double[]> nextStepStates = ssa.goToNextInteractionNetworkState(networkState,
 						entitiesToCheck);
@@ -320,11 +327,8 @@ public class TDRFBAAnalysis extends Analysis {
 			constraintsToAdd.addAll(GPRConstraints);
 			/////////
 
-
-			
 			try {
 				result = b.FBA(new ArrayList<Constraint>(constraintsToAdd), true, false);
-
 				fbaResult = result.result;
 
 			} catch (Exception e) {

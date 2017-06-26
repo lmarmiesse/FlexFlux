@@ -41,6 +41,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import flexflux.general.Constraint;
+import flexflux.general.Vars;
 import flexflux.operation.OperationFactory;
 import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioComplex;
@@ -117,12 +118,10 @@ public class InteractionNetwork {
 		return entityStateConstraintTranslation;
 	}
 
-	public void addEntityStateConstraintTranslation(BioEntity ent,
-			Integer state, Constraint c) {
+	public void addEntityStateConstraintTranslation(BioEntity ent, Integer state, Constraint c) {
 
 		if (!entityStateConstraintTranslation.containsKey(ent)) {
-			entityStateConstraintTranslation.put(ent,
-					new HashMap<Integer, Constraint>());
+			entityStateConstraintTranslation.put(ent, new HashMap<Integer, Constraint>());
 		}
 
 		entityStateConstraintTranslation.get(ent).put(state, c);
@@ -146,8 +145,8 @@ public class InteractionNetwork {
 	public void updateInteractionNetworkEntityState(BioEntity ent, int state) {
 
 		if (state > interactionNetworkEntitiesStates.get(ent)[1]) {
-			System.err.println("Error : value " + state + " for species "
-					+ ent.getId() + " is greater than maximum state");
+			System.err.println(
+					"Error : value " + state + " for species " + ent.getId() + " is greater than maximum state");
 		}
 		if (state < interactionNetworkEntitiesStates.get(ent)[0]) {
 			interactionNetworkEntitiesStates.get(ent)[0] = state;
@@ -210,15 +209,14 @@ public class InteractionNetwork {
 				continue;
 			}
 
-			if (value >= c.getLb() && value <= c.getUb()) {
+			if (Vars.round(value) >= Vars.round(c.getLb()) && Vars.round(value) <= Vars.round(c.getUb())) {
 				return i;
 			}
 
 		}
 
 		if (ndState == -1) {
-			System.err.println("Error : value " + value + " for variable "
-					+ ent.getId()
+			System.err.println("Error : value " + value + " for variable " + ent.getId()
 					+ " does not correspond to any qualitative state.");
 			System.exit(0);
 		}
@@ -236,8 +234,7 @@ public class InteractionNetwork {
 	}
 
 	public void addInteractionToConstraints(Interaction inter) {
-		interactionToConstraints.put(inter, inter.getConsequence()
-				.createConstraints());
+		interactionToConstraints.put(inter, inter.getConsequence().createConstraints());
 	}
 
 	public Constraint getInitialConstraint(BioEntity ent) {
@@ -277,21 +274,18 @@ public class InteractionNetwork {
 		return entities;
 	}
 
-	public void addTargetConditionalInteraction(BioEntity target,
-			Interaction inter) {
+	public void addTargetConditionalInteraction(BioEntity target, Interaction inter) {
 
 		if (targetToInteractions.get(target) == null) {
 			targetToInteractions.put(target, new FFTransition());
 		}
 		targetToInteractions.get(target).addConditionalInteraction(inter);
 
-		interactionToConstraints.put(inter, inter.getConsequence()
-				.createConstraints());
+		interactionToConstraints.put(inter, inter.getConsequence().createConstraints());
 
 	}
 
-	public void setTargetDefaultInteraction(BioEntity target,
-			Interaction defaultInt) {
+	public void setTargetDefaultInteraction(BioEntity target, Interaction defaultInt) {
 
 		if (targetToInteractions.get(target) == null) {
 			targetToInteractions.put(target, new FFTransition());
@@ -310,8 +304,7 @@ public class InteractionNetwork {
 
 	public void addNumEntity(BioEntity e) {
 
-		if (numEntities.containsKey(e.getId())
-				|| intEntities.containsKey(e.getId())
+		if (numEntities.containsKey(e.getId()) || intEntities.containsKey(e.getId())
 				|| binaryEntities.containsKey(e.getId())) {
 
 			// System.err.println("Warning: two entites have the same name : "
@@ -323,8 +316,7 @@ public class InteractionNetwork {
 	}
 
 	public void addIntEntity(BioEntity e) {
-		if (numEntities.containsKey(e.getId())
-				|| intEntities.containsKey(e.getId())
+		if (numEntities.containsKey(e.getId()) || intEntities.containsKey(e.getId())
 				|| binaryEntities.containsKey(e.getId())) {
 			// System.err.println("Warning: two entites have the same name : "
 			// + e.getId() + ", second one not added");
@@ -334,8 +326,7 @@ public class InteractionNetwork {
 	}
 
 	public void addBinaryEntity(BioEntity e) {
-		if (numEntities.containsKey(e.getId())
-				|| intEntities.containsKey(e.getId())
+		if (numEntities.containsKey(e.getId()) || intEntities.containsKey(e.getId())
 				|| binaryEntities.containsKey(e.getId())) {
 			// System.err.println("Warning: two entites have the same name : "
 			// + e.getId() + ", second one not added");
@@ -394,8 +385,7 @@ public class InteractionNetwork {
 		}
 
 		for (BioEntity ent : initialConstraints.keySet()) {
-			newInteractionNetwork.addInitialConstraint(ent,
-					initialConstraints.get(ent));
+			newInteractionNetwork.addInitialConstraint(ent, initialConstraints.get(ent));
 
 		}
 
@@ -403,18 +393,13 @@ public class InteractionNetwork {
 			newInteractionNetwork.addInitialState(ent, initialStates.get(ent));
 		}
 
-		newInteractionNetwork.interactionNetworkEntitiesStates = this
-				.getInteractionNetworkEntitiesStates();
+		newInteractionNetwork.interactionNetworkEntitiesStates = this.getInteractionNetworkEntitiesStates();
 
-		newInteractionNetwork.setInteractionToConstraints(this
-				.getInteractionToConstraints());
-		newInteractionNetwork.setTargetToInteractions(this
-				.getTargetToInteractions());
-		newInteractionNetwork.setInteractionNetworkEntities(this
-				.getInteractionNetworkEntities());
+		newInteractionNetwork.setInteractionToConstraints(this.getInteractionToConstraints());
+		newInteractionNetwork.setTargetToInteractions(this.getTargetToInteractions());
+		newInteractionNetwork.setInteractionNetworkEntities(this.getInteractionNetworkEntities());
 
-		newInteractionNetwork.entityStateConstraintTranslation = this
-				.getEntityStateConstraintTranslation();
+		newInteractionNetwork.entityStateConstraintTranslation = this.getEntityStateConstraintTranslation();
 
 		return newInteractionNetwork;
 	}
@@ -435,18 +420,15 @@ public class InteractionNetwork {
 		GPRInteractions = gPRInteractions;
 	}
 
-	public void setInitialConstraints(
-			Map<BioEntity, Constraint> initialConstraints) {
+	public void setInitialConstraints(Map<BioEntity, Constraint> initialConstraints) {
 		this.initialConstraints = initialConstraints;
 	}
 
-	public void setInteractionToConstraints(
-			Map<Interaction, List<Constraint>> interactionToConstraints) {
+	public void setInteractionToConstraints(Map<Interaction, List<Constraint>> interactionToConstraints) {
 		this.interactionToConstraints = interactionToConstraints;
 	}
 
-	public void setTargetToInteractions(
-			Map<BioEntity, FFTransition> targetToInteractions) {
+	public void setTargetToInteractions(Map<BioEntity, FFTransition> targetToInteractions) {
 		this.targetToInteractions = targetToInteractions;
 	}
 
@@ -461,8 +443,7 @@ public class InteractionNetwork {
 	public Map<String, BioEntity> getNumEntities() {
 		return numEntities;
 	}
-	
-	
+
 	/**
 	 * 
 	 * Adds entities to the problem from the metaboblic network.
@@ -501,7 +482,7 @@ public class InteractionNetwork {
 			this.addNumEntity(be);
 		}
 	}
-	
+
 	/**
 	 * 
 	 * Adds GPR interactions to the problem.
@@ -530,8 +511,7 @@ public class InteractionNetwork {
 
 				// if the genes are here
 				Relation rel1Active = null;
-				
-				
+
 				// if there are more than 1 enzyme, we create a And
 				if (enzymes.size() > 1) {
 					rel1 = (And) relationFactory.makeAnd();
@@ -540,7 +520,7 @@ public class InteractionNetwork {
 				}
 
 				for (String enzName : enzymes.keySet()) {
-					
+
 					BioPhysicalEntity enzyme = enzymes.get(enzName);
 
 					String classe = enzyme.getClass().getSimpleName();
@@ -610,8 +590,8 @@ public class InteractionNetwork {
 
 				// if the genes are not there, the reaction is not there
 
-				Unique reacEqZero = (Unique) relationFactory.makeUnique(this.getEntity(name),
-						operationFactory.makeEq(), 0.0);
+				Unique reacEqZero = (Unique) relationFactory.makeUnique(this.getEntity(name), operationFactory.makeEq(),
+						0.0);
 
 				Interaction inter = relationFactory.makeIfThenInteraction(reacEqZero, rel1);
 
@@ -636,27 +616,19 @@ public class InteractionNetwork {
 			str += "--------\n" + e.getId() + "\n";
 
 			if (this.getInitialConstraints().containsKey(e)) {
-				str += "Initial constraint : ["
-						+ this.getInitialConstraint(e).getLb() + " , "
+				str += "Initial constraint : [" + this.getInitialConstraint(e).getLb() + " , "
 						+ this.getInitialConstraint(e).getUb() + "]\n";
 				if (this.canTranslate(e)) {
-					str += "Initial state : ["
-							+ this.getStateFromValue(e, this
-									.getInitialConstraint(e).getLb())
-							+ " , "
-							+ +this.getStateFromValue(e, this
-									.getInitialConstraint(e).getUb()) + "]\n";
+					str += "Initial state : [" + this.getStateFromValue(e, this.getInitialConstraint(e).getLb()) + " , "
+							+ +this.getStateFromValue(e, this.getInitialConstraint(e).getUb()) + "]\n";
 				}
 			}
 
 			if (this.getTargetToInteractions().containsKey(e)) {
-				for (Interaction i : this.getTargetToInteractions().get(e)
-						.getConditionalInteractions()) {
+				for (Interaction i : this.getTargetToInteractions().get(e).getConditionalInteractions()) {
 					str += i + "\n";
 				}
-				str += "ELSE : "
-						+ this.getTargetToInteractions().get(e)
-								.getdefaultInteraction().getConsequence()
+				str += "ELSE : " + this.getTargetToInteractions().get(e).getdefaultInteraction().getConsequence()
 						+ "\n";
 			}
 
