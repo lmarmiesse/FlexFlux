@@ -116,8 +116,6 @@ public class ClassificationAnalysis extends Analysis {
 
 			this.fvaWithConstraint();
 
-			this.getConcurrentReactions();
-
 			this.fvaWithFluxSumConstraint();
 
 			this.scopeTest();
@@ -263,15 +261,15 @@ public class ClassificationAnalysis extends Analysis {
 
 		FVAResult fvaResult = fvaAnalysis.runAnalysis();
 
-		optimaZeroFluxReactions = fvaResult.getZeroFluxReactions();
+		mleReactions = fvaResult.getZeroFluxReactions();
 
 		if (Vars.verbose) {
-			System.err.println("[PFBA] Number of optimaZeroFluxReactions : "
-					+ optimaZeroFluxReactions.size());
+			System.err.println("[PFBA] Number of mleReactions : "
+					+ mleReactions.size());
 		}
 
 		// We remove the zero flux reactions from the remain reactions
-		for (String id : optimaZeroFluxReactions.keySet()) {
+		for (String id : mleReactions.keySet()) {
 			remainReactions.remove(id);
 		}
 
@@ -403,160 +401,6 @@ public class ClassificationAnalysis extends Analysis {
 			System.err.println("[PFBA] Number of independent reactions : "
 					+ objectiveIndependantReactions.size());
 		}
-	}
-
-	/**
-	 * Browse optimaZeroFluxReactions, check if there are concurrent reactions
-	 * We do this one in the last step because we change all the lower and upper
-	 * bound of the internal reactions For each reaction set the lb and the ub
-	 * to the fva min max found above and compute the optimal value of the main
-	 * objective If the main objective equals to 0, then the reaction is a
-	 * concurrent reaction
-	 * 
-	 */
-	private void getConcurrentReactions() {
-
-		if (Vars.verbose) {
-			System.err.println("[PFBA] Get concurrent reactions");
-			System.err.println("[PFBA] Number of reactions to treat : "
-					+ optimaZeroFluxReactions.size());
-			System.err.print("[");
-		}
-
-		int n = 0;
-
-		// Change all the internal reaction bounds to extreme values
-		for (BioEntity e : b.getSimpleConstraints().keySet()) {
-
-			String id = e.getId();
-
-			if (b.getBioNetwork().getBiochemicalReactionList().containsKey(id)) {
-
-				BioChemicalReaction reaction = b.getBioNetwork()
-						.getBiochemicalReactionList().get(id);
-
-				// We limit the exchange reaction identification to one to
-				// one
-				// reactions
-				if (!(reaction.isExchangeReaction()
-						&& reaction.getLeftParticipantList().size() == 1 && reaction
-						.getRightParticipantList().size() == 1)) {
-					// if the reaction is not an exchange reaction we change
-					// its
-					// lower and upper bound to FVA max values.
-					Constraint constraint = b.getSimpleConstraints().get(e);
-					constraint.setUb(Vars.maxUpperBound);
-
-					if (reaction.isReversible()) {
-						constraint.setLb(Vars.minLowerBound);
-					} else {
-						constraint.setLb(0);
-					}
-				}
-			}
-
-		}
-
-		double sumFBA1 = 0.0;
-		double sumFBA2 = 0.0;
-		int n2 = 0;
-
-		for (BioEntity e : optimaZeroFluxReactions.values()) {
-
-			long startTime = System.currentTimeMillis();
-
-			n++;
-
-			String id = e.getId();
-
-			BioChemicalReaction reaction = b.getBioNetwork()
-					.getBiochemicalReactionList().get(id);
-
-			Double min = 0.0;
-			Double max = 0.0;
-
-			Constraint constraint = b.getSimpleConstraints().get(e);
-
-			double oldLb = constraint.getLb();
-			double oldUb = constraint.getUb();
-
-			max = fvaWithNoConstraintResult.getMap().get(e)[1];
-			min = fvaWithNoConstraintResult.getMap().get(e)[0];
-
-			constraint.setUb(max);
-			constraint.setLb(max);
-
-			// We compute the optimal value of the main objective. If the
-			// optimal value equals to 0, the reaction is concurrent
-			b.prepareSolver();
-
-			FBAAnalysis fbaAnalysis = new FBAAnalysis(b);
-			FBAResult res = fbaAnalysis.runAnalysis();
-
-			long stopTime = System.currentTimeMillis();
-			long elapsedTime = stopTime - startTime;
-
-			sumFBA1 += elapsedTime;
-
-			// System.err.println("First FBA : "+elapsedTime);
-
-			if (res.getObjValue().isNaN() || res.getObjValue() == 0) {
-				concurrentReactions.put(e.getId(), e);
-			} else {
-				if (reaction.isReversible()) {
-
-					n2++;
-
-					startTime = System.currentTimeMillis();
-
-					constraint.setUb(min);
-					constraint.setLb(min);
-
-					b.prepareSolver();
-
-					fbaAnalysis = new FBAAnalysis(b);
-					res = fbaAnalysis.runAnalysis();
-
-					stopTime = System.currentTimeMillis();
-					elapsedTime = stopTime - startTime;
-
-					sumFBA2 += elapsedTime;
-
-					// System.err.println("Second FBA : "+elapsedTime);
-
-					if (res.getObjValue().isNaN() || res.getObjValue() == 0) {
-						concurrentReactions.put(e.getId(), e);
-					} else {
-						mleReactions.put(e.getId(), e);
-					}
-				} else {
-					mleReactions.put(e.getId(), e);
-				}
-			}
-
-			constraint.setUb(oldUb);
-			constraint.setLb(oldLb);
-
-			if (Vars.verbose) {
-				if (n % 10 == 0) {
-					System.err.print("*");
-				}
-			}
-
-		}
-		if (Vars.verbose) {
-			System.err.println("First FBA mean time : " + sumFBA1 / n);
-			System.err.println("First FBA 2 mean time : " + sumFBA2 / n2);
-		}
-
-		if (Vars.verbose) {
-			System.err.println("]");
-			System.err.println("[PFBA] Number of mle reactions : "
-					+ mleReactions.size());
-			System.err.println("[PFBA] Number of concurrent reactions : "
-					+ concurrentReactions.size());
-		}
-
 	}
 
 	/**

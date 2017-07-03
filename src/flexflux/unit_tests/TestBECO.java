@@ -35,7 +35,6 @@ public class TestBECO extends FFUnitTest{
 	private static File tempResultZeroFluxFile = null;
 	private static File tempResultMleFile = null;
 	private static File tempResultEleFile = null;
-	private static File tempResultConcurrentFile = null;
 	private static File tempResultIndependentFile = null;
 	private static File tempResultOptimaFile = null;
 	private static File tempResultDeadFile = null;
@@ -43,7 +42,6 @@ public class TestBECO extends FFUnitTest{
 	private static File tempResultEssentialGeneFile = null;
 	private static File tempResultZeroFluxGeneFile = null;
 	private static File tempResultMleGeneFile = null;
-	private static File tempResultConcurrentGeneFile = null;
 	private static File tempResultEleGeneFile = null;
 	private static File tempResultIndependentGeneFile = null;
 	private static File tempResultOptimaGeneFile = null;
@@ -62,7 +60,6 @@ public class TestBECO extends FFUnitTest{
 	private static String referenceZeroFluxFile = "";
 	private static String referenceMleFile = "";
 	private static String referenceEleFile = "";
-	private static String referenceConcurrentFile = "";
 	private static String referenceIndependentFile = "";
 	private static String referenceOptimaFile = "";
 	private static String referenceDeadFile = "";
@@ -72,7 +69,6 @@ public class TestBECO extends FFUnitTest{
 	private static String referenceEssentialGeneFile = "";
 	private static String referenceZeroFluxGeneFile = "";
 	private static String referenceMleGeneFile = "";
-	private static String referenceConcurrentGeneFile = "";
 	private static String referenceEleGeneFile = "";
 	private static String referenceIndependentGeneFile = "";
 	private static String referenceOptimaGeneFile = "";
@@ -131,7 +127,6 @@ public class TestBECO extends FFUnitTest{
 		java.nio.file.Path tmpResultZeroFlux = null;
 		java.nio.file.Path tmpResultMle = null;
 		java.nio.file.Path tmpResultEle = null;
-		java.nio.file.Path tmpResultConcurrent = null;
 		java.nio.file.Path tmpResultIndependent = null;
 		java.nio.file.Path tmpResultOptima = null;
 		java.nio.file.Path tmpResultDead = null;
@@ -139,7 +134,6 @@ public class TestBECO extends FFUnitTest{
 		java.nio.file.Path tmpResultEssentialGenes = null;
 		java.nio.file.Path tmpResultZeroFluxGenes = null;
 		java.nio.file.Path tmpResultMleGenes = null;
-		java.nio.file.Path tmpResultConcurrentGenes = null;
 		java.nio.file.Path tmpResultEleGenes = null;
 		java.nio.file.Path tmpResultIndependentGenes = null;
 		java.nio.file.Path tmpResultOptimaGenes = null;
@@ -167,8 +161,6 @@ public class TestBECO extends FFUnitTest{
 					".tab");
 			tmpResultMle = java.nio.file.Files.createTempFile("test", ".tab");
 			tmpResultEle = java.nio.file.Files.createTempFile("test", ".tab");
-			tmpResultConcurrent = java.nio.file.Files.createTempFile("test",
-					".tab");
 			tmpResultIndependent = java.nio.file.Files.createTempFile("test",
 					".tab");
 			tmpResultOptima = java.nio.file.Files
@@ -182,8 +174,6 @@ public class TestBECO extends FFUnitTest{
 					".tab");
 			tmpResultMleGenes = java.nio.file.Files.createTempFile("test",
 					".tab");
-			tmpResultConcurrentGenes = java.nio.file.Files.createTempFile(
-					"test", ".tab");
 			tmpResultEleGenes = java.nio.file.Files.createTempFile("test",
 					".tab");
 			tmpResultIndependentGenes = java.nio.file.Files.createTempFile(
@@ -224,7 +214,6 @@ public class TestBECO extends FFUnitTest{
 		tempResultZeroFluxFile = tmpResultZeroFlux.toFile();
 		tempResultMleFile = tmpResultMle.toFile();
 		tempResultEleFile = tmpResultEle.toFile();
-		tempResultConcurrentFile = tmpResultConcurrent.toFile();
 		tempResultIndependentFile = tmpResultIndependent.toFile();
 		tempResultOptimaFile = tmpResultOptima.toFile();
 		tempResultDeadFile = tmpResultDead.toFile();
@@ -232,7 +221,6 @@ public class TestBECO extends FFUnitTest{
 		tempResultEssentialGeneFile = tmpResultEssentialGenes.toFile();
 		tempResultZeroFluxGeneFile = tmpResultZeroFluxGenes.toFile();
 		tempResultMleGeneFile = tmpResultMleGenes.toFile();
-		tempResultConcurrentGeneFile = tmpResultConcurrentGenes.toFile();
 		tempResultEleGeneFile = tmpResultEleGenes.toFile();
 		tempResultIndependentGeneFile = tmpResultIndependentGenes.toFile();
 		tempResultOptimaGeneFile = tmpResultOptimaGenes.toFile();
@@ -300,10 +288,6 @@ public class TestBECO extends FFUnitTest{
 							"flexflux/unit_tests/data/conditionComparisonTest/resultEle.tab",
 							tempResultEleFile);
 
-			referenceConcurrentFile = TestUtils
-					.copyProjectResource(
-							"flexflux/unit_tests/data/conditionComparisonTest/resultConcurrent.tab",
-							tempResultConcurrentFile);
 
 			referenceIndependentFile = TestUtils
 					.copyProjectResource(
@@ -339,11 +323,6 @@ public class TestBECO extends FFUnitTest{
 					.copyProjectResource(
 							"flexflux/unit_tests/data/conditionComparisonTest/resultEleGenes.tab",
 							tempResultEleGeneFile);
-
-			referenceConcurrentGeneFile = TestUtils
-					.copyProjectResource(
-							"flexflux/unit_tests/data/conditionComparisonTest/resultConcurrentGenes.tab",
-							tempResultConcurrentGeneFile);
 
 			referenceIndependentGeneFile = TestUtils
 					.copyProjectResource(
@@ -503,18 +482,6 @@ public class TestBECO extends FFUnitTest{
 
 	}
 
-	@Test
-	public void testConcurrent() {
-
-		String pathFileTest = basePath + "/concurrentReactions.tsv";
-		File fileTest = new File(pathFileTest);
-		File fileRef = new File(referenceConcurrentFile);
-
-		FileAssert.assertEquals(
-				"Concurrent reactions are different from the reference",
-				fileRef, fileTest);
-
-	}
 
 	@Test
 	public void testEle() {
@@ -594,18 +561,6 @@ public class TestBECO extends FFUnitTest{
 
 	}
 
-	@Test
-	public void testConcurrentGenes() {
-
-		String pathFileTest = basePath + "/concurrentGenes.tsv";
-		File fileTest = new File(pathFileTest);
-		File fileRef = new File(referenceConcurrentGeneFile);
-
-		FileAssert.assertEquals(
-				"Concurrent genes are different from the reference", fileRef,
-				fileTest);
-
-	}
 
 	@Test
 	public void testEleGenes() {

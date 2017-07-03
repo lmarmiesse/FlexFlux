@@ -396,7 +396,6 @@ public class BECOResult extends AnalysisResult {
 		PrintWriter outZeroFlux = null;
 		PrintWriter outMle = null;
 		PrintWriter outEle = null;
-		PrintWriter outConcurrent = null;
 		PrintWriter outIndependent = null;
 		PrintWriter outOptima = null;
 		PrintWriter outRedundant = null;
@@ -418,8 +417,6 @@ public class BECOResult extends AnalysisResult {
 					+ ".tsv"));
 			outEle = new PrintWriter(new File(path + "/ele" + objectName
 					+ ".tsv"));
-			outConcurrent = new PrintWriter(new File(path + "/concurrent"
-					+ objectName + ".tsv"));
 			outIndependent = new PrintWriter(new File(path + "/independent"
 					+ objectName + ".tsv"));
 			outOptima = new PrintWriter(new File(path + "/optima" + objectName
@@ -437,7 +434,6 @@ public class BECOResult extends AnalysisResult {
 			writers.put("zf", outZeroFlux);
 			writers.put("mle", outMle);
 			writers.put("ele", outEle);
-			writers.put("conc", outConcurrent);
 			writers.put("ind", outIndependent);
 			writers.put("opt", outOptima);
 			writers.put("dead", outDead);
@@ -490,11 +486,6 @@ public class BECOResult extends AnalysisResult {
 								.get("mle" + objectName).keySet());
 						Collections.sort(mleIds);
 						classification.put("mle", mleIds);
-
-						ArrayList<String> concurrentIds = new ArrayList<String>(
-								result.get("concurrent" + objectName).keySet());
-						Collections.sort(concurrentIds);
-						classification.put("conc", concurrentIds);
 
 						ArrayList<String> eleIds = new ArrayList<String>(result
 								.get("ele" + objectName).keySet());
@@ -786,7 +777,6 @@ public class BECOResult extends AnalysisResult {
 					int nbZeroFlux = 0;
 					int nbMle = 0;
 					int nbEle = 0;
-					int nbConc = 0;
 					int nbInd = 0;
 					int nbOpt = 0;
 					int nbRed = 0;
@@ -799,7 +789,6 @@ public class BECOResult extends AnalysisResult {
 						nbZeroFlux = result.get("zeroFlux" + objectName).size();
 						nbMle = result.get("mle" + objectName).size();
 						nbEle = result.get("ele" + objectName).size();
-						nbConc = result.get("concurrent" + objectName).size();
 						nbInd = result.get("objectiveIndependent" + objectName)
 								.size();
 						nbOpt = result.get("optima" + objectName).size();
@@ -815,12 +804,12 @@ public class BECOResult extends AnalysisResult {
 					if (isReaction) {
 						out.write(c.code + "__" + objName + "," + nbEssential
 								+ "," + nbZeroFlux + "," + nbMle + "," + nbEle
-								+ "," + nbConc + "," + nbInd + "," + nbOpt
+								+ ","  + nbInd + "," + nbOpt
 								+ "," + nbDead + "\n");
 					} else {
 						out.write(c.code + "__" + objName + "," + nbEssential
 								+ "," + nbRed + "," + nbZeroFlux + "," + nbMle
-								+ "," + nbEle + "," + nbConc + "," + nbInd
+								+ "," + nbEle + "," + nbInd
 								+ "," + nbOpt + "," + nbDead + "\n");
 					}
 
@@ -949,9 +938,9 @@ public class BECOResult extends AnalysisResult {
 		try {
 			out = new PrintWriter(new File(outPath + "/multiBar_data.js"));
 			if (isReaction) {
-				out.write("var str = \"name,essential,zeroFlux,mle,ele,conc,ind,opt,dead\\n");
+				out.write("var str = \"name,essential,zeroFlux,mle,ele,ind,opt,dead\\n");
 			} else {
-				out.write("var str = \"name,essential,red,zeroFlux,mle,ele,conc,ind,opt,dead\\n");
+				out.write("var str = \"name,essential,red,zeroFlux,mle,ele,ind,opt,dead\\n");
 			}
 
 			for (Condition c : conditions) {
@@ -967,7 +956,6 @@ public class BECOResult extends AnalysisResult {
 					int nbZeroFlux = 0;
 					int nbMle = 0;
 					int nbEle = 0;
-					int nbConc = 0;
 					int nbInd = 0;
 					int nbOpt = 0;
 					int nbRed = 0;
@@ -980,7 +968,6 @@ public class BECOResult extends AnalysisResult {
 						nbZeroFlux = result.get("zeroFlux" + objectName).size();
 						nbMle = result.get("mle" + objectName).size();
 						nbEle = result.get("ele" + objectName).size();
-						nbConc = result.get("concurrent" + objectName).size();
 						nbInd = result.get("objectiveIndependent" + objectName)
 								.size();
 						nbOpt = result.get("optima" + objectName).size();
@@ -995,12 +982,12 @@ public class BECOResult extends AnalysisResult {
 					if (isReaction) {
 						out.write(c.code + "__" + objName + "," + nbEssential
 								+ "," + nbZeroFlux + "," + nbMle + "," + nbEle
-								+ "," + nbConc + "," + nbInd + "," + nbOpt
+								+ "," + nbInd + "," + nbOpt
 								+ "," + nbDead + "\\n");
 					} else {
 						out.write(c.code + "__" + objName + "," + nbEssential
 								+ "," + nbRed + "," + nbZeroFlux + "," + nbMle
-								+ "," + nbEle + "," + nbConc + "," + nbInd
+								+ "," + nbEle + "," + nbInd
 								+ "," + nbOpt + "," + nbDead + "\\n");
 					}
 				}
@@ -1282,21 +1269,18 @@ public class BECOResult extends AnalysisResult {
 
 							if (result.get("essential" + objectName)
 									.containsKey(id)) {
-								value = 8;
+								value = 6;
 							} else if (!isReaction
 									&& result.redundantGenesForEssentialReactions
 											.containsKey(id)) {
-								value = 7;
+								value = 6;
 							} else if (result.get("optima" + objectName)
 									.containsKey(id)) {
-								value = 6;
+								value = 5;
 							} else if (result.get("ele" + objectName)
 									.containsKey(id)) {
-								value = 5;
-							} else if (result.get("mle" + objectName)
-									.containsKey(id)) {
 								value = 4;
-							} else if (result.get("concurrent" + objectName)
+							} else if (result.get("mle" + objectName)
 									.containsKey(id)) {
 								value = 3;
 							} else if (result.get(

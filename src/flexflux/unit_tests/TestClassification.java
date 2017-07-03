@@ -41,10 +41,8 @@ public class TestClassification extends FFUnitTest {
 	static String tmpDir = "/tmp/testPfba";
 
 	@BeforeClass
-	public static void init() throws ClassNotFoundException,
-			NoSuchMethodException, SecurityException, InstantiationException,
-			IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException {
+	public static void init() throws ClassNotFoundException, NoSuchMethodException, SecurityException,
+			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
 		tmpDir = System.getProperty("java.io.tmpdir") + "/testPfba";
 
@@ -82,13 +80,10 @@ public class TestClassification extends FFUnitTest {
 		String regulationFile = null;
 
 		try {
-			sbmlFile = TestUtils.copyProjectResource(
-					"flexflux/unit_tests/data/pfba/test.xml", tempSbmlFile);
-			constraintFile = TestUtils.copyProjectResource(
-					"flexflux/unit_tests/data/pfba/constraints.txt",
+			sbmlFile = TestUtils.copyProjectResource("flexflux/unit_tests/data/pfba/test.xml", tempSbmlFile);
+			constraintFile = TestUtils.copyProjectResource("flexflux/unit_tests/data/pfba/constraints.txt",
 					tempConstraintFile);
-			regulationFile = TestUtils.copyProjectResource(
-					"flexflux/unit_tests/data/pfba/interactions.sbml",
+			regulationFile = TestUtils.copyProjectResource("flexflux/unit_tests/data/pfba/interactions.sbml",
 					tempInteractionFile);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -118,8 +113,7 @@ public class TestClassification extends FFUnitTest {
 
 			} catch (SecurityException se) {
 				se.printStackTrace();
-				System.err.println("Security Exception during creation of "
-						+ tmpDir);
+				System.err.println("Security Exception during creation of " + tmpDir);
 			}
 		}
 
@@ -166,22 +160,6 @@ public class TestClassification extends FFUnitTest {
 	public void testMleReactions() {
 
 		Set<String> test = res.mleReactions.keySet();
-
-		Set<String> ref = new HashSet<String>();
-
-		// R1 uses H
-		// ref.add("R1");
-		// ref.add("R_B_EX");
-		// ref.add("R_C_EX");
-
-		Assert.assertEquals(ref, test);
-
-	}
-
-	@Test
-	public void testConcurrentReactions() {
-
-		Set<String> test = res.concurrentReactions.keySet();
 
 		Set<String> ref = new HashSet<String>();
 
@@ -267,7 +245,7 @@ public class TestClassification extends FFUnitTest {
 		Set<String> test = res.mleGenes.keySet();
 
 		Set<String> ref = new HashSet<String>();
-
+		ref.add("G7");	
 		Assert.assertEquals(ref, test);
 	}
 
@@ -309,37 +287,17 @@ public class TestClassification extends FFUnitTest {
 	}
 
 	@Test
-	public void testConcurrentGenes() {
-
-		Set<String> test = res.concurrentGenes.keySet();
-
-		Set<String> ref = new HashSet<String>();
-
-		ref.add("G7");
-
-		Assert.assertEquals(ref, test);
-	}
-
-	@Test
 	public void testGetReactionClassification() {
 
 		HashMap<String, String> classif = res.getReactionClassification();
 
-		Assert.assertEquals(
-				"test the number of reactions in the classification",
+		Assert.assertEquals("test the number of reactions in the classification",
 				networkRef.getBiochemicalReactionList().size(), classif.size());
-		Assert.assertEquals("test independent reaction in the classif",
-				"independent", classif.get("R_P_EX"));
-		Assert.assertEquals("test optima reaction in the classif", "optima",
-				classif.get("R5"));
-		Assert.assertEquals("test ele reaction in the classif", "ele",
-				classif.get("R4"));
-		Assert.assertEquals("test concurrent reaction in the classif",
-				"concurrent", classif.get("R7"));
-		Assert.assertEquals("test zeroFlux reaction in the classif",
-				"zeroFlux", classif.get("R2"));
-		Assert.assertEquals("test dead reaction in the classif", "dead",
-				classif.get("DEAD"));
+		Assert.assertEquals("test independent reaction in the classif", "independent", classif.get("R_P_EX"));
+		Assert.assertEquals("test optima reaction in the classif", "optima", classif.get("R5"));
+		Assert.assertEquals("test ele reaction in the classif", "ele", classif.get("R4"));
+		Assert.assertEquals("test zeroFlux reaction in the classif", "zeroFlux", classif.get("R2"));
+		Assert.assertEquals("test dead reaction in the classif", "dead", classif.get("DEAD"));
 
 	}
 
@@ -351,13 +309,10 @@ public class TestClassification extends FFUnitTest {
 		res.writeCytoscapeClassifAttribute(fileTest, true);
 
 		try {
-			String fileRef = TestUtils.copyProjectResource(
-					"flexflux/unit_tests/data/pfba/classif.attr",
-					java.nio.file.Files.createTempFile("test", ".attr")
-							.toFile());
+			String fileRef = TestUtils.copyProjectResource("flexflux/unit_tests/data/pfba/classif.attr",
+					java.nio.file.Files.createTempFile("test", ".attr").toFile());
 
-			FileAssert.assertEquals("test classif attribute file", new File(
-					fileRef), new File(fileTest));
+			FileAssert.assertEquals("test classif attribute file", new File(fileRef), new File(fileTest));
 
 		} catch (IOException e) {
 			Assert.fail("Impossible to get the reference file");
@@ -375,14 +330,10 @@ public class TestClassification extends FFUnitTest {
 		res.writeCytoscapeGenericAttributes(fileTest, true);
 
 		try {
-			String fileRef = TestUtils
-					.copyProjectResource(
-							"flexflux/unit_tests/data/pfba/genericAttributes.tab",
-							java.nio.file.Files.createTempFile("test", ".tab")
-									.toFile());
+			String fileRef = TestUtils.copyProjectResource("flexflux/unit_tests/data/pfba/genericAttributes.tab",
+					java.nio.file.Files.createTempFile("test", ".tab").toFile());
 
-			FileAssert.assertEquals("test generic attribute file", new File(
-					fileRef), new File(fileTest));
+			FileAssert.assertEquals("test generic attribute file", new File(fileRef), new File(fileTest));
 
 		} catch (IOException e) {
 			Assert.fail("Impossible to get the reference file");
