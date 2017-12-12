@@ -17,3 +17,9 @@ hs*log
 /.fatjar
 /.gitignore
 /.Rhistory
+shell/FlexFlux_Lucas/
+sandbox
+jsbml.log
+*.jar
+*.zip
+*.gz
