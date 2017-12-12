@@ -129,7 +129,7 @@ public class TestPAO extends FFUnitTest {
 			}
 		}
 		
-		Assert.assertEquals(0.0, Vars.round(val));
+		Assert.assertEquals(Double.NaN, Vars.round(val));
 		
 	}
 	
