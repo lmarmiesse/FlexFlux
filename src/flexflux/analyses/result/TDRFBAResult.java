@@ -130,21 +130,21 @@ public class TDRFBAResult extends AnalysisResult {
 		try {
 			PrintWriter out = new PrintWriter(new File(path));
 
-			String line = "Time\t";
+			String line = "Time";
 			for (String s : entitiesArray) {
-
-				line += s + "\t";
+				
+				line += "\t"+s;
 
 			}
 			out.println(line);
 
 			for (Double time : times) {
 
-				line = time + "\t";
+				line = time.toString();
 				for (String s : entitiesArray) {
 
 					if (resultMap.get(time).containsKey(s) && resultMap.get(time).get(s) != null) {
-						line += Vars.round(resultMap.get(time).get(s)) + "\t";
+						line += "\t"+Vars.round(resultMap.get(time).get(s));
 					} else {
 						System.err.println("Error for variable " + s + ", no calculated value.");
 
