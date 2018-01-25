@@ -34,6 +34,8 @@
 package flexflux.unit_tests;
 
 import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
+
 import flexflux.analyses.DRAnalysis;
 import flexflux.analyses.FVAAnalysis;
 import flexflux.analyses.KOAnalysis;
@@ -280,7 +282,7 @@ public class TestFVA_KO_DR extends FFUnitTest {
 		List<BioEntity> dead = resultDr.getDeadReactions();
 
 		System.err.println(dead.size());
-		Assert.assertTrue(dead.size() == 8);
+		assertEquals("False number of dead reactions", 8, dead.size());
 
 		List<BioEntity> testDead = new ArrayList<BioEntity>();
 
