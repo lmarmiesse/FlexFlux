@@ -113,7 +113,7 @@ public class TestPAO extends FFUnitTest {
 	}
 	
 	
-	@Test
+//	@Test
 	public void test() {
 		
 		KOAnalysis koGenes = new KOAnalysis(bind, 1, null);
