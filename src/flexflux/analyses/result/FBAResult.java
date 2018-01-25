@@ -311,4 +311,12 @@ public class FBAResult extends AnalysisResult {
 		return objValue;
 	}
 
+	public Map<String, String> getEntToResult() {
+		return entToResult;
+	}
+
+	
+	
+	
+	
 }
