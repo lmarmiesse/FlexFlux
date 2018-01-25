@@ -16,7 +16,7 @@
     -->
 	<!-- uncomment the above lines to use ANT outside of Eclipse -->
 	<property name="dir.build" value="/home/lcottret/workspaces/git_repositories/FlexFlux" />
-	<property name="out.build" value="/home/lcottret/workspaces/workspaceMetExploreJava/metexploreJava/metexploreJava/lib" />
+	<property name="out.build" value="/home/lcottret/workspaces/git_repositories/MetExplore-Java/lib" />
 
 	<target name="main">
 		<fatjar.build output="${out.build}/flexFlux.jar">
