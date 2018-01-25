@@ -93,7 +93,7 @@ public class DRAnalysis extends Analysis {
 		b.getConstraints().addAll(constraintsToAdd);
 
 		DRResult drResult = new DRResult(0.0, b);
-
+		
 		Map<String, BioEntity> FVAMap = new HashMap<String, BioEntity>();
 
 		for (String reactionName : b.getBioNetwork()
@@ -172,8 +172,9 @@ public class DRAnalysis extends Analysis {
 					+ ((System.currentTimeMillis() - startTime) / 1000) + "s "
 					+ Vars.maxThread + " threads");
 		}
-
 		drResult.clean(minValue);
+		
+		drResult.addPrunedReactions();
 
 		return drResult;
 

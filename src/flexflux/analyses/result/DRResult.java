@@ -51,6 +51,7 @@ import javax.swing.JScrollPane;
 
 import org.jfree.ui.RefineryUtilities;
 
+import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
 
 /**
@@ -62,8 +63,12 @@ import parsebionet.biodata.BioEntity;
  */
 public class DRResult extends FVAResult {
 
+	private Bind bind;
+	
 	public DRResult(double objValue, Bind b) {
 		super(objValue);
+		
+		bind = b;
 	}
 
 	public void writeToFile(String path) {
@@ -139,6 +144,16 @@ public class DRResult extends FVAResult {
 			map.remove(b);
 		}
 
+	}
+	
+	/**
+	 * add prunedReactions in the result
+	 */
+	public void addPrunedReactions() {
+		for(BioChemicalReaction r : bind.getDeadReactions()) {
+			double zeros[] = {0.0, 0.0};
+			map.put(r, zeros);
+		}
 	}
 
 	@Override
