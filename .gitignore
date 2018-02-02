@@ -20,6 +20,5 @@ hs*log
 shell/FlexFlux_Lucas/
 sandbox
 jsbml.log
-*.jar
 *.zip
 *.gz
