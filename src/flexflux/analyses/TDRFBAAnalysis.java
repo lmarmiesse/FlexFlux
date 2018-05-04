@@ -112,7 +112,6 @@ public class TDRFBAAnalysis extends Analysis {
 			if (b.getInteractionNetwork().canTranslate(ent)) {
 
 				simpleConstraints.put(ent, b.getInteractionNetwork().getConstraintFromState(ent, state));
-
 			} else {
 				simpleConstraints.put(ent, new Constraint(ent, (double) state, (double) state));
 			}
@@ -122,7 +121,7 @@ public class TDRFBAAnalysis extends Analysis {
 
 			simpleConstraints.put(ent, b.getInteractionNetwork().getInitialConstraints().get(ent));
 		}
-
+		
 		Map<BioChemicalReaction, Map<BioEntity, Double>> exchangeInteractions = b.getExchangeInteractions();
 
 		Map<Integer, Set<Constraint>> timeConstraintMap = new HashMap<Integer, Set<Constraint>>();
@@ -134,7 +133,8 @@ public class TDRFBAAnalysis extends Analysis {
 		TDRFBAResult rFBAResult = new TDRFBAResult();
 
 		for (int i = 0; i < iterations; i++) {
-
+			
+			
 			// we save the results
 			Map<String, Double> valuesMap = new HashMap<String, Double>();
 			valuesMap.put("X", X);
@@ -151,26 +151,31 @@ public class TDRFBAAnalysis extends Analysis {
 
 			for (BioEntity enti : simpleConstraints.keySet()) {
 
-				if (b.getInteractionNetwork().canTranslate(enti)) {
+				double lb = simpleConstraints.get(enti).getLb();
+				double ub = simpleConstraints.get(enti).getUb();
 
-					networkState.put(enti,
-							b.getInteractionNetwork().getStateFromValue(enti, simpleConstraints.get(enti).getLb()));
+				if (b.getInteractionNetwork().canTranslate(enti)) {
+					networkState.put(enti, b.getInteractionNetwork().getStateFromBounds(enti, lb, ub));
 
 				} else if (b.getInteractionNetwork().getInteractionNetworkEntities().keySet().contains(enti.getId())) {
-					networkState.put(enti, (int) simpleConstraints.get(enti).getLb());
+					// Hmfff... Why ub and not lb ?
+					networkState.put(enti, (int) ub);
 				}
 			}
 
 			if (i != 0) {
-
+				
+				// Set new regulatory states from values of reactions
+				for (BioEntity reac : b.getBioNetwork().getBiochemicalReactionList().values()) {
+					double value = b.getSolvedValue(reac);
+					if (!Double.isNaN(value) && b.getInteractionNetwork().canTranslate(reac)) {
+						networkState.put(reac, b.getInteractionNetwork().getStateFromValue(reac, value));
+					}
+				}
 
 				RSAAnalysis ssa = new RSAAnalysis(b.getInteractionNetwork(), new HashMap<BioEntity, Constraint>());
 				List<BioEntity> entitiesToCheck = new ArrayList<BioEntity>();
 				entitiesToCheck.addAll(b.getInteractionNetwork().getTargetToInteractions().keySet());
-
-				for (BioEntity e : networkState.keySet()) {
-					Integer val = networkState.get(e);
-				}
 
 				Map<Constraint, double[]> nextStepStates = ssa.goToNextInteractionNetworkState(networkState,
 						entitiesToCheck);
@@ -313,7 +318,6 @@ public class TDRFBAAnalysis extends Analysis {
 
 			}
 
-			double fbaResult = 0;
 			double mu = 0;
 			DoubleResult result;
 
@@ -329,7 +333,6 @@ public class TDRFBAAnalysis extends Analysis {
 
 			try {
 				result = b.FBA(new ArrayList<Constraint>(constraintsToAdd), true, false);
-				fbaResult = result.result;
 
 			} catch (Exception e) {
 				System.err.println("rFBA stopped");
@@ -377,8 +380,6 @@ public class TDRFBAAnalysis extends Analysis {
 
 			}
 
-			// System.err.println("mu = " + mu);
-			// System.err.println(i);
 
 			// we set the new concentrations for the metabolites according to
 			// the uptake
@@ -402,8 +403,6 @@ public class TDRFBAAnalysis extends Analysis {
 
 				}
 
-				// System.err.println(metab.getId() + " " + uptake);
-				// System.err.println(simpleConstraints.get(metab).getUb());
 
 				// uptake is >0 when the metabolite goes out of the cell
 				// <0 when it comes in
