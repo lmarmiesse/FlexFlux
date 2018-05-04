@@ -224,6 +224,45 @@ public class InteractionNetwork {
 		return ndState;
 
 	}
+	
+	public Integer getStateFromBounds(BioEntity ent, double lb, double ub) {
+
+		int ndState = -1;
+		
+		double tmp;
+		
+		if(lb > ub)
+		{
+			tmp=ub;
+			ub=lb;
+			lb=tmp;
+		}
+		
+
+		for (Integer i : entityStateConstraintTranslation.get(ent).keySet()) {
+
+			Constraint c = entityStateConstraintTranslation.get(ent).get(i);
+
+			if (c == null) {
+				ndState = i;
+				continue;
+			}
+
+			if (Vars.round(lb) >= Vars.round(c.getLb()) && Vars.round(ub) <= Vars.round(c.getUb())) {
+				return i;
+			}
+
+		}
+
+		if (ndState == -1) {
+			System.err.println("Error : bounds " + lb +"," +ub  + " for variable " + ent.getId()
+					+ " do not correspond to any qualitative state.");
+			System.exit(0);
+		}
+
+		return ndState;
+
+	}
 
 	public Map<Interaction, List<Constraint>> getInteractionToConstraints() {
 		return interactionToConstraints;
