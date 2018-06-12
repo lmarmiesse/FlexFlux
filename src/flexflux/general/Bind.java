@@ -627,14 +627,9 @@ public abstract class Bind {
 	 *            If true : uses extended SBML format.
 	 */
 	public void loadSbmlNetwork(String path, boolean ext) {
-		if (ext) {
-			JSBMLToBionetwork parser = new JSBMLToBionetwork(path);
-			setNetworkAndConstraints(parser.getBioNetwork());
-
-		} else {
+	
 			Sbml2Bionetwork parser = new Sbml2Bionetwork(path, ext);
 			setNetworkAndConstraints(parser.getBioNetwork());
-		}
 	}
 
 	/**
