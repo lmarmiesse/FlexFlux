@@ -213,11 +213,11 @@ public class FlexfluxDR extends FFApplication{
 		DRAnalysis analysis = new DRAnalysis(bind, f.d);
 		DRResult result = analysis.runAnalysis();
 
-		for (BioChemicalReaction trimedReac : trimed) {
-
-			result.addLine(trimedReac, new double[] { 0.0, 0.0 });
-
-		}
+//		for (BioChemicalReaction trimedReac : trimed) {
+//
+//			result.addLine(trimedReac, new double[] { 0.0, 0.0 });
+//
+//		}
 
 		if (f.plot) {
 			result.plot();
