@@ -54,9 +54,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -144,7 +142,17 @@ public class TestFVA_KO_DR extends FFUnitTest {
 		Vars.maxThread = 1;
 
 		bind.loadSbmlNetwork(coliFileString, false);
+		
+		
+		
+		
 		n = bind.getBioNetwork();
+		
+		for(BioChemicalReaction r : n.getBiochemicalReactionList().values())
+		{
+			System.err.println(r.getId()+" :"+r.getGPR().get(0));
+		}
+		
 		i = bind.getInteractionNetwork();
 
 		bind.loadConstraintsFile(condFileString);
@@ -162,10 +170,10 @@ public class TestFVA_KO_DR extends FFUnitTest {
 
 	public void go() {
 
-		Map<String, BioChemicalReaction> networkReacs = n
-				.getBiochemicalReactionList();
-
-		BioChemicalReaction reaction = null;
+//		Map<String, BioChemicalReaction> networkReacs = n
+//				.getBiochemicalReactionList();
+//
+//		BioChemicalReaction reaction = null;
 
 		FVAAnalysis fva = new FVAAnalysis(bind, null, null);
 		FVAResult result = fva.runAnalysis();
@@ -190,6 +198,8 @@ public class TestFVA_KO_DR extends FFUnitTest {
 						.getInteractionNetwork().getEntity(name))[1] - max) < 0.001);
 
 			}
+			
+			in.close();
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -220,6 +230,8 @@ public class TestFVA_KO_DR extends FFUnitTest {
 						.getInteractionNetwork().getEntity(name)) - value) < 0.001);
 
 			}
+			
+			in.close();
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -255,7 +267,6 @@ public class TestFVA_KO_DR extends FFUnitTest {
 
 				double value = Double.parseDouble(splittedLine[1]);
 				
-				
 				double simuResult = Math.abs(resultKoGenes.getValueForEntity(bind
 						.getInteractionNetwork().getEntity(name)));
 				
@@ -263,9 +274,11 @@ public class TestFVA_KO_DR extends FFUnitTest {
 					simuResult=0.0;
 				}
 				
-				Assert.assertTrue((simuResult - value) < 0.001);
+				Assert.assertEquals("Bad simulation value for KO gene "+name, value, simuResult, 0.001);
 
 			}
+			
+			in.close();
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

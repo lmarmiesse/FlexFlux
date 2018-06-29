@@ -45,14 +45,10 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import parsebionet.biodata.BioChemicalReaction;
-import parsebionet.biodata.BioComplex;
 import parsebionet.biodata.BioEntity;
-import parsebionet.biodata.BioGene;
 import parsebionet.biodata.BioNetwork;
 import parsebionet.biodata.BioPhysicalEntity;
 import parsebionet.biodata.BioPhysicalEntityParticipant;
-import parsebionet.biodata.BioProtein;
-import parsebionet.io.JSBMLToBionetwork;
 import parsebionet.io.Sbml2Bionetwork;
 import flexflux.analyses.FBAAnalysis;
 import flexflux.analyses.RSAAnalysis;
@@ -60,13 +56,10 @@ import flexflux.analyses.result.FBAResult;
 import flexflux.analyses.result.RSAAnalysisResult;
 import flexflux.input.ConstraintsFileReader;
 import flexflux.input.SBMLQualReader;
-import flexflux.interaction.And;
 import flexflux.interaction.Interaction;
 import flexflux.interaction.InteractionNetwork;
-import flexflux.interaction.Or;
 import flexflux.interaction.Relation;
 import flexflux.interaction.RelationFactory;
-import flexflux.interaction.Unique;
 import flexflux.objective.Objective;
 import flexflux.operation.OperationFactory;
 

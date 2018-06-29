@@ -572,8 +572,13 @@ public class InteractionNetwork {
 					if (classe.compareTo("BioProtein") == 0) {
 						// listOfProteins.put(enzyme.getId(),
 						// (BioProtein)enzyme);
-
-						listOfGenes = ((BioProtein) enzyme).getGeneList();
+						
+						BioGene gene = ((BioProtein) enzyme).getGene();
+						
+						if(gene != null)
+						{
+							listOfGenes.put(gene.getId(), gene);
+						}
 
 					} else if (classe.compareTo("BioComplex") == 0) {
 

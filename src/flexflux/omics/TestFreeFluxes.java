@@ -23,8 +23,6 @@ import flexflux.interaction.Interaction;
 import flexflux.objective.Objective;
 import parsebionet.biodata.BioChemicalReaction;
 import parsebionet.biodata.BioEntity;
-import parsebionet.biodata.BioNetwork;
-import parsebionet.io.JSBMLToBionetwork;
 
 public class TestFreeFluxes extends FFApplication {
 
@@ -243,7 +241,7 @@ public class TestFreeFluxes extends FFApplication {
 
 		writeRevResults(f.ResultsFolderPath + "/outRev.txt", revResults, samples);
 
-		BioEntity fluxSum = bind.createFluxesSummation();
+		bind.createFluxesSummation();
 
 		// to write the results into a file
 		Map<String, Double> sampleToMinimisationRes = new HashMap<String, Double>();

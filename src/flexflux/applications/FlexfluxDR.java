@@ -215,7 +215,7 @@ public class FlexfluxDR extends FFApplication{
 
 //		for (BioChemicalReaction trimedReac : trimed) {
 //
-//			result.addLine(trimedReac, new double[] { 0.0, 0.0 });
+//			System.err.println(trimedReac.getId()+ " trimed");
 //
 //		}
 
